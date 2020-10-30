@@ -145,14 +145,14 @@ DROPSITES = [
         'allowOneTimeOrders': False,
         'pickupDay': 6,
     },
-    {
-        'name': 'St Johns',
-        'memberLimit': 20,
-        'color': 'purple',
-        'description': 'Portland - St Johns Farmers Market (Saturday)',
-        'allowOneTimeOrders': False,
-        'pickupDay': 6,
-    },
+    # {
+    #     'name': 'St Johns',
+    #     'memberLimit': 20,
+    #     'color': 'purple',
+    #     'description': 'Portland - St Johns Farmers Market (Saturday)',
+    #     'allowOneTimeOrders': False,
+    #     'pickupDay': 6,
+    # },
     {
         'name': 'Banzhaf',
         'memberLimit': 25,
@@ -198,8 +198,8 @@ ORDER_WINDOWS = [
         'homeDeliveryZips': ['97401', '97402', '97403', '97404', '97405', '97477', '97408', '97448']
     }
 ]
-DROP_SITE_ORDER = ['LCFM', 'Banzhaf', 'Home Delivery', 'W 11th', 'Friendly', 'Farm - Friday', 'Farm - Tuesday',
-                   'Woodstock', 'Cully', 'St Johns', 'PSU', 'Hollywood', 'Zafar']
+DROP_SITE_ORDER = ['Home Delivery', 'W 11th', 'Friendly', 'Farm - Friday', 'Farm - Tuesday',
+                   'Woodstock', 'Cully', 'St Johns', 'PSU', 'Hollywood', 'Zafar', 'LCFM', 'Banzhaf']
 
 DELIVERY_CSVS = {
     1: [
