@@ -146,8 +146,8 @@ class Profile(models.Model):
                                                       help_text="We have a signed Member Liability Document of file.")
     non_subscribing_member = models.BooleanField(default=False,
                                                  help_text="Non-subscribing members are allowed to make payments to their ffcsa account w/o having a monthly subscription")
-    no_plastic_bags = models.BooleanField(default=False,
-                                          help_text="Do not pack my items in a plastic bag when possible.")
+    plastic_bags = models.BooleanField(default=False,
+                                          help_text="Please pack small items in a plastic bag.")
     allow_substitutions = models.BooleanField(default=True,
                                               help_text="I am okay with substitutions when an item I ordered is no longer available. We do our best to pack what you have ordered, however on occasion crops will not be ready to harvest, etc. We can provide a substitution, or we can credit your account.")
     weekly_emails = models.BooleanField(default=True, verbose_name="Receive Weekly Emails",

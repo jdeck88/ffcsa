@@ -106,7 +106,7 @@ class Command(BaseCommand):
                     'attending_dinner': cart.attending_dinner,
                     'drop_site': drop_site,
                     'additional_instructions': user.profile.invoice_notes,
-                    'no_plastic_bags': user.profile.no_plastic_bags,
+                    'plastic_bags': user.profile.plastic_bags,
                     'allow_substitutions': user.profile.allow_substitutions,
                 }
 

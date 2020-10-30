@@ -59,7 +59,7 @@ class Order(SiteRelated):
     drop_site = models.CharField(blank=True, max_length=255)
 
     # TODO just fetch these prefrence from the user?
-    no_plastic_bags = models.BooleanField(_("No Plastic Bags"), default=False)
+    plastic_bags = models.BooleanField(_("Use Plastic Bags"), default=False)
     allow_substitutions = models.BooleanField(
         _("Allow product substitutions"), default=False)
 

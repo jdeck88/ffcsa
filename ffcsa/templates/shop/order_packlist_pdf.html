@@ -47,9 +47,9 @@
     }
 </style>
 
-{% if order.no_plastic_bags or not order.allow_substitutions or order.shipping_detail_city %}
+{% if order.plastic_bags or not order.allow_substitutions %}
     <div style="border: 1px solid black; font-weight: bold; margin-bottom: 5px; padding: 8px 5px; display: flex; justify-content: space-between">
-        <span>{% if order.no_plastic_bags %}NO PLASTIC BAGS{% endif %}</span>
+        <span>{% if order.plastic_bags %}USE PLASTIC BAGS{% endif %}</span>
         <span>{% if not order.allow_substitutions %}NO SUBSTITUTIONS{% endif %}</span>
     </div>
 {% endif %}

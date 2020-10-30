@@ -31,7 +31,7 @@ accounts_base.ProfileInline.fieldsets = (
     ('Payments', {'fields': (
         'monthly_contribution', 'discount_code', 'paid_signup_fee', 'payment_method', 'ach_status',
         'stripe_subscription_id', 'stripe_customer_id')}),
-    ('Preferences', {'fields': ('home_delivery', 'delivery_address', 'delivery_notes', 'drop_site', 'no_plastic_bags',
+    ('Preferences', {'fields': ('home_delivery', 'delivery_address', 'delivery_notes', 'drop_site', 'plastic_bags',
                                 'allow_substitutions', 'weekly_emails')}),
     ('Other', {'fields': ('start_date', 'join_dairy_program', 'can_order_dairy',
                           'signed_membership_agreement', 'non_subscribing_member')}),

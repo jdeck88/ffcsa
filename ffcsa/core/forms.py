@@ -216,7 +216,7 @@ class ProfileForm(accounts_forms.ProfileForm):
                 # defaults
                 user.profile.allow_substitutions = True
                 user.profile.weekly_emails = True
-                user.profile.no_plastic_bags = False
+                user.profile.plastic_bags = False
 
                 sib_template_name = 'Home Delivery' if user.profile.home_delivery else drop_site
 
