@@ -13,7 +13,7 @@ FROZEN_PRODUCT_CATEGORIES = ['pasture raised meats']
 FROZEN_ITEM_PACKLIST_EXCLUDED_CATEGORIES = ['nuts & honey']
 GRAIN_BEANS_CATEGORIES = ['grains & beans']
 PRODUCT_ORDER_CATEGORIES = ['vegetables', 'eggs', 'fruit', 'eggs', 'mushroom']
-MARKET_CHECKLISTS = ['LCFM', 'Hollywood', 'PSU', 'St Johns', 'Woodstock']
+MARKET_CHECKLISTS = ['LCFM', 'Hollywood', 'PSU', 'St Johns']
 MARKET_CHECKLIST_COLUMN_CATEGORIES = OrderedDict([
     # checklist columns -> (category list, additional kwargs, default)
     # if default is None, then we will sum the number of items
@@ -34,7 +34,7 @@ HOME_DELIVERY_FEE_BY_ZIP = {
 }
 DEFAULT_HOME_DELIVERY_CHARGE = 5
 
-INVITE_ONLY_PORTLAND_MARKETS = ['Hollywood', 'PSU', 'Cully', 'St Johns']
+INVITE_ONLY_PORTLAND_MARKETS = ['Hollywood', 'PSU', 'Cully', 'St Johns', 'Irvington', 'Woodstock']
 INVITE_CODE = 'PDX_2020'
 
 # A location can either be a zip code or a dropsite name
@@ -42,17 +42,23 @@ DROP_LOCATION_GROUP_LIMITS = [
     # Portland
     {
         'limit': 115,
-        'locations': ['Hollywood', 'PSU', 'Cully', 'St Johns', 'Zafar']
+        'locations': ['Hollywood', 'PSU', 'Cully', 'St Johns', 'Zafar', 'Irvington', 'Woodstock']
     },
     # Corvallis
     {
         'limit': 60,
         'locations': ['97330', '97331', '97333', 'Banzhaf'],
     },
+    # Eugene - Tue
+    {
+        'limit': 60,
+        'locations': ['W 11th', 'Friendly']
+    },
     # Eugene - Wed
     {
-        'limit': 140,
-        'locations': ['97402', '97403', '97405', 'W 11th', 'Friendly']
+        'limit': 100,
+        # 'locations': ['97402', '97403', '97405', 'W 11th', 'Friendly']
+        'locations': ['97402', '97403', '97405']
     },
     # Eugene - Thur
     {
@@ -103,7 +109,7 @@ DROPSITES = [
         'color': 'white',
         'description': 'Eugene - W 11th & Van Buren (Wednesday)',
         'allowOneTimeOrders': False,
-        'pickupDay': 3,
+        'pickupDay': 2,
     },
     {
         'name': 'Friendly',
@@ -111,7 +117,7 @@ DROPSITES = [
         'color': 'green',
         'description': 'Eugene - Adams & 26th (Wednesday)',
         'allowOneTimeOrders': False,
-        'pickupDay': 3,
+        'pickupDay': 2,
     },
     {
         'name': 'LCFM',
@@ -131,7 +137,7 @@ DROPSITES = [
     },
     {
         'name': 'Hollywood',
-        'memberLimit': 60,
+        'memberLimit': 15,
         'color': 'yellow',
         'description': 'Portland - Hollywood Farmers Market (Saturday)',
         'allowOneTimeOrders': True,
@@ -142,6 +148,22 @@ DROPSITES = [
         'memberLimit': 30,
         'color': 'red',
         'description': 'Portland - Killingsworth & NE 60th (Saturday)',
+        'allowOneTimeOrders': False,
+        'pickupDay': 6,
+    },
+    {
+        'name': 'Irvington',
+        'memberLimit': 30,
+        'color': 'purple',
+        'description': 'Portland - Irvington Neighborhood (Saturday)',
+        'allowOneTimeOrders': False,
+        'pickupDay': 6,
+    },
+    {
+        'name': 'Woodstock',
+        'memberLimit': 30,
+        'color': 'white',
+        'description': 'Portland - Woodstock Neighborhood (Saturday)',
         'allowOneTimeOrders': False,
         'pickupDay': 6,
     },
@@ -184,7 +206,8 @@ ORDER_WINDOWS = [
         'endTime': '23:59',
         'packDay': 5,
         'memberLimit': 220,
-        'dropsites': ['Farm - Friday', 'LCFM', 'Hollywood', 'PSU', 'Banzhaf', 'Cully', 'St Johns', 'Zafar'],
+        'dropsites': ['Farm - Friday', 'LCFM', 'Hollywood', 'PSU', 'Banzhaf', 'Cully', 'Irvington', 'Woodstock',
+                      'St Johns', 'Zafar'],
         'homeDeliveryZips': ['97330', '97331', '97333']
     },
     {
@@ -199,7 +222,8 @@ ORDER_WINDOWS = [
     }
 ]
 DROP_SITE_ORDER = ['Home Delivery', 'W 11th', 'Friendly', 'Farm - Friday', 'Farm - Tuesday',
-                   'Woodstock', 'Cully', 'St Johns', 'PSU', 'Hollywood', 'Zafar', 'LCFM', 'Banzhaf']
+                   'Woodstock', 'Cully', 'St Johns', 'PSU', 'Hollywood', 'Irvington', 'Woodstock', 'Zafar', 'LCFM',
+                   'Banzhaf']
 
 DELIVERY_CSVS = {
     1: [
@@ -207,10 +231,10 @@ DELIVERY_CSVS = {
             'name': 'Wednesday',
             'zipCodes': ['97402', '97403', '97405'],
             'standingDeliveries': [
-                ['1122 W 11th Avenue, Eugene, OR 97402', 'W 11th Dropsite', '', '', '', '15', '4:00', '10:00', '', '',
-                 '', '', 'none'],
-                ['2675 Adams St, Eugene, OR 97405', 'Friendly', '', '', '', '15', '4:00', '10:00', '', '',
-                 '', '', 'none']
+                # ['1122 W 11th Avenue, Eugene, OR 97402', 'W 11th Dropsite', '', '', '', '15', '4:00', '10:00', '', '',
+                #  '', '', 'none'],
+                # ['2675 Adams St, Eugene, OR 97405', 'Friendly', '', '', '', '15', '4:00', '10:00', '', '',
+                #  '', '', 'none']
             ]
         },
         {
@@ -281,6 +305,8 @@ SENDINBLUE_TRANSACTIONAL_TEMPLATES = {
     'Farm - Tuesday': 50,
     'LCFM': 28,
     'Hollywood': 30,
+    'Irvington': 189,
+    'Woodstock': 190,
     'PSU': 29,
     'Cully': 51,
     'Home Delivery': 32,
@@ -781,13 +807,13 @@ OPTIONAL_APPS = (
 f = os.path.join(PROJECT_APP_PATH, "local_settings.py")
 if os.path.exists(f):
     import sys
-    import imp
+import imp
 
-    module_name = "%s.local_settings" % PROJECT_APP
-    module = imp.new_module(module_name)
-    module.__file__ = f
-    sys.modules[module_name] = module
-    exec(open(f, "rb").read())
+module_name = "%s.local_settings" % PROJECT_APP
+module = imp.new_module(module_name)
+module.__file__ = f
+sys.modules[module_name] = module
+exec(open(f, "rb").read())
 
 WEBPACK_LOADER = {
     "DEFAULT": {
