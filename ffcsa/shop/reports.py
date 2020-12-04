@@ -30,12 +30,13 @@ def generate_weekly_order_reports(date):
 
     for vo in vendor_orders:
         # send_order_to_vendor(order.write_pdf(), vendor, vendor_title, date)
-        docs.append(vo.pickuplist)
+        if vo.vendor_title.lower() != 'deck family farm':
+            docs.append(vo.pickuplist)
         # zip_files.append(("{}_pickup_list_{}.pdf".format(vendor_title, date), pickuplist))
         # we need 2 of these
-        if vo.vendor_title.lower() == 'deck family farm':
+        # if vo.vendor_title.lower() == 'deck family farm':
             # for some reason this doesn't render the title???
-            docs.append(vo.pickuplist.copy())
+            # docs.append(vo.pickuplist.copy())
             # zip_files.append(("{}_pickup_list_karina_{}.pdf".format(vendor_title, date), pickuplist))
 
     # generate packing lists

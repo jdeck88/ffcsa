@@ -3,8 +3,6 @@
 <style>
     @page {
         size: Letter;
-        margin-left: 0;
-        margin-right: 0;
 
         @bottom-center{
             content: counter(page) ' of ' counter(pages);
@@ -42,6 +40,8 @@
     }
 
     .header .qty,
+    .header .price,
+    .header .total_price,
     .header .checklist {
         font-size: 13px;
     }
@@ -86,15 +86,17 @@
 
     .price,
     .total_price {
-        width: 60px;
+        min-width: 50px;
+        font-size: 13px;
     }
 
     .qty {
-        width: 50px;
+        width: 20px;
+        font-size: 13px;
     }
 
     .checklist {
-        width: 50px;
+        width: 40px;
     }
 
     .category {
@@ -115,8 +117,8 @@
     <li class="header">
         <h4 class="item"></h4>
         <h4 class="qty">Qty</h4>
-        <th class="price">Price</th>
-        <th class="total_price">Total Price</th>
+        <h4 class="price">Price</h4>
+        <h4 class="total_price">Total Price</h4>
         <h4 class="checklist">Packed by DFF</h4>
         <h4 class="checklist">Received by FFCSA</h4>
     </li>
@@ -129,8 +131,8 @@
                 <li>
                     <span class="item">{{ item.description }}</span>
                     <span class="num qty">{{ item.quantity }}</span>
-                    <td class="num">${{ item.vendor_price }}</td>
-                    <td class="num">${{ item.total_price }}</td>
+                    <span class="num price">${{ item.vendor_price }}</span>
+                    <span class="num total_price">${{ item.total_price }}</span>
                     <span class="checklist"></span>
                     <span class="checklist"></span>
                 </li>
