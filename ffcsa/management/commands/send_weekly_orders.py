@@ -10,7 +10,7 @@ from django.core.management import BaseCommand
 from ffcsa.shop.deliveries import generate_deliveries_csv, generate_deliveries_optimoroute_csv
 from ffcsa.shop.invoice import generate_invoices
 from ffcsa.shop.models import Order
-from ffcsa.shop.reports import generate_weekly_order_reports, send_order_to_vendor
+from ffcsa.shop.reports import generate_weekly_order_reports, send_order_to_vendor, generate_woven_roots_dairy_packlist
 
 # TODO :: logger isn't used in this file
 logger = logging.getLogger(__name__)
@@ -41,7 +41,15 @@ class Command(BaseCommand):
 
             if options['send_orders']:
                 for vo in vendor_orders:
-                    send_order_to_vendor(vo.order.write_pdf(), vo.vendor, vo.vendor_title, date)
+                    order = vo.order
+                    try:
+                        if vo.vendor_title.lower() != 'woven roots farm':
+                            # email packlist to woven roots farm
+                            packlist = generate_woven_roots_dairy_packlist(date)
+                            order = order.copy([p for p in packlist.pages])  # uses the metadata from doc
+                    except:
+                        pass
+                    send_order_to_vendor(order.write_pdf(), vo.vendor, vo.vendor_title, date)
 
             orders = Order.objects.filter(time__date=date)
 
