@@ -43,9 +43,10 @@ class Command(BaseCommand):
                 for vo in vendor_orders:
                     order = vo.order
                     try:
-                        if vo.vendor_title.lower() != 'woven roots farm':
+                        if vo.vendor_title.lower() == 'woven roots':
                             # email packlist to woven roots farm
                             packlist = generate_woven_roots_dairy_packlist(date)
+                            order = order[0]
                             order = order.copy([p for p in packlist.pages])  # uses the metadata from doc
                     except:
                         pass

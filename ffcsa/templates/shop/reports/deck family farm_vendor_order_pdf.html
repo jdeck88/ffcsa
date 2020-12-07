@@ -4,7 +4,7 @@
     @page {
         size: Letter;
 
-        @bottom-center{
+        @bottom-center {
             content: counter(page) ' of ' counter(pages);
             font-size: 9pt;
             text-align: center;
@@ -139,5 +139,26 @@
             {% endfor %}
         </ul>
     {% endfor %}
+
+    <li class="category">Totals</li>
+
+    <ul class="items">
+        <li>
+            <span class="item">Total</span>
+            <span class="num qty"></span>
+            <span class="num price"></span>
+            <span class="num total_price">${{ grand_total }}</span>
+            <span class="checklist"></span>
+            <span class="checklist"></span>
+        </li>
+        <li>
+            <span class="item">case, Chicken Eggs (Friday Invoice Only)</span>
+            <span class="num qty"></span>
+            <span class="num price">$94.5</span>
+            <span class="num total_price"></span>
+            <span class="checklist"></span>
+            <span class="checklist"></span>
+        </li>
+    </ul>
 </ul>
 
