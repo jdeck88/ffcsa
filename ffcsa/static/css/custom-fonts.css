@@ -14,6 +14,7 @@ Font-Face Icons
 }
 
 /* Use the following CSS code if you want to use data attributes for inserting your icons */
+
 [data-icon]:before {
 	font-family: 'Icons';
 	content: attr(data-icon);
@@ -25,7 +26,8 @@ Font-Face Icons
 	-webkit-font-smoothing: antialiased;
 }
 
-[class^="font-"]:before, [class*=" font-"]:before {
+/* These selectors were originally "font-" but were modified as that collided with Tailwind */
+[class^="font-icon-"]:before, [class*=" font-icon-"]:before {
 	font-family: 'Icons';
 	speak: none;
 	font-style: normal;
@@ -35,8 +37,8 @@ Font-Face Icons
 	-webkit-font-smoothing: antialiased;
 }
 
-[class^="font-"],
-[class*=" font-"]{
+[class^="font-icon-"],
+[class*=" font-icon-"]{
 	display:inline-block;
 	line-height:1em;
 }

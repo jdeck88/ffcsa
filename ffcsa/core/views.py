@@ -55,6 +55,14 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 logger = logging.getLogger(__name__)
 
 
+def home(request, template="home.html"):
+    context = {
+        'settings': settings
+    }
+
+    return TemplateResponse(request, template, context)
+
+
 def shop_home(request, template="shop_home.html"):
     root_categories = Category.objects.published().filter(
         Q(products__available=True) | Q(

@@ -20,8 +20,8 @@ config = {
   devtool: 'source-map',
   entry: {
     // main: './main.js',
-    style: './ffcsa/static/css/style.css',
-    cart: './cart/index.js',
+    style: './ffcsa/static/css/style-source.css',
+    // cart: './cart/index.js',
     // absences: './absences/index.js',
   },
   // context: path.join(CWD, "app", "static", "app"),
@@ -68,9 +68,10 @@ config = {
       {
         test: /\.css$/,
         use: [
-          DEBUG ? 'style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader?sourceMap',
-          'postcss-loader',
+          DEBUG ? 'style-loader' :
+            MiniCssExtractPlugin.loader,
+            'css-loader?sourceMap',
+            'postcss-loader',
         ],
       },
       {
@@ -91,7 +92,7 @@ config = {
   },
   resolve: {
     extensions: ['.js', '.jsx'],
-    modules: ['app/static/app/', 'node_modules', '.'],
+    modules: ['node_modules', 'ffcsa/static/js/', '.'],
     alias: {},
   },
   plugins: [

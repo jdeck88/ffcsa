@@ -22,9 +22,79 @@ module.exports = {
           // '800': '#504A40',
           // '900': '#423D33',
         },
+
+        red: {
+            '1': '#c54c51',
+            '2': '#be253e',
+        },
+        
+        orange: {
+            '1': '#efad8b',
+            '2': '#e67f51',
+            '3': '#e16231',
+            '4': '#e98d63', // Left and right boxes below homepage hero image
+            '5': '#e57849', // Center box below homepage hero image
+        },
+        
+        yellow: {
+            '1': '#f9e5a7',
+            '2': '#f7db80',
+            '3': '#f4d151',
+            '4': '#f2c916',
+        },
+        
+        green: {
+            '1': '#5f8b49',
+            '2': '#7c9b65',
+            '3': 'rgba(95, 139, 73, .645)',
+        },
+        
+        brown: {
+            '1': '#e0cabc',
+            '2': '#c9a18a',
+            '3': '#b57e62',
+            '4': '#a2603f',
+            '5': '#914323',
+            '6': '#694334',
+            '7': '#502616',
+        },
+
+        tan: {
+            '1': '#fbf0d0',
+            '2': '#eadcd2',
+        },
+      },
+
+      minHeight: {
+        'inherit': 'inherit',
+        '100px': '100px',
+        '200px': '200px',
+        '300px': '300px',
+        '400px': '400px',
+        '500px': '500px',
+      },
+
+      height: {
+        'inherit': 'inherit',
+        '100px': '100px',
+        '200px': '200px',
+        '300px': '300px',
+        '400px': '400px',
+        '500px': '500px',
+      },
+
+      width: {
+        'inherit': 'inherit',
+        '100px': '100px',
+        '200px': '200px',
+        '300px': '300px',
+        '400px': '400px',
+        '500px': '500px',
       },
     },
+
     variants: {},
+    
     plugins: [],
   },
 }
