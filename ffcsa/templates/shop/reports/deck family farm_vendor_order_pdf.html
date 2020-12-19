@@ -86,7 +86,7 @@
 
     .price,
     .total_price {
-        min-width: 50px;
+        min-width: 55px;
         font-size: 13px;
     }
 
@@ -103,6 +103,12 @@
         background: #E1E1E1;
         font-weight: bold;
         padding: 3px 0 3px 12px;
+    }
+
+    .subtotal {
+        background: #f0f0f0;
+        font-weight: bold;
+        margin-top: -12px;
     }
 
 </style>
@@ -137,6 +143,17 @@
                     <span class="checklist"></span>
                 </li>
             {% endfor %}
+        </ul>
+
+        <ul class="items subtotal">
+            <li>
+                <span class="item">Sub-total</span>
+                <span class="num qty"></span>
+                <span class="num price"></span>
+                <span class="num total_price">${{ category_items|sum_items }}</span>
+                <span class="checklist"></span>
+                <span class="checklist"></span>
+            </li>
         </ul>
     {% endfor %}
 

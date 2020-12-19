@@ -32,6 +32,14 @@ def get_attr(value, arg):
 
 
 @register.filter
+def sum_items(items):
+    total = 0
+    for i in items:
+        total = total + i['total_price']
+    return total
+
+
+@register.filter
 def get_billing_detail_field(billing_detail_list, key):
     for (k, value) in billing_detail_list:
         if k == key:
