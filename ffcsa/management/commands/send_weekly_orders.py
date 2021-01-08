@@ -46,8 +46,7 @@ class Command(BaseCommand):
                         if vo.vendor_title.lower() == 'woven roots':
                             # email packlist to woven roots farm
                             packlist = generate_woven_roots_dairy_packlist(date)
-                            order = order[0]
-                            order = order.copy([p for p in packlist.pages])  # uses the metadata from doc
+                            order.pages.extend(packlist.pages)
                     except:
                         pass
                     send_order_to_vendor(order.write_pdf(), vo.vendor, vo.vendor_title, date)
