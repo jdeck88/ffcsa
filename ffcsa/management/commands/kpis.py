@@ -2,7 +2,7 @@ from django.core.mail import send_mail
 from django.db import connection
 from mezzanine.conf import settings
 from django.core.management import BaseCommand
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 
 
 class Command(BaseCommand):
@@ -10,11 +10,22 @@ class Command(BaseCommand):
     """
     help = 'Calculate KPIs for the past month excluding today'
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--date',
+            action='store',
+            type=lambda s: datetime.strptime(s, '%Y-%m-%d').date(),
+            default=date.today(),
+            help="Send orders to vendors"
+        )
+
     def handle(self, *args, **options):
-        yesterday = date.today() - timedelta(days=1)
+        date = options['date']
+
+        yesterday = date - timedelta(days=1)
         last_day_of_previous_month = yesterday.replace(day=1) - timedelta(days=1)
-        one_month_ago = date.today().replace(month=last_day_of_previous_month.month)
-        jan_first = date.today().replace(month=1, day=1)
+        one_month_ago = date.replace(month=last_day_of_previous_month.month, year=last_day_of_previous_month.year)
+        jan_first = date.replace(month=1, day=1, year=last_day_of_previous_month.year)
 
         # excluded users are farmily, ewing, lopez, albarquoni
         excluded_users = '1, 13, 24, 61'
@@ -65,6 +76,15 @@ class Command(BaseCommand):
             cursor.execute(query)
             number_of_members = cursor.fetchall()[0][0]
 
+            # of active subscriptions
+            query = """
+                select count(user_id) 
+                from ffcsa_core_profile 
+                where stripe_subscription_id is not null and stripe_subscription_id <> '';
+            """
+            cursor.execute(query)
+            number_of_subscriptions = cursor.fetchall()[0][0]
+
         msg = """
         Date: {}
         The following KPIs are for the past month.
@@ -76,9 +96,10 @@ class Command(BaseCommand):
         # of engaged members: {}
         # of engaged members last year: {}
         # of members: {}
+        # of subscriptions: {}
         """.format(yesterday, avg_order_last_month, avg_order_ytd, avg_order_last_month_last_year,
                    avg_order_ytd_last_year, number_of_engaged_members, number_of_engaged_members_last_year,
-                   number_of_members)
+                   number_of_members, number_of_subscriptions)
 
         print(msg)
         send_mail(
