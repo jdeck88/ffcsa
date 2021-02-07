@@ -38,7 +38,8 @@
         ((category.title))
       </a>
 
-      <ul v-if="category.subCategory.length > 0" class="absolute w-full hidden bg-white text-secondary rounded shadow-lg py-3 px-2 hover-target">
+      <!-- list of sub gategories -->
+      <ul v-if="category.subCategory.length > 0" class="absolute w-full hidden bg-white text-secondary rounded shadow-3xl py-3 px-2 hover-target">
         <li v-for="sub in category.subCategory" :class="[categorySelected(sub), 'text-base hover:text-primary']">
           <a @click.prevent="selectedCategory=sub" class="py-2 px-4 block" href="#">((sub))</a>
         </li>
@@ -99,8 +100,8 @@
     </div>
   
     <!-- Spinner -->
-    <div class="mx-auto my-20" style="max-width: 6rem;" v-else>
-      <template v-if='loading'>
+    <div class="mx-auto my-20" style=" max-width: 10rem;"  v-else>
+      <div v-if='loading' style=" max-width: 6rem;">
         <svg version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
         viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
           <path fill="#e16231" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
@@ -114,9 +115,11 @@
               repeatCount="indefinite" />
           </path>
         </svg>
-      </template>
+      </div>
 
-      <template v-else>No products here</template>
+      <template v-else>
+        <p>No products here!</p>
+      </template>
     </div>
   </section>
   <!-- Products list -->
