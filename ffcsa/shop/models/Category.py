@@ -1,5 +1,6 @@
 from functools import reduce
 from operator import iand, ior
+from collections import defaultdict
 
 from django.db import models
 from django.db.models import Q
@@ -110,3 +111,19 @@ class Category(Page, RichText):
         if not root:
             return self.slug
         return self.slug.lstrip(root).lstrip('/')
+    
+    @classmethod
+    def parent_sub_categories(self):
+        """
+        Returns a default dict with all parent categories as keys and the value
+        is list of sub categories (if no parent categoery we return the sub 
+        category as parent)
+        """
+
+        data = defaultdict(list)
+        for category in self.objects.all():
+            if category.parent:
+                data[str(category.parent)].append(category.title)
+            else:
+                data[category.title] = []
+        return data

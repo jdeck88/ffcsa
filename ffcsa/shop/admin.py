@@ -28,6 +28,7 @@ from ffcsa.shop.models import (Category, DiscountCode, Order, OrderItem,
                                ProductVariation, Sale, Vendor, VendorProductVariation)
 from ffcsa.shop.models.Cart import CartItem
 from ffcsa.shop.models.Vendor import VendorCartItem
+from ffcsa.shop.models.Product import ProductSeason, ProductVariationUnit
 from ffcsa.shop.views import HAS_PDF
 
 """
@@ -116,7 +117,7 @@ class ProductVariationAdmin(nested.NestedStackedInline):
     view_on_site = False
     fieldsets = (
         (None, {
-            "fields": ["_title", "in_inventory", "weekly_inventory", "is_frozen", "extra",
+            "fields": ["_title", "in_inventory", "weekly_inventory", "is_frozen", "extra", "unit",
                        ("vendor_price", "unit_price", "margin"),
                        "sku",
                        "default",
@@ -144,7 +145,7 @@ class ProductImageAdmin(TabularDynamicInlineAdmin):
 product_fieldsets = deepcopy(DisplayableAdmin.fieldsets)
 product_fieldsets[0][1]["fields"].insert(2, "available")
 product_fieldsets[0][1]["fields"].extend(
-    ["content", "categories", "order_on_invoice", "is_dairy"])
+    ["content", "categories", "order_on_invoice", "is_dairy", "seasons"])
 product_fieldsets = list(product_fieldsets)
 
 other_product_fields = []
@@ -213,8 +214,7 @@ class ProductAdmin(nested.NestedModelAdminMixin, ContentTypedAdmin, DisplayableA
     list_editable = product_list_editable
     list_filter = ("status", "available", CategoryListFilter, "variations__vendors")
     filter_horizontal = ("categories",) + tuple(other_product_fields)
-    search_fields = ("title", "content", "categories__title",
-                     "variations__sku")
+    search_fields = ("title", "content", "categories__title", "variations__sku")
     inlines = (ProductImageAdmin, ProductVariationAdmin)
     form = ProductAdminForm
     fieldsets = product_fieldsets
@@ -545,3 +545,5 @@ admin.site.register(Order, OrderAdmin)
 admin.site.register(Sale, SaleAdmin)
 admin.site.register(DiscountCode, DiscountCodeAdmin)
 admin.site.register(Vendor, VendorAdmin)
+admin.site.register(ProductSeason)
+admin.site.register(ProductVariationUnit)

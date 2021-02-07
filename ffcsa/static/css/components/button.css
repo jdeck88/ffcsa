@@ -1,37 +1,72 @@
 a.btn {
-    -webkit-appearance: button;
-    -moz-appearance: button;
-    appearance: button;
-    text-decoration: none;
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+  text-decoration: none;
 }
 
 .btn {
-    @apply text-white text-center text-2xl font-bold py-2 px-4 rounded-md shadow-xl;
-    background-color: theme(colors.orange.3);
+  @apply text-white text-center text-2xl font-bold py-2 px-4 rounded-md shadow-xl;
+  background-color: theme('colors.orange.3');
 }
 
 .btn:hover {
-    background-color: #d95320;
+  background-color: #d95320;
 }
 
 .btn-sm {
-    @apply text-lg self-center w-auto;
-    padding: 15px 20px;
-    max-height: 57px;
+  @apply text-lg self-center w-auto;
+  padding: 15px 20px;
+  max-height: 57px;
 }
 
 .btn-light-orange {
-    background-color: theme(colors.orange.2);
+  background-color: theme('colors.orange.2');
 }
 
 .btn-light-orange:hover {
-    background-color: theme(colors.orange.1); /* TODO */
+  background-color: theme('colors.orange.1'); /* TODO */
 }
 
 .btn-green {
-    background-color: theme(colors.green.1);
+  background-color: theme('colors.green.1');
 }
 
 .btn-green:hover {
-    background-color: theme(colors.green.2); /* TODO */
+  background-color: theme('colors.green.2'); /* TODO */
+}
+
+
+/* @Joe start here */
+
+.bbtn {
+  @apply text-center text-xl font-bold py-3 px-6 rounded-md text-base;
+}
+
+/* primary button */
+.btn-primary {
+  @apply bbtn bg-primary text-white;
+}
+
+.btn-primary:hover {
+  @apply bg-orange-2;
+}
+
+/* secondary button */
+.btn-outline-secondary {
+  @apply px-6 py-4 border border-brown-7 rounded text-brown-7 text-xl transition duration-500 ease-in-out;
+}
+
+.btn-outline-secondary:hover {
+  @apply px-6 py-4 border border-brown-7 rounded bg-brown-7 text-white text-xl;
+}
+
+/* add to card button */
+.btn-add-to-card {
+  @apply px-6 py-3 font-light text-brown-7 text-lg;
+  background-color: theme('colors.brown.0'); /* TODO */
+}
+
+.btn-add-to-card:hover {
+  @apply underline;
 }

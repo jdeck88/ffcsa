@@ -1,16 +1,53 @@
-{% extends "accounts/account_form.html" %}
-{% load i18n %}
+{% extends "base.html" %}
+
+{% load staticfiles static %}
+{% block meta_title %}Login{% endblock %}
 
 {% block main %}
+<main>
+  <div class="min-w-screen flex items-center justify-center px-5 py-5 mt-32">
+    <div class="bg-gray-100 text-gray-500 rounded-3xl shadow-xl overflow-hidden" style="min-width:27rem">
+      <div class="md:flex w-full">
+        <div class="w-full py-10 px-5 md:px-10">
+          <div class="text-center mb-10">
+            <h1 class="font-bold text-3xl text-gray-900">LOGIN</h1>
+            <p>Welcome back</p>
+          </div>
+          <form action="" method="POST">
+            {% csrf_token %}
+            <div class="flex -mx-3">
+              <div class="w-full px-3 mb-5">
+                <label for="" class="text-xs font-semibold px-1">Email</label>
+                <div class="flex">
+                  <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-email-outline text-gray-400 text-lg"></i></div>
+                  <input name="username" type="email" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-primary" placeholder="johnsmith@example.com">
+                </div>
+              </div>
+            </div>
+            <div class="flex -mx-3">
+              <div class="w-full px-3 mb-12">
+                <label for="" class="text-xs font-semibold px-1">Password</label>
+                <div class="flex">
+                  <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-lock-outline text-gray-400 text-lg"></i></div>
+                  <input name="password" type="password" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-primary" placeholder="************">
+                </div>
+              </div>
+            </div>
+            <div class="flex -mx-3">
+              <div class="w-full px-3 mb-5">
+                <button class="block w-full max-w-xs mx-auto btn-primary text-white rounded-lg px-3 py-3 font-semibold">LOGIN</button>
+              </div>
+            </div>
+          </form>
 
-{% if request.user.is_authenticated %}
-    <p>{% trans "You're already logged in. If you'd like to log in as a different user, you'll need to log out first." %}</p>
-{% else %}
-    {{ block.super }}
-    {% url "mezzanine_password_reset" as password_reset_url %}
-    {% url "profile_update" as profile_update_url %}
-    {% blocktrans %}<p>You can also <a href="{{ password_reset_url }}?next={{ profile_update_url }}">reset your password</a> if you've forgotten it.</p>{% endblocktrans %}</p>
-    <p>{% blocktrans %}If you don't have an account you can learn more about becoming a <a href="http://deckfamilyfarm.com/full-farm-csa/">member</a>.{% endblocktrans %}</p>
-{% endif %}
 
-{% endblock %}
+          <p class="mt-3">
+            Don't have an account?
+            <a href="{% url 'signup' %}{% if not 'account' in request.path %}?next={{ request.path }}{% else %}?next=/{% endif %}" class="text-primary">Register now!</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock main %}

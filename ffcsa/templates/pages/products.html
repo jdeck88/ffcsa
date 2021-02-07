@@ -1,0 +1,343 @@
+{% extends "pages/page.html" %}
+
+{% load mezzanine_tags shop_tags i18n static %}
+{% block body_id %}products{% endblock %}
+
+
+{% block custom_css %}
+<!-- TODO - idealy this will be in a centeral place -->
+<style>
+  :root {
+    --banner-bg: url({% static 'img/cows-banner-2.jpg' %});
+  }
+</style>
+{% endblock custom_css %}
+
+
+{% block main %}
+<main id="productsVue" v-cloak>
+  <!-- Call block super -->
+  {{ block.super }}
+
+  <!-- product detail modal -->
+  {% include 'partials/product_modal.html' %}
+
+  <!-- banner section -->
+  <section class="min-h-300px lg:min-h-400px xl:min-h-500px bg-cover bg-center bg-overlay-dark" style="background-image: var(--banner-bg);">
+    <div class="flex flex-col justify-center px-4 pt-4 pb-8 min-h-300px lg:min-h-400px xl:min-h-500px">
+      <h2 class="text-white text-center text-5xl mb-4">Placeholder text</h2>
+    </div>
+  </section>
+  <!-- banner section -->
+
+  <!-- filters section -->
+  <section class="md:flex justify-center mt-10 text-success md:text-xl font-bold">
+    
+    <div v-for="category in categories" class="inline-blocks relative hover-trigger">
+      <a href="#" @click.prevent="selectedCategory=category.title" :class="[categorySelected(category.title), 'hover:text-primary block m-3']">
+        ((category.title))
+      </a>
+
+      <ul v-if="category.subCategory.length > 0" class="absolute w-full hidden bg-white text-secondary rounded shadow-lg py-3 px-2 hover-target">
+        <li v-for="sub in category.subCategory" :class="[categorySelected(sub), 'text-base hover:text-primary']">
+          <a @click.prevent="selectedCategory=sub" class="py-2 px-4 block" href="#">((sub))</a>
+        </li>
+      </ul>
+    </div>
+    
+    <a href="#" class="hover:text-primary block m-3">RECIPIES</a>
+    <a href="#" v-if="selectedCategory" @click.prevent="selectedCategory=''"  class="hover:underline text-sm text-secondary block m-3 pt-2">
+      Clear filters
+    </a>
+  </section>
+  <!-- filters section -->
+
+
+  <!-- Products list -->
+  <section class="min-h-screen">
+    <div v-if="products.length > 0" class="container my-12 mx-auto px-4 md:px-12">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div class="text-center mb-4" v-for="product in products">
+          <a :href="'#' + product.slug" @click="showProduct(product)">
+            <img alt="Placeholder" class="block h-auto w-full mb-2" src="https://picsum.photos/600/400/?random">
+          </a>
+  
+          <h3 class="text-brown-7 text-xl font-bold truncate">(( product.title ))</h3>
+          <p class="text-brown-7 text-xl">$(( product.price ))/unit</p>
+          <div class="my-2">
+            <template v-if="product.num_in_stock">
+              <button class="btn-add-to-card" @click.prevent="NavVue.addToCart(product)">ADD TO CART</button>
+            </template>
+            <template v-else>
+              <button class="disabled:opacity-50 bg-gray-100 p-4 px-6 text-red-1 rounded">OUT OF STOCK</button>
+            </template>
+
+          </div>
+          <a :href="(( product.url ))" class="text-green-2">Quantity/Weight Details Here</a>
+          <p class="text-brown-7 text-sm italic font-thin">(( product.vendor ))</p>
+        </div>
+      </div>
+  
+  
+      <!-- Page pagination -->
+      <div class="flex justify-center mb-5">
+        <a :class="[(previous == null) ? 'pointer-events-none' : '', 'next-prev p-1 pt-2 mr-2']" href="#" @click.prevent="goToPage(currentPage - 1)">
+          <svg width="11" height="19" viewBox="0 0 11 19" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.0058 18.0041C8.87419 18.0049 8.74373 17.9796 8.62189 17.9299C8.50005 17.8801 8.38924 17.8068 8.2958 17.7141L0.295798 9.71409C0.20207 9.62113 0.127676 9.51053 0.0769072 9.38867C0.0261385 9.26681 0 9.1361 0 9.00409C0 8.87208 0.0261385 8.74137 0.0769072 8.61951C0.127676 8.49766 0.20207 8.38706 0.295798 8.29409L8.2958 0.294092C8.4841 0.105788 8.7395 0 9.0058 0C9.2721 0 9.52749 0.105788 9.7158 0.294092C9.9041 0.482395 10.0099 0.73779 10.0099 1.00409C10.0099 1.27039 9.9041 1.52579 9.7158 1.71409L2.4158 9.00409L9.7158 16.2941C9.80953 16.3871 9.88392 16.4977 9.93469 16.6195C9.98546 16.7414 10.0116 16.8721 10.0116 17.0041C10.0116 17.1361 9.98546 17.2668 9.93469 17.3887C9.88392 17.5105 9.80953 17.6211 9.7158 17.7141C9.62236 17.8068 9.51154 17.8801 9.38971 17.9299C9.26787 17.9796 9.1374 18.0049 9.0058 18.0041Z" fill="#6F4131"/></svg>
+        </a>
+  
+        <template v-for="i in pageRange">
+          <p class="mt-1 p-1 mx-1" v-if="i == currentPage">(( i ))</p>
+          <a v-else class="pagination-page mt-1 p-1 mx-1 font-thin" href="#" @click.prevent="goToPage(i)">(( i ))</a>
+        </template>
+  
+        <a :class="[(next == null) ? 'pointer-events-none' : '', 'next-prev p-1 pt-2 mr-2']" href="#" @click.prevent="goToPage(currentPage + 1)">
+          <svg width="11" height="19" viewBox="0 0 11 19" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.00592 5.83405e-05C1.13753 -0.000702541 1.26799 0.0245221 1.38983 0.0742867C1.51167 0.124051 1.62248 0.197378 1.71592 0.290059L9.71592 8.29006C9.80965 8.38302 9.88404 8.49362 9.93481 8.61548C9.98558 8.73734 10.0117 8.86805 10.0117 9.00006C10.0117 9.13207 9.98558 9.26278 9.93481 9.38464C9.88404 9.5065 9.80965 9.6171 9.71592 9.71006L1.71592 17.7101C1.52762 17.8984 1.27222 18.0041 1.00592 18.0041C0.739619 18.0041 0.484225 17.8984 0.295921 17.7101C0.107618 17.5218 0.00182921 17.2664 0.00182924 17.0001C0.00182926 16.7338 0.107618 16.4784 0.295921 16.2901L7.59592 9.00006L0.295923 1.71006C0.202194 1.61709 0.127798 1.50649 0.0770297 1.38464C0.0262611 1.26278 0.000123545 1.13207 0.000123557 1.00006C0.000123568 0.868046 0.0262611 0.737341 0.0770298 0.615481C0.127798 0.493622 0.202194 0.383022 0.295923 0.290059C0.389363 0.197378 0.500177 0.124051 0.622015 0.0742866C0.743852 0.024522 0.874315 -0.000702564 1.00592 5.83405e-05Z" fill="#6F4131"/></svg>
+        </a>
+      </div>
+      <!-- Page pagination -->
+  
+    </div>
+  
+    <!-- Spinner -->
+    <div class="mx-auto my-20" style="max-width: 6rem;" v-else>
+      <template v-if='loading'>
+        <svg version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+        viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
+          <path fill="#e16231" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+            <animateTransform 
+              attributeName="transform" 
+              attributeType="XML"
+              type="rotate"
+              dur="1s" 
+              from="0 50 50"
+              to="360 50 50" 
+              repeatCount="indefinite" />
+          </path>
+        </svg>
+      </template>
+
+      <template v-else>No products here</template>
+    </div>
+  </section>
+  <!-- Products list -->
+
+
+  
+
+
+  <!-- WHAT’S IN SEASON? -->
+  <div class="flex justify-center py-6">
+    <button class="btn-outline-secondary">WHAT’S IN SEASON?</button>
+  </div>
+  <!-- WHAT’S IN SEASON? -->
+
+
+  <!-- Beyond the Groceries -->
+  <section class="text-center bg-givry p-5">
+    <div class="container mx-auto">
+      <h3 class="text-3xl font-bold text-brown-7 my-5 py-5">Beyond the Groceries</h3>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-12 my-5 py-5">
+        <div>
+          <img alt="Placeholder" class="block h-auto w-full mb-2" src="https://picsum.photos/600/400/?random">
+          <a href="#" class="text-3xl font-bold text-brown-7">RECIPIES FROM THE FARM</a>
+        </div>
+
+        <div>
+          <img alt="Placeholder" class="block h-auto w-full mb-2" src="https://picsum.photos/600/400/?random">
+          <a href="#" class="text-3xl font-bold text-brown-7">PRODUCTS & SWAG</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Beyond the Groceries -->
+
+
+  <!-- Ready for Better Food Choices? -->
+  <section class="text-center p-5 py-20 max-w-xl mx-auto">
+    <h3 class="text-3xl text-primary font-bold mb-5">Ready for Better Food Choices?</h3>
+    <p class="text-secondary text-xl mb-10">Join the hundreds of households who trust local farmers to provide high quality food for a full diet.</p>
+    <button class="btn-primary">BECOME A MEMBER</button>
+  </section>
+  <!-- Ready for Better Food Choices? -->
+</main>
+{% endblock main %}
+
+{% block js %}
+<script>
+  const ProductsVue = new Vue({
+    el: '#productsVue',
+    delimiters: ['((', '))'],
+    data: {
+      loading: true,
+
+      // products
+      count: 0,
+      limit:21,
+      offset:0,
+      selectedCategory: '',
+      products: [],
+      categories: [],
+
+      // pages
+      next: null,
+      previous: null,
+
+      // product
+      currentProduct: null,
+      currentProductMapping: null,  // store number_in_cart
+
+      quantities: {}, // maps variation.id : variation.quantity
+      quantity: 1,
+
+      // product details
+      modalShown: false,
+
+    },
+
+    watch: {
+      currentProduct: function(val, oldVal) {
+        if (val !== null) {
+          this.modalShown = true
+        } else {
+          this.modalShown = false
+        }
+      },
+
+      selectedCategory: function(val, oldVal) {
+        this.products = []
+        this.getProducts()
+      }
+    },
+
+    computed: {
+      pages: function() {
+        return Math.ceil(parseInt(this.count) / parseInt(this.limit))
+      },
+      
+      currentPage: function() {
+        return Math.ceil((parseInt(this.offset) + parseInt(this.limit))/ parseInt(this.limit))
+      },
+
+      pageRange: function() {
+        const pages = Array.from({length: this.pages}, (_, i) => i + 1)
+        const index = pages.indexOf(this.currentPage);
+
+        const prev = []
+        for (i = index; i > 0; i--) {
+          prev.unshift(i)
+        }
+
+        const next = []
+        for (i = index + 1; i <= pages.length; i++) {
+          next.push(i)
+        }
+
+
+        let total = prev.slice(Math.max(prev.length - 3, 0))
+
+        for (item in next) {
+          if (total.length < 6) total.push(next[item])
+        }
+
+        // console.log('total', total)
+        return total
+      },
+      
+    },
+
+    methods: {
+      async getProducts() {
+        this.loading = true;
+
+        // make sure we are not overpassing the count
+        if (this.count > 0 && this.offset > this.count) this.offset = this.count - this.limit;
+        
+        // get products and assign the results
+        try {
+          const res = await axios.get(`/api/products/?limit=${this.limit}&offset=${this.offset}&category=${this.selectedCategory}`);
+          const { count, next, previous, results } = res.data;
+          this.products = results;
+          this.next = next;
+          this.previous = previous;
+          this.count = count;
+          
+
+          this.loading = false;
+          console.log(res.data)
+          // after fetching the products, check if the url 
+          // has product slug to open it
+          this.openProductWithSlug()
+        } catch (error) {
+          console.log(error)
+        }
+      },
+      async getCategories() {
+        // get categories and clean up the data
+        try {
+          const res = await axios.get(`/api/products/get_parent_sub_categories/`);
+
+          const WANTED_CATEGORIES = [
+            'Pasture Raised Meats', 'Organic Vegetables', 'Organic Fruit', 'Raw Dairy', 'Pantry'
+          ]
+          for (let key in res.data) {
+            if (WANTED_CATEGORIES.includes(key))
+            this.categories.push({title: key, subCategory: res.data[key]})
+          }
+
+
+          console.log(this.categories)
+          
+        } catch (error) {
+          console.log(error)
+        }
+      },
+      openProductWithSlug() {
+        // open product if we got its slug in the urls hash
+        const slug    = location.hash.slice(1);
+        const matched = this.products.filter(product => product.slug == slug)
+        if (matched.length > 0) this.showProduct(matched[0])
+      },
+      goToPage(page) {
+        toOffset = (page - 1) * this.limit;
+        this.offset = toOffset
+        this.getProducts()
+      },
+      showProduct(product) {
+        // just for testing
+        // console.log(product)
+        // console.log(product.variations)
+        // console.log(product.variations[0])
+        this.currentProduct = product;
+
+        for (variation of this.currentProduct.variations) {
+          if (NavVue.isVariationInCart(variation)) {
+            const item = NavVue.cart.items.filter(item => item.variation_id == variation.id)[0]
+            this.quantities[variation.id] = item.quantity
+          } else {
+            this.quantities[variation.id] = 0
+          }
+        }
+
+      },
+      hideProductModal() {
+        this.currentProduct = null;
+        this.quantities = {};
+        location.hash = ' ';
+      },
+      categorySelected(category) {
+        return this.selectedCategory == category ? 'text-primary' : ''
+      }
+    },
+
+    async mounted() {
+      // get products and categories
+      this.getProducts()
+      this.getCategories()
+    }
+  
+  })
+
+
+</script>
+{% endblock %}

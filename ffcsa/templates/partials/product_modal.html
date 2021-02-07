@@ -1,0 +1,103 @@
+<div :class="[(modalShown ? '' : 'hidden'), 'fixed z-10 inset-0 overflow-y-auto']">
+  <div class="flex min-h-screen" v-if="currentProduct != null">
+
+    <div class="fixed inset-0 transition-opacity"  aria-hidden="true" @click.prevent="hideProductModal()">
+      <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+    </div>
+  
+    <div class="bg-white text-secondary max-w-4xl mx-auto my-auto shadow p-5 pb-10 z-10" style="min-height: 22rem;">
+      <!-- close button -->
+      <div class="flex mb-2">
+        <a href="#" class="ml-auto" @click.prevent="hideProductModal()">
+          <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.4 0L9 8.43L0.57 0L0 0.57L8.4 9L0 17.43L0.57 18L9 9.57L17.4 18L18 17.43L9.57 9L18 0.57L17.4 0Z" fill="#6F4131"/></svg>
+        </a>
+      </div>
+      <!-- close button -->
+
+      <section class="px-3">
+        <!-- header (title, vendor and season) -->
+        <div class="flex mb-1">
+          <div class="grid grid-cols-2">
+            <h3 class="col-span-2 md:col-span-1 text-2xl font-bold capitalize pr-2">((currentProduct.title))</h3>
+            <p class="col-span-2 md:col-span-1 text-base font-light italic pt-2 mt-auto">((currentProduct.vendor))</p>
+          </div>
+
+          <!-- Show products seasons -->
+          <template v-if="currentProduct.seasons.length < 4">
+            <p class="ml-auto mt-2 font-thin italic">(( currentProduct.seasons.join(' - ') ))</p>
+          </template>
+
+          <!-- Show all seasons -->
+          <template v-else>
+            <p class="ml-auto mt-2 font-thin italic">ALL SEASON</p>
+          </template>
+        </div>
+        <!-- header (title, vendor and season) -->
+  
+        <hr class="bg-secondary">
+  
+        <!-- product details -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-5">
+          <!-- item image -->
+          <img alt="Placeholder" class="block h-auto w-full mb-2" src="https://picsum.photos/600/400/?random">
+
+          <!-- item control -->
+          <div class="col-span-2">
+            <div v-for="variation in currentProduct.variations" class="grid grid-cols-3 rounded shadow p-2 py-4 mb-3">
+              <div class="col-span-3 md:col-span-2 flex">
+                <p class="text-3xl pr-2">$((variation.unit_price))</p>
+
+                <!-- product available amount, if product number_in_stock is null means it is unlimited -->
+                <p class="text-red-1 pt-3">
+                  <template v-if="variation.is_unlimited">AVAILABLE</template>
+                  <template v-else-if="variation.number_in_stock == 0">OUT OF STOCK</template>
+                  <template v-else>((variation.number_in_stock)) AVAILABLE</template>
+                </p>
+
+              </div>
+              
+              <div class="col-span-3 md:col-span-1">
+
+                <!-- product variations unlimited amount -> enter number you want -->
+                <template v-if="variation.is_unlimited">
+                  <input type="text" v-model="quantities[variation.id]" class="w-full text-center py-2 mb-2 rounded-lg border-2 border-gray-200 outline-none">
+                  <button class="w-full bg-primary p-3 rounded text-white font-semibold" @click="NavVue.addToCart(variation)">
+                    <template v-if="NavVue.isVariationInCart(variation)">UPDATE CART</template>
+                    <template v-else>ADD TO CART</template>
+                  </button>
+                </template>
+                
+                <!-- product variations out of stock -> can't manpulate -->
+                <template v-else-if="variation.number_in_stock == 0">
+                  <p class="text-red-1 mb-2 text-center">OUT OF STOCK!</p>
+                  <button class="w-full disabled:opacity-50 bg-gray-100 p-3 rounded" disabled>ADD TO CART</button>
+                </template>
+
+                <!-- product variations limited amount -> chose from dropdown -->
+                <template v-else>
+                  <select v-model="quantities[variation.id]" class="w-full shadow-sm rounded border cursor-pointer p-2 px-6 mb-2">
+                    <option v-for="num in variation.number_in_stock" :value="num">((num))</option>
+                  </select>
+                  <button class="w-full bg-primary p-3 rounded text-white font-semibold" @click="NavVue.addToCart(variation)">
+                    <template v-if="NavVue.isVariationInCart(variation)">UPDATE CART</template>
+                    <template v-else>ADD TO CART</template>
+                  </button>
+                </template>
+
+              </div>
+            </div>
+          </div>
+          <!-- item control -->
+
+        </div>
+        <!-- product details -->
+
+        <!-- product content -->
+        <div class="p-4 mt-4 bg-gray-100" v-if="currentProduct.content" v-html="currentProduct.content"></div>
+        <!-- product content -->
+
+      </section>
+    </div>
+  
+  </div>
+</div>

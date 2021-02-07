@@ -736,10 +736,20 @@ INSTALLED_APPS = (
     "ffcsa.core",
     'nested_admin',
     'anymail',
+    'rest_framework',
     # "mezzanine.mobile",
 
     'webpack_loader'
 )
+
+
+# django rest framework
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 21
+}
+
 
 # List of middleware classes to use. Order is important; in the request phase,
 # these middleware classes will be applied in the order given, and in the

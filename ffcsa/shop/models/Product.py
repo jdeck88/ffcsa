@@ -6,6 +6,7 @@ from django.db.models import CharField
 from django.db.models.base import ModelBase
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+from django.utils.text import slugify
 from future.builtins import super
 from future.utils import with_metaclass
 from mezzanine.conf import settings
@@ -33,6 +34,24 @@ class BaseProduct(Displayable):
         abstract = True
 
 
+class ProductSeason(models.Model):
+    # Seasons for products
+    class Meta:
+        verbose_name = 'Season'
+        verbose_name_plural = 'Seasons'
+    slug = models.SlugField(max_length=200, blank=True)
+    name = models.SlugField(max_length=200)
+
+    def __str__(self) -> str:
+        return self.name
+
+    def save(self, *args, **kwargs):
+        # create slug if not exists
+        if not self.slug:
+            self.slug = slugify(self.name, allow_unicode=True)
+        super().save(*args, **kwargs)
+
+
 class Product(BaseProduct, Priced, RichText, ContentTyped, AdminThumbMixin):
     """
     Container model for a product that stores information common to
@@ -51,6 +70,7 @@ class Product(BaseProduct, Priced, RichText, ContentTyped, AdminThumbMixin):
     upsell_products = models.ManyToManyField("self",
                                              verbose_name=_("Upsell products"), blank=True)
     rating = RatingField(verbose_name=_("Rating"))
+    seasons = models.ManyToManyField(ProductSeason, related_name='seasons')
 
     order_on_invoice = models.FloatField(default=0, null=True, blank=True,
                                          help_text="Order this product will be printed on invoices. If set, this will override the product's category order_on_invoice setting. This is a float number for more fine grained control. (ex. '2.1' will be sorted the same as if the product's parent category order_on_invoice was 2 & the product's category order_on_invoice was 1).")
@@ -171,6 +191,19 @@ class ProductOption(models.Model):
         verbose_name_plural = _("Product options")
 
 
+class ProductVariationUnit(models.Model):
+    # Unit of Measurement (UOM) with for products its Code
+    class Meta:
+        verbose_name = 'Unit'
+        verbose_name_plural = 'Units'
+
+    name = models.SlugField(max_length=50)
+    code = models.SlugField(max_length=50)
+
+    def __str__(self) -> str:
+        return f'{self.name} ({self.code})'
+
+
 class ProductVariationMetaclass(ModelBase):
     """
     Metaclass for the ``ProductVariation`` model that dynamcally
@@ -211,6 +244,7 @@ class ProductVariation(with_metaclass(ProductVariationMetaclass, Priced)):
     # on_delete=models.SET_NULL, blank=True,
     # null=True)
 
+    unit = models.ForeignKey(ProductVariationUnit, on_delete=models.SET_NULL, blank=True, null=True, related_name='product_variations')
     objects = managers.ProductVariationManager()
 
     class Meta:

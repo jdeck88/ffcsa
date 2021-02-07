@@ -36,12 +36,38 @@ config = {
   module: {
     rules: [
       {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader'],
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                [
+                  '@babel/preset-env',
+                  {
+                    modules: false,
+                    // debug: true,
+                    targets: packageJson.browserslist,
+                    useBuiltIns: 'usage',
+                    corejs: '3',
+                  },
+                ],
+                ['@babel/preset-react', {}],
+              ],
+              plugins: [
+                '@babel/plugin-proposal-object-rest-spread',
+                '@babel/plugin-proposal-class-properties',
+              ],
+              cacheDirectory: path.resolve(CWD, 'tmp'),
+              sourceType: 'unambiguous',
+            },
+          },
+        ],
       },
       {
-        test: /\.scss$/,
-        use: ['sass-loader'],
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
       },
       {
         test: /\.(png|woff|woff2|svg|eot|ttf|gif|jpe?g)$/,
@@ -57,22 +83,31 @@ config = {
           },
         ],
       },
-    ]
+    ],
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
+    modules: ['node_modules', 'ffcsa/static/js/', '.'],
+    alias: {},
   },
   plugins: [
-    // NOTE - below lines are commented out cuz they cuz 'Invalid configuration' for development config
-    // DEBUG ? null : new webpack.optimize.SplitChunksPlugin(),
-    // DEBUG ? null : new CleanWebpackPlugin(),
-    // DEBUG
-    //   ? null
-    //   : new MiniCssExtractPlugin({
-    //     filename: '[name]-[contenthash].css',
-    //   }),
+    DEBUG ? null : new webpack.optimize.SplitChunksPlugin(),
+    DEBUG ? null : new CleanWebpackPlugin(),
+    DEBUG
+      ? null
+      : new MiniCssExtractPlugin({
+        filename: '[name]-[contenthash].css',
+      }),
     new BundleTracker({
       filename: './static/webpack-stats-' + (DEBUG ? 'dev' : 'prod') + '.json',
     }),
+    // DEBUG
+    //   ? new webpack.NamedModulesPlugin()
+    //   : new webpack.HashedModuleIdsPlugin(),
     new webpack.HashedModuleIdsPlugin(),
-  ],
+  ].filter(function (el) {
+    return !!el
+  }),
   devServer: {
     contentBase: false,
     inline: true,
@@ -81,10 +116,6 @@ config = {
     disableHostCheck: true,
     headers: {'Access-Control-Allow-Origin': '*'},
     host: HOST,
-    historyApiFallback: true,
-    hot: true,
-    stats: "minimal",
-    host: "localhost",
     port: 4000,
   },
   performance: {
@@ -106,18 +137,18 @@ config = {
         },
       }),
     ],
-    // splitChunks: {
-    //   cacheGroups: {
-    //     vendors: {
-    //       test: /\/node_modules\//,
-    //       name: 'vendors',
-    //       chunks: 'all',
-    //     },
-    //   },
-    // },
-    // runtimeChunk: {
-    //   name: 'manifest',
-    // },
+    splitChunks: {
+      cacheGroups: {
+        vendors: {
+          test: /\/node_modules\//,
+          name: 'vendors',
+          chunks: 'all',
+        },
+      },
+    },
+    runtimeChunk: {
+      name: 'manifest',
+    },
   },
 }
 

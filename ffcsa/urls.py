@@ -9,6 +9,16 @@ from mezzanine.conf import settings
 import ffcsa.core.views as ffcsa_core
 import ffcsa.shop.views as shop_ciews
 
+# API router
+from rest_framework import routers
+from ffcsa.core.api.urls import router as core_router
+from ffcsa.shop.api.urls import router as shop_router
+
+router = routers.SimpleRouter()
+router.registry.extend(core_router.registry)
+router.registry.extend(shop_router.registry)
+
+
 admin.autodiscover()
 
 # Add the urlpatterns for any custom Django applications here.
@@ -37,6 +47,10 @@ urlpatterns += [
 
     # Shop URLs.
     url("^", include("ffcsa.shop.urls")),
+
+    # api endpoint
+    url("^api/", include(router.urls)),
+    
     url("^account/orders/$", shop_ciews.order_history, name="shop_order_history"),
     url("^account/payments/$", ffcsa_core.payments, name="payments"),
     url("^account/payments/subscribe$", ffcsa_core.payments_subscribe, name="payments_subscribe"),
