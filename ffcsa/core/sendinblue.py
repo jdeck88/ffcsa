@@ -333,7 +333,9 @@ def update_or_add_user(user, lists_to_add=None, lists_to_remove=None, remove_mem
 
     if remove_member:
         lists_to_add.extend(['FORMER_MEMBERS'])
-        lists_to_remove.extend(['MEMBERS', 'WEEKLY_REMINDER'])
+        to_remove = NEW_USER_LISTS.copy()
+        to_remove.append(get_packout_list_for_user(user))
+        lists_to_remove.extend(to_remove)
         drop_site = None
 
     if not remove_member and not user.profile.home_delivery and drop_site not in dropsites._DROPSITE_DICT:
@@ -456,8 +458,7 @@ def on_user_cancel_subscription(user):
 
 
 def on_user_resubscribe(user):
-    return update_or_add_user(user, lists_to_add=['MEMBERS'], lists_to_remove=['FORMER_MEMBERS'])
-
+    return update_or_add_user(user, lists_to_add=NEW_USER_LISTS.copy(), lists_to_remove=['FORMER_MEMBERS'])
 
 # --------
 # Email management

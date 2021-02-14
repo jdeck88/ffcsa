@@ -7,6 +7,7 @@ from django.db.models import Q
 from django.conf import settings
 
 from ffcsa.core.models import Payment
+from ffcsa.core.sendinblue import on_user_cancel_subscription
 from ffcsa.shop.models import Order
 
 
@@ -42,5 +43,6 @@ class Command(BaseCommand):
             # If the user has less then $20 remaining and the
             if last_order is None or (remaining_budget < 10 and last_order.time.date() < two_months_date):
                 user.is_active = False
+                on_user_cancel_subscription(user)
                 user.save()
                 print('Deactivating user: {}'.format(user))
