@@ -4,9 +4,9 @@
 
 # Convert cart to orders & restart the server to clear the cached budgets
 # Monday at 00:01
-1 0 * * 1 %(user)s %(manage)s cart && %(manage)s send_weekly_orders --send-orders > /home/ffcsa/logs/cron_orders.log 2>&1
+1 0 * * 1 %(user)s %(manage)s cart > /home/ffcsa/logs/cron_orders.log 2>&1 && %(manage)s send_weekly_orders --send-orders >> /home/ffcsa/logs/cron_orders.log 2>&1
 # Thursday at 00:01
-1 0 * * 4 %(user)s %(manage)s cart && %(manage)s send_weekly_orders --send-orders > /home/ffcsa/logs/cron_orders.log 2>&1
+1 0 * * 4 %(user)s %(manage)s cart > /home/ffcsa/logs/cron_orders.log 2>&1 && %(manage)s send_weekly_orders --send-orders >> /home/ffcsa/logs/cron_orders.log 2>&1
 
 # send weekly reminder email
 # 0 17 * * 4 %(user)s %(manage)s reminder
