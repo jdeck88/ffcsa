@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack serve",
-    "prod": "NODE_ENV=production webpack serve"
+    "prod": "NODE_ENV=production webpack --progress"
   },
   "repository": {
     "type": "git",

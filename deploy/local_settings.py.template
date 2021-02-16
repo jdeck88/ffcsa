@@ -82,7 +82,7 @@ ADMINS = [('RJ', '%(admin_email)s')]
 #COMPRESS_OFFLINE = True
 
 STATICFILES_IGNORE = [
-    'css/style.css'
+    'css/style-source.css'
 ]
 
 STATICFILES_STORAGE = (

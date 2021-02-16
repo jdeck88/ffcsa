@@ -17,6 +17,7 @@ const HTTPS = !!process.env.HTTPS
 
 config = {
   mode: DEBUG ? 'development' : 'production',
+  bail: DEBUG ? false : true,
   devtool: 'source-map',
   entry: {
     // main: './main.js',
