@@ -1,0 +1,171 @@
+{% load shop_tags i18n ffcsa_core_tags %}
+
+<style>
+    @page {
+        size: Letter;
+
+        @bottom-center {
+            content: counter(page) ' of ' counter(pages);
+            font-size: 9pt;
+            text-align: center;
+            height: 1cm;
+            width: 1cm;
+        }
+    }
+
+    .items li:nth-child(even) {
+        background: #F7F7F7;
+    }
+
+    .items li:first-child {
+        background: white;
+    }
+
+    ul {
+        padding: 0;
+        list-style: none;
+        clear: both;
+    }
+
+    h4 {
+        margin: 0;
+    }
+
+    .header h4 {
+        text-align: center;
+    }
+
+    .header .item {
+        text-align: left;
+    }
+
+    .header .qty,
+    .header .price,
+    .header .total_price,
+    .header .checklist {
+        font-size: 13px;
+    }
+
+    li > * {
+        padding: 2px 4px;
+        border: 1px solid #E1E1E1;
+        flex-shrink: 0;
+    }
+
+    .header > * {
+        border-color: transparent;
+    }
+
+    .header {
+        display: flex;
+        align-items: end;
+        border-bottom: 3px solid #9E9E9E;
+    }
+
+    .items {
+        margin-bottom: 12px;
+    }
+
+    .items li {
+        display: flex;
+    }
+
+    .items .item {
+        padding-left: 24px;
+    }
+
+    .item {
+        flex-grow: 1;
+        flex-shrink: 1;
+    }
+
+    .num {
+        text-align: right;
+        padding: 2px 8px;
+    }
+
+    .price,
+    .total_price {
+        min-width: 55px;
+        font-size: 13px;
+    }
+
+    .qty {
+        width: 20px;
+        font-size: 13px;
+    }
+
+    .checklist {
+        width: 40px;
+    }
+
+    .category {
+        background: #E1E1E1;
+        font-weight: bold;
+        padding: 3px 0 3px 12px;
+    }
+
+    .subtotal {
+        background: #f0f0f0;
+        font-weight: bold;
+        margin-top: -12px;
+    }
+
+</style>
+
+<h3 style="float: left; margin-top:0">Creamy Cow, LLC Order Ticket</h3>
+<p style="float: right; margin-top:0">{{ date }}</p>
+
+{% regroup items by category as category_list %}
+
+<ul>
+    <li class="header">
+        <h4 class="item"></h4>
+        <h4 class="qty">Qty</h4>
+        <h4 class="price">Price</h4>
+        <h4 class="total_price">Total Price</h4>
+        <h4 class="checklist">Packed</h4>
+        <h4 class="checklist">Received by FFCSA</h4>
+    </li>
+
+    {% for category, category_items in category_list %}
+        <li class="category">{{ category }}</li>
+
+        <ul class="items">
+            {% for item in category_items %}
+                <li>
+                    <span class="item">{{ item.description }}</span>
+                    <span class="num qty">{{ item.quantity }}</span>
+                    <span class="num price">${{ item.vendor_price }}</span>
+                    <span class="num total_price">${{ item.total_price }}</span>
+                    <span class="checklist"></span>
+                    <span class="checklist"></span>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <ul class="items subtotal">
+            <li>
+                <span class="item">Sub-total</span>
+                <span class="num qty"></span>
+                <span class="num price"></span>
+                <span class="num total_price">${{ category_items|sum_items }}</span>
+                <span class="checklist"></span>
+                <span class="checklist"></span>
+            </li>
+        </ul>
+    {% endfor %}
+
+    <li class="category">Totals</li>
+
+    <ul class="items">
+        <li>
+            <span class="item">Total</span>
+            <span class="num qty"></span>
+            <span class="num price"></span>
+            <span class="num total_price">${{ grand_total }}</span>
+            <span class="checklist"></span>
+            <span class="checklist"></span>
+        </li>
+    </ul>
+</ul>

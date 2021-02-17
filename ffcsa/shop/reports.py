@@ -30,14 +30,14 @@ def generate_weekly_order_reports(date):
 
     for vo in vendor_orders:
         # send_order_to_vendor(order.write_pdf(), vendor, vendor_title, date)
-        if vo.vendor_title.lower() != 'deck family farm':
+        if vo.vendor_title.lower() not in ['deck family farm', 'creamy cow, llc']:
             docs.append(vo.pickuplist)
         # zip_files.append(("{}_pickup_list_{}.pdf".format(vendor_title, date), pickuplist))
         # we need 2 of these
         # if vo.vendor_title.lower() == 'deck family farm':
-            # for some reason this doesn't render the title???
-            # docs.append(vo.pickuplist.copy())
-            # zip_files.append(("{}_pickup_list_karina_{}.pdf".format(vendor_title, date), pickuplist))
+        # for some reason this doesn't render the title???
+        # docs.append(vo.pickuplist.copy())
+        # zip_files.append(("{}_pickup_list_karina_{}.pdf".format(vendor_title, date), pickuplist))
 
     # generate packing lists
 
@@ -122,7 +122,10 @@ def get_vendor_orders(date, qs):
         items.append(item)
 
     for vendor_title, items in vendor_items.items():
-        if vendor_title.lower() == 'deck family farm':
+        # feed a friend contribution orders often have blank vendor
+        if vendor_title == '':
+            continue
+        if vendor_title.lower() in ['deck family farm', 'creamy cow, llc']:
             # we sort so we can use the django regroup filter
             items.sort(key=lambda x: (x['category'], x['description']))
         else:
@@ -179,7 +182,7 @@ def generate_ffcsa_inventory_packlist(date, qs):
 
 def generate_dairy_packlist(date):
     items = OrderItem.objects \
-        .filter(order__time__date=date, category__icontains='raw dairy') \
+        .filter(order__time__date=date, category__icontains='dairy', is_frozen=False) \
         .select_related('order') \
         .order_by('order__drop_site', 'order__billing_detail_last_name', 'order__billing_detail_first_name',
                   'description')
@@ -222,7 +225,10 @@ def get_frozen_items(qs, exclude_filter=Q()):
         filter = filter | Q(category__icontains=cat)
     for cat in settings.DFF_ORDER_TICKET_EXCLUDE_CATEGORIES:
         exclude_filter = exclude_filter & ~Q(category__icontains=cat)
-    exclude_filter = exclude_filter & Q(vendor__iexact='Deck Family Farm', in_inventory=False)
+    exclude_filter = exclude_filter & Q(
+        Q(vendor__iexact='Deck Family Farm', in_inventory=False) |
+        Q(vendor__iexact='Creamy Cow, LLC', is_frozen=True, in_inventory=False)
+    )
     filter = filter | exclude_filter
     filter = filter | Q(is_frozen=True)
     # we sort so we can use the django regroup filter
@@ -245,7 +251,7 @@ def generate_frozen_items_packlist(date, qs):
     for k, v in groupby(items, key=lambda x: x['order__drop_site']):
         i = OrderedDict()
         for k2, v2 in groupby(v, key=lambda x: (
-        x['order__billing_detail_last_name'], x['order__billing_detail_first_name'])):
+                x['order__billing_detail_last_name'], x['order__billing_detail_first_name'])):
             i[k2] = list(v2)
 
         order_items[k] = i
@@ -266,7 +272,7 @@ def generate_frozen_items_packlist(date, qs):
 
 def generate_dff_dairy_packlist(date):
     items = OrderItem.objects \
-        .filter(order__time__date=date, vendor__iexact='deck family farm', category__icontains='raw dairy') \
+        .filter(order__time__date=date, vendor__iexact='creamy cow, llc', category__icontains='dairy', is_frozen=False) \
         .select_related('order') \
         .order_by('category', 'description')
     GroupedResult = namedtuple('GroupedResult', ['description', 'items', 'total_quantity'])
@@ -286,7 +292,7 @@ def generate_dff_dairy_packlist(date):
 
 def generate_woven_roots_dairy_packlist(date):
     items = OrderItem.objects \
-        .filter(order__time__date=date, vendor__iexact='woven roots', category__icontains='raw dairy') \
+        .filter(order__time__date=date, vendor__iexact='woven roots', category__icontains='dairy') \
         .select_related('order') \
         .order_by('description')
     GroupedResult = namedtuple('GroupedResult', ['description', 'items'])
