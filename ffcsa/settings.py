@@ -298,8 +298,8 @@ SENDINBLUE_LISTS = {
     'MEMBERS': 7,
     'FORMER_MEMBERS': 11,
     'PROSPECTIVE_MEMBERS': 4,
-    'PACKOUT - FRIDAY': 49,
-    'PACKOUT - TUESDAY': 50,
+    'Packout - Friday': 49,
+    'Packout - Tuesday': 50,
 }
 
 SENDINBLUE_TRANSACTIONAL_TEMPLATES = {
