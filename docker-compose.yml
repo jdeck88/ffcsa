@@ -1,0 +1,56 @@
+version: '3.7'
+services: 
+  nginx:
+    container_name: ffcsa_nginx
+    build: ./nginx
+    volumes:
+      - static_volume:/app/static
+      - ./nginx:/etc/nginx/conf.d
+    ports:
+      - 80:80
+    depends_on:
+      - django_gunicorn
+  
+  django_gunicorn:
+    container_name: ffcsa_web
+    build: .
+    restart: always
+    command: gunicorn --workers=4 ffcsa.wsgi:application --bind 0.0.0.0:8000 --timeout 100 --reload
+    env_file: .env
+    volumes:
+      - .:/app
+      - static_volume:/app/static
+    ports: 
+      - 8000
+    depends_on: 
+      - mysql
+      - frontend
+
+  mysql:
+    container_name: ffcsa_db
+    image: mysql:5.7
+    restart: always
+    environment: 
+      MYSQL_ROOT_PASSWORD: U7srFFgcmtzE
+      MYSQL_DATABASE: ffcsa
+      # MYSQL_USER: ffcsa
+      # MYSQL_PASSWORD:
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - 3306
+
+  frontend:
+    container_name: ffcsa_frontend
+    build: 
+      context: .
+      dockerfile: frontend.Dockerfile
+    volumes:
+      - .:/app
+    ports: 
+      - 4000:4000
+
+
+volumes:
+  db_data:
+  static_volume:

@@ -17,7 +17,7 @@ const HTTPS = !!process.env.HTTPS
 
 config = {
   mode: DEBUG ? 'development' : 'production',
-  bail: DEBUG ? false : true,
+  // bail: DEBUG ? false : true,
   devtool: 'source-map',
   entry: {
     // main: './main.js',
@@ -85,7 +85,8 @@ config = {
     historyApiFallback: true,
     hot: true,
     stats: "minimal",
-    host: "localhost",
+    // host: "localhost",
+    host: "0.0.0.0",
     port: 4000,
   },
   performance: {
