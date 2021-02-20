@@ -18,7 +18,7 @@ services:
     command: gunicorn --workers=4 ffcsa.wsgi:application --bind 0.0.0.0:8000 --timeout 100 --reload
     env_file: .env
     volumes:
-      - .:/app
+      - .:/app:main_project_volume
       - static_volume:/app/static
     ports: 
       - 8000
@@ -46,7 +46,7 @@ services:
       context: .
       dockerfile: frontend.Dockerfile
     volumes:
-      - .:/app
+      - .:/app:main_project_volume
     ports: 
       - 4000:4000
 
