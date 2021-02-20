@@ -11,8 +11,7 @@ const TerserJSPlugin = require('terser-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const packageJson = require(path.resolve(CWD, 'package.json'))
 
-// const HOST = process.env.HOST || '127.0.0.1'
-const HOST = process.env.HOST || '198.199.109.231'
+const HOST = process.env.HOST
 const DEBUG = process.env.NODE_ENV !== 'production'
 const HTTPS = !!process.env.HTTPS
 
