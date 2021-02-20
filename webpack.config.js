@@ -70,7 +70,11 @@ config = {
     //     filename: '[name]-[contenthash].css',
     //   }),
     new BundleTracker({
-      filename: './static/webpack-stats-' + (DEBUG ? 'dev' : 'prod') + '.json',
+      // filename: './static/webpack-stats-' + (DEBUG ? 'dev' : 'prod') + '.json',
+
+      path: path.resolve(__dirname, "static/"),
+      publicPath: "/",
+      filename: "webpack-stats-dev.js"
     }),
     new webpack.HashedModuleIdsPlugin(),
   ],
