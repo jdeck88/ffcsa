@@ -12,6 +12,7 @@ RUN chown -R nonroot /app
 # Switch to our nonroot user
 USER nonroot
 
+RUN npm config set unsafe-perm true
 
 RUN npm install
 
