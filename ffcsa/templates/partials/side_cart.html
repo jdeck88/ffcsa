@@ -1,4 +1,4 @@
-<div :class="[(cart.shown ? '' : 'hidden'), 'fixed z-10 inset-0 overflow-y-auto']">
+<div :class="[(cart.shown ? '' : 'hidden'), 'fixed z-10 inset-0 overflow-hidden']">
 
   <div class="flex min-h-screen">
     
@@ -6,7 +6,7 @@
       <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
     </div>
 
-    <div class="bg-white z-10 text-secondary max-w-full ml-auto shadow p-3 pb-10" style="width: 30rem;">
+    <div class="bg-white z-10 relative text-secondary max-w-full ml-auto shadow p-3 pb-10" style="width: 30rem;">
       
       <!-- header and close button -->
       <div class="flex mb-2">
@@ -19,7 +19,8 @@
       <!-- header and close button -->
 
       <!-- content -->
-      <section class="px-3 mt-5 mt-10 overflow-y-scroll" style="min-width: 25rem;height: 71vh;">
+      <!-- <section class="px-3 mt-5 mt-10 overflow-y-scroll" style="min-width: 25rem;height: 71vh;"> -->
+      <section class="px-3 mt-5 mt-10 overflow-y-scroll" style="min-width: 25rem; max-height: 70vh;">
         <div class="grid grid-cols-3 gap-4 shadow rounded mb-4" v-if="cart.items.length > 0" v-for="item in cart.items">
           <!-- item image -->
           <div class="col-span-1">
@@ -28,8 +29,12 @@
           <!-- item image -->
 
           <!-- item control -->
-          <div class="col-span-2">
-            <h4 class="font-bold capitalize">((item.description))</h4>
+          <div class="col-span-2 pr-2">
+            <div class="grid grid-cols-12">
+              <h4 class="col-span-11 font-bold capitalize">((item.description))</h4>
+              <i @click.prevent="removeCartItem(item)" class="text-right fas fa-times cursor-pointer"></i>
+            </div>
+
             <div class="flex mt-10">
               <p>$((item.unit_price))</p>
 
@@ -45,7 +50,7 @@
       <!-- content -->
 
       <!-- total and checkout -->
-      <section class="px-3 mt-10">
+      <section class="bg-white absolute px-3 mt-10 inset-x-0 bottom-5" style="width: 95%;">
         <a href="#" class="block mb-4" @click.prevent="clearCart()">Clear cart</a>
         <div class="flex text-black font-bold mb-4">
           <p>SUBTOTAL</p>

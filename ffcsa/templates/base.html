@@ -288,8 +288,10 @@
             this.cart.shown = true;
             this.fetchCart();
           },
-          async removeCartItem() {
+          async removeCartItem(item) {
             // remove an item from cart
+            const res = await axios.post(`/api/cart/${item.id}/remove_item/`);
+            this.fetchCart()
           },
           async clearCart() {
             // remove all items from cart and rest attending_dinner to 0

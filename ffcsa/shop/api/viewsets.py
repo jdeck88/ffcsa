@@ -1,3 +1,4 @@
+from django.http.response import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from django.db.models import  Q
 from rest_framework import viewsets
@@ -15,7 +16,7 @@ from .serializers import *
 
 class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
-    queryset = Product.objects.all()
+    queryset = Product.objects.filter(available=True)
 
     def list(self, request):
         # note - need to add the filters manually as django filters
@@ -24,7 +25,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 
         # queryset = Product.objects.filter(categories__title__icontains=filt_category)
         
-        queryset = Product.objects.all()
+        queryset = Product.objects.filter(available=True)
         filt_category = request.GET.get('category')
         if filt_category:
             queryset = Product.objects.filter(
@@ -67,6 +68,13 @@ class CartViewSet(viewsets.ModelViewSet):
         # treating this one as retrive not list
         serializer = self.get_serializer(request.cart)
         return Response(serializer.data)
+
+
+    @detail_route(methods=['post'])
+    def remove_item(self, request, pk=None):
+        # remove item from cart
+        request.cart.items.filter(pk=pk).delete()
+        return Response({})
 
     @list_route(methods=['post'])
     def clear(self, request):
