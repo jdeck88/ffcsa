@@ -6,6 +6,7 @@ services:
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     volumes:
       - static_volume:/app/static
+      - media_volume:/app/media
       - ./nginx:/etc/nginx/conf.d
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
@@ -31,6 +32,7 @@ services:
     volumes:
       - .:/app
       - static_volume:/app/static
+      - media_volume:/app/media
     ports: 
       - 8000
     depends_on: 
@@ -66,3 +68,4 @@ services:
 volumes:
   db_data:
   static_volume:
+  media_volume:
