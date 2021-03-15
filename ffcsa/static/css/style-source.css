@@ -34,6 +34,11 @@
   color: theme(colors.green.3);
 }
 
+
+body {
+  font-family: sans-serif !important;
+}
+
 blockquote, dd, dl, figure, h1, h2, h3, h4, h5, h6, hr, p, pre, a, span {
   font-family: sans-serif;
 }
@@ -335,18 +340,18 @@ h1, h2, h3, h4, h5, h6, p {
 
 
 input[type='number']::-webkit-inner-spin-button,
-  input[type='number']::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
-  .custom-number-input input:focus {
-    outline: none !important;
-  }
+.custom-number-input input:focus {
+  outline: none !important;
+}
 
-  .custom-number-input button:focus {
-    outline: none !important;
-  }
+.custom-number-input button:focus {
+  outline: none !important;
+}
 
 
 
@@ -359,4 +364,12 @@ input[type='number']::-webkit-inner-spin-button,
 
 .hover-trigger:hover .hover-target {
   display: block;
+}
+
+
+
+/* Cart button disable state */
+.btn-disabled {
+  @apply transform opacity-25;
+  pointer-events: none;
 }

@@ -62,7 +62,7 @@ class Product(BaseProduct, Priced, RichText, ContentTyped, AdminThumbMixin):
                                     default=False)
     image = CharField(_("Image"), max_length=100, blank=True, null=True)
     categories = models.ManyToManyField("Category", blank=True,
-                                        verbose_name=_("Product categories"))
+                                        verbose_name=_("Product categories"), related_name='category_products')
     date_added = models.DateTimeField(_("Date added"), auto_now_add=True,
                                       null=True)
     related_products = models.ManyToManyField("self",
@@ -70,7 +70,7 @@ class Product(BaseProduct, Priced, RichText, ContentTyped, AdminThumbMixin):
     upsell_products = models.ManyToManyField("self",
                                              verbose_name=_("Upsell products"), blank=True)
     rating = RatingField(verbose_name=_("Rating"))
-    seasons = models.ManyToManyField(ProductSeason, related_name='seasons')
+    seasons = models.ManyToManyField(ProductSeason, blank=True, null=True, related_name='seasons')
 
     order_on_invoice = models.FloatField(default=0, null=True, blank=True,
                                          help_text="Order this product will be printed on invoices. If set, this will override the product's category order_on_invoice setting. This is a float number for more fine grained control. (ex. '2.1' will be sorted the same as if the product's parent category order_on_invoice was 2 & the product's category order_on_invoice was 1).")

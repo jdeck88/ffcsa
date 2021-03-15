@@ -5,7 +5,7 @@
       <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
     </div>
   
-    <div class="bg-white text-secondary max-w-4xl mx-auto my-auto shadow p-5 pb-10 z-10" style="min-height: 22rem;">
+    <div class="bg-white text-secondary max-w-4xl mx-auto my-auto shadow p-5 pb-10 z-10" style="min-height: 22rem; min-width: 75vw;">
       <!-- close button -->
       <div class="flex mb-2">
         <a href="#" class="ml-auto" @click.prevent="hideProductModal()">
@@ -39,48 +39,41 @@
         <!-- product details -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-5">
           <!-- item image -->
-          <img alt="Placeholder" class="block h-auto w-full mb-2" src="https://picsum.photos/600/400/?random">
+          <div class="block h-auto w-full mb-2" :style="'background-image: url(/media/' + currentProduct.image + ');background-position: center; background-repeat: no-repeat; background-size: cover;width: 100%;height: 12rem;'"></div>
 
           <!-- item control -->
           <div class="col-span-2">
-            <div v-for="variation in currentProduct.variations" class="grid grid-cols-3 rounded shadow p-2 py-4 mb-3">
+            <div v-for="variation in currentProduct.variations" class="grid grid-cols-3 p-2 py-4 mb-3">
               <div class="col-span-3 md:col-span-2 flex">
-                <p class="text-3xl pr-2">$((variation.unit_price))</p>
+                <p class="text-3xl mt-auto pr-2">$((variation.unit_price))</p>
 
                 <!-- product available amount, if product number_in_stock is null means it is unlimited -->
-                <p class="text-red-1 pt-3">
-                  <template v-if="variation.is_unlimited">AVAILABLE</template>
-                  <template v-else-if="variation.number_in_stock == 0">OUT OF STOCK</template>
-                  <template v-else>((variation.number_in_stock)) AVAILABLE</template>
+                <p class="mt-auto">
+                  <span v-if="variation.is_unlimited" class="text-success">
+                    AVAILABLE
+                  </span>
+                  <span v-else-if="variation.number_in_stock == 0" class="text-red-1">
+                    OUT OF STOCK
+                  </span>
+                  <span v-else class="text-success">
+                    ((variation.number_in_stock)) AVAILABLE
+                  </span>
                 </p>
 
               </div>
               
               <div class="col-span-3 md:col-span-1">
-
-                <!-- product variations unlimited amount -> enter number you want -->
-                <template v-if="variation.is_unlimited">
-                  <input type="text" v-model="quantities[variation.id]" class="w-full text-center py-2 mb-2 rounded-lg border-2 border-gray-200 outline-none">
-                  <button class="w-full bg-primary p-3 rounded text-white font-semibold" @click="NavVue.addToCart(variation)">
-                    <template v-if="NavVue.isVariationInCart(variation)">UPDATE CART</template>
-                    <template v-else>ADD TO CART</template>
+                <!-- product variations out of stock -> can't manpulate -->
+                <template v-if="variation.number_in_stock == 0">
+                  <button class="w-full disabled:opacity-50 focus:outline-none cursor-default bg-gray-100 p-3 rounded" disabled>
+                    OUT OF STOCK
                   </button>
                 </template>
-                
-                <!-- product variations out of stock -> can't manpulate -->
-                <template v-else-if="variation.number_in_stock == 0">
-                  <p class="text-red-1 mb-2 text-center">OUT OF STOCK!</p>
-                  <button class="w-full disabled:opacity-50 bg-gray-100 p-3 rounded" disabled>ADD TO CART</button>
-                </template>
 
-                <!-- product variations limited amount -> chose from dropdown -->
                 <template v-else>
-                  <select v-model="quantities[variation.id]" class="w-full shadow-sm rounded border cursor-pointer p-2 px-6 mb-2">
-                    <option v-for="num in variation.number_in_stock" :value="num">((num))</option>
-                  </select>
-                  <button class="w-full bg-primary p-3 rounded text-white font-semibold" @click="NavVue.addToCart(variation)">
-                    <template v-if="NavVue.isVariationInCart(variation)">UPDATE CART</template>
-                    <template v-else>ADD TO CART</template>
+                  <!-- todo disable button when user purchace all in stock for item -->
+                  <button class="btn-add-to-card" @click="NavVue.addToCart(variation)">
+                    ADD TO CART
                   </button>
                 </template>
 

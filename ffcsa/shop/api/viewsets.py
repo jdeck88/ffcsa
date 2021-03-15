@@ -1,4 +1,3 @@
-from django.http.response import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from django.db.models import  Q
 from rest_framework import viewsets
@@ -7,7 +6,7 @@ from rest_framework.response import Response
 
 from ffcsa.shop.utils import recalculate_cart
 
-from ffcsa.shop.models.Cart import Cart
+from ffcsa.shop.models.Cart import Cart, CartItem
 from ffcsa.shop.models.Product import Product, ProductVariation
 from ffcsa.shop.models.Category import Category
 
@@ -23,13 +22,12 @@ class ProductViewSet(viewsets.ModelViewSet):
         # can not be installed with current django version which is
         # required to run Mezzanine
 
-        # queryset = Product.objects.filter(categories__title__icontains=filt_category)
-        
         queryset = Product.objects.filter(available=True)
         filt_category = request.GET.get('category')
         if filt_category:
+            # queryset to get the products/subproducts
             queryset = Product.objects.filter(
-                Q(categories__title=filt_category) | Q(categories__parent__title=filt_category)    
+                (Q(categories__title=filt_category) | Q(categories__parent__title=filt_category)) & Q(available=True)
             )
         queryset = self.paginate_queryset(queryset)
         serializer = ProductDataSerializer(queryset, many=True)
@@ -54,8 +52,14 @@ class ProductVariationViewSet(viewsets.ModelViewSet):
         Add product variation to cart
         """
         product_variation = get_object_or_404(ProductVariation, pk=pk)
-        quantity = request.data.get('quantity', 1)
-        request.cart.add_item(product_variation, int(quantity))
+        
+        # increase item quantity if item already in cart 
+        item = request.cart.items.filter(variation=product_variation).first()
+        if item:
+            item.update_quantity(item.quantity + 1)
+        else:
+            request.cart.add_item(product_variation, 1)
+        
         recalculate_cart(request)
         return Response({'OK': 'OK'})
 
@@ -71,10 +75,28 @@ class CartViewSet(viewsets.ModelViewSet):
 
 
     @detail_route(methods=['post'])
+    def increase_item(self, request, pk=None):
+        item = get_object_or_404(CartItem, pk=pk)
+        item.update_quantity(item.quantity + 1)
+        return Response({'message': 'Item increased'})
+    
+    @detail_route(methods=['post'])
+    def decrease_item(self, request, pk=None):
+        item = get_object_or_404(CartItem, pk=pk)
+        
+        if (item.quantity - 1) == 0:
+            item.delete()
+            return Response({'message': 'Item decreased'})
+            
+        item.update_quantity(item.quantity - 1)
+        return Response({'message': 'Item decreased'})
+    
+    @detail_route(methods=['post'])
     def remove_item(self, request, pk=None):
         # remove item from cart
-        request.cart.items.filter(pk=pk).delete()
-        return Response({})
+        item = get_object_or_404(CartItem, pk=pk)
+        item.delete()
+        return Response({'message': 'Item removed'})
 
     @list_route(methods=['post'])
     def clear(self, request):

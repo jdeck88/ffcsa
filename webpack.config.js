@@ -13,7 +13,7 @@ const packageJson = require(path.resolve(CWD, 'package.json'))
 
 const HOST = process.env.HOST
 const DEBUG = process.env.NODE_ENV !== 'production'
-const HTTPS = !!process.env.HTTPS
+const HTTPS = eval(process.env.HTTPS)
 
 config = {
   mode: DEBUG ? 'development' : 'production',

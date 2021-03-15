@@ -1,3 +1,4 @@
+from datetime import timedelta
 from functools import reduce
 from operator import iand, ior
 from collections import defaultdict
@@ -115,15 +116,27 @@ class Category(Page, RichText):
     @classmethod
     def parent_sub_categories(self):
         """
-        Returns a default dict with all parent categories as keys and the value
-        is list of sub categories (if no parent categoery we return the sub 
-        category as parent)
+        List of categories and it's published sub categories for products to be filtered
         """
 
-        data = defaultdict(list)
-        for category in self.objects.all():
-            if category.parent:
-                data[str(category.parent)].append(category.title)
-            else:
-                data[category.title] = []
-        return data
+        target_cats = [
+            'Pasture Raised Meats',
+            'Organic Vegetables',
+            'Raw Dairy',
+            'Organic Fruit',
+            'Pantry'
+        ]
+
+        categories = []
+        for cat_title in target_cats:
+            cat = Category.objects.get(title=cat_title)
+            # sub_cat( published and have at least one available product)
+            sub_cats = [cat.title for cat in cat.children.all() if cat.published() and Product.objects.filter(categories__title=cat.title, available=True).count() > 0]
+
+            categories.append({
+                'title': cat.title,
+                'display_name': cat.title.upper(),
+                'sub_cats': sub_cats
+            })
+
+        return categories

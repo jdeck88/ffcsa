@@ -7,7 +7,7 @@ fi
 
 domains=(ffcsa-staging.deckfamilyfarm.com)
 rsa_key_size=4096
-data_path="./data/certbot"
+data_path="./data/staging/certbot"
 email="rj@rjewing.com" # Adding a valid address is strongly recommended
 staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
 

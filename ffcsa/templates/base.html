@@ -263,26 +263,19 @@
         
         methods: {
           async fetchCart() {
-            const res = await axios.get('/api/cart/');
-            const { id, attending_dinner, items, total_price } = res.data
-            // console.log(res.data)
-            this.cart.items = items
-            this.cart.total_price = total_price
+            try {
+              const res = await axios.get('/api/cart/');
+              const { id, attending_dinner, items, total_price } = res.data
+              console.log(res.data)
+              this.cart.items = items
+              this.cart.total_price = total_price
+            } catch (error) {
+              console.log('Can not fetch Cart')
+            }
           },
           async addToCart(variation) {
-            // check if variation already in Cart (to calc quantity)
-            // if (quantity == null) {
-            //   const items = this.cart.items.filter(item => item.variation_id == variation.id);
-            //   if (items.length > 0) {
-            //     quantity = items[0].quantity + 1
-            //   }
-            // }
-
-            const quantity = ProductsVue.quantities[variation.id]
-            
-
             // Add item to session cart
-            const res = await axios.post(`/api/product_variations/${variation.id}/add_to_cart/`, {quantity})
+            const res = await axios.post(`/api/product_variations/${variation.id}/add_to_cart/`)
 
             ProductsVue.hideProductModal();
             this.cart.shown = true;
@@ -299,20 +292,41 @@
             this.fetchCart()
           },
         
-          isVariationInCart(variation) {
-            const items = this.cart.items.filter(item => item.variation_id == variation.id);
-            if (items.length > 0) return true
-
-            return false
-          },
-          getProductQuantity: function(product) {
-            const items = this.cart.items.filter(item => item.variation_id == product.id);
-            if (items.length > 0) {
-              return quantity = items[0].quantity
+          // per item
+          async increaseItemQuantity(item, event) {
+            // increase CartItem quantity
+            const controlContainer = event.target.parentElement
+            // disable buttons
+            controlContainer.querySelectorAll('button').forEach(btn => btn.disabled = true);
+            
+            try {
+              const res = await axios.post(`/api/cart/${item.id}/increase_item/`);
+              this.fetchCart();
+              // enable buttons
+              controlContainer.querySelectorAll('button').forEach(btn => btn.disabled = false);
+            } catch (error) {
+              console.log(error)
+              // enable buttons
+              controlContainer.querySelectorAll('button').forEach(btn => btn.disabled = false);
             }
-
-            return 1
-          }
+          },
+          async decreaseItemQuantity(item, event) {
+            // increase CartItem quantity
+            const controlContainer = event.target.parentElement
+            // disable buttons
+            controlContainer.querySelectorAll('button').forEach(btn => btn.disabled = true);
+            
+            try {
+              const res = await axios.post(`/api/cart/${item.id}/decrease_item/`);
+              this.fetchCart();
+              // enable buttons
+              controlContainer.querySelectorAll('button').forEach(btn => btn.disabled = false);
+            } catch (error) {
+              console.log(error)
+              // enable buttons
+              controlContainer.querySelectorAll('button').forEach(btn => btn.disabled = false);
+            }
+          },
           
         },
 
