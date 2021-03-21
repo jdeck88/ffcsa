@@ -69,22 +69,25 @@
           </a>
   
           <h3 class="text-brown-7 text-xl font-bold truncate">(( product.title ))</h3>
-          <p class="text-brown-7 text-xl">$(( product.price ))/unit</p>
           <div class="my-2">
             <template v-if="product.has_in_stock_variations">
               <!-- at least one variation in stock -->
               <template v-if="product.variations.length == 1">
+                <p class="text-brown-7 text-xl">$(( product.price ))/unit</p>
                 <button class="btn-add-to-card" @click.prevent="NavVue.addToCart(product.variations[0])">ADD TO CART</button>
               </template>
               
               <template v-else>
+                <p>
+                  <span class="italic text-gray-500">Starts from </span>
+                  <span class="text-brown-7 text-xl">$(( getProductStartFrom(product) ))/unit</span>
+                </p>
                 <button class="btn-add-to-card" @click.prevent="showProduct(product)">CHOOSE VARIATION</button>
               </template>
-
             </template>
             <template v-else>
               <!-- all product variations are out of stock -->
-              <button class="disabled:opacity-50 focus:outline-none bg-gray-100 p-4 px-6 text-red-1 rounded" style="cursor: auto !important;">
+              <button class="disabled:opacity-50 focus:outline-none bg-gray-100 text-gray-500 p-4 px-6 cursor-default rounded">
                 OUT OF STOCK
               </button>
             </template>
@@ -115,22 +118,8 @@
     </div>
   
     <!-- Spinner -->
-    <div class="mx-auto my-20" style="max-width: 10rem;"  v-else>
-      <div v-if='loading' style="max-width: 6rem;">
-        <svg version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-        viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
-          <path fill="#e16231" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
-            <animateTransform 
-              attributeName="transform" 
-              attributeType="XML"
-              type="rotate"
-              dur="1s" 
-              from="0 50 50"
-              to="360 50 50" 
-              repeatCount="indefinite" />
-          </path>
-        </svg>
-      </div>
+    <div class="flex justify-center mt-20" v-else>
+      <img src="{% static 'gifs/spinner.gif' %}" alt="spinner">
 
       <template v-else>
         <p class="text-gray-700" style="width: 12rem;">No available products!</p>
@@ -313,6 +302,11 @@
         this.currentProduct = product;
       },
 
+      getProductStartFrom(product) {
+        prices = []
+        product.variations.forEach(v => prices.push(parseFloat(v.unit_price)));
+        return Math.min(...prices)
+      },
       hideProductModal() {
         this.currentProduct = null;
         location.hash = ' ';

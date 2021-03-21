@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="{{ LANGUAGE_CODE }}"{% if LANGUAGE_BIDI %} dir="rtl"{% endif %}>
-{% load pages_tags mezzanine_tags i18n staticfiles static %}
-{% load render_bundle from webpack_loader %}
+  {% load pages_tags mezzanine_tags i18n staticfiles static %}
+  {% load render_bundle from webpack_loader %}
 
   <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -18,6 +18,7 @@
     <link rel="manifest" href="{% static 'img/favicon/site.webmanifest' %}">
     <link rel="mask-icon" href="{% static 'img/favicon/safari-pinned-tab.svg' %}" color="#000000">
     <link rel="shortcut icon" href="{% static 'img/favicon/favicon.ico' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="msapplication-config" content="{% static 'img/favicon/browserconfig.xml' %}">
     <meta name="theme-color" content="#ffffff">
@@ -26,13 +27,26 @@
     {% include 'ffcsa_core/includes/rollbar.html' %}
 
     {% ifinstalled mezzanine.blog %}
-        <link rel="alternate" type="application/rss+xml" title="RSS" href="{% url 'blog_post_feed' 'rss' %}">
-        <link rel="alternate" type="application/atom+xml" title="Atom" href="{% url 'blog_post_feed' 'atom' %}">
+      <link rel="alternate" type="application/rss+xml" title="RSS" href="{% url 'blog_post_feed' 'rss' %}">
+      <link rel="alternate" type="application/atom+xml" title="Atom" href="{% url 'blog_post_feed' 'atom' %}">
     {% endifinstalled %}
 
     {% compress css %}
-        {% block extra_css %}{% endblock %}
+      {% block extra_css %}{% endblock %}
     {% endcompress %}
+
+    <style>
+      /* main styles [important to have it here not in the style-source file ] */
+      .mainContentWrapper {
+        min-height: 70vh;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .centered {  position: fixed;  top: 50%;  left: 50%;  margin-top: -[1/2(element-height)];  margin-left: -[1/2(element-width)];}
+    </style>
 
     <!-- •• removed below line •• -->
     <!-- render_bundle "manifest" "css"  -->
@@ -100,8 +114,15 @@
     {% block extra_head %}{% endblock %}
   </head>
 
-  <body id="{% block body_id %}body{% endblock %}" >
-    <div id="wrapper">
+  <body id="{% block body_id %}body{% endblock %}">
+
+    <!-- main spinner -->
+    <section id="main-spinner" class="centered">
+      <img src="{% static 'gifs/spinner.gif' %}" alt="spinner">
+    </section>
+
+    <!-- main content -->
+    <div id="wrapper" class="hidden">
       <header id="">
         <nav id="navVue" class="mx-4 my-5 lg:mx-10 lg:my-3 bg-white select-none h-auto" v-cloak>
           <div class="flex items-center">
@@ -199,17 +220,18 @@
         
       </header>
 
+      <div style="min-height: 80vh;">
       {% block all_content %}
         {% nevercache %}
           {% if messages %}
-          <div class="messages">
+          <!-- <div class="messages">
             {% for message in messages %}
               <div class="alert alert-dismissable alert-{{ message.tags }}" data-alert="alert">
                 <button type="button" class="close" data-dismiss="alert"aria-hidden="true">&times;</button>
                 {{ message }}
               </div>
             {% endfor %}
-          </div>
+          </div> -->
           {% endif %}
         {% endnevercache %}
         
@@ -219,8 +241,7 @@
           {% block main %}{% endblock %}
         {% endblock %}
       {% endblock %}
-  
-      
+      </div>
 
       <!-- Footer -->
       {% if 'accounts' not in request.path %}
@@ -229,13 +250,13 @@
 
     </div>
     
+
     {% compress js %}
       <script>
         var static_url = "{% get_static_prefix %}"
         var media_url = "{% get_media_prefix %}"
       </script>
     {% endcompress %}
-
 
     {% render_bundle "style" "js" %}
 
@@ -265,10 +286,13 @@
           async fetchCart() {
             try {
               const res = await axios.get('/api/cart/');
-              const { id, attending_dinner, items, total_price } = res.data
+              const { id, items, total_price, delivery_fee, remaining_budget, attending_dinner } = res.data
               console.log(res.data)
-              this.cart.items = items
-              this.cart.total_price = total_price
+              this.cart.items = items;
+              this.cart.total_price = total_price;
+              this.cart.delivery_fee = delivery_fee;
+              this.cart.remaining_budget = remaining_budget;
+              this.cart.attending_dinner = attending_dinner;
             } catch (error) {
               console.log('Can not fetch Cart')
             }
@@ -345,6 +369,14 @@
         if (event.target.id !== "username" && event.target.parentElement.id !== "username") {
           if (NavVue.showUserDropdown) NavVue.showUserDropdown = false
         }
+      })
+    </script>
+
+    <script defer>
+      // intial loading
+      window.addEventListener('DOMContentLoaded', e => {
+        document.querySelector('#main-spinner').classList.add('hidden')
+        document.querySelector('#wrapper').classList.remove('hidden')
       })
     </script>
 

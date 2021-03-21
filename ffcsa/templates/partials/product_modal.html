@@ -52,9 +52,7 @@
                   <span v-if="variation.is_unlimited" class="text-success">
                     AVAILABLE
                   </span>
-                  <span v-else-if="variation.number_in_stock == 0" class="text-red-1">
-                    OUT OF STOCK
-                  </span>
+                  <span v-else-if="variation.number_in_stock == 0" class="text-red-1"></span>
                   <span v-else class="text-success">
                     ((variation.number_in_stock)) AVAILABLE
                   </span>
@@ -65,14 +63,14 @@
               <div class="col-span-3 md:col-span-1">
                 <!-- product variations out of stock -> can't manpulate -->
                 <template v-if="variation.number_in_stock == 0">
-                  <button class="w-full disabled:opacity-50 focus:outline-none cursor-default bg-gray-100 p-3 rounded" disabled>
+                  <button class="w-full disabled:opacity-50 focus:outline-none cursor-default bg-gray-100 text-gray-500 p-3 rounded">
                     OUT OF STOCK
                   </button>
                 </template>
 
                 <template v-else>
                   <!-- todo disable button when user purchace all in stock for item -->
-                  <button class="btn-add-to-card" @click="NavVue.addToCart(variation)">
+                  <button class="btn-add-to-card w-full" @click="NavVue.addToCart(variation)">
                     ADD TO CART
                   </button>
                 </template>

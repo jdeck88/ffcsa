@@ -22,6 +22,9 @@
 /* @import url('../skins/default.css'); */
 /* @import url('shop.css'); */
 
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,400&display=swap');
+
+
 /* ===================================
 1. General
 ==================================== */
@@ -36,11 +39,7 @@
 
 
 body {
-  font-family: sans-serif !important;
-}
-
-blockquote, dd, dl, figure, h1, h2, h3, h4, h5, h6, hr, p, pre, a, span {
-  font-family: sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 
@@ -67,9 +66,9 @@ blockquote, dd, dl, figure, h1, h2, h3, h4, h5, h6, hr, p, pre, a, span {
 3. Specialty
 ==================================== */
 
-header > nav {
+/* header > nav {
   height: 67px;
-}
+} */
 
 /* Header logo */
 header > nav > a:first-of-type {
