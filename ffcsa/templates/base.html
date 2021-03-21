@@ -378,6 +378,14 @@
         document.querySelector('#main-spinner').classList.add('hidden')
         document.querySelector('#wrapper').classList.remove('hidden')
       })
+
+
+      // close side-cart if open
+      document.addEventListener('keyup', e => {
+        if (e.key === "Escape") {
+          NavVue.cart.shown = false;
+        }
+      })
     </script>
 
     {% block js %}{% endblock %}
