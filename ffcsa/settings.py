@@ -35,14 +35,15 @@ HOME_DELIVERY_FEE_BY_ZIP = {
 }
 DEFAULT_HOME_DELIVERY_CHARGE = 5
 
-INVITE_ONLY_PORTLAND_MARKETS = ['Hollywood', 'PSU', 'Cully', 'St Johns', 'Irvington', 'Woodstock']
+# INVITE_ONLY_PORTLAND_MARKETS = ['Hollywood', 'PSU', 'Cully', 'St Johns', 'Irvington', 'Woodstock']
+INVITE_ONLY_PORTLAND_MARKETS = []
 INVITE_CODE = 'PDX_2020'
 
 # A location can either be a zip code or a dropsite name
 DROP_LOCATION_GROUP_LIMITS = [
     # Portland
     {
-        'limit': 150,
+        'limit': 170,
         'locations': ['Hollywood', 'PSU', 'Cully', 'St Johns', 'Zafar', 'Irvington', 'Woodstock']
     },
     # Corvallis

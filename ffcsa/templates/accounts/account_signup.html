@@ -37,11 +37,11 @@
 
         <div class="border-b-2 my-8"></div>
 
-        <p class="mb-8">Our Portland dropsites are currently full. <a target="_blank"
-                                                                      href="https://26403a96.sibforms.com/serve/MUIEAEe-Lhh9Ij9OVpUCDzojW-Mdekxfy3xZjo7tka8o97OAN5FCESzSdtZnYvRkQkahzra5SB0It2X_txOn8Osv64fHf6t3Cv15W_S8yXTczZbBQfQ7Z_voZO4w2Q48UtGXYMgQaelSC0ni3_GivthfTK9FvMchpVPz-q7Y2JscpW2VjQjQSGgfNoJ56dxcF6ASqRwLc5Qkpa2S">Join
-            our waitlist</a> to be notified when a spot opens up. Thank you for understanding and supporting local
-            farms!
-        </p>
+{#        <p class="mb-8">Our Portland dropsites are currently full. <a target="_blank"#}
+{#                                                                      href="https://26403a96.sibforms.com/serve/MUIEAEe-Lhh9Ij9OVpUCDzojW-Mdekxfy3xZjo7tka8o97OAN5FCESzSdtZnYvRkQkahzra5SB0It2X_txOn8Osv64fHf6t3Cv15W_S8yXTczZbBQfQ7Z_voZO4w2Q48UtGXYMgQaelSC0ni3_GivthfTK9FvMchpVPz-q7Y2JscpW2VjQjQSGgfNoJ56dxcF6ASqRwLc5Qkpa2S">Join#}
+{#            our waitlist</a> to be notified when a spot opens up. Thank you for understanding and supporting local#}
+{#            farms!#}
+{#        </p>#}
         {#        <iframe width="540" height="450"#}
         {#                src="https://26403a96.sibforms.com/serve/MUIEAEe-Lhh9Ij9OVpUCDzojW-Mdekxfy3xZjo7tka8o97OAN5FCESzSdtZnYvRkQkahzra5SB0It2X_txOn8Osv64fHf6t3Cv15W_S8yXTczZbBQfQ7Z_voZO4w2Q48UtGXYMgQaelSC0ni3_GivthfTK9FvMchpVPz-q7Y2JscpW2VjQjQSGgfNoJ56dxcF6ASqRwLc5Qkpa2S"#}
         {#                frameborder="0" scrolling="auto" allowfullscreen#}
@@ -95,7 +95,7 @@
                     </div>
                 {% endif %}
                 {% render_field form.drop_site show_required=False group_class="col-xs-12" %}
-                {% render_field form.invite_code show_required=False group_class="col-xs-12" %}
+                {% render_field form.invite_code show_required=False group_class="col-xs-12 hidden" %}
             </fieldset>
 
             <fieldset>
