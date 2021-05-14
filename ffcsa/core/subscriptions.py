@@ -17,7 +17,7 @@ PAYMENT_DESCRIPTION = 'FFCSA Payment'
 def charge_signup_fee_if_needed(user):
     if user.profile.join_dairy_program and not user.profile.paid_signup_fee:
         if not user.profile.stripe_customer_id:
-            raise AssertionError('Attempting to charge a raw dairy program fee, but user has no stripe customer id')
+            raise AssertionError('Attempting to charge a dairy program fee, but user has no stripe customer id')
 
         stripe.Charge.create(
             amount=settings.SIGNUP_FEE_IN_CENTS,

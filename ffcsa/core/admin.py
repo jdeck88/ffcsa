@@ -81,13 +81,13 @@ class UserProfileAdmin(accounts_base.UserProfileAdmin):
                 and user.profile.monthly_contribution != obj.profile.monthly_contribution \
                 and obj.profile.stripe_subscription_id:
             update_stripe_subscription(obj)
-        if change and obj.profile.non_subscribing_member:
-            if user.profile.stripe_subscription_id:
-                # TODO: this is not a very good UX
-                self.message_user(request, 'Non-subscribing members can not have an existing subscription',
-                                  messages.ERROR)
-                raise ValidationError(
-                    'Non-subscribing members can not have an existing subscription')
+        # if change and obj.profile.non_subscribing_member:
+        #     if user.profile.stripe_subscription_id:
+        #         TODO: this is not a very good UX
+        #         self.message_user(request, 'Non-subscribing members can not have an existing subscription',
+        #                           messages.ERROR)
+        #         raise ValidationError(
+        #             'Non-subscribing members can not have an existing subscription')
             # create stripe user if not already existing
             if not obj.profile.stripe_customer_id:
                 customer = stripe.Customer.create(

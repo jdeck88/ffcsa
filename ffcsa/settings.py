@@ -10,14 +10,14 @@ from django.utils.translation import ugettext_lazy as _
 ##############################
 DAIRY_CATEGORY = 'dairy'
 FROZEN_PRODUCT_CATEGORIES = ['pasture raised meats']
-FROZEN_ITEM_PACKLIST_EXCLUDED_CATEGORIES = ['nuts & honey']
+FROZEN_ITEM_PACKLIST_EXCLUDED_CATEGORIES = ['nuts & honey', 'free']
 GRAIN_BEANS_CATEGORIES = ['grains & beans']
 PRODUCT_ORDER_CATEGORIES = ['vegetables', 'eggs', 'fruit', 'eggs', 'mushroom']
 MARKET_CHECKLISTS = ['LCFM', 'Hollywood', 'PSU', 'St Johns']
 MARKET_CHECKLIST_COLUMN_CATEGORIES = OrderedDict([
     # checklist columns -> (category list, additional kwargs, default)
     # if default is None, then we will sum the number of items
-    ('Tote', (['grain', 'vegetables', 'fruit', 'eggs', 'swag', 'bread', 'mushroom', 'nut', 'coffee', 'pantry'],
+    ('Tote', (['grain', 'vegetables', 'fruit', 'eggs', 'swag', 'bread', 'mushroom', 'nut', 'coffee', 'pantry', 'free'],
               {'AND': {'is_frozen': False}}, 1)),
     ('Meat', (['meat'], {'OR': {'is_frozen': True}}, 1)),
     ('Dairy', (['dairy'], {'AND': {'is_frozen': False}}, None)),
@@ -42,13 +42,13 @@ INVITE_CODE = 'PDX_2020'
 DROP_LOCATION_GROUP_LIMITS = [
     # Portland
     {
-        'limit': 115,
+        'limit': 150,
         'locations': ['Hollywood', 'PSU', 'Cully', 'St Johns', 'Zafar', 'Irvington', 'Woodstock']
     },
     # Corvallis
     {
         'limit': 60,
-        'locations': ['97330', '97331', '97333', 'Banzhaf'],
+        'locations': ['97330', '97331', '97333', 'Corvallis'],
     },
     # Eugene - Tue
     {
@@ -144,7 +144,7 @@ DROPSITES = [
     },
     {
         'name': 'Hollywood',
-        'memberLimit': 15,
+        'memberLimit': 60,
         'color': 'yellow',
         'description': 'Portland - Hollywood Farmers Market (Saturday)',
         'allowOneTimeOrders': True,
@@ -178,20 +178,20 @@ DROPSITES = [
         'pickupDay': 6,
         'DFFDelivery': True,
     },
-    # {
-    #     'name': 'St Johns',
-    #     'memberLimit': 20,
-    #     'color': 'purple',
-    #     'description': 'Portland - St Johns Farmers Market (Saturday)',
-    #     'allowOneTimeOrders': False,
-    #     'pickupDay': 6,
-    # 'DFFDelivery': True,
-                   # },
     {
-        'name': 'Banzhaf',
+        'name': 'St Johns',
+        'memberLimit': 20,
+        'color': 'purple',
+        'description': 'Portland - St Johns Farmers Market (Saturday)',
+        'allowOneTimeOrders': False,
+        'pickupDay': 6,
+        'DFFDelivery': True,
+    },
+    {
+        'name': 'Corvallis',
         'memberLimit': 25,
         'color': 'orange',
-        'description': 'Corvallis - NW Walnut & NW Aspen (Saturday)',
+        'description': 'Corvallis - SW Hawkeye & SW Brooklane (Saturday)',
         'allowOneTimeOrders': False,
         'pickupDay': 6,
         'DFFDelivery': False,
@@ -220,7 +220,7 @@ ORDER_WINDOWS = [
         'endTime': '23:59',
         'packDay': 5,
         'memberLimit': 220,
-        'dropsites': ['Farm - Friday', 'LCFM', 'Hollywood', 'PSU', 'Banzhaf', 'Cully', 'Irvington', 'Woodstock',
+        'dropsites': ['Farm - Friday', 'LCFM', 'Hollywood', 'PSU', 'Corvallis', 'Cully', 'Irvington', 'Woodstock',
                       'St Johns', 'Zafar'],
         'homeDeliveryZips': ['97330', '97331', '97333']
     },
@@ -237,7 +237,7 @@ ORDER_WINDOWS = [
 ]
 DROP_SITE_ORDER = ['Home Delivery', 'W 11th', 'Friendly', 'Farm - Friday', 'Farm - Tuesday',
                    'Woodstock', 'Cully', 'St Johns', 'PSU', 'Hollywood', 'Irvington', 'Woodstock', 'Zafar', 'LCFM',
-                   'Banzhaf']
+                   'Corvallis']
 
 DELIVERY_CSVS = {
     1: [
@@ -265,7 +265,7 @@ DELIVERY_CSVS = {
             'zipCodes': ['97330', '97331', '97333'],
             'standingDeliveries': [
                 # ['Address', 'Name', 'Phone', 'Email', 'Notes', 'duration', 'tw start', 'tw end', 'Boxes', 'dairy', 'meat', 'flowers', 'notifications']
-                ['3843 NW Arrowood Circle, Corvallis, OR 97330', 'Banzhaf Dropsite', '', '', '', '8', '7:00', '12:00',
+                ['3355 SW Hawkeye, Corvallis, OR 97333', 'Corvallis Dropsite', '', '', '', '8', '7:00', '12:00',
                  '', '', '', '', 'none'],
                 ['1007 SE 3rd St, Corvallis, OR 97333', '1st Alt South', '', '', '', '10', '', '', '', '', '', '',
                  'none'],
@@ -316,7 +316,8 @@ SENDINBLUE_LISTS = {
 }
 
 SENDINBLUE_TRANSACTIONAL_TEMPLATES = {
-    'Banzhaf': 27,
+    # 'Banzhaf': 27,
+    'Corvallis': 308,
     'Farm - Friday': 31,
     'Farm - Tuesday': 50,
     'LCFM': 28,

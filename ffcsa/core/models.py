@@ -136,8 +136,8 @@ class Profile(models.Model):
     paid_signup_fee = models.BooleanField(default=False)
     can_order_dairy = models.BooleanField("Has had dairy conversation", default=False)
     join_dairy_program = models.BooleanField(
-        "Join Raw Dairy Program",
-        help_text="I would like to join the Raw Dairy program. I understand that I will be charged a $50 herd-share fee when making my first payment and will need to talk to the Dairy Manager before gaining access to raw dairy products. We'll be in touch soon.",
+        "Join Dairy Program",
+        help_text="I would like to join the Dairy program. I understand that I will be charged a $50 herd-share fee when making my first payment and will need to talk to the Dairy Manager before gaining access to dairy products. We'll be in touch soon.",
         default=False)
     payment_agreement = models.BooleanField(
         "I agree to make monthly payments in order to maintain my membership with the FFCSA for 6 months, with a minimium of $172 per month.",

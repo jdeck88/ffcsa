@@ -182,7 +182,7 @@ def payments_subscribe(request):
     user = request.user
     if user.profile.join_dairy_program and not user.profile.paid_signup_fee and not request.POST.get(
             'signupAcknowledgement') == 'True':
-        errors.append('You must acknowledge the 1 time Raw Dairy program fee')
+        errors.append('You must acknowledge the 1 time Dairy program fee')
 
     if not stripeToken:
         errors.append('Invalid Request')
