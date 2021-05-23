@@ -108,8 +108,6 @@ def signup(request, template="accounts/account_signup.html", extra_context=None)
         add_google_contact(new_user)
 
         subject = "New User Signup"
-        if new_user.profile.join_dairy_program:
-            subject = subject + ' - Needs Dairy Conversation'
         send_mail_template(
             subject,
             "ffcsa_core/send_admin_new_user_email",
@@ -587,6 +585,19 @@ def stripe_webhooks(request):
 
             if user:
                 if charge.description == SIGNUP_DESCRIPTION:
+                    if user.profile.join_dairy_program and not user.profile.can_order_dairy:
+                        c = {
+                            'user': user,
+                            'user_url': request.build_absolute_uri(reverse("admin:auth_user_change", args=(user.id,))),
+                        }
+                        send_mail_template(
+                            'First Payment Received - Needs Dairy Conversation',
+                            "ffcsa_core/send_admin_dairy_convo_email",
+                            settings.DEFAULT_FROM_EMAIL,
+                            settings.ACCOUNTS_APPROVAL_EMAILS,
+                            context=c,
+                            fail_silently=True,
+                        )
                     user.profile.paid_signup_fee = True
                     user.profile.save()
 
