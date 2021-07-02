@@ -28,6 +28,7 @@
 
             <!-- Onetime Payment -->
             {% if user.profile.non_subscribing_member or user.profile.stripe_subscription_id or user.profile.stripe_customer_id and user.profile.ach_status in 'NEW,VERIFYING' %}
+            <section>
                 <!-- Payment modal trigger -->
                 <p>
                     <button type="button" class="btn btn-info" id="make-payment">
@@ -106,10 +107,12 @@
                         </div>
                     </div>
                 </div>
+            </section>
             {% endif %}
 
             <!-- ACH Bank Verification-->
             {% if user.profile.payment_method == 'ACH' and user.profile.ach_status == 'NEW' or user.profile.payment_method == 'ACH' and user.profile.ach_status == 'VERIFYING' %}
+            <section>
                 <p class="alert alert-warning">It looks like your ACH bank account has not been verified. Once you
                     receive the 2 small deposits with the descriptions "<strong>AMNTS:</strong>", enter them below to
                     verify your bank account. The deposits should show on your statement withing 1-2 business days.</p>
@@ -135,8 +138,10 @@
                         </div>
                     </div>
                 </form>
+            </section>
                 <!-- New Subscription Signup -->
             {% elif not user.profile.non_subscribing_member and not user.profile.stripe_subscription_id %}
+            <section>
                 {% if user.profile.ach_status == 'FAILED' %}
                     <p class="alert alert-danger">We had trouble sending funds to your provided bank account for
                         verification purposes. Your information may have been entered incorrectly. Please try again.</p>
@@ -178,7 +183,10 @@
 
                     <button class="btn btn-default btn-info" type="submit">Subscribe</button>
                 </form>
+
+            </section>
             {% elif not user.profile.non_subscribing_member %}
+            <section>
                 <p>Your monthly contribution is ${{ user.profile.monthly_contribution }} via
                     {% if user.profile.payment_method == 'CC' %}
                         Credit Card
@@ -231,6 +239,8 @@
                     </div>
 
                 </div>
+
+            </section>
             {% endif %}
             <div id="payment-container"></div>
 

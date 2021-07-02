@@ -1,0 +1,391 @@
+
+{% load mezzanine_tags shop_tags static i18n %}
+<input type="hidden" id="stripeApiKey" value="{{ STRIPE_API_KEY }}"/>
+
+
+
+
+<!-- Cash details -->
+<section class="grid grid-cols-12 gap-4 text-center mt-10">
+  <div class="col-span-12 md:col-span-6 lg:col-span-4">
+    <h2 class="text-3xl text-success font-bold">$((NavVue.cart.remaining_budget))</h2>
+    <h4>Remaining balance</h4>
+  </div>
+  <div class="col-span-12 md:col-span-6 lg:col-span-4">
+    <h2 class="text-3xl text-success font-bold">$0</h2>
+    <h4>Last payment</h4>
+  </div>
+  <div class="col-span-12 md:col-span-6 lg:col-span-4">
+    <h2 class="text-3xl text-success font-bold">$0</h2>
+    <h4>Last order</h4>
+  </div>
+</section>
+
+
+
+
+
+
+<!-- Onetime Payment -->
+{% if user.profile.non_subscribing_member or user.profile.stripe_subscription_id or user.profile.stripe_customer_id and user.profile.ach_status in 'NEW,VERIFYING' %}
+<section class="one-time-payment mt-20">
+  <!-- Modal btn -->
+  <button class="btn-primary uppercase" @click.prevent="OPT_ToggleModal">Add funds</button>
+  
+  <!-- Modal -->
+  <div v-show="oneTimePayment.modalShown" class="fixed z-10 inset-0 overflow-y-auto">
+    <div class="flex min-h-screen">
+
+      <div class="fixed inset-0 transition-opacity"  aria-hidden="true" @click.prevent="OPT_ToggleModal">
+        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+      </div>
+    
+      <div class="bg-white text-secondary max-w-4xl mx-auto my-auto shadow p-5 pb-10 z-10" style="min-height: 22rem; min-width: 45vw;">
+        <!-- close button -->
+        <div class="flex mb-2">
+          <a href="#" class="close-modal-btn ml-auto" @click.prevent="OPT_ToggleModal"></a>
+        </div>
+        <!-- close button -->
+  
+        <section class="px-3">
+          <h4 class="text-xl text-black text-center">Add funds to account</h4>
+
+          <!-- Show warning and info alers -->
+          {% if user.profile.payment_method == 'ACH' and user.profile.ach_status == 'VERIFIED' %}
+          <div class="alert-warning mt-5">
+            <p>
+              Note: Because your default payment method is via ACH bank transfer, it will
+              take 7-10 business days before the payment is reflected in your account.
+            </p>
+            <p>If you choose to pay with a credit card below the payment will be added to
+              your account within 10 mins.</p>
+          </div>
+          <p class="alert-info">This is a one time payment that will be credited to your account.</p>
+          {% endif %}
+
+          <form action="{% url 'make_payment' %}" method="POST" id="oneTimePayment" class="mt-8">
+            <!-- Amount -->
+            <div class="col-span-6 relative">
+              <label for="amount" class="text-gray-700 px-1">Payment Amount</label>
+              <input type="number" name="amount"  class="input-v" style="padding-left: 2rem;" min="20" max="999" required>
+              <i class="fas fa-dollar-sign absolute left-4 bottom-4"></i>
+            </div>
+            
+            <!-- ACH & non_subscribing_member user -->
+            {% if user.profile.payment_method == 'ACH' or user.profile.non_subscribing_member %}
+            <div id="chosePaymentMethod">
+              <h3 class="text-black mt-4">Choose payment method</h3>
+
+              <!-- Payment options Bank/CC -->
+              <div class="flex flex-col">
+                {% if user.profile.ach_status == 'VERIFIED' %}
+                <label class="inline-flex items-center mt-3">
+                  <input type="radio" class="form-radio h-5 w-5 text-gray-600" name="paymentType" value="ACH" v-model="oneTimePayment.paymentMethod" required>
+                  <span class="ml-2 text-gray-700 select-none cursor-pointer">Subscription default Bank Account</span>
+                </label>
+                {% endif %}
+      
+                <label class="inline-flex items-center mt-3">
+                  <input type="radio" class="form-radio h-5 w-5 text-gray-600" name="paymentType" value="CC" v-model="oneTimePayment.paymentMethod" required>
+                  <span class="ml-2 text-gray-700 select-none cursor-pointer">Credit Card</span>
+                </label>
+              </div>
+
+              <!-- Credit Card details -->
+              {% with False as isSubscription %}
+              <div v-show="oneTimePayment.paymentMethod == 'CC'" id="one-time-payment-card" class="w-11/12 my-5 mx-auto"></div>
+              {% endwith %}
+
+              <label class="inline-flex items-center mt-6">
+                <input type="checkbox" class="form-radio h-4 w-4 text-gray-600" name="chargeAcknowledgement" checked required>
+                <span class="ml-2 text-gray-700 select-none cursor-pointer">acknowledge that the above amount will be debited from my Card or Bank Account</span>
+              </label>
+            </div>
+            {% endif %}
+
+            <!-- Stripe errors -->
+            <div id="OTP-StripeErrors" v-if="oneTimePayment.stripeError" class="alert-danger mt-5">((oneTimePayment.stripeError))</div>
+
+            <!-- Action buttons -->
+            <div class="flex mt-10">
+              <ff-button text="Add Funds" cls="btn-primary ml-auto mr-3" :loading="oneTimePayment.loading" v-on:click.native="OPT_Pay"></ff-button>
+              <button type="button" class="btn-primary" @click.prevent="OPT_ToggleModal">Cancel</button>
+            </div>
+          </form>
+        </section>
+      </div>
+    
+    </div>
+  </div>
+</section>
+{% endif %}
+
+
+
+<!-- ACH Bank Verification-->
+{% if user.profile.payment_method == 'ACH' and user.profile.ach_status == 'NEW' or user.profile.payment_method == 'ACH' and user.profile.ach_status == 'VERIFYING' %}
+<section class="ach-bank-verification mt-20">
+  <div class="mt-8" role="alert">
+    <div class="alert-warning">
+      <p>It looks like your ACH bank account has not been verified. Once you
+        receive the 2 small deposits with the descriptions "<strong>AMNTS:</strong>", enter them below to
+        verify your bank account. The deposits should show on your statement withing 1-2 business days.</p>
+    </div>
+
+    {% for error in subscribe_errors %}
+      <div class="alert-danger mt-3">{{ error }}</div>
+    {% endfor %}
+
+    <form action="{% url 'payments_verify' %}" method="POST" id="VerifyACH" class="mt-5">
+      <p>Deposit Amounts</p>
+
+      <div class="mt-4 grid grid-cols-12 gap-4 mt-10">
+        <div class="col-span-6">
+          <label for="amount1" class="text-gray-700 px-1">Deposit 1</label>
+          <input type="number" name="amount1" id="amount1" class="input-v" required>
+        </div>
+
+        <div class="col-span-6">
+          <label for="amount2" class="text-gray-700 px-1">Deposit 2</label>
+          <input type="number" name="amount2" id="amount2" class="input-v" required>
+        </div>
+      </div>
+
+      <div class="flex mt-10">
+        <ff-button text="Verify and Make Payment" cls="btn-primary ml-auto mr-3" :loading="VerifyACH.loading" v-on:click.native="Verify_ACH"></ff-button>
+      </div>
+    </form>
+  </div>
+</section>
+
+
+
+
+
+<!-- New Subscription Signup -->
+{% elif not user.profile.non_subscribing_member and not user.profile.stripe_subscription_id %}
+<section class="new-subs mt-20">
+  {% if user.profile.ach_status == 'FAILED' %}
+    <p class="alert-danger mb-10">We had trouble sending funds to your provided bank account for verification purposes. Your information may have been entered incorrectly. Please try again.</p>
+  {% else %}
+    <p class="alert-warning mb-10">It looks like you have yet to setup a subscription.
+    <p class="mb-10">
+      {% if user.profile.join_dairy_program %}
+        <strong>If you would like to skip the $50 Raw Dairy program fee and pay for the entire year in advance</strong>
+      {% else %}
+        <span>If you would like to pay for the year in advance</span>
+      {% endif %}
+      <span>, (minimum $172 / month, $2,064 total) send a personal check made out to "Full Farm CSA" by mail to: PO box 565 Junction City, OR 97448</span>
+    </p>
+    <strong>Otherwise,</strong> please complete the following form to setup your subscription.</p>
+  {% endif %}
+
+  
+  <form action="{% url 'payments_subscribe' %}" method="POST" id="newSubscription">
+    <!-- Monthly Contribution Amount (minimum $172) >>>>>> payment_amount.html -->
+    <div class="mt-2">
+      <label for="amount" class="text-gray-700 px-1">Monthly Contribution Amount (minimum $172)</label>
+      {% if user.profile.monthly_contribution != None %}
+      <input class="input-v" type="number" name="amount" min="172" required value="{{ user.profile.monthly_contribution }}"/>
+      {% else %}
+      <input class="input-v" type="number" name="amount" min="172" required value="12121"/>
+      {% endif %}
+      <!-- <small class="italic px-2">minimum $172</small> -->
+      <div class="mt-3 mb-4">
+        How much should I pay? This amount will be your monthly
+        budget for each month throughout the year, which may include either 4 weeks
+        or 5 weeks of ordering. Although we recommend multiplying your weekly
+        ordering amount by 4.33 (the average number of weeks in a month), you may
+        want to give yourself some extra buffer room for those longer, 5 week
+        months, but you can also top up your account if needed periodically.
+      </div>
+    </div>
+
+    <!-- Payment method ACH Bank/CC >>>>>> payment_details.html -->
+    <div>
+      <h3 class="text-lg mt-4">Payment method</h3>
+
+      <!-- 1. ACH bank -->
+      <label class="inline-flex items-center cursor-pointer mt-3" for="paymentTypesACH">
+        <input type="radio" class="form-radio h-5 w-5 text-gray-600" name="paymentType" id="paymentTypesACH" value="ACH" v-model="newSubscription.paymentMethod">
+        <span class="ml-2 text-gray-700 select-none" value="DEFAULT">ACH Bank Transfer (Payments take around 7 business days to show up on your account)</span>
+      </label>
+
+      <!-- 2. CreditCard bank -->
+      <label class="inline-flex items-center cursor-pointer mt-3" for="paymentTypesCC">
+        <input type="radio" class="form-radio h-5 w-5 text-gray-600" name="paymentType" id="paymentTypesCC" value="CC" v-model="newSubscription.paymentMethod">
+        <span class="ml-2 text-gray-700 select-none" value="DEFAULT">Credit Card - (Payments take < 1 hr to show up on your account, but we are charged a fee)</span>
+      </label>
+      
+      <!-- ACH details -->
+      <div v-show="newSubscription.paymentMethod == 'ACH'" class="mt-10 grid grid-cols-12 gap-4 my-10" id="ach-details">
+        <div class="col-span-6">
+          <label for="achAccountName" class="text-gray-700 px-1">Name on Bank Account</label>
+          <input class="input-v" type="text" required name="achAccountName" value="{{ user.get_full_name }}"/>
+        </div>
+  
+        <div class="col-span-6">
+          <label for="ach-account-type" class="text-gray-700 px-1">Bank Account Type</label>
+          <select id="ach-account-type" name="achAccountType" class="input-v">
+            <option value="individual">Individual</option>
+            <option value="company">Company</option>
+          </select>
+        </div>
+  
+        <div class="col-span-6">
+          <label for="achRoutingNumber" class="text-gray-700 px-1">Routing Number</label>
+          <input class="input-v" type="text" required name="achRoutingNumber" placeholder="123456789" value="110000000" min="9"/>
+        </div>
+  
+        <div class="col-span-6">
+          <label for="achAccountNumber" class="text-gray-700 px-1">Account Number</label>
+          <input class="input-v" type="text" required name="achAccountNumber" placeholder="0000987654321" value="000123456789"/>
+        </div>
+        
+        <div class="col-span-12">
+          <p class="alert-warning mb-10">To validate your bank account, we will make 2 small
+            deposits. Once received, you will need to come back to this page and enter the amount to complete the
+            verification.</p>
+        </div>
+      </div>
+    
+      <!-- Credit Card details -->
+      <div v-show="newSubscription.paymentMethod == 'CC'" class="mt-10">
+        {% with True as isSubscription %}
+        <div id="new-subscription-payment-card"></div>
+        {% endwith %}
+      </div>
+
+
+      <div id="OTP-StripeErrors" v-if="newSubscription.stripeError" class="alert-danger mt-5">((newSubscription.stripeError))</div>
+    </div>
+    
+    {% if not user.profile.paid_signup_fee and user.profile.join_dairy_program %}
+    <label class="inline-flex items-center mt-5 cursor-pointer">
+      <input type="checkbox" class="form-radio h-4 w-4 text-gray-600" name="signupAcknowledgement" checked required>
+      <span class="ml-2 text-gray-700 select-none">I acknowledge that I will also be charged a one time fee of <strong>$50</strong> to join the Raw Dairy program</span>
+    </label>
+    {% endif %}
+
+    <!-- TODO - Error handeling -->
+    <div id="stripeErrors"></div>
+    {% for error in subscribe_errors %}
+      <div class="alert alert-danger">{{ error }}</div>
+    {% endfor %}
+
+    <div class="flex mt-10">
+      <ff-button text="Subscribe" cls="btn-primary m-auto w-60" :loading="newSubscription.loading" v-on:click.native="subscribe"></ff-button>
+    </div>
+  </form>
+
+</section>
+
+<!-- NOT non_subscribing_member -->
+<!-- todo - there are two buttons here, why? -->
+{% elif not user.profile.non_subscribing_member %}
+<section class="mt-20">
+  <div class="mb-4">
+    <p>Your monthly contribution is ${{ user.profile.monthly_contribution }} via
+      {% if user.profile.payment_method == 'CC' %}
+        Credit Card
+      {% else %}
+        ACH Bank Transfer
+      {% endif %}.
+    </p>
+    <p>You next payment is scheduled for <strong>{{ next_payment_date }}</strong>.</p>
+    {% if user.profile.payment_method == 'ACH' %}
+      <p class="alert-info my-4">Note: It will take 3-5 business days before the payment is reflected in your account.</p>
+    {% endif %}
+  
+  
+    <!-- TODO - handel errors -->
+    {% for error in subscribe_errors %}
+      <div class="alert alert-danger">{{ error }}</div>
+    {% endfor %}
+  </div>
+
+  <button class="btn-primary" id="edit-payment-info">Update Payment Method</button>
+  <button class="btn-primary" id="edit-payment-amount-btn">Update Monthly Contribution</button>
+
+  <!-- update payment method -->
+
+  <div class="hidden" id="edit-payment">
+    <form action="{% url 'payments_update' %}" method="POST" id="edit-payment-form" class="form">
+      {% csrf_token %}
+      <input type="hidden" name="amount" value="{{ user.profile.monthly_contribution }}"/>
+
+      <br/>
+      {% include "ffcsa_core/payment_details.html" %}
+
+      <div id="stripeErrors"></div>
+
+      <button class="btn btn-info" type="submit">Save</button>
+      <br/>
+    </form>
+
+    <!-- update payment amount -->
+    <div class="hidden" id="edit-payment-amount">
+      <form action="{% url 'payments_update_amount' %}" method="POST" id="edit-payment-amount-form" class="form">
+        {% csrf_token %}
+        <br/>
+        {% include "ffcsa_core/payment_amount.html" %}
+        <button class="btn btn-info" type="submit">Save</button>
+        <br/>
+      </form>
+    </div>
+  </div>
+  
+</section>
+{% endif %}
+
+
+<!-- TODO - why this is here? -->
+<div id="payment-container"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- warning about old payments records before 2017 -->
+{% if user.profile.joined_before_dec_2017 %}
+<div class="flex items-center bg-blue-500 text-white text-sm font-bold px-4 py-3" role="alert">
+  <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.432 0c1.34 0 2.01.912 2.01 1.957 0 1.305-1.164 2.512-2.679 2.512-1.269 0-2.009-.75-1.974-1.99C9.789 1.436 10.67 0 12.432 0zM8.309 20c-1.058 0-1.833-.652-1.093-3.524l1.214-5.092c.211-.814.246-1.141 0-1.141-.317 0-1.689.562-2.502 1.117l-.528-.88c2.572-2.186 5.531-3.467 6.801-3.467 1.057 0 1.233 1.273.705 3.23l-1.391 5.352c-.246.945-.141 1.271.106 1.271.317 0 1.357-.392 2.379-1.207l.6.814C12.098 19.02 9.365 20 8.309 20z"/></svg>
+  <p>Only payments made for Dec. 2017 onwardsare shown here.</p>
+</div>
+{% endif %}
+
+
+
+<!-- TODO - update this part so it is intiated by Vue and managed here -->
+<!-- Payments history -->
+<section class="mt-20">
+  <h3 class="text-lg mb-4">
+    <i class="fas fa-exchange-alt text-primary"></i>
+    Payment history
+  </h3>
+
+  <payments endpoint="/api/payments/only_payments"></payments>
+</section>
+
+<!-- Credit history -->
+<section class="mt-10">
+  <h3 class="text-lg mb-4">
+    <i class="fas fa-undo-alt text-primary"></i>
+    Credit history
+  </h3>
+
+  <payments endpoint="/api/payments/only_credits"></payments>
+</section>

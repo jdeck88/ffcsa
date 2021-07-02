@@ -7,6 +7,7 @@ module.exports = {
         primary: '#e16231',       // orange-3
         secondary: '#502616',     // brown-7
         success: '#5f8b49',       // light orange ex. footer bg
+        danger: '#fc1013',       // red color
         givry: '#F8DAC7',         // light orange ex. footer bg
 
 
@@ -38,7 +39,7 @@ module.exports = {
         
         orange: {
             '1': '#efad8b',
-            '2': '#e67f51', // hover effect
+            '2': '#d1501d', // hover effect (darker)
             '3': '#e16231',
             '4': '#e98d63', // Left and right boxes below homepage hero image
             '5': '#e57849', // Center box below homepage hero image

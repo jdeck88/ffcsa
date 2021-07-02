@@ -114,17 +114,18 @@
     {% block extra_head %}{% endblock %}
   </head>
 
-  <body id="{% block body_id %}body{% endblock %}">
+  <body id="{% block body_id %}body{% endblock %}" class="{% block body_class %}{% endblock %}">
 
     <!-- main spinner -->
     <section id="main-spinner" class="centered">
       <img src="{% static 'gifs/spinner.gif' %}" alt="spinner">
     </section>
 
+    
     <!-- main content -->
     <div id="wrapper" class="hidden">
-      <header id="">
-        <nav id="navVue" class="mx-4 my-5 lg:mx-10 lg:my-3 bg-white select-none h-auto" v-cloak>
+      <header">
+        <nav id="navVue" class="px-4 py-5 lg:px-10 lg:py-3 bg-white select-none h-auto" v-cloak>
           <div class="flex items-center">
             <a href="/" id="header-home-icon" class="inline-block no-select-background w-3/5 lg:w-2/5" role="button" tabindex="0" aria-label="Home">
               <img class="h-12" src="/static/img/dff-logo-long.png" draggable="false" aria-hidden="true">
@@ -146,7 +147,7 @@
                 
                 <div :class="[(showUserDropdown ? '' : 'hidden'), 'origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5']">
                   <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Account settings</a>
+                    <a href="/accounts/update/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Account settings</a>
                     <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Support</a>
                     <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">My orders</a>
                     <a href="{% url 'logout' %}?next={{ request.get_full_path }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Logout</a>
@@ -187,6 +188,15 @@
               <i @click="showNavDropdown = !showNavDropdown" class="fas text-4xl fa-bars text-secondary self-center" role="button"></i>
             </div>
           </div>
+
+          <!-- Notification -->
+          <section v-show="notification.shown" class="notification">
+            <div 
+            :class="[notification.typeClass, 'fixed z-50 top-20 right-4 rounded bg-white shadow-lg p-4 border-l-4 border-primary w-96 max-w-lg']">
+            <i class="fas fa-times absolute right-5 opacity-70 hover:opacity-100 cursor-pointer" @click="notification.shown = false"></i>
+              <p class="mt-2 w-11/12">((notification.text))</p>
+            </div>
+          </section>
 
           <!-- Mobile menu -->
           <div :class="[(showNavDropdown ? '' : 'hidden'), 'mt-5']">
@@ -275,11 +285,29 @@
           cart: {
             shown: false,
             items: [],
-            total_price: 0
+            total_price: 0,
+            delivery_fee: 0,
+            remaining_budget: 0,
+            attending_dinner: 0
+          },
+          notification: {
+            text: '',
+            shown: false,
+            typeClass: 'success'
           },
 
           showNavDropdown: false,
           showUserDropdown: false,
+        },
+
+        watch: {
+          'notification.shown': function(val) {
+            if (val) {
+              setTimeout(() => {
+                if (this.notification.text.length < 65) this.notification.shown = false
+              }, 3000);
+            }
+          }
         },
         
         methods: {
@@ -352,6 +380,21 @@
             }
           },
           
+
+          show_msg(msg, type='success') {
+            this.notification.shown = true
+            this.notification.text = msg
+            
+            // show border color based on the message type
+            switch (type) {
+              case 'success':
+                this.notification.typeClass = 'border-success'
+                break;
+              case 'error':
+                this.notification.typeClass = 'border-danger'
+                break;
+            }
+          }
         },
 
         computed: {},

@@ -63,11 +63,22 @@
 
       <!-- total and checkout -->
       <section class="bg-white absolute px-3 mt-10 inset-x-0 bottom-5" style="width: 95%;">
-        <a href="#" class="block mb-4" @click.prevent="clearCart()">Clear cart</a>
-        <div class="flex text-black font-bold mb-4">
+        <!-- <a href="#" class="block mb-4" @click.prevent="clearCart()">Clear cart</a> -->
+
+
+        <div class="flex text-black font-bold">
           <p>SUBTOTAL</p>
           <p class="ml-auto">$((cart.total_price))</p>
         </div>
+        <div class="flex text-black font-bold">
+          <p>DELIVERY FEE</p>
+          <p class="ml-auto">$((cart.delivery_fee))</p>
+        </div>
+        <div class="flex text-black font-bold mb-4">
+          <p>REMAINING BUDGET</p>
+          <p class="ml-auto">$((cart.remaining_budget))</p>
+        </div>
+
         <a href="/cart" class="block btn-primary tracking-widest font-bold text-lg w-full">CONTINUE TO CHECKOUT</a>
       </section>
       <!-- total and checkout -->

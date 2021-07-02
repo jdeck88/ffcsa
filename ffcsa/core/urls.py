@@ -25,7 +25,7 @@ urlpatterns = i18n_patterns(
     url("^checkout%s$" % _slash, page_not_found, name="shop_checkout"),
     url("^checkout/complete%s$" % _slash, page_not_found, name="shop_complete"),
     url("^stripe%s$" % _slash, views.stripe_webhooks),
-    url("^accounts/update%s$" % _slash, profile_update, kwargs={"extra_context": {"title": "Account Settings"}}),
+    url("^accounts/update%s$" % _slash, profile_update, kwargs={"extra_context": {"title": "Account Settings", 'STRIPE_API_KEY': settings.STRIPE_API_KEY}}),
     url(r'^country-autocomplete/$', views.ProductAutocomplete.as_view(), name='product-autocomplete'),
     url(r'^zip-check/(?P<zip>\d{5})$', views.home_delivery_check, name='home-delivery-zip-check'),
     url(r'^signrequest/$', views.SignRequest.as_view(), name='signrequest'),

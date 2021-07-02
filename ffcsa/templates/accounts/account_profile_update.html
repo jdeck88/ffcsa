@@ -1,142 +1,634 @@
-{% extends "base.html" %}
-{% load i18n mezzanine_tags ffcsa_core_tags shop_tags %}
+{% extends "pages/page.html" %}
+{% load mezzanine_tags shop_tags i18n static %}
+{% block body_id %}products{% endblock %}
 
-{% block meta_title %}{{ title }}{% endblock %}
-{% block title %}{{ title }}{% endblock %}
-{% block body_id %}account{% endblock %}
-
-{% block breadcrumb_menu %}
-    {{ block.super }}
-    <li>{{ title }}</li>
-{% endblock %}
-
-{% block extra_head %}
-    {{ block.super }}
-
-    {#    TODO: figure out why including form.media.js in the extra_js block breaks compressor w/ key not found in manifest #}
-    {{ form.media.js }}
-    <script type="text/javascript"
-            src="https://maps.google.com/maps/api/js?libraries=geometry,places&key={{ settings.GOOGLE_API_KEY }}"></script>
-    <script type="text/javascript"
-            src="https://cdn.jsdelivr.net/gh/geocodezip/geoxml3@master/polys/geoxml3.js"></script>
-{% endblock %}
+{% block body_class %}bg-gray-100{% endblock %}
 
 
 {% block main %}
+<main id="accountSettings" v-cloak>
+  <!-- Call block super -->
+  {{ block.super }}
 
-    {% errors_for form %}
+  <section class="container mx-auto grid gap-4 grid-cols-12">
+    <!-- left section -->
+    <div class="col-span-12 md:col-span-3 bg-white py-3">
+      <div class="p-4">
+        <h3 class="text-lg">Settings</h3>
+      </div>
 
-    {% include 'ffcsa_core/includes/membership_agreement_alert.html' %}
+      <ul>
+        <li :class="[(activeSettings == 'personal' ? 'bg-gray-200 border-l-4 border-primary' : ''), 'hover:bg-gray-200']">
+          <a id="personal" class="block p-4" href="#" @click.prevent="updateActiveSettings">Personal</a>
+        </li>
+        <li :class="[(activeSettings == 'payment' ? 'bg-gray-200 border-l-4 border-primary' : ''), 'hover:bg-gray-200']">
+          <a id="payment" class="block p-4" href="#" @click.prevent="updateActiveSettings">Payment</a>
+        </li>
+        <li :class="[(activeSettings == 'delivery' ? 'bg-gray-200 border-l-4 border-primary' : ''), 'hover:bg-gray-200']">
+          <a id="delivery" class="block p-4" href="#" @click.prevent="updateActiveSettings">Delivery Options</a>
+        </li>
+        <li :class="[(activeSettings == 'orders' ? 'bg-gray-200 border-l-4 border-primary' : ''), 'hover:bg-gray-200']">
+          <a id="orders" class="block p-4" href="#" @click.prevent="updateActiveSettings">Order history</a>
+        </li>
+        <li :class="[(activeSettings == 'password' ? 'bg-gray-200 border-l-4 border-primary' : ''), 'hover:bg-gray-200']">
+          <a id="password" class="block p-4" href="#" @click.prevent="updateActiveSettings">Change Password</a>
+        </li>
+      </ul>
+    </div>
 
-    <form class="update-profile-form" method="post"{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>
-        {% nevercache %}
-            {% csrf_token %}
-        {% endnevercache %}
+    <!-- right section -->
+    <div class="col-span-12 md:col-span-9 bg-white p-5">
+      <!-- personal settings -->
+      <div v-if="activeSettings == 'personal'">
+        <h3 class="text-lg">Personal</h3>
+  
+        <form id="personal-form" class="grid grid-cols-12 gap-4 mt-10">
+          <!-- first name -->
+          <div class="col-span-6">
+            <label for="first_name" class="text-gray-700 px-1">First name</label>
+            <input type="text" name="first_name" id="first_name" v-model="user.first_name" class="input-v" @input="enableSaveButton">
+          </div>
+  
+          <!-- last name -->
+          <div class="col-span-6">
+            <label for="last_name" class="text-gray-700 px-1">Last name</label>
+            <input type="text" name="last_name" id="last_name" v-model="user.last_name" class="input-v" @input="enableSaveButton">
+          </div>
+  
+          <!-- email -->
+          <div class="col-span-12">
+            <label for="email" class="text-gray-700 px-1">Email</label>
+            <input type="email" name="email" id="email" v-model="user.email" class="input-v" @input="enableSaveButton">
+          </div>
+  
+          <!-- Contact Number -->
+          <div class="col-span-6">
+            <label for="phone_number" class="text-gray-700 px-1">Contact Number</label>
+            <input type="text" name="phone_number" id="phone_number" v-model="user.profile.phone_number" class="input-v" @input="acceptPhoneNumber" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
+            <small class="text-gray-400">must match format 999-999-9999</small>
+          </div>
+  
+          <!-- Alternate Contact Number -->
+          <div class="col-span-6">
+            <label for="phone_number_2" class="text-gray-700 px-1">Alternate Contact Number</label>
+            <input type="text" name="phone_number_2" id="phone_number_2" v-model="user.profile.phone_number_2" class="input-v" @input="acceptPhoneNumber2" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
+            <small class="text-gray-400">must match format 999-999-9999</small>
+          </div>
+          
+        </form>
 
-        <div class="panel panel-default">
-            <div class="panel-body">
-                {% is_order_cycle as is_order_cycle %}
-                {% if valid_dropsite and not is_order_cycle %}
-                    <p class="alert alert-warning">Any changes you make will not take affect until the next order
-                        cycle.
-                        If you have an urgent drop site change, send us an email to <a
-                                href="mailto:fullfarmcsa@deckfamilyfarm.com">fullfarmcsa@deckfamilyfarm.com</a>
-                        and we will see if we can accommodate your request. However, we greatly appreciate if you
-                        are able to pickup at your selected drop site this week.
-                    </p>
-                {% endif %}
-                {% if not request.user.profile.join_dairy_program %}
-                    <p class="alert alert-warning">If you would like to start ordering dairy products and join the Raw
-                        Dairy Program, send us an email to <a href="mailto:fullfarmcsa@deckfamilyfarm.com">fullfarmcsa@deckfamilyfarm.com</a>
-                        and we will get you setup.
-                    </p>
-                {% endif %}
+          <!-- save button -->
+        <div class="section-footer flex mt-10">
+          <button :class="[(saveButtonEnabled ? '' : 'btn-disabled'), 'btn-primary text-base font-medium px-4 py-2 ml-auto']" @click.prevent="saveUser">Save changes</button>
+        </div>
+      </div>
+      
+      <!-- payment -->
+      <div v-if="activeSettings == 'payment'">
+        <h3 class="text-lg">Payment</h3>
 
-                <fieldset>
-                    <legend>Delivery Options</legend>
-                    {% if settings.HOME_DELIVERY_ENABLED %}
-                        {% with form.home_delivery as widget %}
-                            <div class="mb-2">
-                                <div class="form-switch inline-block align-middle">
-                                    <input type="checkbox" name="{{ widget.name }}" id="{{ widget.id_for_label }}"
-                                           class="form-switch-checkbox"
-                                           {% if widget.value %}checked{% endif %}/>
-                                    <label class="form-switch-label" for="{{ widget.id_for_label }}"></label>
-                                </div>
-                                <label class=""
-                                       for="{{ widget.id_for_label }}">{{ widget.label }}</label>
-                                <span class="block text-gray-600">{{ widget.help_text }}</span>
-                            </div>
-                        {% endwith %}
-                        <div id="delivery_information" style="display: none">
-                            {% with form.delivery_address as field %}
-                                <div class="form-group input_{{ field.id_for_label }} {% if field.errors %} has-error {% endif %}">
-                                    <label class="control-label block"
-                                           for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                    {{ field }}
-                                    {% if field.errors %}
-                                        <p class="help-block">
-                                            {% for e in field.errors %}
-                                                {% if not forloop.first %} / {% endif %}{{ e }}
-                                            {% endfor %}
-                                        </p>
-                                    {% endif %}
-                                    <button type="button" id="change_address" class="btn btn-default btn-medium mb-3">Change</button>
-                                </div>
-                            {% endwith %}
-                            <div class="alert alert-warning hidden" id="save-alert">Click "Save" at the bottom of the
-                                page to save your changes.
-                            </div>
-                            {% render_field form.delivery_notes %}
-                        </div>
-                    {% endif %}
-                    {% render_field form.drop_site %}
-                </fieldset>
-                <fieldset>
-                    <legend>Preferences</legend>
-                    {% render_field form.plastic_bags %}
-                    {% render_field form.allow_substitutions %}
-                    {% render_field form.weekly_emails %}
-                </fieldset>
+        <!-- <h4>Your remaining balance is: <span class="text-sucess">(( NavVue.cart.remaining_budget ))</span></h4> -->
+
+        {% include 'accounts/account_payments.html' %}
+
+
+
+
+      </div>
+
+      <!-- delivery settings -->
+      <div v-if="activeSettings == 'delivery'">
+        <h3 class="text-lg">Delivery Options</h3>
+
+
+        <form id="delivery-form" class="grid grid-cols-12 gap-4 mt-10">
+
+          <div class="col-span-12">
+            <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+              <input type="checkbox" name="toggle" id="toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+              <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
             </div>
-        </div>
+            <label for="toggle" class="cursor-pointer select-none">Home Delivery</label>
+            <small class="block text-gray-400 mt-2">Available in Eugene, Corvallis, and Springfield for a $5 fee. This fee is waived for all orders over $125.</small>
+          </div>
 
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <fieldset>
-                    <legend>Contact Information</legend>
-                    {% render_field form.first_name %}
-                    {% render_field form.last_name %}
-                    {% render_field form.email %}
-                    {% render_field form.phone_number %}
-                    {% render_field form.phone_number_2 %}
-                </fieldset>
+          
+          <div class="col-span-6">
+            <label for="drop_site" class="block">Drop Site Location</label>
+            <select name="drop_site" id="drop_site">
+              <option value="">Joe</option>
+              <option value="">Joe</option>
+              <option value="">Joe</option>
+            </select>
+          </div>
+
+
+        </form>
+
+
+
+      </div>
+
+      <!-- order history -->
+      <div v-if="activeSettings == 'orders'">
+        <h3 class="text-lg">Order history</h3>
+
+        <form id="delivery-form" class="grid grid-cols-12 gap-4 mt-10"></form>
+      </div>
+      
+      <!-- change password -->
+      <div v-if="activeSettings == 'password'">
+        <h3 class="text-lg">Change Password</h3>
+      </div>
+
+      
+    </div>
+
+  </section>
+
+
+
+</main>
+{% endblock main %}
+
+{% block js %}
+<script src="https://unpkg.com/vuetable-2@next"></script>
+<script src="https://js.stripe.com/v3/"></script>
+
+<script defer>
+
+  // Stripe
+  const stripe = Stripe('{{ STRIPE_API_KEY }}')
+  const elements = stripe.elements({
+    fonts: [
+      {
+        cssSrc: "https://rsms.me/inter/inter.css"
+      }
+    ],
+    // Stripe's examples are localized to specific languages, but if
+    // you wish to have Elements automatically detect your user's locale,
+    // use `locale: 'auto'` instead.
+    locale: window.__exampleLocale
+  });
+
+  /**
+   * Card Element
+   */
+  const card = elements.create("card", {
+    style: {
+      base: {
+        color: "#32325D",
+        fontWeight: 500,
+        fontFamily: "Inter, Open Sans, Segoe UI, sans-serif",
+        fontSize: "20px",
+        fontSmoothing: "antialiased",
+
+        "::placeholder": {
+          color: "#CFD7DF"
+        }
+      },
+      invalid: {
+        color: "#E25950"
+      }
+    }
+  });
+
+  // card.mount("#stripe-card2");
+
+
+
+
+  // Payment history component
+  const PaymentComponent = Vue.component('payments', {
+    
+    data: function () {
+      return {
+        payments: [],
+        count: 0,
+        next: null,
+        previous: null,
+        limit: 21
+      }
+    },
+    props: ['endpoint'],
+    delimiters: ['{', '}'],
+    template: `
+    <div>
+      <div class="flex flex-col" style="max-height: 20rem;">
+        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Date
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Amount
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      charge_id
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr v-for="payment in payments">
+                    <td class="px-6 py-4 whitespace-nowrap">{payment.date}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">$ {payment.amount}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <!-- Payment pending status -->
+                      <span v-if="payment.pending" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                        Pending
+                      </span>
+                      <span v-else class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                        Success
+                      </span>
+                      <!-- Payment pending status -->
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">{payment.charge_id}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
+          </div>
         </div>
+      </div>
 
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <fieldset>
-                    <legend>Change Password</legend>
-                    {% render_field form.password1 %}
-                    {% render_field form.password2 %}
-                </fieldset>
-            </div>
-        </div>
+      <!-- Page pagination -->
+      <div v-if="payments.length" class="flex justify-center my-5">
+        <a :class="[(previous == null) ? 'pointer-events-none' : '', 'next-prev p-1 pt-2 mr-2']" href="#" @click.prevent="goBack">
+          <i class="fas fa-chevron-left"></i>
+        </a>
+
+        <template v-for="i in pageRange">
+          <p class="mt-1 p-1 mx-1" v-if="i == currentPage">{i}</p>
+          <p v-else class="pagination-page mt-1 p-1 mx-1 font-thin">{i}</p>
+        </template>
+
+        <a :class="[(next == null) ? 'pointer-events-none' : '', 'next-prev p-1 pt-2 mr-2']" href="#" @click.prevent="goNext">
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+      <!-- Page pagination -->
+    </div>
+    `,
+    methods: {
+      async getPaginatedData(url=this.endpoint) {
+        // make sure we are not overpassing the count
+        if (this.count > 0 && this.offset > this.count) this.offset = this.count - this.limit;
+
+        try {
+          const res = await axios.get(url);
+          this.count = res.data.count;
+          this.next = res.data.next;
+          this.previous = res.data.previous;
+          this.payments = res.data.results;
+        } catch (error) {
+          console.log(error.response.data)
+        }
+      },
+      goBack() {
+        if (!this.previous) return;
+        this.getPaginatedData(this.previous)
+      },
+      goNext() {
+        if (!this.next) return;
+        this.getPaginatedData(this.next)
+      }
+    },
+    computed: {
+      pages: function() {
+        return Math.ceil(parseInt(this.count) / parseInt(this.limit))
+      },
+      currentPage: function() {
+        return Math.ceil((parseInt(this.offset) + parseInt(this.limit))/ parseInt(this.limit))
+      },
+      pageRange: function() {
+        const pages = Array.from({length: this.pages}, (_, i) => i + 1)
+        const index = pages.indexOf(this.currentPage);
+
+        const prev = []
+        for (i = index; i > 0; i--) {
+          prev.unshift(i)
+        }
+
+        const next = []
+        for (i = index + 1; i <= pages.length; i++) {
+          next.push(i)
+        }
 
 
-        {# These are hidden fields that must be rendered so the field isn't reset upon save #}
-        {% render_field form.join_dairy_program %}
-        {% render_field form.payment_agreement %}
-        {% render_field form.num_adults %}
+        let total = prev.slice(Math.max(prev.length - 3, 0))
 
-        <div class="form-actions">
-            {% block account_form_actions %}
-                <input class="btn btn-primary btn-lg pull-right" type="submit" value="Save">
-            {% endblock %}
-        </div>
-    </form>
+        for (item in next) {
+          if (total.length < 6) total.push(next[item])
+        }
 
-    {% include "ffcsa_core/includes/address-check_modal.html" %}
+        // console.log('total', total)
+        return total
+      },
+      offset: function() {
+        if (!this.next) return 0;
+        const url = new URL(this.next);
+        const offset = parseInt(url.searchParams.get('offset')) - 21;
+        return offset
+      }
+    
+    },
+    mounted() {
+      this.getPaginatedData() 
+    }
+  })
+
+  // FF Custom Button (button with spinner)
+  const FFButton = Vue.component('ff-button', {
+    delimiters: ['{', '}'],
+    props: {
+      text: String,
+      cls: String,
+      loading: Boolean
+    },
+    template: `
+      <template v-if="loading == true">
+        <button :class="cls.replace('btn-primary', 'btn-white w-32')" disabled>
+          <img src="{% static 'gifs/spinner.gif' %}" alt="spinner" class="h-8 m-auto">
+        </button>
+      </template>
+      <template v-else>
+        <button :class="cls" type="button">{text}</button>
+      </template>
+    `,
+    data: function() {
+      return {}
+    }
+  })
+
+
+  const AccountVue = new Vue({
+    el: '#accountSettings',
+    delimiters: ['((', '))'],
+    data: {
+      user: {
+        first_name: '',
+        last_name: '',
+        email: '',
+        profile: {
+          phone_number: '',
+          phone_number_2: ''
+        }
+      },
+      payments: {
+        only_credits: [],
+        only_payments: []
+      },
+      activeSettings: 'payment',
+      saveButtonEnabled: false,
+
+      // oneTimePayment
+      // {% if user.profile.non_subscribing_member or user.profile.stripe_subscription_id or user.profile.stripe_customer_id and user.profile.ach_status in 'NEW,VERIFYING' %}
+      oneTimePayment: {
+        modalShown: false,
+        paymentMethod: 'ACH',
+        stripeError: null,
+        loading: false
+      },
+      // {% endif %}
+
+
+      // VerifyACH
+      // {% if user.profile.payment_method == 'ACH' and user.profile.ach_status == 'NEW' or user.profile.payment_method == 'ACH' and user.profile.ach_status == 'VERIFYING' %}
+      VerifyACH: {
+        loading: false
+      },
+      
+      // newSubscription
+      // {% elif not user.profile.non_subscribing_member and not user.profile.stripe_subscription_id %}
+      newSubscription: {
+        paymentMethod: 'ACH', // ACH || CC
+        stripeError: null,
+        loading: false
+
+      }
+      // {% endif %}
+
+
+
+
+    },
+    methods: {
+      // get user info
+      async getUser() {
+        try {
+          const res = await axios.get(`/api/users/{{user.id}}`);
+          this.user = res.data
+        } catch (error) {
+          NavVue.show_msg('Can not get user information', 'error')
+        }
+      },
+      // Save user info
+      async saveUser() {
+        try {
+          if (!document.getElementById(`${this.activeSettings}-form`).reportValidity()) return
+
+          const res = await axios.patch(`/api/users/{{user.id}}/`, {...this.user});
+          NavVue.show_msg('Updated successfuly')
+        } catch (error) {
+          console.log(error.response.data)
+          NavVue.show_msg('Can not save user information', 'error')
+        }
+      },
+
+      // get user payments
+      async getUserPayments() {
+        try {
+          // get only_payments
+          const only_payments_res = await axios.get(`/api/payments/only_payments`);
+          this.payments.only_payments = only_payments_res.data.results
+          console.log('payment', only_payments_res.data)
+        } catch (error) {
+          console.log(error.response.data)
+          
+        }
+      },
+      // get user credits
+      async getUserCredits() {
+        try {
+          // get only_credits
+          const only_credits_res = await axios.get(`/api/payments/only_credits`);
+          this.payments.only_credits = only_credits_res.data.results
+          
+        } catch (error) {
+          console.log(error.response.data)
+          
+        }
+      },
+
+
+
+      // oneTimePayment
+      // {% if user.profile.non_subscribing_member or user.profile.stripe_subscription_id or user.profile.stripe_customer_id and user.profile.ach_status in 'NEW,VERIFYING' %}
+      OPT_ToggleModal() {
+        this.oneTimePayment.modalShown = !this.oneTimePayment.modalShown;
+      },
+      async OPT_Pay() {
+        // One time payment pay function
+        const oneTimePayment = document.getElementById('oneTimePayment')
+        if (oneTimePayment.reportValidity()) {
+          this.oneTimePayment.loading = true
+  
+          // Get stripe card token if user using a card
+          if (this.oneTimePayment.paymentMethod == 'CC') {
+            stripe.createToken(card).then(async (result) => {
+              if (result.error) {
+                // Inform the customer that there was an error.
+                console.log(result.error.message)
+                this.oneTimePayment.stripeError = result.error.message;
+                this.oneTimePayment.loading = false
+              } else {
+                // Send the token to your server.
+                this.oneTimePayment.stripeError = null;
+                const res = await axios.post('/api/pay/one_time_payment/', {
+                  stripeToken: result.token.id,
+                  amount: parseFloat(oneTimePayment.amount.value)
+                });
+                
+                // Show success message
+                NavVue.show_msg(res.data.detail)
+                
+                oneTimePayment.reset()
+                card.unmount()
+                this.oneTimePayment.loading = false
+                this.oneTimePayment.modalShown = false
+              }
+            });
+          } else {
+            try {
+              const res = await axios.post('/api/pay/one_time_payment/', {amount: parseFloat(oneTimePayment.amount.value)});
+              NavVue.show_msg(res.data.detail)
+              this.oneTimePayment.modalShown = false
+            } catch (error) {
+              NavVue.show_msg(error.response.data.detail, 'error')
+            }
+            this.oneTimePayment.loading = false
+          }
+        }
+      },
+      // {% endif %}
+
+      // VerifyACH
+      // {% if user.profile.payment_method == 'ACH' and user.profile.ach_status == 'NEW' or user.profile.payment_method == 'ACH' and user.profile.ach_status == 'VERIFYING' %}
+      async Verify_ACH() {
+        const VerifyACH = document.getElementById('VerifyACH');
+        if (VerifyACH.reportValidity()) {
+          this.VerifyACH.loading = true
+  
+          try {
+            const res = await axios.post('/api/pay/verify_ach_deposits/', {
+              amount1: VerifyACH.amount1.value,
+              amount2: VerifyACH.amount2.value
+            })
+  
+            NavVue.show_msg(res.data.detail)
+            setTimeout(() => location.reload(), 20000)
+            
+          } catch (error) {
+            NavVue.show_msg(error.response.data.detail, 'error')
+          }
+          this.VerifyACH.loading = false
+        }
+      },
+
+      // newSubscription
+      // {% elif not user.profile.non_subscribing_member and not user.profile.stripe_subscription_id %}
+      async subscribe() {
+        const newSubscription = document.getElementById('newSubscription');
+        if (newSubscription.reportValidity()) {
+          this.newSubscription.loading = true;
+          fd = new FormData(newSubscription)
+          var data = {
+            country: 'us',
+            currency: 'usd',
+            routing_number: fd.get('achRoutingNumber'),
+            account_number: fd.get('achAccountNumber'),
+            account_holder_name: fd.get('achAccountName'),
+            account_holder_type: fd.get('achAccountType')
+          }
+          promise = stripe.createToken('bank_account', data).then(async (result) => {
+            if (result.error) {
+              console.log(result.error.message)
+              this.newSubscription.stripeError = result.error.message;
+            } else {
+              this.newSubscription.stripeError = null;
+              try {
+                const res = await axios.post('/api/pay/subscribe/', {
+                  stripeToken: result.token.id,
+                  amount: parseFloat(fd.get('amount')),
+                  paymentType: fd.get('paymentType')
+                });
+                NavVue.show_msg(res.data.detail)
+                setTimeout(() => location.reload(), 10000)
+              } catch (error) {
+                NavVue.show_msg(error.response.data.detail, 'error')
+              }
+            }
+
+            this.newSubscription.loading = false;
+          })
+
+        }
+      },
+      // {% endif %}
+      
+
+      enableSaveButton() {
+        this.saveButtonEnabled = true
+      },
+      acceptPhoneNumber(e) {
+        // accept only numbers and format them like 999-999-9999
+        const x = this.user.profile.phone_number.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+        this.user.profile.phone_number = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
+        this.saveButtonEnabled = true;
+      },
+      acceptPhoneNumber2(e) {
+        // accept only numbers and format them like 999-999-9999
+        const x = this.user.profile.phone_number_2.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+        this.user.profile.phone_number_2 = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
+        this.saveButtonEnabled = true;
+      },
+      updateActiveSettings(e) {
+        this.activeSettings = e.target.id;
+        console.log()
+      }
+    },
+
+    watch: {
+      // Onetime Payment
+      'oneTimePayment.paymentMethod': function(val) {
+        // mount the card ui elements when method is CC
+        if (val == 'CC') {
+          card.unmount()
+          card.mount('#one-time-payment-card')
+        }
+      },
+      // new subscription
+      'newSubscription.paymentMethod': function(val) {
+        // mount the card ui elements when method is CC
+        if (val == 'CC') {
+          card.unmount()
+          card.mount('#new-subscription-payment-card')
+        }
+      }
+    },
+    
+    mounted() {
+      this.getUser()
+      // this.getUserPayments()
+      // this.getUserCredits()
+    }
+  })
+</script>
 {% endblock %}
-

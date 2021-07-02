@@ -79,7 +79,7 @@
               
               <template v-else>
                 <p>
-                  <span class="italic text-gray-500">Starts from </span>
+                  <span class="italic text-gray-500">From </span>
                   <span class="text-brown-7 text-xl">$(( getProductStartFrom(product) ))/unit</span>
                 </p>
                 <button class="btn-add-to-card" @click.prevent="showProduct(product)">CHOOSE VARIATION</button>
@@ -194,7 +194,7 @@
       currentProduct: null,
       currentProductMapping: null,  // store number_in_cart
 
-      quantity: 1,
+      quantity: 1, // todo - might delete this one??
 
       // product details
       modalShown: false,
