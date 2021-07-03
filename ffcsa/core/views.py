@@ -429,33 +429,8 @@ def donate(request):
         feed_a_friend, created = User.objects.get_or_create(
             username=settings.FEED_A_FRIEND_USER)
 
-        # TODO :: Ensure this works for non-subscribing members
-        order_dict = {
-            'user_id': user.id,
-            'time': datetime.datetime.now(),
-            'site': Site.objects.get(id=1),
-            'billing_detail_first_name': user.first_name,
-            'billing_detail_last_name': user.last_name,
-            'billing_detail_email': user.email,
-            'billing_detail_phone': user.profile.phone_number,
-            'billing_detail_phone_2': user.profile.phone_number_2,
-            'total': amount,
-        }
-
-        order = Order.objects.create(**order_dict)
-
-        item_dict = {
-            'sku': 0,
-            'description': 'Feed-A-Friend Donation',
-            'quantity': 1,
-            'unit_price': amount,
-            'total_price': amount,
-            'category': 'Feed-A-Friend',
-            'vendor': 'Feed-A-Friend',
-            'vendor_price': 0,
-        }
-
-        order.items.create(**item_dict)
+        Payment.objects.create(amount=-amount, user=user, is_credit=True,
+                               notes="Feed-A-Friend Donation")
         Payment.objects.create(amount=amount, user=feed_a_friend, is_credit=True,
                                notes="Donation from {}".format(user.get_full_name()))
         success(request, 'Thank you for your donation to the Feed-A-Friend fund!')
