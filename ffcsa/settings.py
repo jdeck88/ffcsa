@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 ##############################
 # FFCSA-CORE SETTINGS #
 ##############################
+YEARLY_SUBSCRIBER_MINIMUM = 1032  # $172 / month for 6 months
 DAIRY_CATEGORY = 'dairy'
 FROZEN_PRODUCT_CATEGORIES = ['pasture raised meats']
 FROZEN_ITEM_PACKLIST_EXCLUDED_CATEGORIES = ['nuts & honey', 'free']
@@ -164,7 +165,7 @@ DROPSITES = [
     {
         'name': 'Irvington',
         'memberLimit': 30,
-        'color': 'purple',
+        'color': 'cyan',
         'description': 'Portland - Irvington Neighborhood (Saturday)',
         'allowOneTimeOrders': False,
         'pickupDay': 6,
@@ -334,6 +335,7 @@ SENDINBLUE_TRANSACTIONAL_TEMPLATES = {
     # 'Woodstock': 10,
     # '19th St.': 1,
     # 'Corner Market': 3,
+    'Non Engaged Member': 356,
 }
 
 SENDINBLUE_DROP_SITE_FOLDER = 'Dropsites'
