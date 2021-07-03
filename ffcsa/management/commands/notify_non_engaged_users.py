@@ -42,7 +42,7 @@ class Command(BaseCommand):
         non_engaged_users = User.objects.filter(
             id__in=users_with_non_recent_orders,
             profile__non_subscribing_member=False,
-            active=True,
+            is_active=True,
             date_joined__lt=fourteen_days
         ) \
             .exclude(username=settings.FEED_A_FRIEND_USER)
@@ -68,9 +68,8 @@ class Command(BaseCommand):
 
                 params = {'FIRSTNAME': user.first_name, 'ORDERWINDOW': order_period}
                 email_result = sendinblue.send_transactional_email(
-                    settings.SENDINBLUE_TRANSACTIONAL_TEMPLATES['Non Engaged Member'], user.email,
+                    'Non Engaged Member', user.email,
                     params)
 
                 if email_result is False:
-                    # notify admin
-                    pass
+                    raise Exception("Failed to send {} non engagement email".format(user))
