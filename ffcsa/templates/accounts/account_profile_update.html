@@ -106,17 +106,17 @@
           </div>
 
           <!-- Delivery Address Details -->
-          <div class="col-span-6" v-show="user.profile.home_delivery">
+          <div class="col-span-6" v-if="user.profile.home_delivery">
             <label for="street" class="text-gray-700 px-1">Street</label>
             <input type="text" name="street" id="street" class="input-v delivery_address_part" minlength="3" v-model="user.profile.address.street">
           </div>
 
-          <div class="col-span-6" v-show="user.profile.home_delivery">
+          <div class="col-span-6" v-if="user.profile.home_delivery">
             <label for="city" class="text-gray-700 px-1">City</label>
             <input type="text" name="city" id="city" class="input-v delivery_address_part" minlength="3" v-model="user.profile.address.city">
           </div>
 
-          <div class="col-span-6" v-show="user.profile.home_delivery">
+          <div class="col-span-6" v-if="user.profile.home_delivery">
             <label for="state" class="block">State</label>
             <select name="state" id="state" class="input-v delivery_address_part" v-model="user.profile.address.state">
               <option value="AL">AL</option>
@@ -175,17 +175,17 @@
             </select>
           </div>
 
-          <div class="col-span-6" v-show="user.profile.home_delivery">
+          <div class="col-span-6" v-if="user.profile.home_delivery">
             <label for="zip" class="text-gray-700 px-1">Zip code</label>
             <input type="text" pattern="[0-9]*" name="zip" id="zip" class="input-v delivery_address_part" minlength="4" maxlength="5" v-model="user.profile.address.zip">
           </div>
 
-          <div class="col-span-6" v-show="user.profile.home_delivery">
+          <div class="col-span-6" v-if="user.profile.home_delivery">
             <label for="country" class="text-gray-700 px-1">Country</label>
             <input type="text" name="country" id="country" class="input-v" disabled v-model="user.profile.address.country">
           </div>
 
-          <div class="col-span-12" v-show="user.profile.home_delivery">
+          <div class="col-span-12" v-if="user.profile.home_delivery">
             <label for="delivery_notes" class="text-gray-700 px-1">Delivery Notes</label>
             <textarea name="delivery_notes" id="delivery_notes" v-model="user.profile.delivery_notes" class="input-v" rows="4"></textarea>
           </div>
@@ -941,8 +941,17 @@
         // make all .delivery_address_part required if home_delivery check
         if (val == true) {
           document.querySelectorAll('.delivery_address_part').forEach(item => item.required = true)
+
+          this.user.profile.address = {
+            street: '',
+            city: '',
+            state: '',
+            zip: '',
+            country: 'USA'
+          }
         } else {
           document.querySelectorAll('.delivery_address_part').forEach(item => item.required = false)
+          this.user.profile.address = null
         }
       }
     
