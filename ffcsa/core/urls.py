@@ -8,6 +8,8 @@ from mezzanine.core.views import page_not_found
 from mezzanine.accounts.views import profile_update
 
 from ffcsa.core import views
+from ffcsa.core import dropsites
+
 
 ACCOUNT_URL = getattr(settings, "ACCOUNT_URL", "/accounts/")
 SIGNUP_URL = getattr(
@@ -25,7 +27,7 @@ urlpatterns = i18n_patterns(
     url("^checkout%s$" % _slash, page_not_found, name="shop_checkout"),
     url("^checkout/complete%s$" % _slash, page_not_found, name="shop_complete"),
     url("^stripe%s$" % _slash, views.stripe_webhooks),
-    url("^accounts/update%s$" % _slash, profile_update, kwargs={"extra_context": {"title": "Account Settings", 'STRIPE_API_KEY': settings.STRIPE_API_KEY}}),
+    url("^accounts/update%s$" % _slash, profile_update, kwargs={"extra_context": {"title": "Account Settings", 'STRIPE_API_KEY': settings.STRIPE_API_KEY, 'DROPSITE_CHOICES': dropsites.DROPSITE_CHOICES}}),
     url(r'^country-autocomplete/$', views.ProductAutocomplete.as_view(), name='product-autocomplete'),
     url(r'^zip-check/(?P<zip>\d{5})$', views.home_delivery_check, name='home-delivery-zip-check'),
     url(r'^signrequest/$', views.SignRequest.as_view(), name='signrequest'),

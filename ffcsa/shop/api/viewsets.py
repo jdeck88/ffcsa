@@ -1,14 +1,17 @@
 from django.shortcuts import get_object_or_404
 from django.db.models import  Q
 from rest_framework import viewsets
+from rest_framework import mixins
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 from ffcsa.shop.utils import recalculate_cart
 
 from ffcsa.shop.models.Cart import Cart, CartItem
 from ffcsa.shop.models.Product import Product, ProductVariation
 from ffcsa.shop.models.Category import Category
+from ffcsa.shop.models.Order import Order
 
 from .serializers import *
 
@@ -103,3 +106,18 @@ class CartViewSet(viewsets.ModelViewSet):
         # clears out the cart
         request.cart.clear()
         return Response({})
+
+
+class OrderViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        queryset = self.queryset.filter(user_id=request.user.id)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

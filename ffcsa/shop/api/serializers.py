@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 from ffcsa.shop.models.Cart import Cart, CartItem
 from ffcsa.shop.models.Product import Product, ProductSeason, ProductVariation
+from ffcsa.shop.models.Order import Order
 
 
 
@@ -90,3 +91,9 @@ class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
         fields = ('id', 'attending_dinner', 'items', 'total_price', 'delivery_fee', 'remaining_budget')
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = '__all__'

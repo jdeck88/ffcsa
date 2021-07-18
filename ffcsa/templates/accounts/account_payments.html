@@ -23,9 +23,6 @@
 
 
 
-
-
-
 <!-- Onetime Payment -->
 {% if user.profile.non_subscribing_member or user.profile.stripe_subscription_id or user.profile.stripe_customer_id and user.profile.ach_status in 'NEW,VERIFYING' %}
 <section class="one-time-payment mt-20">
@@ -98,7 +95,7 @@
 
               <label class="inline-flex items-center mt-6">
                 <input type="checkbox" class="form-radio h-4 w-4 text-gray-600" name="chargeAcknowledgement" checked required>
-                <span class="ml-2 text-gray-700 select-none cursor-pointer">acknowledge that the above amount will be debited from my Card or Bank Account</span>
+                <span class="ml-2 text-gray-700 select-none cursor-pointer">I acknowledge that the above amount will be debited from my Card or Bank Account</span>
               </label>
             </div>
             {% endif %}
@@ -121,10 +118,9 @@
 {% endif %}
 
 
-
 <!-- ACH Bank Verification-->
 {% if user.profile.payment_method == 'ACH' and user.profile.ach_status == 'NEW' or user.profile.payment_method == 'ACH' and user.profile.ach_status == 'VERIFYING' %}
-<section class="ach-bank-verification mt-20">
+<section class="ach-bank-verification mt-20 ">
   <div class="mt-8" role="alert">
     <div class="alert-warning">
       <p>It looks like your ACH bank account has not been verified. Once you
@@ -157,9 +153,6 @@
     </form>
   </div>
 </section>
-
-
-
 
 
 <!-- New Subscription Signup -->
@@ -345,20 +338,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- warning about old payments records before 2017 -->
 {% if user.profile.joined_before_dec_2017 %}
 <div class="flex items-center bg-blue-500 text-white text-sm font-bold px-4 py-3" role="alert">
@@ -367,9 +346,6 @@
 </div>
 {% endif %}
 
-
-
-<!-- TODO - update this part so it is intiated by Vue and managed here -->
 <!-- Payments history -->
 <section class="mt-20">
   <h3 class="text-lg mb-4">
@@ -381,7 +357,7 @@
 </section>
 
 <!-- Credit history -->
-<section class="mt-10">
+<section>
   <h3 class="text-lg mb-4">
     <i class="fas fa-undo-alt text-primary"></i>
     Credit history

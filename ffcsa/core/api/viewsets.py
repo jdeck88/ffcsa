@@ -7,14 +7,14 @@ from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.decorators import detail_route, list_route
+from rest_framework.decorators import detail_route, list_route, permission_classes
 from rest_framework.exceptions import NotAcceptable
 from django.shortcuts import get_object_or_404
 
 from ffcsa.core import sendinblue, signrequest
 from ffcsa.core.api.permissions import IsOwner
 from ffcsa.core.api.serializers import *
-from ffcsa.core.models import Payment
+from ffcsa.core.models import Payment, Address
 from ffcsa.core.subscriptions import *
 
 User = get_user_model()
@@ -30,6 +30,12 @@ class UserViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.G
     def update(self, request, *args, **kwargs):
         user = get_object_or_404(User, pk=kwargs['pk'])
         profile_data = request.data.pop('profile')
+        address = profile_data.pop('address')
+
+        # Set delivery_address if user select home_delivery is True
+        if profile_data.get('home_delivery'):
+            address = Address.objects.get_or_create(**address)
+            profile_data['delivery_address'] = address[0].id
 
         # save user data
         serializer = UserSerializer(user, data=request.data)
@@ -40,8 +46,27 @@ class UserViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.G
         serializer = ProfileSerializer(user.profile, data=profile_data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        
+
         return Response({})
+
+
+    @detail_route(methods=['post'])
+    def change_password(self, request, pk=None):
+        serializer = ChangePasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        cpassword, password, password2 = serializer.data.values()
+
+        if not request.user.check_password(cpassword):
+            raise NotAcceptable('Wrong current password')
+
+        if not password == password2:
+            raise NotAcceptable('Could not confirm your new password')
+
+        request.user.set_password(password)
+        request.user.save()
+        auth.authenticate(request.user)
+        return Response({'detail': 'Password updated'})
 
 
 class LoginViewSet(viewsets.ViewSet):
@@ -120,7 +145,7 @@ class PayViewSet(viewsets.ViewSet):
             return Response({'detail': 'Your payment is pending'})
 
         except Exception as e:
-            raise NotAcceptable(e.json_body.get('error').get('message', 'Something went wrong!'))
+            raise NotAcceptable(e.user_message)
 
     # >>>>>> verify_ach
     @list_route(methods=['post'])
@@ -161,7 +186,7 @@ class PayViewSet(viewsets.ViewSet):
                 return Response({'detail': 'Your account has been verified.'})
         
         except Exception as e:
-            raise NotAcceptable(e)
+            raise NotAcceptable(e.user_message)
 
     # >>>>>> payments_subscribe
     @list_route(methods=['post'])
@@ -210,6 +235,6 @@ class PayViewSet(viewsets.ViewSet):
                 })
 
         except Exception as e:
-            raise NotAcceptable(e.json_body.get('error').get('message', 'Something went wrong!'))
+            raise NotAcceptable(e.user_message)
         
 

@@ -1,8 +1,9 @@
 from django.contrib.auth import get_user_model
+from googleapiclient import model
 from rest_framework import serializers
 from rest_framework.exceptions import NotAcceptable
 
-from ffcsa.core.models import Profile, Payment
+from ffcsa.core.models import Profile, Payment, Address
 User = get_user_model()
 
 
@@ -11,12 +12,27 @@ class LoginSerializer(serializers.Serializer):
     username = serializers.EmailField()
     password = serializers.CharField(min_length=6)
 
+# Change password Serializer
+class ChangePasswordSerializer(serializers.Serializer):
+    cpassword = serializers.CharField(min_length=6)
+    password = serializers.CharField(min_length=6)
+    password2 = serializers.CharField(min_length=6)
+
+# Address Serializer
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        exclude = ('id', )
 
 # Profile Serializer
 class ProfileSerializer(serializers.ModelSerializer):
+    address = AddressSerializer(source='delivery_address', required=False)
+    
     class Meta:
         model = Profile
-        fields = ('phone_number', 'phone_number_2')
+        exclude = ('id', )
+        read_only_fields = ('stripe_customer_id', 'stripe_subscription_id', 
+            'payment_method', 'ach_status', 'discount_code', 'user', 'paid_signup_fee', 'can_order_dairy', 'google_person_id')
 
 
 # Payment Serializer

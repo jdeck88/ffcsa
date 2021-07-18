@@ -12,53 +12,53 @@
 
   <section class="container mx-auto grid gap-4 grid-cols-12">
     <!-- left section -->
-    <div class="col-span-12 md:col-span-3 bg-white py-3">
-      <div class="p-4">
-        <h3 class="text-lg">Settings</h3>
+    <div class="col-span-12 md:col-span-3  py-3">
+      <div class="bg-white">
+        <h3 class="text-lg p-4">Settings</h3>
+  
+        <ul>
+          <li :class="[{'bg-gray-200 border-l-4 border-primary': activeSettings == 'personal'}, 'hover:bg-gray-200']">
+            <a id="personal" class="block p-4" href="#" @click.prevent="updateActiveSettings">My info</a>
+          </li>
+          <li :class="[{'bg-gray-200 border-l-4 border-primary': activeSettings == 'payment'}, 'hover:bg-gray-200']">
+            <a id="payment" class="block p-4" href="#" @click.prevent="updateActiveSettings">Payment</a>
+          </li>
+          <li :class="[{'bg-gray-200 border-l-4 border-primary': activeSettings == 'delivery'}, 'hover:bg-gray-200']">
+            <a id="delivery" class="block p-4" href="#" @click.prevent="updateActiveSettings">Delivery Options</a>
+          </li>
+          <li :class="[{'bg-gray-200 border-l-4 border-primary': activeSettings == 'orders'}, 'hover:bg-gray-200']">
+            <a id="orders" class="block p-4" href="#" @click.prevent="updateActiveSettings">Order history</a>
+          </li>
+          <li :class="[{'bg-gray-200 border-l-4 border-primary': activeSettings == 'password'}, 'hover:bg-gray-200']">
+            <a id="password" class="block p-4" href="#" @click.prevent="updateActiveSettings">Change Password</a>
+          </li>
+        </ul>
       </div>
-
-      <ul>
-        <li :class="[(activeSettings == 'personal' ? 'bg-gray-200 border-l-4 border-primary' : ''), 'hover:bg-gray-200']">
-          <a id="personal" class="block p-4" href="#" @click.prevent="updateActiveSettings">Personal</a>
-        </li>
-        <li :class="[(activeSettings == 'payment' ? 'bg-gray-200 border-l-4 border-primary' : ''), 'hover:bg-gray-200']">
-          <a id="payment" class="block p-4" href="#" @click.prevent="updateActiveSettings">Payment</a>
-        </li>
-        <li :class="[(activeSettings == 'delivery' ? 'bg-gray-200 border-l-4 border-primary' : ''), 'hover:bg-gray-200']">
-          <a id="delivery" class="block p-4" href="#" @click.prevent="updateActiveSettings">Delivery Options</a>
-        </li>
-        <li :class="[(activeSettings == 'orders' ? 'bg-gray-200 border-l-4 border-primary' : ''), 'hover:bg-gray-200']">
-          <a id="orders" class="block p-4" href="#" @click.prevent="updateActiveSettings">Order history</a>
-        </li>
-        <li :class="[(activeSettings == 'password' ? 'bg-gray-200 border-l-4 border-primary' : ''), 'hover:bg-gray-200']">
-          <a id="password" class="block p-4" href="#" @click.prevent="updateActiveSettings">Change Password</a>
-        </li>
-      </ul>
     </div>
 
     <!-- right section -->
     <div class="col-span-12 md:col-span-9 bg-white p-5">
       <!-- personal settings -->
-      <div v-if="activeSettings == 'personal'">
+      <div v-show="activeSettings == 'personal'">
         <h3 class="text-lg">Personal</h3>
   
         <form id="personal-form" class="grid grid-cols-12 gap-4 mt-10">
           <!-- first name -->
           <div class="col-span-6">
             <label for="first_name" class="text-gray-700 px-1">First name</label>
-            <input type="text" name="first_name" id="first_name" v-model="user.first_name" class="input-v" @input="enableSaveButton">
+            <input type="text" name="first_name" id="first_name" v-model="user.first_name" class="input-v">
           </div>
   
           <!-- last name -->
           <div class="col-span-6">
             <label for="last_name" class="text-gray-700 px-1">Last name</label>
-            <input type="text" name="last_name" id="last_name" v-model="user.last_name" class="input-v" @input="enableSaveButton">
+            <input type="text" name="last_name" id="last_name" v-model="user.last_name" class="input-v">
           </div>
   
           <!-- email -->
           <div class="col-span-12">
             <label for="email" class="text-gray-700 px-1">Email</label>
-            <input type="email" name="email" id="email" v-model="user.email" class="input-v" @input="enableSaveButton">
+            <input type="email" name="email" id="email" v-model="user.email" class="input-v">
           </div>
   
           <!-- Contact Number -->
@@ -77,70 +77,198 @@
           
         </form>
 
-          <!-- save button -->
+        <!-- save button -->
         <div class="section-footer flex mt-10">
-          <button :class="[(saveButtonEnabled ? '' : 'btn-disabled'), 'btn-primary text-base font-medium px-4 py-2 ml-auto']" @click.prevent="saveUser">Save changes</button>
+          <ff-button text="Update info" cls="btn-primary ml-auto mr-3" :loading="personal.loading" v-on:click.native="saveUser"></ff-button>
         </div>
       </div>
       
       <!-- payment -->
-      <div v-if="activeSettings == 'payment'">
+      <div v-show="activeSettings == 'payment'">
         <h3 class="text-lg">Payment</h3>
-
-        <!-- <h4>Your remaining balance is: <span class="text-sucess">(( NavVue.cart.remaining_budget ))</span></h4> -->
-
         {% include 'accounts/account_payments.html' %}
-
-
-
-
       </div>
 
       <!-- delivery settings -->
-      <div v-if="activeSettings == 'delivery'">
+      <div v-show="activeSettings == 'delivery'">
         <h3 class="text-lg">Delivery Options</h3>
 
-
-        <form id="delivery-form" class="grid grid-cols-12 gap-4 mt-10">
-
+        <form id="delivery-form" class="grid grid-cols-12 gap-4 my-10">
+          <!-- Delivery Options -->
+          {% if settings.HOME_DELIVERY_ENABLED %}
           <div class="col-span-12">
             <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
-              <input type="checkbox" name="toggle" id="toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
-              <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+              <input type="checkbox" id="home_delivery" name="home_delivery" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" v-model="user.profile.home_delivery"/>
+              <label for="home_delivery" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
             </div>
             <label for="toggle" class="cursor-pointer select-none">Home Delivery</label>
             <small class="block text-gray-400 mt-2">Available in Eugene, Corvallis, and Springfield for a $5 fee. This fee is waived for all orders over $125.</small>
           </div>
 
-          
-          <div class="col-span-6">
+          <!-- Delivery Address Details -->
+          <div class="col-span-6" v-show="user.profile.home_delivery">
+            <label for="street" class="text-gray-700 px-1">Street</label>
+            <input type="text" name="street" id="street" class="input-v delivery_address_part" minlength="3" v-model="user.profile.address.street">
+          </div>
+
+          <div class="col-span-6" v-show="user.profile.home_delivery">
+            <label for="city" class="text-gray-700 px-1">City</label>
+            <input type="text" name="city" id="city" class="input-v delivery_address_part" minlength="3" v-model="user.profile.address.city">
+          </div>
+
+          <div class="col-span-6" v-show="user.profile.home_delivery">
+            <label for="state" class="block">State</label>
+            <select name="state" id="state" class="input-v delivery_address_part" v-model="user.profile.address.state">
+              <option value="AL">AL</option>
+              <option value="AK">AK</option>
+              <option value="AZ">AZ</option>
+              <option value="AR">AR</option>
+              <option value="CA">CA</option>
+              <option value="CO">CO</option>
+              <option value="CT">CT</option>
+              <option value="DE">DE</option>
+              <option value="DC">DC</option>
+              <option value="FL">FL</option>
+              <option value="GA">GA</option>
+              <option value="HI">HI</option>
+              <option value="ID">ID</option>
+              <option value="IL">IL</option>
+              <option value="IN">IN</option>
+              <option value="IA">IA</option>
+              <option value="KS">KS</option>
+              <option value="KY">KY</option>
+              <option value="LA">LA</option>
+              <option value="ME">ME</option>
+              <option value="MD">MD</option>
+              <option value="MA">MA</option>
+              <option value="MI">MI</option>
+              <option value="MN">MN</option>
+              <option value="MS">MS</option>
+              <option value="MO">MO</option>
+              <option value="MT">MT</option>
+              <option value="NE">NE</option>
+              <option value="NV">NV</option>
+              <option value="NH">NH</option>
+              <option value="NJ">NJ</option>
+              <option value="NM">NM</option>
+              <option value="NY">NY</option>
+              <option value="NC">NC</option>
+              <option value="ND">ND</option>
+              <option value="OH">OH</option>
+              <option value="OK">OK</option>
+              <option value="OR">OR</option>
+              <option value="PA">PA</option>
+              <option value="PR">PR</option>
+              <option value="RI">RI</option>
+              <option value="SC">SC</option>
+              <option value="SD">SD</option>
+              <option value="TN">TN</option>
+              <option value="TX">TX</option>
+              <option value="UT">UT</option>
+              <option value="VT">VT</option>
+              <option value="VA">VA</option>
+              <option value="VI">VI</option>
+              <option value="WA">WA</option>
+              <option value="WV">WV</option>
+              <option value="WI">WI</option>
+              <option value="WY">WY</option>
+            </select>
+          </div>
+
+          <div class="col-span-6" v-show="user.profile.home_delivery">
+            <label for="zip" class="text-gray-700 px-1">Zip code</label>
+            <input type="text" pattern="[0-9]*" name="zip" id="zip" class="input-v delivery_address_part" minlength="4" maxlength="5" v-model="user.profile.address.zip">
+          </div>
+
+          <div class="col-span-6" v-show="user.profile.home_delivery">
+            <label for="country" class="text-gray-700 px-1">Country</label>
+            <input type="text" name="country" id="country" class="input-v" disabled v-model="user.profile.address.country">
+          </div>
+
+          <div class="col-span-12" v-show="user.profile.home_delivery">
+            <label for="delivery_notes" class="text-gray-700 px-1">Delivery Notes</label>
+            <textarea name="delivery_notes" id="delivery_notes" v-model="user.profile.delivery_notes" class="input-v" rows="4"></textarea>
+          </div>
+          <!-- Delivery Address Details -->
+          {% endif %}
+
+          <!-- Drop Sites -->
+          <div class="col-span-12">
             <label for="drop_site" class="block">Drop Site Location</label>
-            <select name="drop_site" id="drop_site">
-              <option value="">Joe</option>
-              <option value="">Joe</option>
-              <option value="">Joe</option>
+            <select name="drop_site" id="drop_site" class="input-v" v-model="user.profile.drop_site" required>
+              {% for site in DROPSITE_CHOICES %}
+              <option value="{{site.0}}">{{site.1}}</option>
+              {% endfor %}
             </select>
           </div>
 
 
+          <!-- Preferences -->
+          <h3 class="col-span-12 text-lg mt-6 mb-3">Preferences</h3>
+          
+          <div class="col-span-6">
+            <label class="inline-flex items-center cursor-pointer">
+              <input type="checkbox" class="form-radio h-4 w-4 text-gray-600" name="plastic_bags" v-model="user.profile.plastic_bags">
+              <span class="ml-2 text-gray-700 select-none">Plastic bags</span>
+            </label>
+            <small class="block text-gray-400 pl-6">Please pack small items in a plastic bag.</small>
+          </div>
+
+          <div class="col-span-6">
+            <label class="inline-flex items-center cursor-pointer">
+              <input type="checkbox" class="form-radio h-4 w-4 text-gray-600" name="weekly_emails" v-model="user.profile.weekly_emails">
+              <span class="ml-2 text-gray-700 select-none">Receive Weekly Emails</span>
+            </label>
+            <small class="block text-gray-400 pl-6">Receive weekly newsletter and reminder emails.</small>
+          </div>
+          
+          <div class="col-span-12">
+            <label class="inline-flex items-center cursor-pointer">
+              <input type="checkbox" class="form-radio h-4 w-4 text-gray-600" name="allow_substitutions" v-model="user.profile.allow_substitutions">
+              <span class="ml-2 text-gray-700 select-none">Allow substitutions</span>
+            </label>
+            <small class="block text-gray-400 pl-6 max-w-lg">I am okay with substitutions when an item I ordered is no longer available. We do our best to pack what you have ordered, however on occasion crops will not be ready to harvest, etc. We can provide a substitution, or we can credit your account.</small>
+          </div>
         </form>
 
-
-
+        <!-- save button -->
+        <div class="section-footer flex mt-10">
+          <ff-button text="Save changes" cls="btn-primary ml-auto mr-3" :loading="personal.loading" v-on:click.native="saveUser"></ff-button>
+        </div>
       </div>
 
       <!-- order history -->
-      <div v-if="activeSettings == 'orders'">
+      <div v-show="activeSettings == 'orders'">
         <h3 class="text-lg">Order history</h3>
 
-        <form id="delivery-form" class="grid grid-cols-12 gap-4 mt-10"></form>
+        <orders endpoint="/api/orders" class="mt-5"></orders>
       </div>
       
       <!-- change password -->
-      <div v-if="activeSettings == 'password'">
+      <div v-show="activeSettings == 'password'">
         <h3 class="text-lg">Change Password</h3>
-      </div>
 
+        <form id="password-form" class="grid grid-cols-12 gap-4 my-10">
+
+          <div class="col-span-12" v-show="user.profile.home_delivery">
+            <label for="cpassword" class="text-gray-700 px-1">Current password</label>
+            <input type="password" name="cpassword" id="cpassword" class="input-v delivery_address_part" minlength="6">
+          </div>
+          <div class="col-span-12" v-show="user.profile.home_delivery">
+            <label for="password" class="text-gray-700 px-1">New password</label>
+            <input type="password" name="password" id="password" class="input-v delivery_address_part" minlength="6">
+          </div>
+          <div class="col-span-12" v-show="user.profile.home_delivery">
+            <label for="password2" class="text-gray-700 px-1">Confirm new password</label>
+            <input type="password" name="password2" id="password2" class="input-v delivery_address_part" minlength="6">
+          </div>
+        </form>
+
+        <!-- save button -->
+        <div class="section-footer flex mt-10">
+          <ff-button text="Save changes" cls="btn-primary ml-auto mr-3" :loading="personal.loading" v-on:click.native="changePassword"></ff-button>
+        </div>
+      </div>
       
     </div>
 
@@ -207,14 +335,14 @@
         count: 0,
         next: null,
         previous: null,
-        limit: 21
+        limit: 5
       }
     },
     props: ['endpoint'],
     delimiters: ['{', '}'],
     template: `
-    <div>
-      <div class="flex flex-col" style="max-height: 20rem;">
+    <div style="min-height: 30rem;">
+      <div class="flex flex-col" style="min-height: 23rem;">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
             <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -230,8 +358,8 @@
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
                     </th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      charge_id
+                    <th v-if="!only_payments" scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      notes
                     </th>
                   </tr>
                 </thead>
@@ -241,15 +369,15 @@
                     <td class="px-6 py-4 whitespace-nowrap">$ {payment.amount}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <!-- Payment pending status -->
-                      <span v-if="payment.pending" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                      <span v-if="payment.pending" class="badge bg-red-100 text-red-800">
                         Pending
                       </span>
-                      <span v-else class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                      <span v-else class="badge bg-green-100 text-green-800">
                         Success
                       </span>
                       <!-- Payment pending status -->
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap">{payment.charge_id}</td>
+                    <td v-if="!only_payments" class="px-6 py-4 whitespace-nowrap" style="    white-space: break-spaces;">{payment.notes}</td>
                   </tr>
                 </tbody>
               </table>
@@ -259,7 +387,7 @@
       </div>
 
       <!-- Page pagination -->
-      <div v-if="payments.length" class="flex justify-center my-5">
+      <div v-if="next || previous" class="flex justify-center my-3">
         <a :class="[(previous == null) ? 'pointer-events-none' : '', 'next-prev p-1 pt-2 mr-2']" href="#" @click.prevent="goBack">
           <i class="fas fa-chevron-left"></i>
         </a>
@@ -277,7 +405,7 @@
     </div>
     `,
     methods: {
-      async getPaginatedData(url=this.endpoint) {
+      async getPaginatedData(url=this.endpoint + `?limit=${this.limit}`) {
         // make sure we are not overpassing the count
         if (this.count > 0 && this.offset > this.count) this.offset = this.count - this.limit;
 
@@ -334,8 +462,11 @@
       offset: function() {
         if (!this.next) return 0;
         const url = new URL(this.next);
-        const offset = parseInt(url.searchParams.get('offset')) - 21;
+        const offset = parseInt(url.searchParams.get('offset')) - this.limit;
         return offset
+      },
+      only_payments: function() {
+        return this.endpoint.includes('only_payments')
       }
     
     },
@@ -343,6 +474,151 @@
       this.getPaginatedData() 
     }
   })
+
+  // Order history component
+  const OrderComponent = Vue.component('orders', {
+    
+    data: function () {
+      return {
+        orders: [],
+        count: 0,
+        next: null,
+        previous: null,
+        limit: 10
+      }
+    },
+    props: ['endpoint'],
+    delimiters: ['{', '}'],
+    template: `
+    <div style="min-height: 30rem;">
+      <div class="flex flex-col" style="min-height: 23rem;">
+        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Date
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Order total
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Transaction ID
+                    </th>
+                    
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr v-for="order in orders">
+                    <td class="px-6 py-4 whitespace-nowrap">{new Date(order.time).toLocaleString()}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">$ {order.total}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <template v-if="order.status == 1">Unprocessed</template>
+                      <template v-else>Processed</template>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">{order.transaction_id}</td>
+                    
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page pagination -->
+      <div v-if="next || previous" class="flex justify-center my-3">
+        <a :class="[(previous == null) ? 'pointer-events-none' : '', 'next-prev p-1 pt-2 mr-2']" href="#" @click.prevent="goBack">
+          <i class="fas fa-chevron-left"></i>
+        </a>
+
+        <template v-for="i in pageRange">
+          <p class="mt-1 p-1 mx-1" v-if="i == currentPage">{i}</p>
+          <p v-else class="pagination-page mt-1 p-1 mx-1 font-thin">{i}</p>
+        </template>
+
+        <a :class="[(next == null) ? 'pointer-events-none' : '', 'next-prev p-1 pt-2 mr-2']" href="#" @click.prevent="goNext">
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+      <!-- Page pagination -->
+    </div>
+    `,
+    methods: {
+      async getPaginatedData(url=this.endpoint + `?limit=${this.limit}`) {
+        // make sure we are not overpassing the count
+        if (this.count > 0 && this.offset > this.count) this.offset = this.count - this.limit;
+
+
+        console.log('Gonna call backend for orders now')
+        try {
+          const res = await axios.get(url);
+          console.log(res)
+          this.count = res.data.count;
+          this.next = res.data.next;
+          this.previous = res.data.previous;
+          this.orders = res.data.results;
+        } catch (error) {
+          console.log(error.response.data)
+        }
+      },
+      goBack() {
+        if (!this.previous) return;
+        this.getPaginatedData(this.previous)
+      },
+      goNext() {
+        if (!this.next) return;
+        this.getPaginatedData(this.next)
+      }
+    },
+    computed: {
+      pages: function() {
+        return Math.ceil(parseInt(this.count) / parseInt(this.limit))
+      },
+      currentPage: function() {
+        return Math.ceil((parseInt(this.offset) + parseInt(this.limit))/ parseInt(this.limit))
+      },
+      pageRange: function() {
+        const pages = Array.from({length: this.pages}, (_, i) => i + 1)
+        const index = pages.indexOf(this.currentPage);
+
+        const prev = []
+        for (i = index; i > 0; i--) {
+          prev.unshift(i)
+        }
+
+        const next = []
+        for (i = index + 1; i <= pages.length; i++) {
+          next.push(i)
+        }
+
+
+        let total = prev.slice(Math.max(prev.length - 3, 0))
+
+        for (item in next) {
+          if (total.length < 6) total.push(next[item])
+        }
+
+        // console.log('total', total)
+        return total
+      },
+      offset: function() {
+        if (!this.next) return 0;
+        const url = new URL(this.next);
+        const offset = parseInt(url.searchParams.get('offset')) - this.limit;
+        return offset
+      },
+    },
+    mounted() {
+      this.getPaginatedData() 
+    }
+  })
+
 
   // FF Custom Button (button with spinner)
   const FFButton = Vue.component('ff-button', {
@@ -372,22 +648,39 @@
     el: '#accountSettings',
     delimiters: ['((', '))'],
     data: {
+      // Current active tab
+      activeSettings: 'personal',
+
+      // Personal
+      // TODO - might need to update this
+      personal: {
+        loading: false
+      },
+
       user: {
         first_name: '',
         last_name: '',
         email: '',
         profile: {
           phone_number: '',
-          phone_number_2: ''
+          phone_number_2: '',
+          home_delivery: false,
+          delivery_notes: '',
+          drop_site: 'Farm',
+          plastic_bags: false,
+          weekly_emails: false,
+          allow_substitutions: false,
+          address: {
+            street: '',
+            city: '',
+            state: '',
+            zip: '',
+            country: 'USA'
+          }
         }
       },
-      payments: {
-        only_credits: [],
-        only_payments: []
-      },
-      activeSettings: 'payment',
-      saveButtonEnabled: false,
 
+      // Payments
       // oneTimePayment
       // {% if user.profile.non_subscribing_member or user.profile.stripe_subscription_id or user.profile.stripe_customer_id and user.profile.ach_status in 'NEW,VERIFYING' %}
       oneTimePayment: {
@@ -412,11 +705,8 @@
         stripeError: null,
         loading: false
 
-      }
+      },
       // {% endif %}
-
-
-
 
     },
     methods: {
@@ -424,6 +714,7 @@
       async getUser() {
         try {
           const res = await axios.get(`/api/users/{{user.id}}`);
+          console.log(res.data)
           this.user = res.data
         } catch (error) {
           NavVue.show_msg('Can not get user information', 'error')
@@ -431,14 +722,19 @@
       },
       // Save user info
       async saveUser() {
+        const form = document.getElementById(`${this.activeSettings}-form`);
+        if (!form.reportValidity()) return
+        
         try {
-          if (!document.getElementById(`${this.activeSettings}-form`).reportValidity()) return
-
+          this.personal.loading = true
           const res = await axios.patch(`/api/users/{{user.id}}/`, {...this.user});
           NavVue.show_msg('Updated successfuly')
+
+          this.personal.loading = false
         } catch (error) {
           console.log(error.response.data)
           NavVue.show_msg('Can not save user information', 'error')
+          this.personal.loading = false
         }
       },
 
@@ -569,8 +865,10 @@
                   amount: parseFloat(fd.get('amount')),
                   paymentType: fd.get('paymentType')
                 });
-                NavVue.show_msg(res.data.detail)
-                setTimeout(() => location.reload(), 10000)
+                // NavVue.show_msg(res.data.detail)
+                // setTimeout(() => location.reload(), 10000)
+                location.reload()
+                // TODO -> store the message in browser and show it after reload
               } catch (error) {
                 NavVue.show_msg(error.response.data.detail, 'error')
               }
@@ -582,22 +880,37 @@
         }
       },
       // {% endif %}
-      
 
-      enableSaveButton() {
-        this.saveButtonEnabled = true
+      // Update password
+      async changePassword() {
+        const form = document.getElementById(`${this.activeSettings}-form`);
+        if (!form.reportValidity()) return
+        
+        const formData = new FormData(form);
+
+        try {
+          this.personal.loading = true
+          const res = await axios.post(`/api/users/{{user.id}}/change_password/`, formData);
+          NavVue.show_msg('Updated successfuly')
+          this.personal.loading = false
+          location.reload()
+        } catch (error) {
+          console.log(error.response.data)
+          NavVue.show_msg(error.response.data.detail, 'error')
+          this.personal.loading = false
+        }
       },
+
+
       acceptPhoneNumber(e) {
         // accept only numbers and format them like 999-999-9999
         const x = this.user.profile.phone_number.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
         this.user.profile.phone_number = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
-        this.saveButtonEnabled = true;
       },
       acceptPhoneNumber2(e) {
         // accept only numbers and format them like 999-999-9999
         const x = this.user.profile.phone_number_2.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
         this.user.profile.phone_number_2 = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
-        this.saveButtonEnabled = true;
       },
       updateActiveSettings(e) {
         this.activeSettings = e.target.id;
@@ -621,7 +934,18 @@
           card.unmount()
           card.mount('#new-subscription-payment-card')
         }
+      },
+    
+      // home_delivery check
+      'user.profile.home_delivery': function(val) {
+        // make all .delivery_address_part required if home_delivery check
+        if (val == true) {
+          document.querySelectorAll('.delivery_address_part').forEach(item => item.required = true)
+        } else {
+          document.querySelectorAll('.delivery_address_part').forEach(item => item.required = false)
+        }
       }
+    
     },
     
     mounted() {
