@@ -39,7 +39,7 @@ services:
       - 8000
     depends_on: 
       - mysql
-      - frontend
+      # - frontend
 
   mysql:
     container_name: ffcsa_db
