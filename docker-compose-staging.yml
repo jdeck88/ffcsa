@@ -3,25 +3,25 @@ services:
   nginx:
     container_name: ffcsa_nginx
     build: ./nginx
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    # command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     volumes:
       - static_volume:/app/static
       - media_volume:/app/media
       - ./nginx/staging:/etc/nginx/conf.d
-      - ./data/staging/certbot/conf:/etc/letsencrypt
-      - ./data/staging/certbot/www:/var/www/certbot
+      # - ./data/staging/certbot/conf:/etc/letsencrypt
+      # - ./data/staging/certbot/www:/var/www/certbot
     ports:
       - 80:80
-      - 443:443
+      # - 443:443
     depends_on:
       - django_gunicorn
   
-  certbot:
-    image: certbot/certbot
-    volumes:
-      - ./data/staging/certbot/conf:/etc/letsencrypt
-      - ./data/staging/certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+  # certbot:
+  #   image: certbot/certbot
+  #   volumes:
+  #     - ./data/staging/certbot/conf:/etc/letsencrypt
+  #     - ./data/staging/certbot/www:/var/www/certbot
+  #   entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
   django_gunicorn:
     container_name: ffcsa_web
