@@ -560,11 +560,13 @@
       },
       goBack() {
         if (!this.previous) return;
-        this.getPaginatedData(this.previous)
+        const url = new URL(this.previous)
+        this.getPaginatedData(url.pathname + url.search)
       },
       goNext() {
         if (!this.next) return;
-        this.getPaginatedData(this.next)
+        const url = new URL(this.next)
+        this.getPaginatedData(url.pathname + url.search)
       }
     },
     computed: {
