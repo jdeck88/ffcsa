@@ -1,18 +1,5 @@
 version: '3.7'
 services:
-  # nginx:
-  #   container_name: ffcsa_nginx
-  #   build: ./nginx
-  #   volumes:
-  #     - static_volume:/app/static
-  #     - media_volume:/app/media
-  #     - ./nginx/staging:/etc/nginx/conf.d
-  #   ports:
-  #     - 8080:80
-  #     # - 443:443
-  #   depends_on:
-  #     - django_gunicorn
-  
   django_gunicorn:
     container_name: ffcsa_web
     build:
@@ -24,8 +11,7 @@ services:
     volumes:
       - .:/app
       - ./static:/app/static
-      - media_volume:/app/media
-      # - static_volume:/app/static
+      - ./media:/app/media
     ports: 
       - 8000:8000
     depends_on: 
@@ -48,5 +34,3 @@ services:
 
 volumes:
   db_data:
-  static_volume:
-  media_volume:
