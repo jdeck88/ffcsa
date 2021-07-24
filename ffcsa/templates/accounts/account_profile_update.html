@@ -374,7 +374,7 @@
                       </span>
                       <!-- Payment pending status -->
                     </td>
-                    <td v-if="!only_payments" class="px-6 py-4 whitespace-nowrap" style="    white-space: break-spaces;">{payment.notes}</td>
+                    <td v-if="!only_payments" class="px-6 py-4 whitespace-nowrap" style="white-space: break-spaces;">{payment.notes}</td>
                   </tr>
                 </tbody>
               </table>
@@ -402,14 +402,11 @@
     </div>
     `,
     methods: {
-      async getPaginatedData(url=this.endpoint + `?limit=${this.limit}`) {
+      async getPaginatedData() {
         // make sure we are not overpassing the count
         if (this.count > 0 && this.offset > this.count) this.offset = this.count - this.limit;
-
-        console.log('#'.repeat())
-        console.log(this.endpoint + `?limit=${this.limit}`)
-        console.log('#'.repeat())
-
+        
+        const url = this.endpoint + `?limit=${this.limit}`;
         try {
           const res = await axios.get(url);
           this.count = res.data.count;
@@ -644,7 +641,7 @@
     delimiters: ['((', '))'],
     data: {
       // Current active tab
-      activeSettings: 'personal',
+      activeSettings: 'payment',
 
       // Personal
       // TODO - might need to update this
