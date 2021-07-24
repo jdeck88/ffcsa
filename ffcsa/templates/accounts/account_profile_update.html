@@ -419,12 +419,12 @@
       goBack() {
         if (!this.previous) return;
         const url = new URL(this.previous)
-        this.getPaginatedData(url.pathname)
+        this.getPaginatedData(url.pathname + url.search)
       },
       goNext() {
         if (!this.next) return;
         const url = new URL(this.next)
-        this.getPaginatedData(url.pathname)
+        this.getPaginatedData(url.pathname + url.search)
       }
     },
     computed: {
