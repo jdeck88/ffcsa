@@ -193,7 +193,7 @@
           {% endif %}
 
           <!-- Drop Sites -->
-          <div class="col-span-12">
+          <div class="col-span-12" v-if="user.profile.home_delivery">
             <label for="drop_site" class="block">Drop Site Location</label>
             <select name="drop_site" id="drop_site" class="input-v" v-model="user.profile.drop_site" required>
               {% for site in DROPSITE_CHOICES %}
@@ -514,7 +514,7 @@
 
                 <tbody class="bg-white divide-y divide-gray-200">
                   <tr v-for="order in orders">
-                    <td class="px-6 py-4 whitespace-nowrap">{new Date(order.time).toLocaleString()}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{new Date(order.time).toLocaleDateString()}</td>
                     <td class="px-6 py-4 whitespace-nowrap">$ {order.total}</td>
                     <td class="px-6 py-4 whitespace-nowrap">{order.transaction_id}</td>
                   </tr>

@@ -181,7 +181,7 @@
       {% if user.profile.monthly_contribution != None %}
       <input class="input-v" type="number" name="amount" min="172" required value="{{ user.profile.monthly_contribution }}"/>
       {% else %}
-      <input class="input-v" type="number" name="amount" min="172" required value="12121"/>
+      <input class="input-v" type="number" name="amount" min="172" required/>
       {% endif %}
       <!-- <small class="italic px-2">minimum $172</small> -->
       <div class="mt-3 mb-4">
