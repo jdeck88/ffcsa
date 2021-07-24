@@ -95,7 +95,7 @@ class PaymentViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
 
     @list_route(methods=['get'])
     def only_payments(self, request):
-        queryset = self.queryset.filter(is_credit=False)
+        queryset = self.queryset.filter(user=request.user, is_credit=False)
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
@@ -105,7 +105,7 @@ class PaymentViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     
     @list_route(methods=['get'])
     def only_credits(self, request):
-        queryset = self.queryset.filter(is_credit=True)
+        queryset = self.queryset.filter(user=request.user, is_credit=True)
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
