@@ -402,11 +402,10 @@
     </div>
     `,
     methods: {
-      async getPaginatedData() {
+      async getPaginatedData(url=`${this.endpoint}?limit=${this.limit}`) {
         // make sure we are not overpassing the count
         if (this.count > 0 && this.offset > this.count) this.offset = this.count - this.limit;
         
-        const url = this.endpoint + `?limit=${this.limit}`;
         try {
           const res = await axios.get(url);
           this.count = res.data.count;
@@ -419,11 +418,13 @@
       },
       goBack() {
         if (!this.previous) return;
-        this.getPaginatedData(this.previous)
+        const url = new URL(this.previous)
+        this.getPaginatedData(url.pathname)
       },
       goNext() {
         if (!this.next) return;
-        this.getPaginatedData(this.next)
+        const url = new URL(this.next)
+        this.getPaginatedData(url.pathname)
       }
     },
     computed: {
@@ -546,8 +547,6 @@
         // make sure we are not overpassing the count
         if (this.count > 0 && this.offset > this.count) this.offset = this.count - this.limit;
 
-
-        console.log('Gonna call backend for orders now')
         try {
           const res = await axios.get(url);
           console.log(res)
