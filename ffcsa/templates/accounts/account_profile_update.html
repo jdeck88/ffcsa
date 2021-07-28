@@ -249,15 +249,15 @@
 
         <form id="password-form" class="grid grid-cols-12 gap-4 my-10">
 
-          <div class="col-span-12" v-show="user.profile.home_delivery">
+          <div class="col-span-12">
             <label for="cpassword" class="text-gray-700 px-1">Current password</label>
             <input type="password" name="cpassword" id="cpassword" class="input-v delivery_address_part" minlength="6">
           </div>
-          <div class="col-span-12" v-show="user.profile.home_delivery">
+          <div class="col-span-12">
             <label for="password" class="text-gray-700 px-1">New password</label>
             <input type="password" name="password" id="password" class="input-v delivery_address_part" minlength="6">
           </div>
-          <div class="col-span-12" v-show="user.profile.home_delivery">
+          <div class="col-span-12">
             <label for="password2" class="text-gray-700 px-1">Confirm new password</label>
             <input type="password" name="password2" id="password2" class="input-v delivery_address_part" minlength="6">
           </div>
