@@ -1,0 +1,108 @@
+{% load shop_tags i18n ffcsa_core_tags %}
+
+<style>
+    @page {
+        size: Letter;
+        margin-top: 1%;
+        margin-bottom: 1%;
+    }
+
+    h2 {
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+
+    .items {
+        clear: both;
+        border-collapse: collapse;
+        color: #333;
+        width: 100%;
+    }
+
+
+    .items tr:nth-child(even) {
+        background: #F7F7F7;
+    }
+
+    .items tr:first-child {
+        background: white;
+    }
+
+    .items .grand_total th,
+    .items td, th {
+        border: 1px solid #E1E1E1;
+        padding: 2px 4px;
+    }
+
+    .items th {
+        border: none;
+        text-align: center;
+    }
+
+    .items .grand_total {
+        border-top: 3px solid black;
+        background: white;
+    }
+
+    .items tbody {
+        border-bottom: 3px solid black;
+    }
+
+    .items .num {
+        text-align: right;
+        {#padding: 2px 8px;#}
+    }
+
+    .items .price,
+    .items .total_price {
+        width: 60px;
+    }
+
+    .items .received {
+        width: 50px;
+    }
+
+    .items .qty {
+        width: 40px;
+    }
+</style>
+
+{#<table style="border: none; width: 100%; margin-bottom: 0">#}
+{#    <tr>#}
+{#        <td>{% trans "Order ID:" %} {{ order.id }}</td>#}
+{#        <td style="float:right;">{{ order.time }}</td>#}
+{#    </tr>#}
+{#</table>#}
+
+<div style="display: flex; justify-content: space-between">
+    <h3 style="">{{ vendor }} Order from FFCSA</h3>
+    <p style="">{{ date }}</p>
+</div>
+{#<h3 style="float: left">{{ vendor }}</h3>#}
+{#<p style="float: right">{{ date }}</p>#}
+
+<table class="items">
+    <tr>
+        <th class="qty">Qty</th>
+        <th>Item</th>
+        <th class="price">Price</th>
+        <th class="total_price">Total Price</th>
+    </tr>
+
+    <tbody>
+    {% for item in items %}
+        <tr>
+            <td class="num qty">{{ item.quantity }}</td>
+            <td>{{ item.description }}</td>
+            <td class="num">${{ item.vendor_price }}</td>
+            <td class="num">${{ item.total_price }}</td>
+        </tr>
+    {% endfor %}
+    <tr class="grand_total">
+        <th style="text-align: left">Total</th>
+        <td></td>
+        <td></td>
+        <th class="num">${{ grand_total }}</th>
+    </tr>
+    </tbody>
+</table>

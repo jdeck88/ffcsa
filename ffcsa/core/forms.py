@@ -115,8 +115,8 @@ class ProfileForm(accounts_forms.ProfileForm):
         self.fields['phone_number'].widget.attrs['placeholder'] = '123-456-7890'
         self.fields['phone_number_2'].widget.attrs['placeholder'] = '123-456-7890'
         self.fields['drop_site'] = forms.ChoiceField(widget=DropsiteSelectWidget(),
-                                                     choices=dropsites.DROPSITE_CHOICES, label="Drop Site Location",
-                                                     help_text="Our Portland dropsites are currently full. <a target='_blank' href='https://26403a96.sibforms.com/serve/MUIEAEe-Lhh9Ij9OVpUCDzojW-Mdekxfy3xZjo7tka8o97OAN5FCESzSdtZnYvRkQkahzra5SB0It2X_txOn8Osv64fHf6t3Cv15W_S8yXTczZbBQfQ7Z_voZO4w2Q48UtGXYMgQaelSC0ni3_GivthfTK9FvMchpVPz-q7Y2JscpW2VjQjQSGgfNoJ56dxcF6ASqRwLc5Qkpa2S'>Join our waitlist</a> to be notified when a spot opens up.")
+                                                     choices=dropsites.DROPSITE_CHOICES, label="Drop Site Location")
+                                                     # help_text="Our Portland dropsites are currently full. <a target='_blank' href='https://26403a96.sibforms.com/serve/MUIEAEe-Lhh9Ij9OVpUCDzojW-Mdekxfy3xZjo7tka8o97OAN5FCESzSdtZnYvRkQkahzra5SB0It2X_txOn8Osv64fHf6t3Cv15W_S8yXTczZbBQfQ7Z_voZO4w2Q48UtGXYMgQaelSC0ni3_GivthfTK9FvMchpVPz-q7Y2JscpW2VjQjQSGgfNoJ56dxcF6ASqRwLc5Qkpa2S'>Join our waitlist</a> to be notified when a spot opens up.")
 
         if self.instance.id is not None:
             self.initial['drop_site'] = self.instance.profile.drop_site
