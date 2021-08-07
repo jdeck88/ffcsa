@@ -9,6 +9,8 @@ module.exports = {
         success: '#5f8b49',       // light orange ex. footer bg
         danger: '#fc1013',       // red color
         givry: '#F8DAC7',         // light orange ex. footer bg
+        petiteOrchid: '#DFA199',         // light red ex. IN SEASON page
+        rainee: '#bcc8ad',         // light green ex. IN SEASON page
 
 
         gray: {

@@ -30,12 +30,7 @@ class UserViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.G
     def update(self, request, *args, **kwargs):
         user = get_object_or_404(User, pk=kwargs['pk'])
         profile_data = request.data.pop('profile')
-        address = profile_data.pop('address')
-
-        # Set delivery_address if user select home_delivery is True
-        if profile_data.get('home_delivery'):
-            address = Address.objects.get_or_create(**address)
-            profile_data['delivery_address'] = address[0].id
+        delivery_address = profile_data.pop('delivery_address')
 
         # save user data
         serializer = UserSerializer(user, data=request.data)
@@ -46,6 +41,12 @@ class UserViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.G
         serializer = ProfileSerializer(user.profile, data=profile_data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+
+        # Save user delivery_address
+        if profile_data.get('home_delivery'):
+            profile = serializer.instance
+            profile.delivery_address = delivery_address
+            profile.save()
 
         return Response({})
 

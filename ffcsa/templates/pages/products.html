@@ -4,16 +4,6 @@
 {% block body_id %}products{% endblock %}
 
 
-{% block custom_css %}
-<!-- TODO - idealy this will be in a centeral place -->
-<style>
-  :root {
-    --banner-bg: url({% static 'img/cows-banner-2.jpg' %});
-  }
-</style>
-{% endblock custom_css %}
-
-
 {% block main %}
 <main id="productsVue" v-cloak>
   <!-- Call block super -->
@@ -23,10 +13,8 @@
   {% include 'partials/product_modal.html' %}
 
   <!-- banner section -->
-  <section class="min-h-300px lg:min-h-400px xl:min-h-500px bg-cover bg-center bg-overlay-dark" style="background-image: var(--banner-bg);">
-    <div class="flex flex-col justify-center px-4 pt-4 pb-8 min-h-300px lg:min-h-400px xl:min-h-500px">
-      <h2 class="text-white text-center text-5xl mb-4">Placeholder text</h2>
-    </div>
+  <section class="min-h-300px lg:min-h-400px bg-cover bg-center bg-overlay-dark flex" style="background-image: var(--products-banner-bg);">
+    <div class="text-white text-center text-3xl m-auto font-bold bg-black bg-opacity-25 px-5 py-4">Placeholder text</div>
   </section>
   <!-- banner section -->
 

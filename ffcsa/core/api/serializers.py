@@ -26,7 +26,7 @@ class AddressSerializer(serializers.ModelSerializer):
 
 # Profile Serializer
 class ProfileSerializer(serializers.ModelSerializer):
-    address = AddressSerializer(source='delivery_address', required=False)
+    delivery_address = serializers.SerializerMethodField()
     
     class Meta:
         model = Profile
@@ -34,6 +34,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         read_only_fields = ('stripe_customer_id', 'stripe_subscription_id', 
             'payment_method', 'ach_status', 'discount_code', 'user', 'paid_signup_fee', 'can_order_dairy', 'google_person_id')
 
+    def get_delivery_address(self, obj):
+        return str(obj.delivery_address)
 
 # Payment Serializer
 class PaymentSerializer(serializers.ModelSerializer):

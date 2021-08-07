@@ -1,13 +1,13 @@
 /* @import url('mezzanine.css'); */
 @import "tailwindcss/base";
 @import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
 /* === custom components === */
 @import url("components/toggle-switch.css");
 @import url("components/spinner.css");
 @import url("components/button.css");
 @import url("components/review-slider.css");
-/* === tailwindcss/utilities needs to follow custom components per the docs ===*/
-@import "tailwindcss/utilities";
 /* ==== Google font ==== */
 /* @import url('https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700|Open+Sans:300,400,600,700'); */
 /* === prettify === */

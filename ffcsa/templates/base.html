@@ -36,6 +36,11 @@
     {% endcompress %}
 
     <style>
+      /* global css */
+      :root {
+        --products-banner-bg: url({% static 'img/cows-banner-2.jpg' %});
+      }
+
       /* main styles [important to have it here not in the style-source file ] */
       .mainContentWrapper {
         min-height: 70vh;
@@ -157,7 +162,7 @@
               {% else %}
               <li>
                 <a href="{% url 'signup' %}{% if not 'account' in request.path %}?next={{ request.path }}{% else %}?next=/{% endif %}"
-                  class="bg-primary text-xs text-white hover:bg-orange-2 tracking-wider font-bold tracking-wide rounded p-3 mr-3">
+                  class="btn-primary px-4 py-3 mr-4">
                   BECOME A MEMBER</a>
               </li>
               <li>
@@ -194,7 +199,7 @@
             <div 
             :class="[notification.typeClass, 'fixed z-50 top-20 right-4 rounded bg-white shadow-lg p-4 border-l-4 border-primary w-96 max-w-lg']">
             <i class="fas fa-times absolute right-5 opacity-70 hover:opacity-100 cursor-pointer" @click="notification.shown = false"></i>
-              <p class="mt-2 w-11/12">((notification.text))</p>
+              <p class="mt-2 w-11/12" v-html="notification.text"></p>
             </div>
           </section>
 

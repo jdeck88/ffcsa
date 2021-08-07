@@ -41,26 +41,23 @@ a.btn {
 
 /* primary button */
 .btn-primary {
-  @apply shadow bg-orange-3 hover:bg-orange-2 text-white font-bold py-2 px-5 rounded text-lg focus:outline-none;
+  @apply text-white bg-orange-3 hover:bg-orange-2 focus:outline-none;
+  @apply shadow rounded font-bold text-lg py-3 px-6 transition duration-300 ease-in-out;
 }
 
+/* white button */
 .btn-white {
-  @apply shadow bg-gray-50 hover:bg-gray-100 text-orange-3 font-bold py-2 px-5 rounded text-lg focus:outline-none;
+  @apply bg-gray-50 text-orange-3 hover:bg-gray-100 focus:outline-none;
+  @apply shadow rounded font-bold text-lg py-3 px-6 transition duration-300 ease-in-out;
 }
 
-
-
-
-/* todo - enhance below */
 /* secondary button */
 .btn-outline-secondary {
-  @apply px-6 py-4 border border-brown-7 rounded text-brown-7 text-xl transition duration-500 ease-in-out;
+  @apply text-brown-7 border border-brown-7 tracking-wide hover:border-brown-7 hover:bg-brown-7 hover:text-white;
+  @apply rounded text-lg px-6 py-5 transition duration-300 ease-in-out;
 }
 
-.btn-outline-secondary:hover {
-  @apply px-6 py-4 border border-brown-7 rounded bg-brown-7 text-white text-xl;
-}
-
+/* todo - enhance below */
 /* add to card button */
 .btn-add-to-card {
   @apply px-6 py-3 font-light text-brown-7 text-lg;

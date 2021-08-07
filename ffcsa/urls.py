@@ -4,6 +4,7 @@ from django.conf.urls import include, url
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.views.i18n import set_language
+from django.views.generic import TemplateView
 from mezzanine.conf import settings
 
 import ffcsa.core.views as ffcsa_core
@@ -50,6 +51,12 @@ urlpatterns += [
 
     # api endpoint
     url("^api/", include(router.urls)),
+
+
+    # static pages
+    url("^faq/$", TemplateView.as_view(template_name='static_pages/faq.html'), name="faq"),
+    url("^in-season/$", TemplateView.as_view(template_name='static_pages/in_season.html'), name="in_season"),
+
     
     url("^account/orders/$", shop_ciews.order_history, name="shop_order_history"),
     url("^account/payments/$", ffcsa_core.payments, name="payments"),

@@ -105,91 +105,10 @@
             <small class="block text-gray-400 mt-2">Available in Eugene, Corvallis, and Springfield for a $5 fee. This fee is waived for all orders over $125.</small>
           </div>
 
-          <!-- Delivery Address Details -->
-          <div class="col-span-6" v-if="user.profile.home_delivery">
-            <label for="street" class="text-gray-700 px-1">Street</label>
-            <input type="text" name="street" id="street" class="input-v delivery_address_part" minlength="3" v-model="user.profile.address.street">
+          <div class="col-span-12" v-if="user.profile.home_delivery" v-observe-visibility="initAutoCompelete()">
+            <label for="address">Address</label>
+            <input class="input-v" id="address" type="text" v-model="user.profile.delivery_address" required>
           </div>
-
-          <div class="col-span-6" v-if="user.profile.home_delivery">
-            <label for="city" class="text-gray-700 px-1">City</label>
-            <input type="text" name="city" id="city" class="input-v delivery_address_part" minlength="3" v-model="user.profile.address.city">
-          </div>
-
-          <div class="col-span-6" v-if="user.profile.home_delivery">
-            <label for="state" class="block">State</label>
-            <select name="state" id="state" class="input-v delivery_address_part" v-model="user.profile.address.state">
-              <option value="AL">AL</option>
-              <option value="AK">AK</option>
-              <option value="AZ">AZ</option>
-              <option value="AR">AR</option>
-              <option value="CA">CA</option>
-              <option value="CO">CO</option>
-              <option value="CT">CT</option>
-              <option value="DE">DE</option>
-              <option value="DC">DC</option>
-              <option value="FL">FL</option>
-              <option value="GA">GA</option>
-              <option value="HI">HI</option>
-              <option value="ID">ID</option>
-              <option value="IL">IL</option>
-              <option value="IN">IN</option>
-              <option value="IA">IA</option>
-              <option value="KS">KS</option>
-              <option value="KY">KY</option>
-              <option value="LA">LA</option>
-              <option value="ME">ME</option>
-              <option value="MD">MD</option>
-              <option value="MA">MA</option>
-              <option value="MI">MI</option>
-              <option value="MN">MN</option>
-              <option value="MS">MS</option>
-              <option value="MO">MO</option>
-              <option value="MT">MT</option>
-              <option value="NE">NE</option>
-              <option value="NV">NV</option>
-              <option value="NH">NH</option>
-              <option value="NJ">NJ</option>
-              <option value="NM">NM</option>
-              <option value="NY">NY</option>
-              <option value="NC">NC</option>
-              <option value="ND">ND</option>
-              <option value="OH">OH</option>
-              <option value="OK">OK</option>
-              <option value="OR">OR</option>
-              <option value="PA">PA</option>
-              <option value="PR">PR</option>
-              <option value="RI">RI</option>
-              <option value="SC">SC</option>
-              <option value="SD">SD</option>
-              <option value="TN">TN</option>
-              <option value="TX">TX</option>
-              <option value="UT">UT</option>
-              <option value="VT">VT</option>
-              <option value="VA">VA</option>
-              <option value="VI">VI</option>
-              <option value="WA">WA</option>
-              <option value="WV">WV</option>
-              <option value="WI">WI</option>
-              <option value="WY">WY</option>
-            </select>
-          </div>
-
-          <div class="col-span-6" v-if="user.profile.home_delivery">
-            <label for="zip" class="text-gray-700 px-1">Zip code</label>
-            <input type="text" pattern="[0-9]*" name="zip" id="zip" class="input-v delivery_address_part" minlength="4" maxlength="5" v-model="user.profile.address.zip">
-          </div>
-
-          <div class="col-span-6" v-if="user.profile.home_delivery">
-            <label for="country" class="text-gray-700 px-1">Country</label>
-            <input type="text" name="country" id="country" class="input-v" disabled v-model="user.profile.address.country">
-          </div>
-
-          <div class="col-span-12" v-if="user.profile.home_delivery">
-            <label for="delivery_notes" class="text-gray-700 px-1">Delivery Notes</label>
-            <textarea name="delivery_notes" id="delivery_notes" v-model="user.profile.delivery_notes" class="input-v" rows="4"></textarea>
-          </div>
-          <!-- Delivery Address Details -->
           {% endif %}
 
           <!-- Drop Sites -->
@@ -279,6 +198,8 @@
 {% block js %}
 <script src="https://unpkg.com/vuetable-2@next"></script>
 <script src="https://js.stripe.com/v3/"></script>
+<script type="text/javascript" src="https://maps.google.com/maps/api/js?libraries=geometry,places&key={{ settings.GOOGLE_API_KEY }}"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/geocodezip/geoxml3@master/polys/geoxml3.js"></script>
 
 <script defer>
 
@@ -317,10 +238,6 @@
       }
     }
   });
-
-  // card.mount("#stripe-card2");
-
-
 
 
   // Payment history component
@@ -614,7 +531,6 @@
     }
   })
 
-
   // FF Custom Button (button with spinner)
   const FFButton = Vue.component('ff-button', {
     delimiters: ['{', '}'],
@@ -665,13 +581,6 @@
           plastic_bags: false,
           weekly_emails: false,
           allow_substitutions: false,
-          address: {
-            street: '',
-            city: '',
-            state: '',
-            zip: '',
-            country: 'USA'
-          }
         }
       },
 
@@ -930,26 +839,6 @@
           card.mount('#new-subscription-payment-card')
         }
       },
-    
-      // home_delivery check
-      'user.profile.home_delivery': function(val) {
-        // make all .delivery_address_part required if home_delivery check
-        if (val == true) {
-          document.querySelectorAll('.delivery_address_part').forEach(item => item.required = true)
-
-          this.user.profile.address = {
-            street: '',
-            city: '',
-            state: '',
-            zip: '',
-            country: 'USA'
-          }
-        } else {
-          document.querySelectorAll('.delivery_address_part').forEach(item => item.required = false)
-          this.user.profile.address = null
-        }
-      }
-    
     },
     
     mounted() {
@@ -958,5 +847,69 @@
       // this.getUserCredits()
     }
   })
+</script>
+
+<script id="initAddressAutoCompelete">
+  function initAutoCompelete() {
+    // Init address auto compelete
+
+    // container IS finished rendering to the DOM
+    const geoXml = new geoXML3.parser()
+    geoXml.parse(static_url + 'docs/delivery_area.kml')
+
+    // default bounds
+    const defaultBounds = new google.maps.LatLngBounds(new google.maps.LatLng(44.222193, -123.207548))
+
+    const options = {
+      bounds: defaultBounds,
+      types: ['address'],
+    }
+
+    const addressInput = document.getElementById('address')
+    const autocomplete = new google.maps.places.Autocomplete(addressInput, options)
+    autocomplete.addListener('place_changed', function () {
+      const place = autocomplete.getPlace();
+      if (!place) {
+        // return error message
+      }
+
+      // Set delivery_address value
+      AccountVue.user.profile.delivery_address = place.formatted_address
+
+      let success = false
+
+      for (var i = 0; i < geoXml.docs[0].gpolygons.length; i++) {
+        if (google.maps.geometry.poly.containsLocation(place.geometry.location, geoXml.docs[0].gpolygons[i])) {
+          success = true
+
+          // Check if we are maxed out for the zip code
+          zip = null
+          place.address_components.forEach(function (c) {
+            if (c.types.includes('postal_code')) {
+              zip = c.long_name
+              return
+            }
+          })
+
+          $.ajax('/zip-check/' + zip)
+          .done(function (data) {
+            if (data.is_full) {
+              success = false
+              NavVue.show_msg('Unfortunately, our delivery route is full and we can not offer home delivery to your zip code at this time. Please check again at a later date as members change drop sites from time-to-time. You can also <a href="mailto:fullfarmcsa@deckfamilyfarm.com">contact us</a> to be notified when a spot opens up!', 'error')
+            }
+          })
+          .fail(function () {
+            success = false
+            NavVue.show_msg('An error occurred. Please try again later. Please <a href="mailto:fullfarmcsa@deckfamilyfarm.com">contact us</a> if this problem persists.', 'error')
+          })
+        }
+      }
+      
+      // we don't deliver to this address
+      if (!success) {
+        NavVue.show_msg('We do not currently offer delivery service to this address. Please <a class="text-blue-500" href="mailto:fullfarmcsa@deckfamilyfarm.com">contact us</a> to be notified when our delivery options expand.', 'error')
+      }
+    })
+  }
 </script>
 {% endblock %}
