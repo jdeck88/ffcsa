@@ -1,15 +1,19 @@
-<footer class="flex flex-wrap justify-center bg-givry p-16 mt-20">
+<footer class="grid grid-cols-12 bg-givry p-16 mt-20">
   {# {% page_menu "pages/menus/footer.html" %} #}
 
-  <div class="flex flex-wrap justify-center text-xl ">
-    <div class="flex flex-col lg:mr-32" style="width: 178px">
+  <!-- Logo -->
+  <div class="col-span-2">Logo here!</div>
+
+  <!-- Footer links -->
+  <div class="col-span-8 grid grid-cols-12 text-xl">
+    <div class="col-span-4 flex flex-col">
       <a href="/">Home</a>
       <a href="#ffcsa">Full Farm CSA</a>
       <a href="/products">Shop</a>
       <a href="#contact">Contact Us</a>
     </div>
 
-    <div class="flex flex-col sm:mr-10 lg:mr-64" style="width: 178px">
+    <div class="col-span-4 flex flex-col">
       <a href="#about">About</a>
       <a href="/faq/">FAQ</a>
       <a href="/in-season/">What's in Season?</a>
@@ -17,8 +21,11 @@
     </div>
   </div>
 
-  <div class="self-center text-5xl mt-5 sm:mt-0">
-    <a href="#instagram" class="mr-4"><i class="fab fa-instagram"></i></a>
-    <a href="#facebook"><i class="fab fa-facebook"></i></a>
-  </div>
+  <!-- Social media links -->
+  <a href="https://www.instagram.com/deckfamilyfarm/" target="_blank" class="col-span-1">
+    <i class="fab fa-instagram social-icon"></i>
+  </a>
+  <a href="https://www.facebook.com/deckfamilyfarm" target="_blank" class="col-span-1">
+    <i class="fab fa-facebook-f social-icon"></i>
+  </a>
 </footer>
