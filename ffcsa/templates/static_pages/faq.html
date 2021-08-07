@@ -473,7 +473,7 @@
   <!-- WHAT’S IN SEASON? -->
   
   
-  {% if user %}
+  {% if not user %}
   <!-- Ready for Better Food Choices? -->
   <div class="max-w-lg text-lg text-center mx-auto mt-10 mb-10">
     <h2 class="text-2xl font-bold text-primary mb-5">Ready for Better Food Choices?</h2>
@@ -481,7 +481,7 @@
   </div>
   <!-- Ready for Better Food Choices? -->
 
-  <div class="text-center mb-20">
+  <div class="text-center">
     <a href="{% url 'signup' %}" class="btn-primary" style="padding-top: .9rem; padding-bottom: .9rem;">BECOME A MEMBER</a>
   </div>
   {% endif %}
