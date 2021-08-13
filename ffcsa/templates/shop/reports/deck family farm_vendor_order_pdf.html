@@ -133,7 +133,7 @@
         <li class="category">{{ category }}</li>
 
         <ul class="items">
-            {% for item in category_items %}
+            {% for item in category_items|dictsort:"description" %}
                 <li>
                     <span class="item">{{ item.description }}</span>
                     <span class="num qty">{{ item.quantity }}</span>
