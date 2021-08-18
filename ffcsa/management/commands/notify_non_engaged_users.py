@@ -32,6 +32,7 @@ class Command(BaseCommand):
 
         # TODO This script should run weekly and send reminder only to users who have not placed
         # an order in 3, 6, 9, & 12 weeks. replace above query with this
+        # 2021-08-13: Maybe a 3,6, 13, 26, 52 sequence is better.
         # users_with_non_recent_orders = Order.objects.values('user_id').annotate(latest_order=Max('time')).filter(
         #     (Q(lastest_order_lt=three_weeks_ago) & Q(latest_order_gte=three_weeks_ago - timedelta(days=7))) |
         #     (Q(lastest_order_lt=six_weeks_ago) & Q(latest_order_gte=six_weeks_ago - timedelta(days=7))) |
