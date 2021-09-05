@@ -4,14 +4,15 @@ module.exports = {
       colors: {
         
         // our project schema
-        primary: '#e16231',       // orange-3
+        primary: '#e16231',       // orange DEFAULT
         secondary: '#502616',     // brown-7
-        success: '#5f8b49',       // light orange ex. footer bg
-        danger: '#fc1013',       // red color
-        givry: '#F8DAC7',         // light orange ex. footer bg
-        petiteOrchid: '#DFA199',         // light red ex. IN SEASON page
-        rainee: '#bcc8ad',         // light green ex. IN SEASON page
-
+        // red
+        danger: '#fc1013',        // red color
+        petiteOrchid: '#DFA199',  // light red ex. IN SEASON page
+        // beige
+        swirl: '#ddd4cd',         // light beige ex. CSA page
+        pearlBush: '#e8e1dc',     // lighter beige ex. CSA page
+        
 
         gray: {
           '100': '#F7F7F7',
@@ -38,26 +39,25 @@ module.exports = {
             '1': '#c54c51',
             '2': '#be253e',
         },
-        
         orange: {
-            '1': '#efad8b',
-            '2': '#d1501d', // hover effect (darker)
-            '3': '#e16231',
-            '4': '#e98d63', // Left and right boxes below homepage hero image
-            '5': '#e57849', // Center box below homepage hero image
+          DEFAULT:  '#e16231',
+          light:    '#e67f51',
+          lighter:  '#efad8b',
+          lightest: '#f8dac7'
         },
         
         yellow: {
-            '1': '#f9e5a7',
-            '2': '#f7db80',
-            '3': '#f4d151',
-            '4': '#f2c916',
+          DEFAULT:  '#f2c916',
+          light:    '#f4d151',
+          lighter:  '#f7db80',
+          lightest: '#f9e5a7',
+          extralightest: '#fcf0d0'
         },
         
         green: {
-            '1': '#5f8b49',
-            '2': '#7c9b65',
-            '3': 'rgba(95, 139, 73, .645)',
+          DEFAULT:  '#5f8b49',
+          light:    '#7c9b65',
+          lighter:  '#97ae84'
         },
         
         brown: {
@@ -69,6 +69,20 @@ module.exports = {
             '5': '#914323',
             '6': '#694334',
             '7': '#502616',
+        },
+
+        browns: {
+          darkest: '#502616',
+          dark: '#694334',
+          DEFAULT: '#914323',
+          light: '#a2603f',
+          lighter: '#b57e62',
+          lightest: '#c9a18a',
+        },
+
+        beige: {
+          DEFAULT: '#e0cabc',
+          light: '#efe8e4',
         },
 
         tan: {

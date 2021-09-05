@@ -22,7 +22,6 @@
 /* @import url('../skins/default.css'); */
 /* @import url('shop.css'); */
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,400&display=swap');
 
 
 /* ===================================
@@ -34,12 +33,25 @@
 }
 
 .subheader-green {
-  color: theme(colors.green.3);
+  color: theme(colors.green.lighter);
 }
 
 
+/* Loading Helvetica font */
+@font-face { font-family: Helvetica; src: url(../fonts/Helvetica-Font/Helvetica.ttf); } 
+@font-face { font-family: Helvetica; font-weight: bold; src: url(../fonts/Helvetica-Font/Helvetica-Bold.ttf); } 
+@font-face { font-family: Helvetica; font-weight: lighter; src: url(../fonts/Helvetica-Font/helvetica-light-587ebe5a59211.ttf); } 
+
+/* Loading Roboto font */
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,400&display=swap'); */
+
+
 body {
-  font-family: 'Roboto', sans-serif;
+  /* font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; */
+  font-family: 'Helvetica', Arial, "Lucida Grande", sans-serif;
+  /* font-weight: 300; */
+  font-size: 1.25rem;
+
 }
 
 
@@ -284,7 +296,7 @@ header a.text-brown-7:hover {
   margin-left: -21px;
   padding: 5px;
   font-size: 25px;
-  color: theme(colors.green.1);
+  color: theme(colors.green.DEFAULT);
   border: solid white;
 }
 
@@ -381,7 +393,7 @@ input[type='number']::-webkit-outer-spin-button {
 * Inputs, Labels, Buttons...
 */
 .input-v {
-  /* @apply w-full px-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-orange-1; */
+  /* @apply w-full px-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-orange-lighter; */
   @apply w-full px-3 py-2 rounded-lg border-2 border-gray-200 outline-none ;
 }
 
@@ -429,7 +441,7 @@ input[type='number']::-webkit-outer-spin-button {
 
 /* footer */
 .social-icon {
-  @apply text-2xl bg-orange-2 text-white rounded-full h-12 w-12 flex items-center justify-center m-3 transform hover:scale-110;
+  @apply text-2xl bg-orange text-white rounded-full h-12 w-12 flex items-center justify-center m-3 transform hover:scale-110;
   @apply transition duration-300 ease-in-out;
 
 }

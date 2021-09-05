@@ -40,7 +40,7 @@
     <div class="col-span-12 md:col-span-9 bg-white p-5">
       <!-- personal settings -->
       <div v-show="activeSettings == 'personal'">
-        <h3 class="text-lg">Personal</h3>
+        <h3 class="text-2xl font-bold opacity-40">Personal</h3>
   
         <form id="personal-form" class="grid grid-cols-12 gap-4 mt-10">
           <!-- first name -->
@@ -74,7 +74,15 @@
             <input type="text" name="phone_number_2" id="phone_number_2" v-model="user.profile.phone_number_2" class="input-v" @input="acceptPhoneNumber2" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
             <small class="text-gray-400">must match format 999-999-9999</small>
           </div>
-          
+
+          <hr class="col-span-12 my-5">
+
+          <!-- num_adults -->
+          <div class="col-span-6">
+            <label for="num_adults" class="text-gray-700 px-1">Number of adults</label>
+            <input type="text" name="num_adults" id="num_adults" v-model="user.profile.num_adults" class="input-v">
+          </div>
+
         </form>
 
         <!-- save button -->
@@ -85,13 +93,13 @@
       
       <!-- payment -->
       <div v-show="activeSettings == 'payment'">
-        <h3 class="text-lg">Payment</h3>
+        <h3 class="text-2xl font-bold opacity-40">Payment</h3>
         {% include 'accounts/account_payments.html' %}
       </div>
 
       <!-- delivery settings -->
       <div v-show="activeSettings == 'delivery'">
-        <h3 class="text-lg">Delivery Options</h3>
+        <h3 class="text-2xl font-bold opacity-40">Delivery Options</h3>
 
         <form id="delivery-form" class="grid grid-cols-12 gap-4 my-10">
           <!-- Delivery Options -->
@@ -157,14 +165,14 @@
 
       <!-- order history -->
       <div v-show="activeSettings == 'orders'">
-        <h3 class="text-lg">Order history</h3>
+        <h3 class="text-2xl font-bold opacity-40">Order history</h3>
 
         <orders endpoint="/api/orders" class="mt-5"></orders>
       </div>
       
       <!-- change password -->
       <div v-show="activeSettings == 'password'">
-        <h3 class="text-lg">Change Password</h3>
+        <h3 class="text-2xl font-bold opacity-40">Change Password</h3>
 
         <form id="password-form" class="grid grid-cols-12 gap-4 my-10">
 

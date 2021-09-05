@@ -47,11 +47,11 @@
 
                 <!-- product available amount, if product number_in_stock is null means it is unlimited -->
                 <p class="mt-auto">
-                  <span v-if="variation.is_unlimited" class="text-success">
+                  <span v-if="variation.is_unlimited" class="text-green">
                     AVAILABLE
                   </span>
                   <span v-else-if="variation.number_in_stock == 0" class="text-red-1"></span>
-                  <span v-else class="text-success">
+                  <span v-else class="text-green">
                     ((variation.number_in_stock)) AVAILABLE
                   </span>
                 </p>

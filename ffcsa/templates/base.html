@@ -41,16 +41,13 @@
         --products-banner-bg: url({% static 'img/cows-banner-2.jpg' %});
       }
 
-      /* main styles [important to have it here not in the style-source file ] */
-      .mainContentWrapper {
-        min-height: 70vh;
+      .centered { 
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        margin-top: '-[1/2(element-height)]';
+        margin-left: '-[1/2(element-width)]';
       }
-
-      .hidden {
-        display: none;
-      }
-
-      .centered {  position: fixed;  top: 50%;  left: 50%;  margin-top: -[1/2(element-height)];  margin-left: -[1/2(element-width)];}
     </style>
 
     <!-- •• removed below line •• -->
@@ -61,7 +58,7 @@
     {% block custom_css %}{% endblock %}
 
     {% compress js %}
-      <script src="{% static "mezzanine/js/"|add:settings.JQUERY_FILENAME %}"></script>
+      <script src="{% static 'mezzanine/js/'|add:settings.JQUERY_FILENAME %}"></script>
       {% block extra_js %}{% endblock %}
     {% endcompress %}
     
@@ -79,9 +76,9 @@
       fbq('track', 'PageView');
     </script>
     
-    <noscript><img height="1" width="1" style="display:none"
-                    src="https://www.facebook.com/tr?id=205901347148225&ev=PageView&noscript=1"
-    /></noscript>
+    <noscript>
+      <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=205901347148225&ev=PageView&noscript=1"/>
+    </noscript>
     <!-- End Facebook Pixel Code -->
 
     <!--[if lt IE 9]>
@@ -137,11 +134,11 @@
             </a>
   
             <!-- Desktop menu -->
-            <ul class="ml-auto hidden md:flex">
+            <section class="ml-auto hidden md:flex items-center">
               {% if user.is_authenticated %}
               <div id="userDropdown" class="relative inline-block text-left mr-3">
                 <div>
-                  <button id="username" @click="showUserDropdown = !showUserDropdown" type="button" class="inline-flex justify-center w-full rounded-md shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none" id="options-menu" aria-haspopup="true" aria-expanded="true">
+                  <button id="username" @click="showUserDropdown = !showUserDropdown" type="button" class="capitalize rounded-md px-4 py-2 bg-white text-lg font-medium text-gray-700 hover:bg-gray-50 hover:text-orange focus:outline-none focus:text-orange" id="options-menu" aria-haspopup="true" aria-expanded="true">
                     <!-- user icon -->
                     <i class="far fa-user mr-3 mt-1"></i>
                     {{user}}
@@ -160,19 +157,17 @@
                 </div>
               </div>
               {% else %}
-              <li>
-                <a href="{% url 'signup' %}{% if not 'account' in request.path %}?next={{ request.path }}{% else %}?next=/{% endif %}"
-                  class="btn-primary px-4 py-3 mr-4">
-                  BECOME A MEMBER</a>
-              </li>
-              <li>
-                <a href="{% url 'login' %}{% if not 'account' in request.path %}?next={{ request.path }}{% else %}?next=/{% endif %}"
-                  class="text-xs font-bold tracking-wide hover:text-primary pr-4">LOGIN</a>
-              </li>
+              <!-- become a member -->
+              <a href="{% url 'signup' %}{% if not 'account' in request.path %}?next={{ request.path }}{% else %}?next=/{% endif %}"
+                class="btn btn-primary mr-4">
+                BECOME A MEMBER</a>
+              <!-- login -->
+              <a href="{% url 'login' %}{% if not 'account' in request.path %}?next={{ request.path }}{% else %}?next=/{% endif %}"
+                class="text-sm font-bold tracking-wide hover:text-primary mr-4">LOGIN</a>
               {% endif %}
   
               <!-- Cart icon -->
-              <li class="cart">
+              <div class="cart">
                 <a href="#" @click.prevent="cart.shown = true">
                   <div class="relative">
                     <svg width="30" height="30" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -185,9 +180,9 @@
                     </span>
                   </div>
                 </a>
-              </li>
+              </div>
               <!-- Cart icon -->
-            </ul>
+            </section>
 
             <div class="ml-auto md:hidden">
               <i @click="showNavDropdown = !showNavDropdown" class="fas text-4xl fa-bars text-secondary self-center" role="button"></i>
@@ -197,7 +192,7 @@
           <!-- Notification -->
           <section v-show="notification.shown" class="notification">
             <div 
-            :class="[notification.typeClass, 'fixed z-50 top-20 right-4 rounded bg-white shadow-lg p-4 border-l-4 border-primary w-96 max-w-lg']">
+            :class="[notification.typeClass, 'fixed z-50 top-20 right-4 rounded bg-white shadow-lg p-4 border-l-4 border-green w-96 max-w-lg']">
             <i class="fas fa-times absolute right-5 opacity-70 hover:opacity-100 cursor-pointer" @click="notification.shown = false"></i>
               <p class="mt-2 w-11/12" v-html="notification.text"></p>
             </div>
@@ -393,7 +388,7 @@
             // show border color based on the message type
             switch (type) {
               case 'success':
-                this.notification.typeClass = 'border-success'
+                this.notification.typeClass = 'border-green'
                 break;
               case 'error':
                 this.notification.typeClass = 'border-danger'

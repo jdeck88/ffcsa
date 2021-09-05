@@ -19,7 +19,7 @@
   <!-- banner section -->
 
   <!-- filters section -->
-  <section class="md:flex justify-center mt-10 text-success md:text-xl font-bold">
+  <section class="md:flex justify-center mt-10 text-green md:text-xl font-bold">
     
     <div v-for="category in categories" class="inline-blocks relative hover-trigger text-base">
       <a href="#" @click.prevent="selectedCategory=category.title" :class="[categorySelected(category.title), 'hover:text-primary block m-3']">
@@ -39,7 +39,7 @@
   <!-- filters section -->
 
   <!-- remove filter -->
-  <section class="container mx-auto flex justify-end text-success">
+  <section class="container mx-auto flex justify-end text-green">
     <a href="#" v-if="selectedCategory" @click.prevent="selectedCategory=''"  class="hover:underline text-sm">
       Show all products
     </a>
@@ -80,7 +80,7 @@
               </button>
             </template>
           </div>
-          <a :href="(( product.url ))" class="text-green-2">Quantity/Weight Details Here</a>
+          <a :href="(( product.url ))" class="text-green-light">Quantity/Weight Details Here</a>
           <p class="text-brown-7 text-sm italic font-thin">(( product.vendor ))</p>
         </div>
       </div>
@@ -122,13 +122,13 @@
 
   <!-- WHAT’S IN SEASON? -->
   <div class="flex justify-center py-6">
-    <button class="btn-outline-secondary">WHAT’S IN SEASON?</button>
+    <a href="/in-season/" class="btn-outline-secondary">BECOME A MEMBER</a>
   </div>
   <!-- WHAT’S IN SEASON? -->
 
 
   <!-- Beyond the Groceries -->
-  <section class="text-center bg-givry p-5">
+  <section class="text-center bg-orange-lightest p-5">
     <div class="container mx-auto">
       <h3 class="text-3xl font-bold text-brown-7 my-5 py-5">Beyond the Groceries</h3>
 
@@ -152,7 +152,7 @@
   <section class="text-center p-5 py-20 max-w-xl mx-auto">
     <h3 class="text-3xl text-primary font-bold mb-5">Ready for Better Food Choices?</h3>
     <p class="text-secondary text-xl mb-10">Join the hundreds of households who trust local farmers to provide high quality food for a full diet.</p>
-    <button class="btn-primary">BECOME A MEMBER</button>
+    <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
   </section>
   <!-- Ready for Better Food Choices? -->
 </main>

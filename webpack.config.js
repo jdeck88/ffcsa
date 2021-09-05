@@ -11,7 +11,7 @@ const TerserJSPlugin = require('terser-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const packageJson = require(path.resolve(CWD, 'package.json'))
 
-const HOST = process.env.HOST
+const HOST = process.env.HOST || 'localhost'
 const DEBUG = process.env.NODE_ENV !== 'production'
 const HTTPS = eval(process.env.HTTPS)
 
@@ -22,8 +22,6 @@ config = {
   entry: {
     // main: './main.js',
     style: './ffcsa/static/css/style-source.css',
-    // cart: './cart/index.js',
-    // absences: './absences/index.js',
   },
   // context: path.join(CWD, "app", "static", "app"),
   context: path.join(__dirname),
@@ -39,10 +37,6 @@ config = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader', 'postcss-loader'],
-      },
-      {
-        test: /\.scss$/,
-        use: ['sass-loader'],
       },
       {
         test: /\.(png|woff|woff2|svg|eot|ttf|gif|jpe?g)$/,
@@ -61,6 +55,7 @@ config = {
     ]
   },
   plugins: [
+    new MiniCssExtractPlugin({filename: '[name]-[contenthash].css'}),
     // NOTE - below lines are commented out cuz they cuz 'Invalid configuration' for development config
     // DEBUG ? null : new webpack.optimize.SplitChunksPlugin(),
     // DEBUG ? null : new CleanWebpackPlugin(),

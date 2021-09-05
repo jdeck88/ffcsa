@@ -7,12 +7,11 @@ a.btn {
 
 .btn {
   @apply text-white text-center text-2xl font-bold py-2 px-4 rounded-md shadow-xl;
-  background-color: theme('colors.orange.3');
 }
 
-.btn:hover {
+/* .btn:hover {
   background-color: #d95320;
-}
+} */
 
 .btn-sm {
   @apply text-lg self-center w-auto;
@@ -21,19 +20,15 @@ a.btn {
 }
 
 .btn-light-orange {
-  background-color: theme('colors.orange.2');
+  /* background-color: theme('colors.orange.2'); */
 }
 
 .btn-light-orange:hover {
-  background-color: theme('colors.orange.1'); /* TODO */
-}
-
-.btn-green {
-  background-color: theme('colors.green.1');
+  /* background-color: theme('colors.orange.1'); TODO */
 }
 
 .btn-green:hover {
-  background-color: theme('colors.green.2'); /* TODO */
+  background-color: theme('colors.green.light'); /* TODO */
 }
 
 
@@ -41,13 +36,18 @@ a.btn {
 
 /* primary button */
 .btn-primary {
-  @apply text-white bg-orange-3 hover:bg-orange-2 focus:outline-none;
+  @apply text-white bg-orange hover:bg-orange-light focus:outline-none;
+  @apply shadow rounded font-bold text-lg py-3 px-6 transition duration-300 ease-in-out;
+}
+
+.btn-green {
+  @apply text-white bg-green hover:bg-green-light focus:outline-none;
   @apply shadow rounded font-bold text-lg py-3 px-6 transition duration-300 ease-in-out;
 }
 
 /* white button */
 .btn-white {
-  @apply bg-gray-50 text-orange-3 hover:bg-gray-100 focus:outline-none;
+  @apply bg-gray-50 text-orange hover:bg-gray-100 focus:outline-none;
   @apply shadow rounded font-bold text-lg py-3 px-6 transition duration-300 ease-in-out;
 }
 
