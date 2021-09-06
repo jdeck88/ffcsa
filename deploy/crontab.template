@@ -12,7 +12,7 @@
 # 0 17 * * 4 %(user)s %(manage)s reminder
 
 # notify non engaged members
-# 0 3 * * 5 %(user)s %(manage)s notify_non_engaged_users
+0 3 * * 3 %(user)s %(manage)s notify_non_engaged_users
 
 # De-activate non active users
 0 3 * * 1 %(user)s %(manage)s deactivate_non_engaged_users

@@ -21,24 +21,21 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         three_weeks_ago = (datetime.now() - timedelta(days=21)).date()
         six_weeks_ago = (datetime.now() - timedelta(days=42)).date()
-        nine_weeks_ago = (datetime.now() - timedelta(days=63)).date()
-        eleven_weeks_ago = (datetime.now() - timedelta(days=77)).date()
+        thirteen_weeks_ago = (datetime.now() - timedelta(days=91)).date()
+        twenty_six_weeks_ago = (datetime.now() - timedelta(days=182)).date()
+        one_year_ago = (datetime.now() - timedelta(days=365)).date()
         fourteen_days = (datetime.now() - timedelta(days=14)).date()
 
         # All users that have joined more then 2 weeks ago, have non_subscribing_member=False,
         # do not have a strip_subscription_id, and are still marked as active
+        # 3, 6, 13, 26, 52 week reminder sequence
         users_with_non_recent_orders = Order.objects.values('user_id').annotate(latest_order=Max('time')).filter(
-            latest_order__lt=three_weeks_ago).values_list('user_id', flat=True)
-
-        # TODO This script should run weekly and send reminder only to users who have not placed
-        # an order in 3, 6, 9, & 12 weeks. replace above query with this
-        # 2021-08-13: Maybe a 3,6, 13, 26, 52 sequence is better.
-        # users_with_non_recent_orders = Order.objects.values('user_id').annotate(latest_order=Max('time')).filter(
-        #     (Q(lastest_order_lt=three_weeks_ago) & Q(latest_order_gte=three_weeks_ago - timedelta(days=7))) |
-        #     (Q(lastest_order_lt=six_weeks_ago) & Q(latest_order_gte=six_weeks_ago - timedelta(days=7))) |
-        #     (Q(lastest_order_lt=nine_weeks_ago) & Q(latest_order_gte=nine_weeks_ago - timedelta(days=7))) |
-        #     (Q(lastest_order_lt=eleven_weeks_ago) & Q(latest_order_gte=eleven_weeks_ago - timedelta(days=7)))
-        # ).values_list('user_id', flat=True)
+            (Q(lastest_order_gt=three_weeks_ago) & Q(latest_order_lte=three_weeks_ago + timedelta(days=7))) |
+            (Q(lastest_order_gt=six_weeks_ago) & Q(latest_order_lte=six_weeks_ago + timedelta(days=7))) |
+            (Q(lastest_order_gt=thirteen_weeks_ago) & Q(latest_order_lte=thirteen_weeks_ago + timedelta(days=7))) |
+            (Q(lastest_order_gt=twenty_six_weeks_ago) & Q(latest_order_lte=twenty_six_weeks_ago + timedelta(days=7))) |
+            (Q(lastest_order_gt=one_year_ago) & Q(latest_order_lte=one_year_ago + timedelta(days=7)))
+        ).values_list('user_id', flat=True)
 
         non_engaged_users = User.objects.filter(
             id__in=users_with_non_recent_orders,
