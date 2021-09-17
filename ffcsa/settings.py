@@ -14,7 +14,7 @@ FROZEN_PRODUCT_CATEGORIES = ['pasture raised meats']
 FROZEN_ITEM_PACKLIST_EXCLUDED_CATEGORIES = ['nuts & honey', 'free']
 GRAIN_BEANS_CATEGORIES = ['grains & beans']
 PRODUCT_ORDER_CATEGORIES = ['vegetables', 'eggs', 'fruit', 'eggs', 'mushroom']
-MARKET_CHECKLISTS = ['LCFM', 'Hollywood', 'PSU', 'St Johns']
+MARKET_CHECKLISTS = ['LCFM', 'Hollywood', 'PSU', 'St Johns', 'Irvington', 'Cully', 'Woodstock']
 MARKET_CHECKLIST_COLUMN_CATEGORIES = OrderedDict([
     # checklist columns -> (category list, additional kwargs, default)
     # if default is None, then we will sum the number of items
