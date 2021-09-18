@@ -28,7 +28,7 @@ config = {
   output: {
     path: path.resolve('./static/ffcsa/'),
     publicPath: DEBUG
-      ? 'http' + (HTTPS ? 's' : '') + '://' + HOST + ':4000/'
+      ? 'http://' + HOST + ':4000/'
       : (process.env.STATIC_URL || '/static/') + 'ffcsa/',
     filename: DEBUG ? '[name].js' : '[name]-[contenthash].js',
   },
@@ -36,7 +36,8 @@ config = {
     rules: [
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader'],
+        // use: ['style-loader', 'css-loader', 'postcss-loader'],
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
       },
       {
         test: /\.(png|woff|woff2|svg|eot|ttf|gif|jpe?g)$/,
@@ -65,7 +66,7 @@ config = {
     //     filename: '[name]-[contenthash].css',
     //   }),
     new BundleTracker({
-      filename: './static/webpack-stats-' + (DEBUG ? 'dev' : 'prod') + '.json',
+      filename: './ffcsa/static/webpack-stats-' + (DEBUG ? 'dev' : 'prod') + '.json',
 
       // path: path.resolve(__dirname, "static/"),
       // publicPath: "/",

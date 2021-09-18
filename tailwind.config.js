@@ -39,11 +39,13 @@ module.exports = {
             '1': '#c54c51',
             '2': '#be253e',
         },
+        
         orange: {
           DEFAULT:  '#e16231',
           light:    '#e67f51',
           lighter:  '#efad8b',
-          lightest: '#f8dac7'
+          lightest: '#f8dac7',
+          extralightest: '#eadbd2'
         },
         
         yellow: {
@@ -57,7 +59,9 @@ module.exports = {
         green: {
           DEFAULT:  '#5f8b49',
           light:    '#7c9b65',
-          lighter:  '#97ae84'
+          lighter:  '#97ae84',
+          lightest:  '#d6ddcc',
+          extralightest:  '#e8ebe2'
         },
         
         brown: {

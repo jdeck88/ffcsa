@@ -30,7 +30,7 @@
   <!-- Where does your food come from? -->
   <section class="container mx-auto text-center my-20 text-brown-7">
     <h3 class="text-2xl font-bold mb-10">Where does your food come from?</h3>
-    <p class="my-10 text-red-2">!!! IMAGE HERE !!!</p>
+    <p class="my-10 font-bold text-red-2">!!! IMAGE HERE !!!</p>
     <div class="grid grid-cols-12 gap-4">
       <div class="col-span-3">Are you <strong class="block">OVERWHELMED</strong> shopping around and researching better food options?</div>
       <div class="col-span-3">Feeling <strong class="block">POWERLESS</strong> in making a positive impact in your community and the world?</div>
@@ -178,32 +178,295 @@
   </section>
   <!-- Video section -->
 
-
   <!-- Ready for Better Food Choices? -->
-  <section class="text-center bg-yellow-extralightest p-24">
+  <section class="text-center bg-yellow-extralightest p-14 md:p-24">
     <h3 class="text-brown-7 font-bold text-3xl mb-20">Ready for Better Food Choices?</h3>
     
-    <div class="grid grid-cols-12 gap-4">
+    <div class="grid grid-cols-12 gap-4 max-w-4xl mx-auto">
       <div class="col-span-12 md:col-span-4 text-center">
-        <img src="{% static 'img/leaf-1.png' %}" alt="leaf" class="w-20 my-10 mx-auto">
-        <h3 class="text-green font-bold">BECOME A MEMBER</h3>
-        <p class="font-thin">Join the family and gain your share of the farm.</p>
+        <img src="{% static 'img/leaf-1.png' %}" alt="leaf" class="w-28 my-10 mx-auto">
+        <h3 class="text-green font-bold mb-3">BECOME A <br> MEMBER</h3>
+        <p class="font-thin w-52 mx-auto text-brown-7">Join the family and gain your share of the farm.</p>
       </div>
       <div class="col-span-12 md:col-span-4 text-center">
-        <img src="{% static 'img/leaf-2.png' %}" alt="leaf" class="w-20 my-10 mx-auto">
-        <h3 class="text-green font-bold">CUSTOMIZE YOUR WEEKLY CRATE</h3>
-        <p class="font-thin">You choose how much to invest and what items you receive.</p>
+        <img src="{% static 'img/leaf-2.png' %}" alt="leaf" class="w-28 my-10 mx-auto">
+        <h3 class="text-green font-bold mb-3">CUSTOMIZE YOUR <br> WEEKLY CRATE</h3>
+        <p class="font-thin w-52 mx-auto text-brown-7">You choose how much to invest and what items you receive.</p>
       </div>
       <div class="col-span-12 md:col-span-4 text-center">
-        <img src="{% static 'img/leaf-3.png' %}" alt="leaf" class="w-20 my-10 mx-auto">
-        <h3 class="text-green font-bold">EAT BETTER EVERY DAY</h3>
-        <p class="font-thin">Rest easy knowing your high-quality food is from a trusted local source.</p>
+        <img src="{% static 'img/leaf-3.png' %}" alt="leaf" class="w-28 my-10 mx-auto">
+        <h3 class="text-green font-bold mb-3">EAT BETTER <br> EVERY DAY</h3>
+        <p class="font-thin w-52 mx-auto text-brown-7">Rest easy knowing your high-quality food is from a trusted local source.</p>
       </div>
-      
     </div>
 
+    {% if not user %}
+    <div class="text-center mt-20">
+      <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
+    </div>
+    {% endif %}
   </section>
   <!-- Ready for Better Food Choices? -->
 
+  <!-- Download our Free Guide -->
+  <section class="p-24">
+    <div class="grid grid-cols-12 gap-4 max-w-4xl mx-auto">
+      <div class="col-span-12 md:col-span-6 text-center">
+        <h4 class="text-2xl mb-3">Download our Free Guide:</h4>
+        <p>7 Things About Misleading Labels</p>
+
+        <!-- form -->
+        <form class="mt-10">
+          <div class="grid grid-cols-12 gap-4 mb-5">
+            <div class="col-span-6">
+              <input type="text" name="last_name" id="last_name" class="input-v" placeholder="FIRST NAME" required>
+            </div>
+            <div class="col-span-6">
+              <input type="text" name="last_name" id="last_name" class="input-v" placeholder="LAST NAME" required>
+            </div>
+            <div class="col-span-12">
+              <input type="email" name="email" id="email" class="input-v" placeholder="EMAIL" required>
+            </div>
+          </div>
+
+          <button class="btn-green">DOWNLOAD</button>
+        </form>
+        <!-- form -->
+      </div>
+
+      <div class="col-span-12 md:col-span-6 text-center">
+        <p class="my-10 font-bold text-red-2">!!! IMAGE HERE !!!</p>
+      </div>
+    </div>
+  </section>
+  <!-- Download our Free Guide -->
+
+  <!-- What Members are Saying -->
+  <section class="bg-green-lightest p-24 text-center">
+    <h3 class="text-3xl font-bold text-brown-7">What Members are Saying</h3>
+
+    <div id="reviews-slider" class="reviews-slider mt-10 mb-10 text-brown-6">
+      <div class="max-w-6xl mx-auto">
+        <div class="reviews-slider-prev mr-5 hidden outline-none lg:flex" tabindex="0" aria-label="Previous review">
+          <svg width="48" height="48" viewBox="0 0 25 25" style="fill: #999;" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M20 .755l-14.374 11.245 14.374 11.219-.619.781-15.381-12 15.391-12 .609.755z"/></svg>
+        </div>
+  
+        <div class="reviews-slider-contents max-w-3xl">
+          <div class="review-panel">
+            <p class="leading-snug md:leading-relaxed text-2xl mb-10">Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi esse reprehenderit, et quibusdam cumque a ratione dolor laudantium veniam hic. Tempore perferendis dolore molestias deleniti.</p>
+            <p><span class="font-bold">- Happy Customer,</span> Portland, OR</p>
+          </div>
+  
+          <div class="review-panel">
+            <p class="leading-snug md:leading-relaxed text-2xl mb-10">Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi esse reprehenderit, et quibusdam cumque a ratione dolor laudantium veniam hic. Tempore perferendis dolore molestias deleniti.</p>
+            <p><span class="font-bold">- Happy Customer 2,</span> Eugene, OR</p>
+          </div>
+  
+          <div class="review-panel">
+            <p class="leading-snug md:leading-relaxed text-2xl mb-10">Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi esse reprehenderit, et quibusdam cumque a ratione dolor laudantium veniam hic. Tempore perferendis dolore molestias deleniti.</p>
+            <p><span class="font-bold">- Happy Customer 3,</span> Junction City, OR</p>
+          </div>
+        </div>
+  
+        <div class="reviews-slider-next ml-5 hidden outline-none lg:flex" tabindex="0" aria-label="Next review">
+          <svg width="48" height="48" viewBox="0 0 25 25" style="fill: #999;" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M4 .755l14.374 11.245-14.374 11.219.619.781 15.381-12-15.391-12-.609.755z"/></svg>
+        </div>
+      </div>
+
+      <div class="review-slider-dots my-10 lg:hidden"></div>
+    </div>
+
+    {% if not user %}
+    <div class="text-center mt-20">
+      <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
+    </div>
+    {% endif %}
+  </section>
+  <!-- What Members are Saying -->
+
+  <!-- Meet Your Trusted Farmers -->
+  <section class="p-24 text-center text-brown-7">
+    <h3 class="font-bold text-3xl mb-20">Meet Your Trusted Farmers</h3>
+
+    <div class="grid grid-cols-12 gap-5 max-w-4xl mx-auto">
+      <div class="col-span-12 md:col-span-4">
+        <p class="my-10 font-bold text-red-2">!!! IMAGE HERE !!!</p>
+        
+        <h4 class="font-bold">Deck Family Farm</h4>
+        <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
+        <p class="text-base font-thin">Juntion City, OR</p>
+      </div>
+
+      <div class="col-span-12 md:col-span-4">
+        <p class="my-10 font-bold text-red-2">!!! IMAGE HERE !!!</p>
+        
+        <h4 class="font-bold">Deck Family Farm</h4>
+        <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
+        <p class="text-base font-thin">Juntion City, OR</p>
+      </div>
+
+      <div class="col-span-12 md:col-span-4">
+        <p class="my-10 font-bold text-red-2">!!! IMAGE HERE !!!</p>
+        
+        <h4 class="font-bold">Deck Family Farm</h4>
+        <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
+        <p class="text-base font-thin">Juntion City, OR</p>
+      </div>
+    </div>
+
+    {% if not user %}
+    <div class="text-center mt-20">
+      <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
+    </div>
+    {% endif %}
+  </section>
+  <!-- Meet Your Trusted Farmers -->
+
+  <!-- Why Trust Your Local Farmer? -->
+  <section class="bg-orange-extralightest p-24">
+    <h3 class="text-brown-7 text-center font-bold text-3xl mb-20">Why Trust Your Local Farmer?</h3>
+
+    <div class="grid grid-cols-12 gap-4 max-w-5xl mx-auto">
+      <div class="col-span-12 md:col-span-6">
+        <p class="mb-5">Looking for a trusted local partner who can make
+          your search for environmentally responsible and
+          healthy food choices easier? <strong>Search no more!</strong>
+          Just because you’re not the farmer doesn’t mean
+          you can’t be confident in knowing where your food
+          came from.</p>
+
+          <p class="mb-5"><strong>Most food these days has natural sounding
+            claims on their packaging, but how do you
+            actually know how your food has been grown?</strong>
+            There’s only one way, and that is to know your
+            farmer.</p>
+
+          <a href="#" class="text-red-2 font-bold text-base">READ MORE</a>
+      </div>
+
+      <div class="col-span-12 md:col-span-6">
+        <img class="w-full mx-auto" alt="Two workers holding bags of fresh veggies" src="{% static 'img/bags-of-veggies.jpg' %}">
+      </div>
+    </div>
+
+    <section class="text-center max-w-xl mx-auto mt-24">
+      <a href="{% url 'signup' %}" class="btn btn-primary mx-5">BECOME A MEMBER</a>
+      <a href="/products" class="btn btn-green mx-5">BROWSE THE STORE</a>
+    </section>
+  </section>
+  <!-- Why Trust Your Local Farmer? -->
+
+  <!-- Full Farm CSA Quick Facts -->
+  <section class="p-24">
+    <h3 class="text-brown-7 text-center font-bold text-3xl mb-20">Full Farm CSA Quick Facts</h3>
+    
+    <div class="grid grid-cols-12 gap-4 max-w-5xl mx-auto">
+      <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
+        Is Full Farm CSA a CSA? <i class="fas fa-plus ml-auto text-base p-1"></i>
+      </p>
+
+      <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
+        Can I do a trial order before committing?  <i class="fas fa-plus ml-auto text-base p-1"></i>
+      </p>
+
+      <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
+        How does it work? <i class="fas fa-plus ml-auto text-base p-1"></i>
+      </p>
+
+      <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
+        What if I go out of town? <i class="fas fa-plus ml-auto text-base p-1"></i>
+      </p>
+
+      <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
+        How much do I pay? <i class="fas fa-plus ml-auto text-base p-1"></i>
+      </p>
+
+      <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
+        Do I choose what’s in my crate? <i class="fas fa-plus ml-auto text-base p-1"></i>
+      </p>
+
+      <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
+        Do you deliver? <i class="fas fa-plus ml-auto text-base p-1"></i>
+      </p>
+
+      <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
+        Are all products from Deck Family Farm? <i class="fas fa-plus ml-auto text-base p-1"></i>
+      </p>
+
+    </div>
+
+  </section>
+  <!-- Full Farm CSA Quick Facts -->
+
+  <hr>
+
+  <!-- Your Customized Weekly Membership Crate -->
+  <section class="p-24">
+    <h3 class="text-brown-7 text-center font-bold text-3xl mb-20">Your Customized Weekly Membership Crate</h3>
+
+    <div class="grid grid-cols-12 gap-10 max-w-5xl mx-auto">
+      <!-- WEEKLY MEMBERSHIP CRATE -->
+      <div class="col-span-12 md:col-span-8 bg-orange-lighter">
+        <div class="bg-orange-light text-center p-5">
+          <p class="font-bold">WEEKLY MEMBERSHIP CRATE</p>
+          <p class="text-base opacity-60">You choose what budget works for your family!</p>
+        </div>
+
+        <ul class="list-disc list-inside p-5 px-10 h-52">
+          <li class="text-base font-thin">Customizable box of seasonal ingredients</li>
+          <li class="text-base font-thin">5% discount on all items</li>
+          <li class="text-base font-thin">Monthly member only specials (up to 30% discount)</li>
+          <li class="text-base font-thin">Access to limited availability items</li>
+          <li class="text-base font-thin">Home delivery options + access to member only pickup sites.</li>
+          <li class="text-base font-thin">Free weekly recipes using the week’s seasonal ingredients</li>
+          <li class="text-base font-thin">Access to seasonal farm dinners</li>
+        </ul>
+
+        <div class="bg-orange-light p-5">
+          <p class="font-bold">$40</p>
+        </div>
+      </div>
+      <!-- WEEKLY MEMBERSHIP CRATE -->
+      
+      <!-- ONE TIME GUEST ORDER -->
+      <div class="col-span-12 md:col-span-4 bg-green-lighter">
+        <div class="bg-green-light text-center p-5">
+          <p class="font-bold">ONE TIME <br> GUEST ORDER</p>
+        </div>
+
+        <ul class="list-disc list-inside p-5 px-10 h-52">
+          <li class="text-base font-thin">Customizable box of seasonal local ingredients</li>
+          <li class="text-base font-thin">Home delivery options OR pick up at local farmers market</li>
+          <li class="text-base font-thin">Trial our CSA without the commitment</li>
+        </ul>
+
+        <div class="bg-green-light p-5 mt-auto">
+          <p class="font-bold">$40</p>
+        </div>
+      </div>
+      <!-- ONE TIME GUEST ORDER -->
+    </div>
+  </section>
+  <!-- Your Customized Weekly Membership Crate -->
+
+
 </main>
 {% endblock main %}
+
+{% block js %}
+<script type="text/javascript" src="{% static 'js/glider/glider.min.js' %}"></script>
+<script>
+  window.addEventListener('load', function(){
+    new Glider(document.querySelector('#reviews-slider .reviews-slider-contents'), {
+      slidesToShow: 1,
+      draggable: true,
+      rewind: true,
+      arrows: {
+        prev: '#reviews-slider .reviews-slider-prev',
+        next: '#reviews-slider .reviews-slider-next'
+      },
+      dots: '#reviews-slider .review-slider-dots'
+    });
+  });
+</script>
+{% endblock %}

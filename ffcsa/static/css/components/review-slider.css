@@ -4,53 +4,45 @@
 @import url("../../js/glider/glider.min.css");
 
 .reviews-slider {
-    @apply flex flex-col justify-center;
-    }
+  @apply flex flex-col justify-center;
+}
 
-    .reviews-slider > div:first-child {
-        @apply flex self-center w-full;
-    }
+.reviews-slider > div:first-child {
+  @apply flex self-center w-full;
+}
 
-    .reviews-slider .reviews-slider-contents {
-        @apply flex text-center;
+.reviews-slider .reviews-slider-contents {
+  @apply flex text-center;
 
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-        }
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
 
-        .reviews-slider .reviews-slider-contents .glider-track {
-            display: flex;
-        }
+.reviews-slider .reviews-slider-contents .glider-track {
+  display: flex;
+}
 
-            .reviews-slider .reviews-slider-contents .review-panel {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                min-height: 325px;
-                margin-left: 10px;
-                margin-right: 10px;
-                }
+.reviews-slider .reviews-slider-contents .review-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 325px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
 
-                .reviews-slider .reviews-slider-contents .review-panel p {
-                    @apply text-3xl mb-10;
-                }
+.reviews-slider .reviews-slider-prev,
+.reviews-slider .reviews-slider-next {
+  @apply flex-col justify-center cursor-pointer;
+}
 
-                .reviews-slider .reviews-slider-contents .review-panel span {
-                    @apply text-2xl;
-        }
+.reviews-slider .reviews-slider-dots {
+  width: 14px;
+  height: 14px;
+  margin: 10px;
+}
 
-        .reviews-slider .reviews-slider-prev,
-        .reviews-slider .reviews-slider-next {
-            @apply flex-col justify-center cursor-pointer;
-        }
-
-        .reviews-slider .reviews-slider-dots {
-            width: 14px;
-            height: 14px;
-            margin: 10px;
-        }
-
-        .reviews-slider .reviews-slider-contents::-webkit-scrollbar {
-            height: 0;
-            width: 0;
+.reviews-slider .reviews-slider-contents::-webkit-scrollbar {
+  height: 0;
+  width: 0;
 }

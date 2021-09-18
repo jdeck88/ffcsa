@@ -193,28 +193,25 @@
         </div>
 
         <div id="reviews-slider" class="reviews-slider mt-10 mb-10 text-brown-6">
-            <div style="max-width: 1400px;">
+            <div class="max-w-6xl mx-auto">
                 <div class="reviews-slider-prev mr-5 hidden outline-none lg:flex" tabindex="0" aria-label="Previous review">
                     <svg width="48" height="48" viewBox="0 0 25 25" style="fill: #999;" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M20 .755l-14.374 11.245 14.374 11.219-.619.781-15.381-12 15.391-12 .609.755z"/></svg>
                 </div>
 
-                <div class="reviews-slider-contents" style="max-width: 1300px;">
+                <div class="reviews-slider-contents max-w-3xl">
                     <div class="review-panel">
-                        <p class="leading-snug md:leading-relaxed">Testimony text goes here, consectetur adipiscing elit. Nullam <br class="hidden lg:inline">mollis, erat ut laoreet lacinia, leo nibh laoreet leo, a rutrum tellus lectus <br class="hidden lg:inline">a lorem. Curabitur nec lectus a felis ultricies ultricies at ut nibh. <br class="hidden lg:inline">Praesent cursus velit nulla, nec rhoncus ipsum volutpat vitae. </p>
-
-                        <span class="font-bold">- Happy Customer, <span class="font-normal" style="padding-top: 5px;">Portland, OR</span></span>
+                        <p class="leading-snug md:leading-relaxed text-2xl mb-10">Testimony text goes here, consectetur adipiscing elit. Nullam mollis, erat ut laoreet lacinia, leo nibh laoreet leo, a rutrum tellus lectus a lorem. Curabitur nec lectus a felis ultricies ultricies at ut nibh. Praesent cursus velit nulla, nec rhoncus ipsum volutpat vitae. </p>
+                        <p><span class="font-bold">- Happy Customer,</span> Portland, OR</p>
                     </div>
 
                     <div class="review-panel">
-                        <p class="leading-snug md:leading-relaxed">Sed porta massa velit, ut vestibulum <br class="hidden lg:inline">elit pellentesque vel. Cras id varius lectus. Pellentesque lobortis sagittis <br class="hidden lg:inline">leo, a feugiat massa semper ac. Praesent in nunc semper, suscipit nisl non, convallis sem.</p>
-
-                        <span class="font-bold">- Happy Customer 2, <span class="font-normal" style="padding-top: 5px;">Eugene, OR</span></span>
+                        <p class="leading-snug md:leading-relaxed text-2xl mb-10">Sed porta massa velit, ut vestibulum elit pellentesque vel. Cras id varius lectus. Pellentesque lobortis sagittis leo, a feugiat massa semper ac. Praesent in nunc semper, suscipit nisl non, convallis sem.</p>
+                        <p><span class="font-bold">- Happy Customer 2,</span> Eugene, OR</p>
                     </div>
 
                     <div class="review-panel">
-                        <p class="leading-snug md:leading-relaxed">Testimony text goes here, consectetur adipiscing elit. Nullam <br class="hidden lg:inline">mollis, erat ut laoreet lacinia, leo nibh laoreet leo, a rutrum tellus lectus <br class="hidden lg:inline">a lorem. Curabitur nec lectus a felis ultricies ultricies at ut nibh. <br class="hidden lg:inline">Praesent cursus velit nulla, nec rhoncus ipsum volutpat vitae. </p>
-
-                        <span class="font-bold">- Happy Customer 3, <span class="font-normal" style="padding-top: 5px;">Junction City, OR</span></span>
+                        <p class="leading-snug md:leading-relaxed text-2xl mb-10">Testimony text goes here, consectetur adipiscing elit. Nullam mollis, erat ut laoreet lacinia, leo nibh laoreet leo, a rutrum tellus lectus a lorem. Curabitur nec lectus a felis ultricies ultricies at ut nibh. Praesent cursus velit nulla, nec rhoncus ipsum volutpat vitae. </p>
+                        <p><span class="font-bold">- Happy Customer 3,</span> Junction City, OR</p>
                     </div>
                 </div>
 
@@ -410,8 +407,8 @@
         </div>
 
         <section class="text-center max-w-xl mx-auto mt-24">
-            <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
-            <a href="/products" class="btn btn-green">BROWSE THE STORE</a>
+            <a href="{% url 'signup' %}" class="btn btn-primary mx-5">BECOME A MEMBER</a>
+            <a href="/products" class="btn btn-green mx-5">BROWSE THE STORE</a>
         </section>
     </section>
 {% endblock %}

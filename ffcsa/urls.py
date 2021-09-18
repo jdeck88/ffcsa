@@ -57,6 +57,7 @@ urlpatterns += [
     url("^faq/$", TemplateView.as_view(template_name='static_pages/faq.html'), name="faq"),
     url("^in-season/$", TemplateView.as_view(template_name='static_pages/in_season.html'), name="in_season"),
     url("^csa/$", TemplateView.as_view(template_name='static_pages/full_farm_csa.html'), name="full_farm_csa"),
+    url("^contact-us/$", TemplateView.as_view(template_name='static_pages/contact_us.html'), name="contact_us"),
 
     
     url("^account/orders/$", shop_ciews.order_history, name="shop_order_history"),

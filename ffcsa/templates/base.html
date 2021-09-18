@@ -39,6 +39,7 @@
       /* global css */
       :root {
         --products-banner-bg: url({% static 'img/cows-banner-2.jpg' %});
+        --products-aboutus-bg: url({% static 'img/about_us2.jpg' %});
       }
 
       .centered { 
@@ -52,7 +53,8 @@
 
     <!-- •• removed below line •• -->
     <!-- render_bundle "manifest" "css"  -->
-    {% render_bundle "style" "css" %}
+    {% render_bundle "style"  %}
+    <!-- <link rel="stylesheet" href="http://localhost:4000/style-0d04c135db612326d23a.css"> -->
 
     <!-- to add custom css inside the html pages -->
     {% block custom_css %}{% endblock %}
@@ -159,7 +161,7 @@
               {% else %}
               <!-- become a member -->
               <a href="{% url 'signup' %}{% if not 'account' in request.path %}?next={{ request.path }}{% else %}?next=/{% endif %}"
-                class="btn btn-primary mr-4">
+                class="btn-primary-sm mr-4">
                 BECOME A MEMBER</a>
               <!-- login -->
               <a href="{% url 'login' %}{% if not 'account' in request.path %}?next={{ request.path }}{% else %}?next=/{% endif %}"
@@ -254,7 +256,7 @@
       </div>
 
       <!-- Footer -->
-      {% if 'accounts' not in request.path %}
+      {% if 'accounts' not in request.path and 'contact-us' not in request.path%}
       {% include 'partials/footer.html' %}
       {% endif %}
 

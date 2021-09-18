@@ -40,6 +40,11 @@ a.btn {
   @apply shadow rounded font-bold text-lg py-3 px-6 transition duration-300 ease-in-out;
 }
 
+.btn-primary-sm {
+  @apply text-white bg-orange hover:bg-orange-light focus:outline-none;
+  @apply shadow rounded font-bold text-base py-2 px-4 transition duration-300 ease-in-out;
+}
+
 .btn-green {
   @apply text-white bg-green hover:bg-green-light focus:outline-none;
   @apply shadow rounded font-bold text-lg py-3 px-6 transition duration-300 ease-in-out;
