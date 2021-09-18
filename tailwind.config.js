@@ -1,4 +1,7 @@
 module.exports = {
+  purge: [
+    './ffcsa/templates/**/*.html'
+  ],
   theme: {
     extend: {
       colors: {
