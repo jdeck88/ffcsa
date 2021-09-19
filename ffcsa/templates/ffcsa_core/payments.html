@@ -1,11 +1,11 @@
 {% extends "shop/base.html" %}
 {% load mezzanine_tags shop_tags static i18n %}
 
-{% block extra_css %}
+{% block css %}
     <link rel="stylesheet" href="{% static "css/ffcsa_core/payments.css" %}">
 {% endblock %}
 
-{% block extra_js %}
+{% block js %}
     <script src="{% static "js/lodash.js" %}"></script>
     <script src="{% static "js/ffcsa_core/payments.js" %}"></script>
 {% endblock %}

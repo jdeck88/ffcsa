@@ -1,0 +1,23 @@
+{% extends "pages/page.html" %}
+
+{% load mezzanine_tags shop_tags i18n static %}
+{% block body_id %}Internship{% endblock %}
+
+
+{% block main %}
+<main id="internship">
+  <!-- Call block super -->
+  {{ block.super }}
+
+  <section class="grid grid-cols-12 gap-10 max-w-screen-lg mx-auto mt-20">
+    <div class="col-span-12 md:col-span-6 p-3 pt-10">
+      <h2 class="text-7xl font-bold text-primary mb-3">Internship</h2>
+      <p class="text-brown-7 font-bold my-5">Join our best in class training</p>
+      <p class="text-base text-gray-600">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia amet sint obcaecati recusandae ipsam? Eveniet illum inventore amet, consequuntur vero quod eligendi quasi ullam incidunt voluptate sapiente iure doloremque dolores.</p>
+    </div>
+
+    <img class="col-span-12 md:col-span-6 block text-right" src="{% static 'img/internship.png' %}" alt="internship">
+  </section>
+
+</main>
+{% endblock main %}

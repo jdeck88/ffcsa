@@ -52,14 +52,6 @@ urlpatterns += [
     # api endpoint
     url("^api/", include(router.urls)),
 
-
-    # static pages
-    url("^faq/$", TemplateView.as_view(template_name='static_pages/faq.html'), name="faq"),
-    url("^in-season/$", TemplateView.as_view(template_name='static_pages/in_season.html'), name="in_season"),
-    url("^csa/$", TemplateView.as_view(template_name='static_pages/full_farm_csa.html'), name="full_farm_csa"),
-    url("^contact-us/$", TemplateView.as_view(template_name='static_pages/contact_us.html'), name="contact_us"),
-
-    
     url("^account/orders/$", shop_ciews.order_history, name="shop_order_history"),
     url("^account/payments/$", ffcsa_core.payments, name="payments"),
     url("^account/payments/subscribe$", ffcsa_core.payments_subscribe, name="payments_subscribe"),

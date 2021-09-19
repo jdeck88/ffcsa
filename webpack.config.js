@@ -20,15 +20,13 @@ config = {
   // bail: DEBUG ? false : true,
   devtool: 'source-map',
   entry: {
-    // main: './main.js',
-    style: './ffcsa/static/css/style-source.css',
+    main: './ffcsa/static/css/style-source.css',
   },
-  // context: path.join(CWD, "app", "static", "app"),
   context: path.join(__dirname),
   output: {
     path: path.resolve('./static/ffcsa/'),
     publicPath: DEBUG
-      ? 'http://' + HOST + ':4000/'
+      ? `http://${HOST}:4000/`
       : (process.env.STATIC_URL || '/static/') + 'ffcsa/',
     filename: DEBUG ? '[name].js' : '[name]-[contenthash].js',
   },
@@ -36,7 +34,6 @@ config = {
     rules: [
       {
         test: /\.css$/,
-        // use: ['style-loader', 'css-loader', 'postcss-loader'],
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
       },
       {
@@ -85,8 +82,6 @@ config = {
     historyApiFallback: true,
     hot: true,
     stats: "minimal",
-    // host: "localhost",
-    host: "0.0.0.0",
     port: 4000,
   },
   performance: {

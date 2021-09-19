@@ -31,88 +31,37 @@
       <link rel="alternate" type="application/atom+xml" title="Atom" href="{% url 'blog_post_feed' 'atom' %}">
     {% endifinstalled %}
 
+    <!-- to add custom css inside the html pages -->
     {% compress css %}
-      {% block extra_css %}{% endblock %}
+      <!-- Global CSS -->
+      <style>
+        /* global css */
+        :root {
+          --products-banner-bg: url({% static 'img/cows-banner-2.jpg' %});
+          --products-aboutus-bg: url({% static 'img/about_us.jpg' %});
+        }
+
+        .centered { 
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          margin-top: '-[1/2(element-height)]';
+          margin-left: '-[1/2(element-width)]';
+        }
+      </style>
+
+      <!-- Custom CSS per page -->
+      {% block css %}{% endblock %}
     {% endcompress %}
-
-    <style>
-      /* global css */
-      :root {
-        --products-banner-bg: url({% static 'img/cows-banner-2.jpg' %});
-        --products-aboutus-bg: url({% static 'img/about_us.jpg' %});
-      }
-
-      .centered { 
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        margin-top: '-[1/2(element-height)]';
-        margin-left: '-[1/2(element-width)]';
-      }
-    </style>
 
     <!-- •• removed below line •• -->
     <!-- render_bundle "manifest" "css"  -->
-    {% render_bundle "style"  %}
+    {% render_bundle "main"  %}
 
-    <!-- to add custom css inside the html pages -->
-    {% block custom_css %}{% endblock %}
-
-    {% compress js %}
-      <script src="{% static 'mezzanine/js/'|add:settings.JQUERY_FILENAME %}"></script>
-      {% block extra_js %}{% endblock %}
-    {% endcompress %}
-    
-    <!-- Facebook Pixel Code -->
-    <script>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-        n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s)}(window, document,'script',
-        'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '205901347148225');
-      fbq('track', 'PageView');
-    </script>
     
     <noscript>
       <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=205901347148225&ev=PageView&noscript=1"/>
     </noscript>
-    <!-- End Facebook Pixel Code -->
-
-    <!--[if lt IE 9]>
-    <script src="{% static "js/html5shiv.js" %}"></script>
-    <script src="{% static "js/respond.min.js" %}"></script>
-    <![endif]-->
-
-    {% compress js %}
-        <script>
-            /* Accessibility. Emulate click event in place of enter for focusable divs. This allows 'onclick' to handle enter presses. */
-            window._previous_tab_element = null;
-
-            document.addEventListener('keyup', (event) => {
-                if (event.keyCode === 13 && event.target.tagName.toLowerCase() === 'div') {
-                    event.preventDefault();
-                    event.target.click();
-
-                // Make sure outline is shown on tab
-                } else if (event.keyCode === 9) {
-                    if (window._previous_tab_element != null) {
-                        window._previous_tab_element.classList.remove('tab-navigation-outline');
-                    }
-
-                    event.target.classList.remove('outline-none');
-                    event.target.classList.add('tab-navigation-outline');
-                    window._previous_tab_element = event.target;
-
-                } else {
-                    return false;
-                }
-            });
-        </script>
-    {% endcompress %}
 
     {% block extra_head %}{% endblock %}
   </head>
@@ -123,12 +72,11 @@
     <section id="main-spinner" class="centered">
       <img src="{% static 'gifs/spinner.gif' %}" alt="spinner">
     </section>
-
     
     <!-- main content -->
     <div id="wrapper" class="hidden">
       <header">
-        <nav id="navVue" class="px-4 py-5 lg:px-10 lg:py-3 bg-white select-none h-auto" v-cloak>
+        <nav id="navVue" class="px-4 py-5 lg:px-10 lg:py-3 bg-white select-none h-auto shadow" v-cloak>
           <div class="flex items-center">
             <a href="/" id="header-home-icon" class="inline-block no-select-background w-3/5 lg:w-2/5" role="button" tabindex="0" aria-label="Home">
               <img class="h-12" src="/static/img/dff-logo-long.png" draggable="false" aria-hidden="true">
@@ -262,18 +210,39 @@
     </div>
     
 
+    
     {% compress js %}
-      <script>
-        var static_url = "{% get_static_prefix %}"
-        var media_url = "{% get_media_prefix %}"
-      </script>
-    {% endcompress %}
+    <!-- Global variables -->
+    <script>
+      var static_url = "{% get_static_prefix %}";
+      var media_url = "{% get_media_prefix %}";
+    </script>
 
-    {% render_bundle "style" "js" %}
+    
+    <!-- Facebook Pixel Code -->
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '205901347148225');
+      fbq('track', 'PageView');
+    </script>
+    <!-- End Facebook Pixel Code -->
 
+    <!-- Load the JS from bundle -->
+    {% render_bundle "main" "js" %}
+
+    <!-- Load scripts -->
+    <script src="{% static 'mezzanine/js/'|add:settings.JQUERY_FILENAME %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
+    
+    <!-- Main Vue Config -->
     <script>
       // Axios config
       axios.defaults.headers = {'X-CSRFToken': '{{csrf_token}}'}
@@ -431,7 +400,10 @@
         }
       })
     </script>
+    <!-- Main Vue Config -->
 
+    <!-- Custom JS per page -->
     {% block js %}{% endblock %}
+    {% endcompress %}
   </body>
 </html>

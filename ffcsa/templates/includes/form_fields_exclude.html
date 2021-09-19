@@ -2,8 +2,8 @@
 {% load mezzanine_tags ffcsa_core_tags %}
 
 {% if include_media %}
-    {% block extra_js %}{{ form_for_fields.media.js }}{% endblock %}
-    {% block extra_css %}{{ form_for_fields.media.css }}{% endblock %}
+    {% block js %}{{ form_for_fields.media.js }}{% endblock %}
+    {% block css %}{{ form_for_fields.media.css }}{% endblock %}
 {% endif %}
 
 {% nevercache %}

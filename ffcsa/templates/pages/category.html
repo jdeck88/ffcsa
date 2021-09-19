@@ -3,12 +3,12 @@
 {% load mezzanine_tags shop_tags i18n ffcsa_core_tags static %}
 {% block body_id %}category{% endblock %}
 
-{% block extra_js %}
+{% block js %}
     {{ block.super }}
     <script src="{% static "shop/js/category_product_variations.js" %}"></script>
 {% endblock %}
 
-{% block extra_css %}
+{% block css %}
     <style>
         .product-quick-add-form .incrementor {
             justify-content: center;
