@@ -11,10 +11,11 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 120vh;
     z-index: -100;
 
-    background-image: var(--products-aboutus-bg);
+    /* background-image: var(--products-aboutus-bg); */
+    background: linear-gradient( rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) ), var(--products-aboutus-bg);
     background-color: #cccccc; /* Used if the image is unavailable */
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* Do not repeat the image */
@@ -39,13 +40,13 @@
   <!-- Call block super -->
   {{ block.super }}
 
-  <section  class="bg-orange-extralightests max-w-3xl mx-auto mt-16 p-5">
-    <h3 class="text-3xl font-bold mb-10 text-white text-center">Get in touch</h3>
+  <section class="bg-orange-extralightests max-w-3xl mx-auto mt-16 p-5 mb-20">
+    <h3 class="text-4xl font-bold mb-16 text-white text-center">Get in touch</h3>
 
     <div class="grid grid-cols-12 gap-10 text-center text-sm items-center">
       <a 
         href="https://www.google.com/maps/place/25362+High+Pass+Rd,+Junction+City,+OR+97448,+USA/@44.2196354,-123.3481561,17z/data=!3m1!4b1!4m5!3m4!1s0x54c1007cd9f7eb3f:0x6094b5f30ebbb486!8m2!3d44.2196354!4d-123.3459621" target="_blank"
-        class="bg-white bg-opacity-70 col-span-12 md:col-span-4 p-3 hover:bg-orange-lightest focus:outline-none transition duration-300 ease-in-out rounded shadow h-full">
+        class="bg-white bg-opacity-80 col-span-12 md:col-span-4 p-3 hover:bg-orange-lightest focus:outline-none transition duration-300 ease-in-out rounded shadow h-full">
         <i class="text-gray-700 fas fa-map-marker text-2xl block mb-3"></i>
         <p>
           25362 High Pass Rd
@@ -55,21 +56,21 @@
 
       <a 
         href="tel:+1541-998-4697"
-        class="bg-white bg-opacity-70 col-span-12 md:col-span-4 p-3 hover:bg-orange-lightest focus:outline-none transition duration-300 ease-in-out rounded shadow h-full">
+        class="bg-white bg-opacity-80 col-span-12 md:col-span-4 p-3 hover:bg-orange-lightest focus:outline-none transition duration-300 ease-in-out rounded shadow h-full">
         <i class="text-gray-700 fas fa-phone-alt text-2xl block mb-3"></i>
         <p>541-998-4697</p>
       </a>
       
       <a 
         href="mailto:info@deckfamilyfarm.com"
-        class="bg-white bg-opacity-70 col-span-12 md:col-span-4 p-3 hover:bg-orange-lightest focus:outline-none transition duration-300 ease-in-out rounded shadow h-full">
+        class="bg-white bg-opacity-80 col-span-12 md:col-span-4 p-3 hover:bg-orange-lightest focus:outline-none transition duration-300 ease-in-out rounded shadow h-full">
         <i class="text-gray-700 fas fa-envelope text-2xl block mb-3"></i>
         <p>info@deckfamilyfarm.com</p>
       </a>
     </div>
 
 
-    <div class="bg-white bg-opacity-70 rounded shadow mt-5 p-5">
+    <div class="bg-white bg-opacity-80 rounded shadow mt-5 p-5">
       <form id="contactUsFrom" class="grid grid-cols-12 gap-4">
       <!-- <form class="shadow"> -->
         <p class="text-base font-bold text-gray-700 col-span-12">Send us a message</p>

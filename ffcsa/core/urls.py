@@ -21,7 +21,7 @@ _slash = "/" if settings.APPEND_SLASH else ""
 urlpatterns = i18n_patterns(
     url("^$", views.home, name="home"),
     url("^shop%s$" % _slash, views.shop_home, name="shop_home"),
-    url("^%s%s$" % (SIGNUP_URL.strip("/"), _slash), views.signup, name="mezzanine_signup"),
+    url("^%s%s$" % (SIGNUP_URL.strip("/"), _slash), views.signup, name="mezzanine_signup", kwargs={"extra_context": {'DROPSITE_CHOICES': dropsites.DROPSITE_CHOICES}}),
     url("^donate%s$" % _slash, views.donate, name="donate"),
     # TODO remove these for one-time orders
     url("^checkout%s$" % _slash, page_not_found, name="shop_checkout"),

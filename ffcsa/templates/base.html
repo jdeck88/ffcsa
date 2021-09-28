@@ -39,6 +39,9 @@
         :root {
           --products-banner-bg: url({% static 'img/cows-banner-2.jpg' %});
           --products-aboutus-bg: url({% static 'img/about_us.jpg' %});
+          --hayden: url({% static 'img/hayden.jpg' %});
+          --preston: url({% static 'img/preston.jpg' %});
+          --group: url({% static 'img/group.jpg' %});
         }
 
         .centered { 
@@ -203,7 +206,7 @@
       </div>
 
       <!-- Footer -->
-      {% if 'accounts' not in request.path and 'contact-us' not in request.path%}
+      {% if 'accounts' not in request.path %}
       {% include 'partials/footer.html' %}
       {% endif %}
 
@@ -246,6 +249,29 @@
     <script>
       // Axios config
       axios.defaults.headers = {'X-CSRFToken': '{{csrf_token}}'}
+
+      // FF Custom Button (button with spinner)
+      const FFButton = Vue.component('ff-button', {
+        delimiters: ['{', '}'],
+        props: {
+          text: String,
+          cls: String,
+          loading: Boolean
+        },
+        template: `
+          <template v-if="loading == true">
+            <button :class="cls.replace('btn-primary', 'btn-white w-32')" disabled>
+              <img src="{% static 'gifs/spinner.gif' %}" alt="spinner" class="h-8 m-auto">
+            </button>
+          </template>
+          <template v-else>
+            <button :class="cls" type="button">{text}</button>
+          </template>
+        `,
+        data: function() {
+          return {}
+        }
+      })
       
       // Cart vue handels everything related to cart
       const NavVue = new Vue({
