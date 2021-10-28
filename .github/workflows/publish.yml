@@ -20,4 +20,4 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Collect Static
-      run: docker exec -it ffcsa_web python manage.py collectstatic --no-input
+      run: docker exec ffcsa_web python manage.py collectstatic --no-input
