@@ -8,6 +8,9 @@ jobs:
   build:
 
     runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: /home/ffcsa/app/ffcsa
     strategy:
       max-parallel: 4
       matrix:
