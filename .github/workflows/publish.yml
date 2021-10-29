@@ -19,6 +19,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        token: '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'
     - run: git pull origin feature/api_with_vue
 
     # - name: Set up Python ${{ matrix.python-version }}
