@@ -19,9 +19,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      with:
-        script: |
-          git pull origin feature/api_with_vue
+    - run: git pull origin feature/api_with_vue
 
     # - name: Set up Python ${{ matrix.python-version }}
     #   uses: actions/setup-python@v2
