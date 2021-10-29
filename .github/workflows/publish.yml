@@ -25,7 +25,7 @@ jobs:
 
     # Build frontend
     - name: Build frontend
-      run: sudo npm run prod
+      run: npm run prod
 
     # Collect static
     - name: Collect Static
