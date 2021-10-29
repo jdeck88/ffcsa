@@ -11,6 +11,7 @@ jobs:
     defaults:
       run:
         working-directory: /home/ffcsa/app/ffcsa
+        
     strategy:
       max-parallel: 4
       matrix:
@@ -18,14 +19,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-
-    # Pull latest changes
-    - name: Build frontend
       run: git pull origin feature/api_with_vue
+
+    # - name: Set up Python ${{ matrix.python-version }}
+    #   uses: actions/setup-python@v2
+    #   with:
+    #     python-version: ${{ matrix.python-version }}
 
     # Build frontend
     - name: Build frontend
