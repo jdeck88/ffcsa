@@ -23,6 +23,8 @@ jobs:
     # Build frontend
     - name: Build frontend
       run: echo "Building frontend!"
+      run: ls
+
     
     # Collect static
     - name: Collect Static
