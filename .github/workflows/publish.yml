@@ -19,5 +19,11 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
+
+    # Build frontend
+    - name: Build frontend
+      run: echo "Building frontend!"
+    
+    # Collect static
     - name: Collect Static
       run: docker exec ffcsa_web python manage.py collectstatic --no-input
