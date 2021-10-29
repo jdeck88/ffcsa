@@ -23,6 +23,10 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
+    # Pull latest changes
+    - name: Build frontend
+      run: git pull origin feature/api_with_vue
+
     # Build frontend
     - name: Build frontend
       run: npm run prod
