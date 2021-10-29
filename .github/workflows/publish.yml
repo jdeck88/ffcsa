@@ -25,9 +25,8 @@ jobs:
 
     # Build frontend
     - name: Build frontend
-      run: pwd
+      run: sudo npm run prod
 
-    
     # Collect static
     - name: Collect Static
       run: docker exec ffcsa_web python manage.py collectstatic --no-input
