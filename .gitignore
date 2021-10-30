@@ -12,6 +12,9 @@ tmp
 credentials.json
 token.pickle
 
+webpack-stats-prod.json
+webpack-stats-dev.json
+
 .vscode
 .DS_Store
 # Byte-compiled / optimized / DLL files
