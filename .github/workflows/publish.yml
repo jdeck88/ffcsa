@@ -19,13 +19,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      with:
-        repository:  ewingrj/ffcsa
-        # token: ${{ secrets.FFCSA }}
-        token: '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'
     
     # Pull changes
-    - run: git pull https://muhamedyoussef:${{secrets.FFCSA}}@github.com/ewingrj/ffcsa.git feature/api_with_vue
+    - run: git pull https://muhamedyoussef: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@github.com/ewingrj/ffcsa.git feature/api_with_vue
 
     # Build frontend
     - name: Build frontend
