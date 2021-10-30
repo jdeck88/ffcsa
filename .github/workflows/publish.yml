@@ -25,7 +25,8 @@ jobs:
         # token: ${{ secrets.FFCSA }}
         token: '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'
     
-    - run: git pull git@github.com:muhamedyoussef/ffcsa.git origin feature/api_with_vue
+    # - run: git pull git@github.com:muhamedyoussef/ffcsa.git origin feature/api_with_vue
+    - run: git pull origin https://muhamedyoussef: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@github.com/ewingrj/ffcsa.git feature/api_with_vue
     # - run: git pull origin feature/api_with_vue
 
     # - name: Set up Python ${{ matrix.python-version }}
