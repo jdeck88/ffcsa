@@ -72,6 +72,9 @@ class Product(BaseProduct, Priced, RichText, ContentTyped, AdminThumbMixin):
     rating = RatingField(verbose_name=_("Rating"))
     seasons = models.ManyToManyField(ProductSeason, blank=True, null=True, related_name='seasons')
 
+    unit = models.CharField(max_length=200, blank=True, null=True)
+    weight = models.CharField(max_length=200, blank=True, null=True)
+
     order_on_invoice = models.FloatField(default=0, null=True, blank=True,
                                          help_text="Order this product will be printed on invoices. If set, this will override the product's category order_on_invoice setting. This is a float number for more fine grained control. (ex. '2.1' will be sorted the same as if the product's parent category order_on_invoice was 2 & the product's category order_on_invoice was 1).")
     is_dairy = models.BooleanField(default=False,

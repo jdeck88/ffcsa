@@ -1,49 +1,95 @@
 import re
-
+import time
+import pandas as pd
 from ffcsa.shop.models import Product
 
 
 
+# # create backup of products names
+# df = pd.DataFrame(Product.objects.all().values_list('id', 'title'), columns=['id', 'name'])
+# df.to_csv(f'products-{int(time.time())}.csv', index=None)
 
+
+
+# rename product `#, Potatoes, Sierra Gold, #2` cuz it match on both sides
+try:
+    product = Product.objects.get(title='#, Potatoes, Sierra Gold, #2')
+    product.title = product.title.replace('#, ', '')
+    product.save()
+except:
+    pass
+
+try:
+    product = Product.objects.get(title='ea, Raw Fresh Sweet Cream (1 pt)')
+    product.title = product.title.replace('ea, ', '')
+    product.save()
+except:
+    pass
+
+
+
+
+def clean_unit(str):
+    return str.replace(',', '').replace('(', '').replace(')', '').strip()
+
+
+
+product_list = []
+
+# parse product weight
 for product in Product.objects.all():
-    # print(product.title)
-
-    unit_expression = re.compile(r'^\w{1,2},')
-    if re.match(unit_expression, product.title):
-        unit = re.search(unit_expression, product.title)[0]
-        product.title = product.title.replace(unit, '').strip()
-
-        # print(product.title)
     
-
-    # print(product.title)
+    # * Weight
+    weight_expression = re.compile(r'\(.*(#|oz|gal|qt|lbs|lb|pieces|count|bag.*)\)|\(.*\)#|(-|,)\s\d\"|\s\d/\d#\s$|,\s#\d$|\s\d*oz$|(-\s|\.|,\s*\d).*(lb|qt|#$)|^\d+(/\d|\.\d)*\s*(#|bu|qt|oz|pk|gal),*|^#,\s')
+    weight_search = weight_expression.search(product.title)
     
-    weight_expression = re.compile(r'\(.*\)$')
-    if re.match(weight_expression, product.title):
-        print(product.title)
-        weight = re.search(weight_expression, product.title)[0]
-        product.title = product.title.replace(weight, '').strip()
-
-
-    # if '(' in product.title:
-    #     print(product.title)
-
-
-
-
-
-
-
-
-    # print(product.title)
-
-    # # parse product unit
-    # if ',' in product.title:
-    #     splited_title = product.title.split(',')
-    #     unit = splited_title[0]
-    #     product.title = ''.join(splited_title[1:])
-    #     # print(unit, product.title)
+    weight = weight_search.group() if weight_search else ''
     
-    # if '(' in product.title:
-    #     splited_title = product.title.split('(')
-    #     # print(splited_title)
+    
+    # remove the weight from the title
+    new_title = product.title.replace(weight, '').strip()
+
+    # * Unit
+    unit_expression = re.compile(r'^.*(ea|bu|pt|bag|doz|pk|flat|box|qt|oz),|\(.*pt\)')
+    unit_search = unit_expression.search(new_title)
+
+    unit = unit_search.group() if unit_search else ''
+
+    # remove unit from the title
+    new_title = new_title.replace(unit, '').strip()
+
+    # Clean unit and weight
+    weight = clean_unit(weight)
+    unit = clean_unit(unit)
+
+
+    # Assing ea to lb
+    if '#' in weight or 'lb' in weight:
+        unit = 'ea'
+
+
+    # final cleaning for weight
+    weight = re.sub('^-', '', weight).strip()
+
+
+    # only # with no number
+    if weight == '#':
+        unit, weight = 'lb', ''
+
+
+    product.title = new_title
+    product.weight = weight
+    product.unit = unit
+    product.save()
+
+
+
+    # product_list.append([product.id, product.title, weight, unit, new_title])
+
+
+
+# # create backup of products names
+# df = pd.DataFrame(product_list, columns=['id', 'old_title', 'weight', 'unit', 'new_title'])
+# df.to_csv(f'products-new.csv', index=None)
+
+

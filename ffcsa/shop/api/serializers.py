@@ -45,8 +45,8 @@ class ProductDataSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Product
-        fields = ['id', 'slug', 'title', 'image', 'price', 'is_dairy', 'categories', 'url', 
-                 'vendor', 'variations', 'content', 'seasons', 'has_in_stock_variations']
+        fields = ('id', 'slug', 'title', 'image', 'price', 'is_dairy', 'categories', 'url', 'unit', 'weight',
+                 'vendor', 'variations', 'content', 'seasons', 'has_in_stock_variations')
 
     def get_seasons(self, obj):
         # return list of season names for this Product

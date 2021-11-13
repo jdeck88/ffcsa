@@ -48,12 +48,13 @@
 
   <!-- Products list -->
   <section class="min-h-screen">
+    <button class="p-3 bg-red-600" @click="store.state.count ++">+</button>
     <div v-if="products.length > 0" class="container my-12 mx-auto">
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 min-h-screen">
         <div class="text-center mb-4" v-for="product in products">
           <!-- product image -->
           <a :href="'#' + product.slug" @click="showProduct(product)">
-            <div :style="'background-image: url(/media/' + product.image + ');background-position: center; background-repeat: no-repeat; background-size: cover;width: 100%; height: 15rem;'"></div>
+            <div :style="'background-image: url(/media/' + product.image + ');background-position: center; background-repeat: no-repeat; background-size: cover;width: 100%; height: 20rem;'"></div>
           </a>
   
           <h3 class="text-brown-7 text-xl font-bold truncate">(( product.title ))</h3>
@@ -61,14 +62,14 @@
             <template v-if="product.has_in_stock_variations">
               <!-- at least one variation in stock -->
               <template v-if="product.variations.length == 1">
-                <p class="text-brown-7 text-xl">$(( product.price ))/unit</p>
+                <p class="text-brown-7 text-xl">$(( product.price ))<span v-if="product.unit">/(( product.unit ))</span></p>
                 <button class="btn-add-to-card" @click.prevent="NavVue.addToCart(product.variations[0])">ADD TO CART</button>
               </template>
               
               <template v-else>
                 <p>
                   <span class="italic text-gray-500">From </span>
-                  <span class="text-brown-7 text-xl">$(( getProductStartFrom(product) ))/unit</span>
+                  <span class="text-brown-7 text-xl">$(( getProductStartFrom(product) ))<span v-if="product.unit">/(( product.unit ))</span></span>
                 </p>
                 <button class="btn-add-to-card" @click.prevent="showProduct(product)">CHOOSE VARIATION</button>
               </template>
@@ -80,7 +81,8 @@
               </button>
             </template>
           </div>
-          <a :href="(( product.url ))" class="text-green-light">Quantity/Weight Details Here</a>
+          <!-- <a :href="(( product.url ))" class="text-green-light">Quantity/Weight Details Here</a> -->
+          <p class="text-green-light">(( product.weight ))</p>
           <p class="text-brown-7 text-sm italic font-thin">(( product.vendor ))</p>
         </div>
       </div>
