@@ -48,7 +48,6 @@
 
   <!-- Products list -->
   <section class="min-h-screen">
-    <button class="p-3 bg-red-600" @click="store.state.count ++">+</button>
     <div v-if="products.length > 0" class="container my-12 mx-auto">
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 min-h-screen">
         <div class="text-center mb-4" v-for="product in products">
@@ -63,7 +62,7 @@
               <!-- at least one variation in stock -->
               <template v-if="product.variations.length == 1">
                 <p class="text-brown-7 text-xl">$(( product.price ))<span v-if="product.unit">/(( product.unit ))</span></p>
-                <button class="btn-add-to-card" @click.prevent="NavVue.addToCart(product.variations[0])">ADD TO CART</button>
+                <button class="btn-add-to-card" @click.prevent="App.addToCart(product.variations[0])">ADD TO CART</button>
               </template>
               
               <template v-else>

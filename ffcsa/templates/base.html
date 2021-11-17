@@ -31,6 +31,11 @@
       <link rel="alternate" type="application/atom+xml" title="Atom" href="{% url 'blog_post_feed' 'atom' %}">
     {% endifinstalled %}
 
+    <!-- vuetify -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+
     <!-- to add custom css inside the html pages -->
     {% compress css %}
       <!-- Global CSS -->
@@ -51,6 +56,38 @@
           margin-top: '-[1/2(element-height)]';
           margin-left: '-[1/2(element-width)]';
         }
+
+        .v-navigation-drawer {
+          z-index: 999999 !important;
+        }
+
+        .v-application--wrap {
+          min-height: auto !important;
+        }
+
+        .v-overlay__scrim {
+          height: 100vh !important;
+        }
+
+        .v-application {
+          font-family: 'Helvetica', Arial, "Lucida Grande", sans-serif;
+        }
+
+
+        .menu-triangle {
+          /* margin-top: 40px; */
+          contain: initial;
+          overflow: visible;
+        }
+        .menu-triangle::before {
+          position: absolute;
+          content: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.9094 10.2281L12.8531 10.1625L8.60313 5.27188C8.45938 5.10625 8.24375 5.00313 8.00313 5.00313C7.7625 5.00313 7.54688 5.10938 7.40313 5.27188L3.15625 10.1531L3.08438 10.2344C3.03125 10.3125 3 10.4062 3 10.5062C3 10.7781 3.23125 11 3.51875 11L12.4813 11C12.7688 11 13 10.7781 13 10.5062C13 10.4031 12.9656 10.3063 12.9094 10.2281Z' fill='white'/%3E%3C/svg%3E%0A");
+          top: -1rem;
+          left: 10%;
+          width: 10px; 
+          height: 13px; 
+        }
+
       </style>
 
       <!-- Custom CSS per page -->
@@ -71,116 +108,204 @@
 
   <body id="{% block body_id %}body{% endblock %}" class="{% block body_class %}{% endblock %}">
 
-    <!-- main spinner -->
-    <section id="main-spinner" class="centered">
-      <img src="{% static 'gifs/spinner.gif' %}" alt="spinner">
-    </section>
+    <div id="app" v-cloak>
+      <v-app>
+  
+        <!-- Side Cart -->
+        <v-navigation-drawer  v-model="drawer" width=456 right fixed temporary>
+          <!-- header and close button -->
+          <div class="flex mb-2 py-4 border-b-2 border-black border-opacity-10">
+            <p class="font-bold text-black mx-auto pt-2">YOUR CART ( ((store.state.cart.items.length)) )</p>
+            
+            <!-- Close button -->
+            <v-btn class="ma-2" absolute top right icon plain @click="drawer = !drawer" class="ml-auto mt-1 mr-5" >
+              <v-icon large color="gray lighten-2">mdi-close</v-icon>
+            </v-btn>
+          </div>
+          <!-- header and close button -->
+
+          <!-- content -->
+          <section class="cart-items pl-3 pr-0 mt-5 mt-10 overflow-y-scroll" style="min-width: 25rem; max-height: 70vh;">
+            <template v-if="store.state.cart.items.length > 0" v-for="item in store.state.cart.items">
+              <div class="grid grid-cols-3 gap-4 border-b-2 border-black border-opacity-10 mb-4 pb-4">
+                <!-- item image -->
+                <div class="col-span-1">
+                  <div class="block h-auto w-full mb-2" :style="'background-image: url(/media/' + item.image + ');background-position: center; background-repeat: no-repeat; background-size: cover;width: 100%;height: 6rem;'"></div>
+                </div>
+                <!-- item image -->
+      
+                <!-- item control -->
+                <div class="col-span-2 pr-2">
+                  <div class="grid grid-cols-12">
+                    <h4 class="col-span-11 font-bold capitalize">((item.description))</h4>
+                    <img @click.prevent="removeCartItem(item)" src="{% static 'img/times.svg' %}" alt="remove-item" class="opacity-25 hover:opacity-75 cursor-pointer w-4 ml-auto">
+                  </div>
+      
+                  <div class="flex mt-10">
+                    <p>$((item.unit_price))</p>
+      
+                    <div class="ml-auto">
+                      <div class="flex">
+                        <!-- <button @click="decreaseItemQuantity(item, $event)" :class="[(item.quantity == 0 ? 'btn-disabled' : ''), 'border rounded-sm font-bold px-3 py-1']">-</button> -->
+                        <v-btn small fab elevation="2" @click="decreaseItemQuantity(item, $event)">
+                          <v-icon color="accent">mdi-minus</v-icon>
+                        </v-btn>
+                        
+                        <p class="px-4 pt-1 select-none">((item.quantity))</p>
+
+                        <v-btn small fab elevation="2" @click="increaseItemQuantity(item, $event)" :disabled="item.all_quantity_in_cart">
+                          <v-icon color="accent">mdi-plus</v-icon>
+                        </v-btn>
+
+                        <!-- <button @click="increaseItemQuantity(item, $event)" :class="[(item.all_quantity_in_cart ? 'btn-disabled' : ''), 'border rounded-sm font-bold px-3 py-1']">+</button> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- item control -->
+              </div>
+            </template>
+
+            <template v-else>
+              <p class="opacity-50 text-center mt-10 font-thin">No items in cart</p>
+            </template>
+
+          </section>
+          <!-- content -->
+
+          <!-- total and checkout -->
+          <section class="bg-white absolute px-3 pt-4 mt-10 inset-x-0 bottom-5 border border-top">
+            <div class="flex text-black font-bold">
+              <p class="mb-2">SUBTOTAL</p>
+              <p class="mb-2 ml-auto">$((store.state.cart.total_price))</p>
+            </div>
+            <div class="flex text-black font-bold">
+              <p class="mb-2">DELIVERY FEE</p>
+              <p class="mb-2 ml-auto">$((store.state.cart.delivery_fee))</p>
+            </div>
+            <div class="flex text-black font-bold mb-4">
+              <p>REMAINING BUDGET</p>
+              <p class="ml-auto">$((store.state.cart.remaining_budget))</p>
+            </div>
+            
+            <v-btn large block color="primary" href="/cart" :disabled="!store.state.cart.items.length">CONTINUE TO CHECKOUT</v-btn>
+          </section>
+          <!-- total and checkout -->
+
+        </v-navigation-drawer>
+        
+        <!-- Navbar -->
+        <v-app-bar absolute app>
+          
+          <!-- Logo -->
+          <v-toolbar-title class="mr-5">
+            <a href="/" ><img class="h-12" src="/static/img/dff-logo-long.png" alt="logo"></a>
+          </v-toolbar-title>
+
+          <v-btn plain class="text-capitalize font-weight-bold" href="/">Home</v-btn>
+          <!-- <v-btn plain class="text-capitalize font-weight-bold" href="/products/">Our Farm</v-btn> -->
+
+          <v-menu offset-y open-on-hover transition="slide-y-transition" bottom close-delay=120 nudge-bottom=5 content-class="menu-triangle" >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn plain v-bind="attrs" v-on="on" text href="/products/">
+                <span class="mx-2 text-capitalize font-weight-bold">Our Farm</span>
+              </v-btn>
+            </template>
+
+            <v-card>
+              
+
+              <v-divider></v-divider>
+
+              <v-row no-gutters>
+                <v-col>
+                  <v-list class="rounded">
+                    <v-list-item-group color="primary">
+                      <v-list-item>
+                        <v-list-item-title>PASTURE RAISED MEATS</v-list-item-title>
+                      </v-list-item>
+                      <v-list-item>
+                        <v-list-item-title>ORGANIC VEGETABLES</v-list-item-title>
+                      </v-list-item>
+                      <v-list-item>
+                        <v-list-item-title>RAW DAIRY</v-list-item-title>
+                      </v-list-item>
+                      <v-list-item>
+                        <v-list-item-title>ORGANIC FRUIT</v-list-item-title>
+                      </v-list-item>
+                    </v-list-item-group>
+                  </v-list>
+                </v-col>
+
+                <v-col>
+                  <v-list-item>
+                    <v-list-item-title>PANTRY</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-title>RECIPIES</v-list-item-title>
+                  </v-list-item>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-menu>
+
+          <v-btn plain class="text-capitalize font-weight-bold" href="#">FAQ</v-btn>
+
+          <v-spacer></v-spacer>
+
+          {% if user.is_authenticated %}
+          <!-- User drop down menu -->
+            <v-menu offset-y open-on-hover transition="slide-y-transition" bottom close-delay=120 nudge-bottom=5 content-class="menu-triangle">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn v-bind="attrs" v-on="on" text>
+                  <v-icon>mdi-account-outline</v-icon>
+                  <span class="mx-2 text-capitalize font-weight-bold">{{user.first_name}}</span>
+                  <v-icon>mdi-chevron-down</v-icon>
+                </v-btn>
+              </template>
+
+              <v-list class="rounded">
+                <v-list-item-group color="primary">
+                  <v-list-item v-for="(item, index) in items" :key="index" :href="item.href">
+                    <v-list-item-title>(( item.title ))</v-list-item-title>
+                  </v-list-item>
+                </v-list-item-group>
+              </v-list>
+            </v-menu>
+          {% else %}
+          <!-- Login and Sing up -->
+            <div>
+              <v-btn color="primary" href="{% url 'signup' %}{% if not 'account' in request.path %}?next={{ request.path }}{% else %}?next=/{% endif %}" class="mx-1 font-weight-bold">
+                BECOME A MEMBER
+              </v-btn>
+  
+              <v-btn text href="{% url 'login' %}{% if not 'account' in request.path %}?next={{ request.path }}{% else %}?next=/{% endif %}" class="mx-1 font-weight-bold">
+                LOGIN
+              </v-btn>
+            </div>
+          {% endif %}
+
+          <!-- Cart Icon -->
+          <v-btn class="ma-2" text icon @click="drawer = !drawer">
+            <v-badge :content="store.state.cart.items.length" :value="store.state.cart.items.length" color="primary" overlap @click="drawer = !drawer">
+              <v-icon large>mdi-cart-outline</v-icon>
+            </v-badge>
+          </v-btn>
+
+        </v-app-bar>
+
+        <!-- Sizes your content based upon application components -->
+        <v-main></v-main>
+
+      </v-app>
+    </div>
+
+
+
+
     
     <!-- main content -->
-    <div id="wrapper" class="hidden">
-      <header">
-        <nav id="navVue" class="px-4 py-5 lg:px-10 lg:py-3 bg-white select-none h-auto shadow" v-cloak>
-          <div class="flex items-center">
-            <a href="/" id="header-home-icon" class="inline-block no-select-background w-3/5 lg:w-2/5" role="button" tabindex="0" aria-label="Home">
-              <img class="h-12" src="/static/img/dff-logo-long.png" draggable="false" aria-hidden="true">
-            </a>
-  
-            <!-- Desktop menu -->
-            <section class="ml-auto hidden md:flex items-center">
-              {% if user.is_authenticated %}
-              <div id="userDropdown" class="relative inline-block text-left mr-3">
-                <div>
-                  <button id="username" @click="showUserDropdown = !showUserDropdown" type="button" class="capitalize rounded-md px-4 py-2 bg-white text-lg font-medium text-gray-700 hover:bg-gray-50 hover:text-orange focus:outline-none focus:text-orange" id="options-menu" aria-haspopup="true" aria-expanded="true">
-                    <!-- user icon -->
-                    <i class="far fa-user mr-3 mt-1"></i>
-                    {{user}}
-                    <!-- arrow down -->
-                    <i class="fas fa-angle-down ml-2 h-5 w-5 pt-1"></i>
-                  </button>
-                </div>
-                
-                <div :class="[(showUserDropdown ? '' : 'hidden'), 'origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5']">
-                  <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                    <a href="/accounts/update/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Account settings</a>
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Support</a>
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">My orders</a>
-                    <a href="{% url 'logout' %}?next={{ request.get_full_path }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Logout</a>
-                  </div>
-                </div>
-              </div>
-              {% else %}
-              <!-- become a member -->
-              <a href="{% url 'signup' %}{% if not 'account' in request.path %}?next={{ request.path }}{% else %}?next=/{% endif %}"
-                class="btn-primary-sm mr-4">
-                BECOME A MEMBER</a>
-              <!-- login -->
-              <a href="{% url 'login' %}{% if not 'account' in request.path %}?next={{ request.path }}{% else %}?next=/{% endif %}"
-                class="text-sm font-bold tracking-wide hover:text-primary mr-4">LOGIN</a>
-              {% endif %}
-  
-              <!-- Cart icon -->
-              <div class="cart">
-                <a href="#" @click.prevent="cart.shown = true">
-                  <div class="relative">
-                    <svg width="30" height="30" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M54.8973 14.2968C53.6821 16.856 48.3397 29.204 47.6117 30.3464C47.5277 30.4808 47.4493 30.6152 47.3765 30.744C46.6653 31.9592 45.9149 32.8944 43.3277 32.8944H18.6373C19.1525 34.468 20.2333 36.4056 22.4733 36.4056H43.8429C44.4757 36.4056 44.9853 36.9208 44.9853 37.548C44.9853 38.1808 44.4757 38.6904 43.8429 38.6904H22.4733C19.3037 38.6904 16.9853 36.2096 16.1229 32.4016C15.6469 30.3016 9.86215 10.948 9.44775 9.43044C9.00535 8.46724 7.96935 7.77284 6.96695 7.77284H1.70295C1.07015 7.77284 0.560547 7.25764 0.560547 6.63044C0.560547 6.00324 1.07575 5.48804 1.70295 5.48804H6.96695C8.92695 5.48804 10.7805 5.59444 11.5813 7.45364C11.6037 7.50404 11.6205 7.55444 11.6317 7.60484C11.8613 8.43364 16.6549 25.4408 18.0213 30.604H43.3221C44.8061 30.604 44.9517 30.3464 45.3941 29.5904C45.4837 29.4392 45.5733 29.2824 45.6797 29.12C46.3573 28.056 51.6661 15.7808 52.7973 13.3952C53.2677 12.1632 53.1837 11.4912 53.0549 11.3008C52.9709 11.1776 52.6965 11.1048 52.3213 11.1048C49.8461 11.144 18.4189 11.1048 17.3269 11.1048C16.6941 11.1048 16.1845 10.5896 16.1845 9.95684C16.1845 9.32404 16.6941 8.81444 17.3269 8.81444C17.5957 8.81444 49.8237 8.85364 52.2989 8.81444C53.8053 8.81444 54.5613 9.45844 54.9365 10.0016C55.6197 10.9984 55.6085 12.4432 54.8973 14.2968ZM21.8629 39.8216C24.8085 39.8216 27.2109 42.2184 27.2109 45.1696C27.2109 48.1208 24.8141 50.512 21.8629 50.512C18.9173 50.512 16.5205 48.1152 16.5205 45.164C16.5205 42.2128 18.9173 39.8216 21.8629 39.8216ZM21.8629 48.3168C23.5989 48.3168 25.0101 46.9056 25.0101 45.1696C25.0101 43.4336 23.5989 42.0224 21.8629 42.0224C20.1269 42.0224 18.7157 43.4336 18.7157 45.1696C18.7213 46.9056 20.1325 48.3168 21.8629 48.3168Z" fill="black"/>
-                      <path d="M43.608 39.8218C46.5536 39.8218 48.956 42.2186 48.956 45.1698C48.956 48.121 46.5592 50.5122 43.608 50.5122C40.6568 50.5122 38.2656 48.1154 38.2656 45.1642C38.2656 42.213 40.6624 39.8218 43.608 39.8218ZM43.608 48.317C45.344 48.317 46.7552 46.9058 46.7552 45.1698C46.7552 43.4338 45.344 42.0226 43.608 42.0226C41.872 42.0226 40.4608 43.4338 40.4608 45.1698C40.4608 46.9058 41.8776 48.317 43.608 48.317Z" fill="black"/>
-                    </svg>
-    
-                    <span class="text-xs text-white text-center bg-red-2 rounded-full absolute" style="top: -.5rem;right: -.6rem;width: 1rem;">
-                      ((cart.items.length))
-                    </span>
-                  </div>
-                </a>
-              </div>
-              <!-- Cart icon -->
-            </section>
-
-            <div class="ml-auto md:hidden">
-              <i @click="showNavDropdown = !showNavDropdown" class="fas text-4xl fa-bars text-secondary self-center" role="button"></i>
-            </div>
-          </div>
-
-          <!-- Notification -->
-          <section v-show="notification.shown" class="notification">
-            <div 
-            :class="[notification.typeClass, 'fixed z-50 top-20 right-4 rounded bg-white shadow-lg p-4 border-l-4 border-green w-96 max-w-lg']">
-            <i class="fas fa-times absolute right-5 opacity-70 hover:opacity-100 cursor-pointer" @click="notification.shown = false"></i>
-              <p class="mt-2 w-11/12" v-html="notification.text"></p>
-            </div>
-          </section>
-
-          <!-- Mobile menu -->
-          <div :class="[(showNavDropdown ? '' : 'hidden'), 'mt-5']">
-            <ul class="text-center text-secondary font-bold">
-
-
-              <li><a href="{% url 'signup' %}{% if not 'account' in request.path %}?next={{ request.path }}{% else %}?next=/{% endif %}" class="hover:text-primary">BECOME A MEMBER</a></li>
-              <li><a href="{% url 'signup' %}{% if not 'account' in request.path %}?next={{ request.path }}{% else %}?next=/{% endif %}" class="hover:text-primary">MEMBER SIGN IN</a></li>
-              <li>
-                <a href="#" @click.prevent="cart.shown = true" class="hover:text-primary">
-                  <div class="relative">
-                    <svg class="mx-auto" width="30" height="30" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M54.8973 14.2968C53.6821 16.856 48.3397 29.204 47.6117 30.3464C47.5277 30.4808 47.4493 30.6152 47.3765 30.744C46.6653 31.9592 45.9149 32.8944 43.3277 32.8944H18.6373C19.1525 34.468 20.2333 36.4056 22.4733 36.4056H43.8429C44.4757 36.4056 44.9853 36.9208 44.9853 37.548C44.9853 38.1808 44.4757 38.6904 43.8429 38.6904H22.4733C19.3037 38.6904 16.9853 36.2096 16.1229 32.4016C15.6469 30.3016 9.86215 10.948 9.44775 9.43044C9.00535 8.46724 7.96935 7.77284 6.96695 7.77284H1.70295C1.07015 7.77284 0.560547 7.25764 0.560547 6.63044C0.560547 6.00324 1.07575 5.48804 1.70295 5.48804H6.96695C8.92695 5.48804 10.7805 5.59444 11.5813 7.45364C11.6037 7.50404 11.6205 7.55444 11.6317 7.60484C11.8613 8.43364 16.6549 25.4408 18.0213 30.604H43.3221C44.8061 30.604 44.9517 30.3464 45.3941 29.5904C45.4837 29.4392 45.5733 29.2824 45.6797 29.12C46.3573 28.056 51.6661 15.7808 52.7973 13.3952C53.2677 12.1632 53.1837 11.4912 53.0549 11.3008C52.9709 11.1776 52.6965 11.1048 52.3213 11.1048C49.8461 11.144 18.4189 11.1048 17.3269 11.1048C16.6941 11.1048 16.1845 10.5896 16.1845 9.95684C16.1845 9.32404 16.6941 8.81444 17.3269 8.81444C17.5957 8.81444 49.8237 8.85364 52.2989 8.81444C53.8053 8.81444 54.5613 9.45844 54.9365 10.0016C55.6197 10.9984 55.6085 12.4432 54.8973 14.2968ZM21.8629 39.8216C24.8085 39.8216 27.2109 42.2184 27.2109 45.1696C27.2109 48.1208 24.8141 50.512 21.8629 50.512C18.9173 50.512 16.5205 48.1152 16.5205 45.164C16.5205 42.2128 18.9173 39.8216 21.8629 39.8216ZM21.8629 48.3168C23.5989 48.3168 25.0101 46.9056 25.0101 45.1696C25.0101 43.4336 23.5989 42.0224 21.8629 42.0224C20.1269 42.0224 18.7157 43.4336 18.7157 45.1696C18.7213 46.9056 20.1325 48.3168 21.8629 48.3168Z" fill="black"/>
-                      <path d="M43.608 39.8218C46.5536 39.8218 48.956 42.2186 48.956 45.1698C48.956 48.121 46.5592 50.5122 43.608 50.5122C40.6568 50.5122 38.2656 48.1154 38.2656 45.1642C38.2656 42.213 40.6624 39.8218 43.608 39.8218ZM43.608 48.317C45.344 48.317 46.7552 46.9058 46.7552 45.1698C46.7552 43.4338 45.344 42.0226 43.608 42.0226C41.872 42.0226 40.4608 43.4338 40.4608 45.1698C40.4608 46.9058 41.8776 48.317 43.608 48.317Z" fill="black"/>
-                    </svg>
-    
-                    <span class="text-xs text-white text-center bg-red-2 rounded-full absolute" style="top: -.5rem;right: -.6rem;width: 1rem;">
-                      ((cart.items.length))
-                    </span>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </div>
-
-
-          <!-- cart modal -->
-          {% include 'partials/side_cart.html' %}
-          <!-- cart modal -->
-        </nav>
-        
-      </header>
+    <div id="wrapper" class="hiddens">
 
       <div style="min-height: 80vh;">
       {% block all_content %}
@@ -211,8 +336,8 @@
       {% endif %}
 
     </div>
-    
 
+    
     
     {% compress js %}
     <!-- Global variables -->
@@ -242,42 +367,19 @@
 
     <!-- Load scripts -->
     <script src="{% static 'mezzanine/js/'|add:settings.JQUERY_FILENAME %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="https://unpkg.com/vuex@3.6.2/dist/vuex.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    
-    <!-- Main Vue Config -->
-    <script>
-      // Axios config
-      axios.defaults.headers = {'X-CSRFToken': '{{csrf_token}}'}
 
-      // FF Custom Button (button with spinner)
-      const FFButton = Vue.component('ff-button', {
-        delimiters: ['{', '}'],
-        props: {
-          text: String,
-          cls: String,
-          loading: Boolean
-        },
-        template: `
-          <template v-if="loading == true">
-            <button :class="cls.replace('btn-primary', 'btn-white w-32')" disabled>
-              <img src="{% static 'gifs/spinner.gif' %}" alt="spinner" class="h-8 m-auto">
-            </button>
-          </template>
-          <template v-else>
-            <button :class="cls" type="button">{text}</button>
-          </template>
-        `,
-        data: function() {
-          return {}
-        }
-      })
-      
-      // Cart vue handels everything related to cart
-      const NavVue = new Vue({
-        el: '#navVue',
-        delimiters: ['((', '))'],
-        data: {
+
+    <script>
+
+      // The Store
+      const store = new Vuex.Store({
+        state: {
+          count: 200,
           cart: {
             shown: false,
             items: [],
@@ -286,37 +388,61 @@
             remaining_budget: 0,
             attending_dinner: 0
           },
-          notification: {
-            text: '',
-            shown: false,
-            typeClass: 'success'
-          },
-
-          showNavDropdown: false,
-          showUserDropdown: false,
         },
+        mutations: {
+          increment (state) {
+            state.count++
+          }
+        }
+      })
 
-        watch: {
-          'notification.shown': function(val) {
-            if (val) {
-              setTimeout(() => {
-                if (this.notification.text.length < 65) this.notification.shown = false
-              }, 3000);
-            }
+      // Vuetify options
+      const opts = {
+        theme: {
+          themes: {
+            light: {
+              primary: '#e16231',
+              secondary: '#b0bec5',
+              accent: '#914323',
+              error: '#b71c1c',
+            },
+          },
+        },
+      }
+  
+      // Vue App
+      const App = new Vue({
+        el: '#app',
+        delimiters: ['((', '))'],
+        store,
+        vuetify: new Vuetify(opts),
+        data() {
+          return {
+            drawer: false,
+            counter: 0,
+
+            items: [
+              { title: 'Account settings', href: '/accounts/update/'},
+              { title: 'Support', href: '#'},
+              { title: 'My orders', href: '#'},
+              { title: 'Logout', href: `{% url 'logout' %}?next={{ request.get_full_path }}`},
+            ],
+
+            showNavDropdown: false,
+            showUserDropdown: false,
           }
         },
-        
         methods: {
           async fetchCart() {
             try {
               const res = await axios.get('/api/cart/');
               const { id, items, total_price, delivery_fee, remaining_budget, attending_dinner } = res.data
               console.log(res.data)
-              this.cart.items = items;
-              this.cart.total_price = total_price;
-              this.cart.delivery_fee = delivery_fee;
-              this.cart.remaining_budget = remaining_budget;
-              this.cart.attending_dinner = attending_dinner;
+              store.state.cart.items = items;
+              store.state.cart.total_price = total_price;
+              store.state.cart.delivery_fee = delivery_fee;
+              store.state.cart.remaining_budget = remaining_budget;
+              store.state.cart.attending_dinner = attending_dinner;
             } catch (error) {
               console.log('Can not fetch Cart')
             }
@@ -326,7 +452,7 @@
             const res = await axios.post(`/api/product_variations/${variation.id}/add_to_cart/`)
 
             ProductsVue.hideProductModal();
-            this.cart.shown = true;
+            this.drawer = !this.drawer;
             this.fetchCart();
           },
           async removeCartItem(item) {
@@ -376,6 +502,72 @@
             }
           },
           
+        },
+        computed: {},
+        async mounted() {
+          // get the cart using user session
+          this.fetchCart()
+        }
+
+      })
+    </script>
+    
+    <!-- Main Vue Config -->
+    <script>
+      // Axios config
+      axios.defaults.headers = {'X-CSRFToken': '{{csrf_token}}'}
+
+      // FF Custom Button (button with spinner)
+      const FFButton = Vue.component('ff-button', {
+        delimiters: ['{', '}'],
+        props: {
+          text: String,
+          cls: String,
+          loading: Boolean
+        },
+        template: `
+          <template v-if="loading == true">
+            <button :class="cls.replace('btn-primary', 'btn-white w-32')" disabled>
+              <img src="{% static 'gifs/spinner.gif' %}" alt="spinner" class="h-8 m-auto">
+            </button>
+          </template>
+          <template v-else>
+            <button :class="cls" type="button">{text}</button>
+          </template>
+        `,
+        data: function() {
+          return {}
+        }
+      })
+      
+      // Cart vue handels everything related to cart
+      const NavVue = new Vue({
+        el: '#navVue',
+        delimiters: ['((', '))'],
+        data: {
+          
+          notification: {
+            text: '',
+            shown: false,
+            typeClass: 'success'
+          },
+
+          showNavDropdown: false,
+          showUserDropdown: false,
+        },
+
+        watch: {
+          'notification.shown': function(val) {
+            if (val) {
+              setTimeout(() => {
+                if (this.notification.text.length < 65) this.notification.shown = false
+              }, 3000);
+            }
+          }
+        },
+        
+        methods: {
+          
 
           show_msg(msg, type='success') {
             this.notification.shown = true
@@ -392,13 +584,7 @@
             }
           }
         },
-
-        computed: {},
-
-        async mounted() {
-          // get the cart using user session
-          this.fetchCart()
-        }
+        
 
       })
 
@@ -412,17 +598,10 @@
     </script>
 
     <script defer>
-      // intial loading
-      window.addEventListener('DOMContentLoaded', e => {
-        document.querySelector('#main-spinner').classList.add('hidden')
-        document.querySelector('#wrapper').classList.remove('hidden')
-      })
-
-
       // close side-cart if open
       document.addEventListener('keyup', e => {
         if (e.key === "Escape") {
-          NavVue.cart.shown = false;
+          App.drawer = false;
         }
       })
     </script>
