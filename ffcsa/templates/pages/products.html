@@ -107,13 +107,11 @@
     </div>
   
     <!-- Spinner -->
-    <div class="flex justify-center mt-20" v-else>
-      <img src="{% static 'gifs/spinner.gif' %}" alt="spinner">
-
-      <template v-else>
-        <p class="text-gray-700" style="width: 12rem;">No available products!</p>
-      </template>
-    </div>
+    <template v-else>
+      <div class="text-center mt-20">
+        <v-progress-circular indeterminate class="text-primary"></v-progress-circular>
+      </div>
+    </template>
   </section>
   <!-- Products list -->
 
@@ -165,8 +163,6 @@
     el: '#productsVue',
     delimiters: ['((', '))'],
     data: {
-      loading: true,
-
       // products
       count: 0,
       limit:21,
@@ -243,8 +239,6 @@
 
     methods: {
       async getProducts() {
-        this.loading = true;
-
         // make sure we are not overpassing the count
         if (this.count > 0 && this.offset > this.count) this.offset = this.count - this.limit;
         
@@ -256,10 +250,17 @@
           this.next = next;
           this.previous = previous;
           this.count = count;
-          
 
-          this.loading = false;
-          console.log(res.data)
+
+          // data = {selectedCategory: this.selectedCategory,count}
+          // // data = {count}
+          // url = Object.keys(data).map(function(k) {
+          //     return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
+          // }).join('&')
+
+          // console.log(url)
+          
+          // console.log(res.data)
           // after fetching the products, check if the url 
           // has product slug to open it
           this.openProductWithSlug()
@@ -306,6 +307,12 @@
     },
 
     async mounted() {
+      // Sync URL params
+      var url = new URL(location.href);
+      var selectedCategory = url.searchParams.get("selectedCategory");
+      if (selectedCategory !== null) {
+        this.selectedCategory = selectedCategory
+      }
       // get products and categories
       this.getProducts()
       this.getCategories()
