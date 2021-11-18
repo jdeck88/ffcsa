@@ -213,11 +213,7 @@
             </template>
 
             <v-card>
-              
-
-              <v-divider></v-divider>
-
-              <v-row no-gutters>
+              <v-row >
                 <v-col>
                   <v-list class="rounded">
                     <v-list-item-group color="primary">
@@ -238,18 +234,22 @@
                 </v-col>
 
                 <v-col>
-                  <v-list-item>
-                    <v-list-item-title>PANTRY</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item>
-                    <v-list-item-title>RECIPIES</v-list-item-title>
-                  </v-list-item>
+                  <v-list class="rounded">
+                    <v-list-item-group color="primary">
+                      <v-list-item>
+                        <v-list-item-title>PANTRY</v-list-item-title>
+                      </v-list-item>
+                      <v-list-item>
+                        <v-list-item-title>RECIPIES</v-list-item-title>
+                      </v-list-item>
+                    </v-list-item-group>
+                  </v-list>
                 </v-col>
               </v-row>
             </v-card>
           </v-menu>
 
-          <v-btn plain class="text-capitalize font-weight-bold" href="#">FAQ</v-btn>
+          <v-btn plain class="text-capitalize font-weight-bold" href="/faq/">FAQ</v-btn>
 
           <v-spacer></v-spacer>
 
