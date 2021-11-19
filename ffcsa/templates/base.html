@@ -178,21 +178,25 @@
               <p class="mb-2">SUBTOTAL</p>
               <p class="mb-2 ml-auto">$((store.state.cart.total_price))</p>
             </div>
+
+            {% if user.is_authenticated %}
             <div class="flex text-black font-bold">
               <p class="mb-2">DELIVERY FEE</p>
               <p class="mb-2 ml-auto">$((store.state.cart.delivery_fee))</p>
             </div>
-            <div class="flex text-black font-bold mb-4">
+            <div class="flex text-black font-bold">
               <p>REMAINING BUDGET</p>
               <p class="ml-auto">$((store.state.cart.remaining_budget))</p>
             </div>
+            {% endif %}
             
-            <v-btn large block color="primary" class="font-weight-bold" href="/cart" :disabled="!store.state.cart.items.length">CONTINUE TO CHECKOUT</v-btn>
+            <v-btn large block color="primary" class="font-weight-bold mt-4" href="/cart" :disabled="!store.state.cart.items.length">CONTINUE TO CHECKOUT</v-btn>
           </section>
           <!-- total and checkout -->
 
         </v-navigation-drawer>
 
+        <!-- Menu drawer -->
         <v-navigation-drawer  v-model="menu" width='100%' right fixed temporary class="opacity-95">
           <v-btn class="ma-2" absolute top right icon plain @click="menu = !menu" class="ml-auto mt-1 mr-5" >
             <v-icon x-large color="gray lighten-2">mdi-close</v-icon>
