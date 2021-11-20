@@ -10,8 +10,8 @@
   <!-- Call block super -->
   {{ block.super }}
   <v-app>
-    <v-main>
-      <v-container class="grey lighten-5 mb-10">
+    <v-main class="grey lighten-5">
+      <v-container class="mb-10">
         <v-row no-gutters>
 
           <!-- left side card -->
@@ -196,7 +196,6 @@
           </v-col>
         </v-row>
       </v-container>
-      
     </v-main>
   </v-app>
 
@@ -548,7 +547,7 @@
     data: {
       // Current active tab
       selectedItem: 0,
-      activeSettings: 'payment',
+      activeSettings: 'personal',
       items: [
         { key: 'personal', text: 'My info', icon: 'mdi-account' },
         { key: 'payment', text: 'Payment', icon: 'mdi-credit-card-outline' },
