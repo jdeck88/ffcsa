@@ -84,6 +84,12 @@
           height: 13px; 
         }
 
+        .alert-fixed {
+          position: fixed;
+          top: 5rem;
+          right: 1rem;
+          z-index: 9999999;
+        }
       </style>
 
       <!-- Custom CSS per page -->
@@ -106,6 +112,8 @@
 
     <div id="app" v-cloak>
       <v-app>
+        <!-- alert compoent -->
+        <v-alert border="left" transition="slide-y-transition" :type="$store.state.alert.type" :value="$store.state.alert.value" dense width=300 class="alert-fixed">(($store.state.alert.content))</v-alert>
   
         <!-- Side Cart -->
         <v-navigation-drawer class="cart-drawer" v-model="drawer" width=456 right fixed temporary>
@@ -380,15 +388,7 @@
     </div>
 
     
-    
-    {% compress js %}
-    <!-- Global variables -->
-    <script>
-      var static_url = "{% get_static_prefix %}";
-      var media_url = "{% get_media_prefix %}";
-    </script>
-
-    
+    {% compress js %}    
     <!-- Facebook Pixel Code -->
     <script>
       !function(f,b,e,v,n,t,s)
@@ -409,16 +409,23 @@
 
     <!-- Load scripts -->
     <script src="{% static 'mezzanine/js/'|add:settings.JQUERY_FILENAME %}"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
     <script src="https://unpkg.com/vuex@3.6.2/dist/vuex.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
-
+    <!-- Global Config & Variables -->
     <script>
+      // Axios config
+      axios.defaults.headers = {'X-CSRFToken': '{{csrf_token}}'}
 
-      // The Store
+      const static_url = "{% get_static_prefix %}";
+      const media_url = "{% get_media_prefix %}";
+    </script>
+
+    <!-- Vue Main App Setup -->
+    <script>
+      // Vuex Store
       const store = new Vuex.Store({
         state: {
           count: 200,
@@ -430,10 +437,19 @@
             remaining_budget: 0,
             attending_dinner: 0
           },
+          alert: {
+            type: 'success',
+            value: false,
+            content: 'Updated now!'
+          }
         },
         mutations: {
           increment (state) {
             state.count++
+          },
+          showAlert(state, val={type: 'success', content: 'Updated successfuly'}) {
+            this.state.alert = {...this.state.alert, ...val}
+            this.state.alert.value = true;
           }
         }
       })
@@ -545,98 +561,37 @@
             }
           },
           
+
+          hide_alert: function (event) {
+            // console.log('Hide')
+            // `event` is the native DOM event
+            window.setInterval(() => {
+              store.state.alert.value = false;
+              // console.log("hide alert after 3 seconds");
+            }, 3000)    
+          }
+        },
+        watch: {
+          '$store.state.alert.value': function(val) {
+            if (val) {
+              setTimeout(() => {
+                // if (this.notification.text.length < 65) this.notification.shown = false
+                this.hide_alert();
+              }, 3000);
+            }
+          }
         },
         computed: {},
         async mounted() {
           // get the cart using user session
           this.fetchCart()
+
+          // hide alert
+          // if(alert){
+          //   this.hide_alert();
+          // }
         }
 
-      })
-    </script>
-    
-    <!-- Main Vue Config -->
-    <script>
-      // Axios config
-      axios.defaults.headers = {'X-CSRFToken': '{{csrf_token}}'}
-
-      // FF Custom Button (button with spinner)
-      const FFButton = Vue.component('ff-button', {
-        delimiters: ['{', '}'],
-        props: {
-          text: String,
-          cls: String,
-          loading: Boolean
-        },
-        template: `
-          <template v-if="loading == true">
-            <button :class="cls.replace('btn-primary', 'btn-white w-32')" disabled>
-              <img src="{% static 'gifs/spinner.gif' %}" alt="spinner" class="h-8 m-auto">
-            </button>
-          </template>
-          <template v-else>
-            <button :class="cls" type="button">{text}</button>
-          </template>
-        `,
-        data: function() {
-          return {}
-        }
-      })
-      
-      // Cart vue handels everything related to cart
-      const NavVue = new Vue({
-        el: '#navVue',
-        delimiters: ['((', '))'],
-        data: {
-          
-          notification: {
-            text: '',
-            shown: false,
-            typeClass: 'success'
-          },
-
-          showNavDropdown: false,
-          showUserDropdown: false,
-        },
-
-        watch: {
-          'notification.shown': function(val) {
-            if (val) {
-              setTimeout(() => {
-                if (this.notification.text.length < 65) this.notification.shown = false
-              }, 3000);
-            }
-          }
-        },
-        
-        methods: {
-          
-
-          show_msg(msg, type='success') {
-            this.notification.shown = true
-            this.notification.text = msg
-            
-            // show border color based on the message type
-            switch (type) {
-              case 'success':
-                this.notification.typeClass = 'border-green'
-                break;
-              case 'error':
-                this.notification.typeClass = 'border-danger'
-                break;
-            }
-          }
-        },
-        
-
-      })
-
-
-      // generic quit out listener (for the user dropdown menu)
-      window.addEventListener('click', event => {
-        if (event.target.id !== "username" && event.target.parentElement.id !== "username") {
-          if (NavVue.showUserDropdown) NavVue.showUserDropdown = false
-        }
       })
     </script>
 
@@ -648,7 +603,6 @@
         }
       })
     </script>
-    <!-- Main Vue Config -->
 
     <!-- Custom JS per page -->
     {% block js %}{% endblock %}

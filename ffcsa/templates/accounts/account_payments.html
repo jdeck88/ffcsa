@@ -26,94 +26,85 @@
 <!-- Onetime Payment -->
 {% if user.profile.non_subscribing_member or user.profile.stripe_subscription_id or user.profile.stripe_customer_id and user.profile.ach_status in 'NEW,VERIFYING' %}
 <section class="one-time-payment mt-20">
-  <!-- Modal btn -->
-  <button class="btn-primary uppercase" @click.prevent="OPT_ToggleModal">Add funds</button>
-  
-  <!-- Modal -->
-  <div v-show="oneTimePayment.modalShown" class="fixed z-10 inset-0 overflow-y-auto">
-    <div class="flex min-h-screen">
+  <div class="text-center">
+    <v-dialog v-model="oneTimePayment.dialog" width="500">
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn large color="primary" v-bind="attrs" v-on="on" class="font-weight-bold">
+          Add Funds
+        </v-btn>
+      </template>
 
-      <div class="fixed inset-0 transition-opacity"  aria-hidden="true" @click.prevent="OPT_ToggleModal">
-        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-      </div>
-    
-      <div class="bg-white text-secondary max-w-4xl mx-auto my-auto shadow p-5 pb-10 z-10" style="min-height: 22rem; min-width: 45vw;">
-        <!-- close button -->
-        <div class="flex mb-2">
-          <a href="#" class="close-modal-btn ml-auto" @click.prevent="OPT_ToggleModal"></a>
-        </div>
-        <!-- close button -->
-  
-        <section class="px-3">
-          <h4 class="text-xl text-black text-center">Add funds to account</h4>
+      <v-card>
+        <v-card-title class="text-h5 grey lighten-2">
+          Add funds to account
+        </v-card-title>
 
-          <!-- Show warning and info alers -->
-          {% if user.profile.payment_method == 'ACH' and user.profile.ach_status == 'VERIFIED' %}
-          <div class="alert-warning mt-5">
-            <p>
-              Note: Because your default payment method is via ACH bank transfer, it will
-              take 7-10 business days before the payment is reflected in your account.
-            </p>
-            <p>If you choose to pay with a credit card below the payment will be added to
-              your account within 10 mins.</p>
-          </div>
-          <p class="alert-info">This is a one time payment that will be credited to your account.</p>
-          {% endif %}
-
-          <form action="{% url 'make_payment' %}" method="POST" id="oneTimePayment" class="mt-8">
-            <!-- Amount -->
-            <div class="col-span-6 relative">
-              <label for="amount" class="text-gray-700 px-1">Payment Amount</label>
-              <input type="number" name="amount"  class="input-v" style="padding-left: 2rem;" min="20" max="999" required>
-              <i class="fas fa-dollar-sign absolute left-4 bottom-4"></i>
+        <v-card-text>
+          <section class="px-3">
+            <!-- Show warning and info alers -->
+            {% if user.profile.payment_method == 'ACH' and user.profile.ach_status == 'VERIFIED' %}
+            <div class="alert-warning mt-5">
+              <p>
+                Note: Because your default payment method is via ACH bank transfer, it will
+                take 7-10 business days before the payment is reflected in your account.
+              </p>
+              <p>If you choose to pay with a credit card below the payment will be added to
+                your account within 10 mins.</p>
             </div>
-            
-            <!-- ACH & non_subscribing_member user -->
-            {% if user.profile.payment_method == 'ACH' or user.profile.non_subscribing_member %}
-            <div id="chosePaymentMethod">
-              <h3 class="text-black mt-4">Choose payment method</h3>
-
-              <!-- Payment options Bank/CC -->
-              <div class="flex flex-col">
-                {% if user.profile.ach_status == 'VERIFIED' %}
-                <label class="inline-flex items-center mt-3">
-                  <input type="radio" class="form-radio h-5 w-5 text-gray-600" name="paymentType" value="ACH" v-model="oneTimePayment.paymentMethod" required>
-                  <span class="ml-2 text-gray-700 select-none cursor-pointer">Subscription default Bank Account</span>
-                </label>
-                {% endif %}
-      
-                <label class="inline-flex items-center mt-3">
-                  <input type="radio" class="form-radio h-5 w-5 text-gray-600" name="paymentType" value="CC" v-model="oneTimePayment.paymentMethod" required>
-                  <span class="ml-2 text-gray-700 select-none cursor-pointer">Credit Card</span>
-                </label>
-              </div>
-
-              <!-- Credit Card details -->
-              {% with False as isSubscription %}
-              <div v-show="oneTimePayment.paymentMethod == 'CC'" id="one-time-payment-card" class="w-11/12 my-5 mx-auto"></div>
-              {% endwith %}
-
-              <label class="inline-flex items-center mt-6">
-                <input type="checkbox" class="form-radio h-4 w-4 text-gray-600" name="chargeAcknowledgement" checked required>
-                <span class="ml-2 text-gray-700 select-none cursor-pointer">I acknowledge that the above amount will be debited from my Card or Bank Account</span>
-              </label>
-            </div>
+            <p class="alert-info">This is a one time payment that will be credited to your account.</p>
             {% endif %}
+  
+            <form action="{% url 'make_payment' %}" method="POST" id="oneTimePayment" class="mt-8">
+              <!-- Amount -->              
+              <v-text-field outlined v-model="oneTimePayment.amount" label="Payment Amount" prefix="$" type="number" min="20" max="999" required></v-text-field>
+              
+              <!-- ACH & non_subscribing_member user -->
+              {% if user.profile.payment_method == 'ACH' or user.profile.non_subscribing_member %}
+              <template>
+                <h3 class="text-black mt-4">Choose payment method</h3>
+                
+                <!-- Payment options Bank/CC -->
+                <v-radio-group v-model="oneTimePayment.paymentMethod">
+                  <!-- 1. ACH bank -->
+                  {% if user.profile.ach_status == 'VERIFIED' %}
+                  <v-radio key="1" label="Subscription default Bank Account" value="ACH"></v-radio>
+                  {% endif %}
+                  <!-- 2. CreditCard bank -->
+                  <v-radio key="2" label="Credit Card" value="CC"></v-radio>
+                </v-radio-group>
+  
+                <!-- Credit Card details -->
+                {% with False as isSubscription %}
+                <div v-show="oneTimePayment.paymentMethod == 'CC'" id="one-time-payment-card" class="w-11/12 my-5 mx-auto"></div>
+                {% endwith %}
+  
+                <v-checkbox
+                  name="chargeAcknowledgement"
+                  label="I acknowledge that the above amount will be debited from my Card or Bank Account"
+                  class="mt-5"
+                  checked required
+                ></v-checkbox>
+              </template>
+              {% endif %}
+  
+              <!-- Stripe errors -->
+              <div id="OTP-StripeErrors" v-if="oneTimePayment.stripeError" class="alert-danger mt-5">((oneTimePayment.stripeError))</div>
+             
+            </form>
+          </section>
+        </v-card-text>
 
-            <!-- Stripe errors -->
-            <div id="OTP-StripeErrors" v-if="oneTimePayment.stripeError" class="alert-danger mt-5">((oneTimePayment.stripeError))</div>
+        <v-divider></v-divider>
 
-            <!-- Action buttons -->
-            <div class="flex mt-10">
-              <ff-button text="Add Funds" cls="btn-primary ml-auto mr-3" :loading="oneTimePayment.loading" v-on:click.native="OPT_Pay"></ff-button>
-              <button type="button" class="btn-primary" @click.prevent="OPT_ToggleModal">Cancel</button>
-            </div>
-          </form>
-        </section>
-      </div>
-    
-    </div>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" :loading="oneTimePayment.loading" @click="OPT_Pay">Add Funds</v-btn>
+          <v-btn color="red" text @click="oneTimePayment.dialog = false">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
+
 </section>
 {% endif %}
 
@@ -134,22 +125,16 @@
 
     <form action="{% url 'payments_verify' %}" method="POST" id="VerifyACH" class="mt-5">
       <p>Deposit Amounts</p>
-
-      <div class="mt-4 grid grid-cols-12 gap-4 mt-10">
-        <div class="col-span-6">
-          <label for="amount1" class="text-gray-700 px-1">Deposit 1</label>
-          <input type="number" name="amount1" id="amount1" class="input-v" required>
-        </div>
-
-        <div class="col-span-6">
-          <label for="amount2" class="text-gray-700 px-1">Deposit 2</label>
-          <input type="number" name="amount2" id="amount2" class="input-v" required>
-        </div>
-      </div>
-
-      <div class="flex mt-10">
-        <ff-button text="Verify and Make Payment" cls="btn-primary ml-auto mr-3" :loading="VerifyACH.loading" v-on:click.native="Verify_ACH"></ff-button>
-      </div>
+      <v-row>
+        <v-col sm="12" md="6">
+          <v-text-field outlined label="Deposit 1" name="amount1" required></v-text-field>
+        </v-col>
+        <v-col sm="12" md="6">
+          <v-text-field outlined label="Deposit 2" name="amount2" required></v-text-field>
+        </v-col>
+      </v-row>
+      
+      <v-btn large color="primary" class="font-weight-bold mt-15" :loading="VerifyACH.loading" @click="Verify_ACH">Verify and Make Payment</v-btn>
     </form>
   </div>
 </section>
@@ -177,12 +162,12 @@
   <form action="{% url 'payments_subscribe' %}" method="POST" id="newSubscription">
     <!-- Monthly Contribution Amount (minimum $172) >>>>>> payment_amount.html -->
     <div class="mt-2">
-      <label for="amount" class="text-gray-700 px-1">Monthly Contribution Amount (minimum $172)</label>
       {% if user.profile.monthly_contribution != None %}
-      <input class="input-v" type="number" name="amount" min="172" required value="{{ user.profile.monthly_contribution }}"/>
+        <v-text-field label="Monthly Contribution Amount (minimum $172)" outlined type="number" name="amount" min="172" value="user.profile.monthly_contribution" required></v-text-field>
       {% else %}
-      <input class="input-v" type="number" name="amount" min="172" required/>
+        <v-text-field label="Monthly Contribution Amount (minimum $172)" outlined type="number" name="amount" min="172" required></v-text-field>
       {% endif %}
+
       <!-- <small class="italic px-2">minimum $172</small> -->
       <div class="mt-3 mb-4">
         How much should I pay? This amount will be your monthly
@@ -198,48 +183,44 @@
     <div>
       <h3 class="text-lg mt-4">Payment method</h3>
 
-      <!-- 1. ACH bank -->
-      <label class="inline-flex items-center cursor-pointer mt-3" for="paymentTypesACH">
-        <input type="radio" class="form-radio h-5 w-5 text-gray-600" name="paymentType" id="paymentTypesACH" value="ACH" v-model="newSubscription.paymentMethod">
-        <span class="ml-2 text-gray-700 select-none" value="DEFAULT">ACH Bank Transfer (Payments take around 7 business days to show up on your account)</span>
-      </label>
-
-      <!-- 2. CreditCard bank -->
-      <label class="inline-flex items-center cursor-pointer mt-3" for="paymentTypesCC">
-        <input type="radio" class="form-radio h-5 w-5 text-gray-600" name="paymentType" id="paymentTypesCC" value="CC" v-model="newSubscription.paymentMethod">
-        <span class="ml-2 text-gray-700 select-none" value="DEFAULT">Credit Card - (Payments take < 1 hr to show up on your account, but we are charged a fee)</span>
-      </label>
+      <v-radio-group v-model="newSubscription.paymentMethod">
+        <!-- 1. ACH bank -->
+        <v-radio key="1" label="ACH Bank Transfer (Payments take around 7 business days to show up on your account)" value="ACH"></v-radio>
+        <!-- 2. CreditCard bank -->
+        <v-radio key="2" label="Credit Card - (Payments take < 1 hr to show up on your account, but we are charged a fee)" value="CC"></v-radio>
+      </v-radio-group>
       
       <!-- ACH details -->
-      <div v-show="newSubscription.paymentMethod == 'ACH'" class="mt-10 grid grid-cols-12 gap-4 my-10" id="ach-details">
-        <div class="col-span-6">
-          <label for="achAccountName" class="text-gray-700 px-1">Name on Bank Account</label>
-          <input class="input-v" type="text" required name="achAccountName" value="{{ user.get_full_name }}"/>
-        </div>
-  
-        <div class="col-span-6">
-          <label for="ach-account-type" class="text-gray-700 px-1">Bank Account Type</label>
-          <select id="ach-account-type" name="achAccountType" class="input-v">
-            <option value="individual">Individual</option>
-            <option value="company">Company</option>
-          </select>
-        </div>
-  
-        <div class="col-span-6">
-          <label for="achRoutingNumber" class="text-gray-700 px-1">Routing Number</label>
-          <input class="input-v" type="text" required name="achRoutingNumber" placeholder="123456789" min="9"/>
-        </div>
-  
-        <div class="col-span-6">
-          <label for="achAccountNumber" class="text-gray-700 px-1">Account Number</label>
-          <input class="input-v" type="text" required name="achAccountNumber" placeholder="0000987654321"/>
-        </div>
-        
-        <div class="col-span-12">
-          <p class="alert-warning mb-10">To validate your bank account, we will make 2 small
-            deposits. Once received, you will need to come back to this page and enter the amount to complete the
-            verification.</p>
-        </div>
+      <div v-show="newSubscription.paymentMethod == 'ACH'" class="mt-10  my-10" id="ach-details">
+        <v-row>
+          <v-col sm="12" md="6">
+            <v-text-field label="Name on Bank Account" outlined name="achAccountName" value="{{user.get_full_name}}" required></v-text-field>
+          </v-col>
+
+          <v-col sm="12" md="6">
+            <v-combobox
+              v-model="newSubscription.achAccountType"
+              label="Bank Account Type"
+              outlined
+              :items="newSubscription.achAccountTypes"
+              item-text="text"
+              item-value="value"
+              :return-object="false"
+            ></v-combobox>
+          </v-col>
+
+          <v-col sm="12" md="6">
+            <v-text-field label="Routing Number" type="number" outlined name="achRoutingNumber" placeholder="123456789" min="9" :required="newSubscription.paymentMethod == 'ACH'"></v-text-field>
+          </v-col>
+
+          <v-col sm="12" md="6">
+            <v-text-field label="Account Number" type="number" outlined name="achAccountNumber" placeholder="0000987654321" :required="newSubscription.paymentMethod == 'ACH'"></v-text-field>
+          </v-col>
+        </v-row>
+
+        <v-alert dense border="left" type="info">
+          To validate your bank account, we will make 2 small deposits. Once received, you will need to come back to this page and enter the amount to complete the verification
+        </v-alert>
       </div>
     
       <!-- Credit Card details -->
@@ -249,15 +230,16 @@
         {% endwith %}
       </div>
 
-
       <div id="OTP-StripeErrors" v-if="newSubscription.stripeError" class="alert-danger mt-5">((newSubscription.stripeError))</div>
     </div>
     
     {% if not user.profile.paid_signup_fee and user.profile.join_dairy_program %}
-    <label class="inline-flex items-center mt-5 cursor-pointer">
-      <input type="checkbox" class="form-radio h-4 w-4 text-gray-600" name="signupAcknowledgement" checked required>
-      <span class="ml-2 text-gray-700 select-none">I acknowledge that I will also be charged a one time fee of <strong>$50</strong> to join the Raw Dairy program</span>
-    </label>
+      <v-checkbox
+        name="signupAcknowledgement"
+        label="I acknowledge that I will also be charged a one time fee of $50 to join the Raw Dairy program"
+        persistent-hint
+        checked required
+      ></v-checkbox>
     {% endif %}
 
     <!-- TODO - Error handeling -->
@@ -265,10 +247,8 @@
     {% for error in subscribe_errors %}
       <div class="alert alert-danger">{{ error }}</div>
     {% endfor %}
-
-    <div class="flex mt-10">
-      <ff-button text="Subscribe" cls="btn-primary m-auto w-60" :loading="newSubscription.loading" v-on:click.native="subscribe"></ff-button>
-    </div>
+    
+    <v-btn color="primary" class="font-weight-bold mt-15" :loading="newSubscription.loading" @click="subscribe">Subscribe</v-btn>
   </form>
 
 </section>

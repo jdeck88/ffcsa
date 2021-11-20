@@ -16,6 +16,7 @@ from ffcsa.core.api.permissions import IsOwner
 from ffcsa.core.api.serializers import *
 from ffcsa.core.models import Payment, Address
 from ffcsa.core.subscriptions import *
+from ffcsa.core.dropsites import DROPSITE_CHOICES
 
 User = get_user_model()
 
@@ -25,7 +26,6 @@ class UserViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.G
     serializer_class = UserSerializer
     queryset = User.objects.all()
     permission_classes = [IsAuthenticated, IsOwner]
-
 
     def update(self, request, *args, **kwargs):
         user = get_object_or_404(User, pk=kwargs['pk'])
@@ -50,7 +50,6 @@ class UserViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.G
 
         return Response({})
 
-
     @detail_route(methods=['post'])
     def change_password(self, request, pk=None):
         serializer = ChangePasswordSerializer(data=request.data)
@@ -68,6 +67,10 @@ class UserViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.G
         request.user.save()
         auth.authenticate(request.user)
         return Response({'detail': 'Password updated'})
+
+    @list_route(methods=['post'])
+    def get_drop_sites(self, request):
+        return Response({'sites': [{'value': site[0], 'text': site[1]} for site in DROPSITE_CHOICES]})
 
 
 class LoginViewSet(viewsets.ViewSet):

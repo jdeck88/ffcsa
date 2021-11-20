@@ -261,7 +261,7 @@
         try {
           this.personal.loading = true
           const res = await axios.patch(`/api/users/{{user.id}}/`, {...this.user});
-          NavVue.show_msg('Updated successfuly')
+          store.commit('showAlert')
 
           this.personal.loading = false
         } catch (error) {

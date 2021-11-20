@@ -9,196 +9,196 @@
 <main id="accountSettings" v-cloak>
   <!-- Call block super -->
   {{ block.super }}
+  <v-app>
+    <v-main>
+      <v-container class="grey lighten-5 mb-10">
+        <v-row no-gutters>
 
-  <section class="container mx-auto grid gap-4 grid-cols-12">
-    <!-- left section -->
-    <div class="col-span-12 md:col-span-3  py-3">
-      <div class="bg-white">
-        <h3 class="text-lg p-4">Settings</h3>
-  
-        <ul>
-          <li :class="[{'bg-gray-200 border-l-4 border-primary': activeSettings == 'personal'}, 'hover:bg-gray-200']">
-            <a id="personal" class="block p-4" href="#" @click.prevent="updateActiveSettings">My info</a>
-          </li>
-          <li :class="[{'bg-gray-200 border-l-4 border-primary': activeSettings == 'payment'}, 'hover:bg-gray-200']">
-            <a id="payment" class="block p-4" href="#" @click.prevent="updateActiveSettings">Payment</a>
-          </li>
-          <li :class="[{'bg-gray-200 border-l-4 border-primary': activeSettings == 'delivery'}, 'hover:bg-gray-200']">
-            <a id="delivery" class="block p-4" href="#" @click.prevent="updateActiveSettings">Delivery Options</a>
-          </li>
-          <li :class="[{'bg-gray-200 border-l-4 border-primary': activeSettings == 'orders'}, 'hover:bg-gray-200']">
-            <a id="orders" class="block p-4" href="#" @click.prevent="updateActiveSettings">Order history</a>
-          </li>
-          <li :class="[{'bg-gray-200 border-l-4 border-primary': activeSettings == 'password'}, 'hover:bg-gray-200']">
-            <a id="password" class="block p-4" href="#" @click.prevent="updateActiveSettings">Change Password</a>
-          </li>
-        </ul>
-      </div>
-    </div>
+          <!-- left side card -->
+          <v-col sm="12" md="3" class="pa-2">
+            <v-card >
+              <v-list>
+                <v-subheader>Settings</v-subheader>
+                <v-list-item-group v-model="selectedItem" color="primary">
+                  <v-list-item v-for="(item, i) in items" :key="i" @click="activeSettings=item.key">
+                    <v-list-item-icon>
+                      <v-icon v-text="item.icon"></v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                      <v-list-item-title v-text="item.text"></v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list-item-group>
+              </v-list>
 
-    <!-- right section -->
-    <div class="col-span-12 md:col-span-9 bg-white p-5">
-      <!-- personal settings -->
-      <div v-show="activeSettings == 'personal'">
-        <h3 class="text-2xl font-bold opacity-40">Personal</h3>
-  
-        <form id="personal-form" class="grid grid-cols-12 gap-4 mt-10">
-          <!-- first name -->
-          <div class="col-span-6">
-            <label for="first_name" class="text-gray-700 px-1">First name</label>
-            <input type="text" name="first_name" id="first_name" v-model="user.first_name" class="input-v">
-          </div>
-  
-          <!-- last name -->
-          <div class="col-span-6">
-            <label for="last_name" class="text-gray-700 px-1">Last name</label>
-            <input type="text" name="last_name" id="last_name" v-model="user.last_name" class="input-v">
-          </div>
-  
-          <!-- email -->
-          <div class="col-span-12">
-            <label for="email" class="text-gray-700 px-1">Email</label>
-            <input type="email" name="email" id="email" v-model="user.email" class="input-v">
-          </div>
-  
-          <!-- Contact Number -->
-          <div class="col-span-6">
-            <label for="phone_number" class="text-gray-700 px-1">Contact Number</label>
-            <input type="text" name="phone_number" id="phone_number" v-model="user.profile.phone_number" class="input-v" @input="acceptPhoneNumber" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
-            <small class="text-gray-400">must match format 999-999-9999</small>
-          </div>
-  
-          <!-- Alternate Contact Number -->
-          <div class="col-span-6">
-            <label for="phone_number_2" class="text-gray-700 px-1">Alternate Contact Number</label>
-            <input type="text" name="phone_number_2" id="phone_number_2" v-model="user.profile.phone_number_2" class="input-v" @input="acceptPhoneNumber2" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
-            <small class="text-gray-400">must match format 999-999-9999</small>
-          </div>
-
-          <hr class="col-span-12 my-5">
-
-          <!-- num_adults -->
-          <div class="col-span-6">
-            <label for="num_adults" class="text-gray-700 px-1">Number of adults</label>
-            <input type="text" name="num_adults" id="num_adults" v-model="user.profile.num_adults" class="input-v">
-          </div>
-
-        </form>
-
-        <!-- save button -->
-        <div class="section-footer flex mt-10">
-          <ff-button text="Update info" cls="btn-primary ml-auto mr-3" :loading="personal.loading" v-on:click.native="saveUser"></ff-button>
-        </div>
-      </div>
-      
-      <!-- payment -->
-      <div v-show="activeSettings == 'payment'">
-        <h3 class="text-2xl font-bold opacity-40">Payment</h3>
-        {% include 'accounts/account_payments.html' %}
-      </div>
-
-      <!-- delivery settings -->
-      <div v-show="activeSettings == 'delivery'">
-        <h3 class="text-2xl font-bold opacity-40">Delivery Options</h3>
-
-        <form id="delivery-form" class="grid grid-cols-12 gap-4 my-10">
-          <!-- Delivery Options -->
-          {% if settings.HOME_DELIVERY_ENABLED %}
-          <div class="col-span-12">
-            <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
-              <input type="checkbox" id="home_delivery" name="home_delivery" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" v-model="user.profile.home_delivery"/>
-              <label for="home_delivery" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
-            </div>
-            <label for="toggle" class="cursor-pointer select-none">Home Delivery</label>
-            <small class="block text-gray-400 mt-2">Available in Eugene, Corvallis, and Springfield for a $5 fee. This fee is waived for all orders over $125.</small>
-          </div>
-
-          <div class="col-span-12" v-if="user.profile.home_delivery" v-observe-visibility="initAutoCompelete()">
-            <label for="address">Address</label>
-            <input class="input-v" id="address" type="text" v-model="user.profile.delivery_address" required>
-          </div>
-          {% endif %}
-
-          <!-- Drop Sites -->
-          <div class="col-span-12" v-if="user.profile.home_delivery">
-            <label for="drop_site" class="block">Drop Site Location</label>
-            <select name="drop_site" id="drop_site" class="input-v" v-model="user.profile.drop_site" required>
-              {% for site in DROPSITE_CHOICES %}
-              <option value="{{site.0}}">{{site.1}}</option>
-              {% endfor %}
-            </select>
-          </div>
-
-          <!-- Preferences -->
-          <h3 class="col-span-12 text-lg mt-6 mb-3">Preferences</h3>
+            </v-card>
+          </v-col>
           
-          <div class="col-span-6">
-            <label class="inline-flex items-center cursor-pointer">
-              <input type="checkbox" class="form-radio h-4 w-4 text-gray-600" name="plastic_bags" v-model="user.profile.plastic_bags">
-              <span class="ml-2 text-gray-700 select-none">Plastic bags</span>
-            </label>
-            <small class="block text-gray-400 pl-6">Please pack small items in a plastic bag.</small>
-          </div>
-
-          <div class="col-span-6">
-            <label class="inline-flex items-center cursor-pointer">
-              <input type="checkbox" class="form-radio h-4 w-4 text-gray-600" name="weekly_emails" v-model="user.profile.weekly_emails">
-              <span class="ml-2 text-gray-700 select-none">Receive Weekly Emails</span>
-            </label>
-            <small class="block text-gray-400 pl-6">Receive weekly newsletter and reminder emails.</small>
-          </div>
+          <!-- right side card -->
+          <v-col sm="12" md="9" class="pa-2">
+            <v-card class="pa-5">
+              <!-- personal settings -->
+              <div v-show="activeSettings == 'personal'">
+                <h3 class="text-2xl font-bold opacity-40">Personal</h3>
           
-          <div class="col-span-12">
-            <label class="inline-flex items-center cursor-pointer">
-              <input type="checkbox" class="form-radio h-4 w-4 text-gray-600" name="allow_substitutions" v-model="user.profile.allow_substitutions">
-              <span class="ml-2 text-gray-700 select-none">Allow substitutions</span>
-            </label>
-            <small class="block text-gray-400 pl-6 max-w-lg">I am okay with substitutions when an item I ordered is no longer available. We do our best to pack what you have ordered, however on occasion crops will not be ready to harvest, etc. We can provide a substitution, or we can credit your account.</small>
-          </div>
-        </form>
+                <form id="personal-form" class="grid grid-cols-12 gap-4 mt-10">
+                  <!-- first name -->
+                  <div class="col-span-6">
+                    <v-text-field label="First name" outlined v-model="user.first_name"></v-text-field>
+                  </div>
+          
+                  <!-- last name -->
+                  <div class="col-span-6">
+                    <v-text-field label="Last name" outlined v-model="user.last_name"></v-text-field>
+                  </div>
+          
+                  <!-- email -->
+                  <div class="col-span-12">
+                    <v-text-field label="Email" outlined v-model="user.email"></v-text-field>
+                  </div>
+          
+                  <!-- Contact Number -->
+                  <div class="col-span-6">
+                    <v-text-field
+                      label="Contact Number"
+                      outlined
+                      v-model="user.profile.phone_number"
+                      hint="must match format 999-999-9999"
+                      persistent-hint
+                      @input="acceptPhoneNumber"
+                      required
+                      ></v-text-field>
+                  </div>
+          
+                  <!-- Alternate Contact Number -->
+                  <div class="col-span-6">
+                    <v-text-field
+                      label="Alternate Contact Number"
+                      outlined
+                      v-model="user.profile.phone_number_2"
+                      hint="must match format 999-999-9999"
+                      persistent-hint
+                      @input="acceptPhoneNumber"
+                      required
+                      ></v-text-field>
+                  </div>
+        
+                  <hr class="col-span-12 my-5">
+        
+                  <!-- num_adults -->
+                  <div class="col-span-6">
+                    <v-text-field label="Number of adults" outlined v-model="user.profile.num_adults"></v-text-field>
+                  </div>
+                </form>
+        
+                <!-- save button -->
+                <v-btn color="primary" class="font-weight-bold mt-10" :loading="personal.loading" @click="saveUser">Update Info</v-btn>
+              </div>
+              
+              <!-- payment -->
+              <div v-show="activeSettings == 'payment'">
+                <h3 class="text-2xl font-bold opacity-40">Payment</h3>
+                {% include 'accounts/account_payments.html' %}
+              </div>
+        
+              <!-- delivery settings -->
+              <div v-show="activeSettings == 'delivery'">
+                <h3 class="text-2xl font-bold opacity-40">Delivery Options</h3>
+        
+                <form id="delivery-form" class="grid grid-cols-12 gap-4 my-10">
+                  <!-- Delivery Options -->
+                  {% if settings.HOME_DELIVERY_ENABLED %}
+                  <div class="col-span-12">
+                    <v-switch
+                      v-model="user.profile.home_delivery"
+                      inset
+                      label="Home Delivery"
+                      hint="Available in Eugene, Corvallis, and Springfield for a $5 fee. This fee is waived for all orders over $125."
+                      persistent-hint
+                    ></v-switch>
+                  </div>
+        
+                  <div class="col-span-12" v-if="user.profile.home_delivery" v-observe-visibility="initAutoCompelete()">
+                    <v-text-field id="address" label="Address" outlined v-model="user.profile.delivery_address" required></v-text-field>
+                  </div>
+                  {% endif %}
+        
+                  <!-- Drop Sites -->
+                  <div class="col-span-12" v-if="user.profile.home_delivery">
+                    <v-combobox
+                      outlined
+                      label="Drop Site Location"
+                      v-model="user.profile.drop_site"
+                      :items="sites"
+                      item-text="text"
+                      item-value="value"
+                      :return-object="false"
+                    ></v-combobox>
+                  </div>
+        
+                  <!-- Preferences -->
+                  <h3 class="col-span-12 text-lg mt-6 mb-3">Preferences</h3>
+                  
+                  <div class="col-span-6">
+                    <v-checkbox
+                      v-model="user.profile.plastic_bags"
+                      label="Plastic bags"
+                      hint="Please pack small items in a plastic bag"
+                      persistent-hint
+                    ></v-checkbox>
+                  </div>
 
-        <!-- save button -->
-        <div class="section-footer flex mt-10">
-          <ff-button text="Save changes" cls="btn-primary ml-auto mr-3" :loading="personal.loading" v-on:click.native="saveUser"></ff-button>
-        </div>
-      </div>
+                  <div class="col-span-6">
+                    <v-checkbox
+                      v-model="user.profile.weekly_emails"
+                      label="Receive Weekly Emails"
+                      hint="Receive weekly newsletter and reminder emails"
+                      persistent-hint
+                    ></v-checkbox>
+                  </div>
 
-      <!-- order history -->
-      <div v-show="activeSettings == 'orders'">
-        <h3 class="text-2xl font-bold opacity-40">Order history</h3>
-
-        <orders endpoint="/api/orders" class="mt-5"></orders>
-      </div>
+                  <div class="col-span-6">
+                    <v-checkbox
+                      v-model="user.profile.allow_substitutions"
+                      label="Allow substitutions"
+                      hint="I am okay with substitutions when an item I ordered is no longer available. We do our best to pack what you have ordered, however on occasion crops will not be ready to harvest, etc. We can provide a substitution, or we can credit your account"
+                      persistent-hint
+                    ></v-checkbox>
+                  </div>
+                </form>
+        
+                <!-- save button -->
+                <v-btn color="primary" class="font-weight-bold mt-10" :loading="personal.loading" @click="saveUser">Update Info</v-btn>
+              </div>
+        
+              <!-- order history -->
+              <div v-show="activeSettings == 'orders'">
+                <h3 class="text-2xl font-bold opacity-40">Order history</h3>
+        
+                <orders endpoint="/api/orders" class="mt-5"></orders>
+              </div>
+              
+              <!-- change password -->
+              <div v-show="activeSettings == 'password'">
+                <h3 class="text-2xl font-bold opacity-40">Change Password</h3>
+        
+                <form id="password-form" class="my-10">
+                  <v-text-field label="Current password" outlined name="cpassword" minlength=6 required></v-text-field>
+                  <v-text-field label="New password" outlined name="password" minlength=6 required></v-text-field>
+                  <v-text-field label="Confirm New password" outlined name="password2" minlength=6 required></v-text-field>
+                </form>
+        
+                <!-- save button -->
+                <v-btn color="primary" class="font-weight-bold mt-10" :loading="personal.loading" @click="changePassword">Change password</v-btn>
+              </div>
+              
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
       
-      <!-- change password -->
-      <div v-show="activeSettings == 'password'">
-        <h3 class="text-2xl font-bold opacity-40">Change Password</h3>
-
-        <form id="password-form" class="grid grid-cols-12 gap-4 my-10">
-
-          <div class="col-span-12">
-            <label for="cpassword" class="text-gray-700 px-1">Current password</label>
-            <input type="password" name="cpassword" id="cpassword" class="input-v delivery_address_part" minlength="6">
-          </div>
-          <div class="col-span-12">
-            <label for="password" class="text-gray-700 px-1">New password</label>
-            <input type="password" name="password" id="password" class="input-v delivery_address_part" minlength="6">
-          </div>
-          <div class="col-span-12">
-            <label for="password2" class="text-gray-700 px-1">Confirm new password</label>
-            <input type="password" name="password2" id="password2" class="input-v delivery_address_part" minlength="6">
-          </div>
-        </form>
-
-        <!-- save button -->
-        <div class="section-footer flex mt-10">
-          <ff-button text="Save changes" cls="btn-primary ml-auto mr-3" :loading="personal.loading" v-on:click.native="changePassword"></ff-button>
-        </div>
-      </div>
-      
-    </div>
-
-  </section>
+    </v-main>
+  </v-app>
 
 </main>
 {% endblock main %}
@@ -544,9 +544,21 @@
   const AccountVue = new Vue({
     el: '#accountSettings',
     delimiters: ['((', '))'],
+    vuetify: new Vuetify(opts),
     data: {
       // Current active tab
-      activeSettings: 'personal',
+      selectedItem: 0,
+      activeSettings: 'payment',
+      items: [
+        { key: 'personal', text: 'My info', icon: 'mdi-account' },
+        { key: 'payment', text: 'Payment', icon: 'mdi-credit-card-outline' },
+        { key: 'delivery', text: 'Delivery Options', icon: 'mdi-truck-delivery-outline' },
+        { key: 'orders', text: 'Order history', icon: 'mdi-history' },
+        { key: 'password', text: 'Change Password', icon: 'mdi-lock-outline' },
+      ],
+
+      // drop_sites
+      sites: [],
 
       // Personal
       // TODO - might need to update this
@@ -574,8 +586,9 @@
       // oneTimePayment
       // {% if user.profile.non_subscribing_member or user.profile.stripe_subscription_id or user.profile.stripe_customer_id and user.profile.ach_status in 'NEW,VERIFYING' %}
       oneTimePayment: {
-        modalShown: false,
+        dialog: false,
         paymentMethod: 'ACH',
+        amount: null,
         stripeError: null,
         loading: false
       },
@@ -592,9 +605,10 @@
       // {% elif not user.profile.non_subscribing_member and not user.profile.stripe_subscription_id %}
       newSubscription: {
         paymentMethod: 'ACH', // ACH || CC
+        achAccountTypes: [{value: 'individual', text: 'Individual'}, {value: 'company', text: 'Company'}],
+        achAccountType: 'individual',   // individual || company
         stripeError: null,
         loading: false
-
       },
       // {% endif %}
 
@@ -618,12 +632,26 @@
         try {
           this.personal.loading = true
           const res = await axios.patch(`/api/users/{{user.id}}/`, {...this.user});
-          NavVue.show_msg('Updated successfuly')
+          store.commit('showAlert')
 
           this.personal.loading = false
         } catch (error) {
           console.log(error.response.data)
           NavVue.show_msg('Can not save user information', 'error')
+          this.personal.loading = false
+        }
+      },
+
+      async getDropSites() {
+        // get drop sites
+        try {
+          this.personal.loading = true
+          const res = await axios.post(`/api/users/get_drop_sites/`);
+          this.sites = res.data.sites
+          this.personal.loading = false
+        } catch (error) {
+          console.log(error.response.data)
+          // store.commit('showAlert', {type: 'error', content: error.response.data.detail})
           this.personal.loading = false
         }
       },
@@ -657,9 +685,6 @@
 
       // oneTimePayment
       // {% if user.profile.non_subscribing_member or user.profile.stripe_subscription_id or user.profile.stripe_customer_id and user.profile.ach_status in 'NEW,VERIFYING' %}
-      OPT_ToggleModal() {
-        this.oneTimePayment.modalShown = !this.oneTimePayment.modalShown;
-      },
       async OPT_Pay() {
         // One time payment pay function
         const oneTimePayment = document.getElementById('oneTimePayment')
@@ -677,27 +702,35 @@
               } else {
                 // Send the token to your server.
                 this.oneTimePayment.stripeError = null;
-                const res = await axios.post('/api/pay/one_time_payment/', {
-                  stripeToken: result.token.id,
-                  amount: parseFloat(oneTimePayment.amount.value)
-                });
-                
-                // Show success message
-                NavVue.show_msg(res.data.detail)
-                
+
+                try {
+                  const res = await axios.post('/api/pay/one_time_payment/', {
+                    stripeToken: result.token.id,
+                    amount: parseFloat(this.oneTimePayment.amount)
+                  });
+  
+                  // Show success message
+                  store.commit('showAlert', {type: 'success', content: res.data.detail})
+                  
+                } catch (error) {
+                  store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+                  
+                }
+
+
                 oneTimePayment.reset()
                 card.unmount()
                 this.oneTimePayment.loading = false
-                this.oneTimePayment.modalShown = false
+                this.oneTimePayment.dialog = false
               }
             });
           } else {
             try {
-              const res = await axios.post('/api/pay/one_time_payment/', {amount: parseFloat(oneTimePayment.amount.value)});
+              const res = await axios.post('/api/pay/one_time_payment/', {amount: parseFloat(this.oneTimePayment.amount)});
               NavVue.show_msg(res.data.detail)
-              this.oneTimePayment.modalShown = false
+              this.oneTimePayment.dialog = false
             } catch (error) {
-              NavVue.show_msg(error.response.data.detail, 'error')
+              store.commit('showAlert', {type: 'error', content: error.response.data.detail})
             }
             this.oneTimePayment.loading = false
           }
@@ -722,7 +755,7 @@
             setTimeout(() => location.reload(), 20000)
             
           } catch (error) {
-            NavVue.show_msg(error.response.data.detail, 'error')
+            store.commit('showAlert', {type: 'error', content: error.response.data.detail})
           }
           this.VerifyACH.loading = false
         }
@@ -741,7 +774,7 @@
             routing_number: fd.get('achRoutingNumber'),
             account_number: fd.get('achAccountNumber'),
             account_holder_name: fd.get('achAccountName'),
-            account_holder_type: fd.get('achAccountType')
+            account_holder_type: this.newSubscription.achAccountType
           }
           promise = stripe.createToken('bank_account', data).then(async (result) => {
             if (result.error) {
@@ -760,7 +793,7 @@
                 location.reload()
                 // TODO -> store the message in browser and show it after reload
               } catch (error) {
-                NavVue.show_msg(error.response.data.detail, 'error')
+                store.commit('showAlert', {type: 'error', content: error.response.data.detail})
               }
             }
 
@@ -781,12 +814,12 @@
         try {
           this.personal.loading = true
           const res = await axios.post(`/api/users/{{user.id}}/change_password/`, formData);
-          NavVue.show_msg('Updated successfuly')
+          store.commit('showAlert')
           this.personal.loading = false
           location.reload()
         } catch (error) {
           console.log(error.response.data)
-          NavVue.show_msg(error.response.data.detail, 'error')
+          store.commit('showAlert', {type: 'error', content: error.response.data.detail})
           this.personal.loading = false
         }
       },
@@ -828,6 +861,7 @@
     },
     
     mounted() {
+      this.getDropSites()
       this.getUser()
       // this.getUserPayments()
       // this.getUserCredits()

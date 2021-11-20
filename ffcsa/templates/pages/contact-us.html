@@ -23,7 +23,6 @@
     filter: blur(7px);
   }
 
-
   input:checked + label {
     border-color: #e16231;
     color: #e16231;
@@ -69,78 +68,72 @@
       </a>
     </div>
 
+    <v-app class="mt-4 rounded">
+      <v-main>
 
-    <div class="bg-white bg-opacity-80 rounded shadow mt-5 p-5">
-      <form id="contactUsFrom" class="grid grid-cols-12 gap-4">
-      <!-- <form class="shadow"> -->
-        <p class="text-base font-bold text-gray-700 col-span-12">Send us a message</p>
-
-        <div class="col-span-12 md:col-span-6">
-          <div class="grid grid-cols-12 gap-4">
-            <!-- Name -->
-            <div class="col-span-12">
-              <label for="name" class="text-gray-700 px-1">Your name</label>
-              <input type="text" name="name" id="name" class="input-v">
-            </div>
-            
-            <!-- email -->
-            <div class="col-span-12">
-              <label for="email" class="text-gray-700 px-1">Email</label>
-              <input type="email" name="email" id="email" class="input-v">
+        <v-card class="pa-5">
+          <div class="">
+            <form id="contactUsFrom" class="grid grid-cols-12 gap-4">
+              <p class="text-base font-bold text-gray-700 col-span-12">Send us a message</p>
+      
+              <div class="col-span-12 md:col-span-6">
+                <v-text-field outlined label="Your name" required></v-text-field>
+                <v-text-field outlined label="Email" type="email" required></v-text-field>
+                <v-text-field outlined label="Phone" required></v-text-field>
+              </div>
+        
+              <!-- message -->
+              <div class="col-span-12 md:col-span-6">
+                <v-textarea outlined label="Message" rows="8" no-resize></v-textarea>
+              </div>
+      
+              <!-- Reason -->
+              <div class="col-span-12 select-none -mt-4">
+                <v-select
+                  outlined
+                  label="Reason"
+                  v-model="reason"
+                  :items="contactReasons"
+                  item-text="text"
+                  item-value="value"
+                  :return-object="false"
+                ></v-select>
+              </div>
+            </form>
+      
+            <div class="text-center mt-2">
+              <v-btn color="primary" class="font-weight-bold">Send message</v-btn>
             </div>
       
-            <!-- email -->
-            <div class="col-span-12">
-              <label for="phone" class="text-gray-700 px-1">Phone</label>
-              <input type="text" name="phone" id="phone" class="input-v">
-            </div>
           </div>
-        </div>
+
+        </v-card>
+
+      </v-main>
+    </v-app>
+
   
-        <!-- message -->
-        <div class="col-span-12 md:col-span-6">
-          <label for="message" class="text-gray-700 px-1">Message</label>
-          <textarea name="message" id="message" class="input-v" rows="8" style="resize: none; max-height: 80%;"></textarea>
-        </div>
-
-        <!-- Reason -->
-        <div class="col-span-12 select-none -mt-4">
-          <p class="text-gray-700">Reason</p>
-
-          <div class="grid grid-cols-12 gap-4 text-center text-base">
-            <div class="col-span-12 md:col-span-4">
-              <input class="hidden" id="inquiry" type="radio" name="reason">
-              <label
-                class="border-2 border-white text-gray-600 bg-white cursor-pointer block w-ful rounded p-2 hover:text-orange"
-                for="inquiry">Inquiry</label>
-            </div>
-  
-            <div class="col-span-12 md:col-span-4">
-              <input class="hidden" id="complain" type="radio" name="reason">
-              <label 
-                class="border-2 border-white text-gray-600 bg-white cursor-pointer block w-ful rounded p-2 hover:text-orange"
-                for="complain">Complain</label>
-            </div>
-
-            <div class="col-span-12 md:col-span-4">
-              <input class="hidden" id="report" type="radio" name="reason">
-              <label 
-                class="border-2 border-white text-gray-600 bg-white cursor-pointer block w-ful rounded p-2 hover:text-orange"
-                for="report">Report an issue</label>
-            </div>
-          </div>
-        </div>
-
-      </form>
-
-      <div class="text-center mt-10">
-        <button class="btn btn-primary">Send message</button>
-      </div>
-
-    </div>
-
-
   </section>
-  
+
 </main>
+
 {% endblock main %}
+
+
+{% block js %}
+<script>
+  const ContactUsVue = new Vue({
+    el: '#contactUs',
+    delimiters: ['((', '))'],
+    vuetify: new Vuetify(opts),
+    data: {
+      reason: 'inquiry',
+      contactReasons: [
+        {key: 'inquiry', text:'Inquiry'},
+        {key: 'complain', text:'Complain'},
+        {key: 'report', text:'Report'}
+      ]
+    }
+  })
+</script>
+{% endblock %}
