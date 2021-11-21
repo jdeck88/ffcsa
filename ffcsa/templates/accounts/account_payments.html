@@ -126,10 +126,10 @@
     <form action="{% url 'payments_verify' %}" method="POST" id="VerifyACH" class="mt-5">
       <p>Deposit Amounts</p>
       <v-row>
-        <v-col sm="12" md="6">
+        <v-col cols="12" md="6">
           <v-text-field outlined label="Deposit 1" name="amount1" required></v-text-field>
         </v-col>
-        <v-col sm="12" md="6">
+        <v-col cols="12" md="6">
           <v-text-field outlined label="Deposit 2" name="amount2" required></v-text-field>
         </v-col>
       </v-row>
@@ -193,11 +193,11 @@
       <!-- ACH details -->
       <div v-show="newSubscription.paymentMethod == 'ACH'" class="mt-10  my-10" id="ach-details">
         <v-row>
-          <v-col sm="12" md="6">
+          <v-col cols="12" md="6">
             <v-text-field label="Name on Bank Account" outlined name="achAccountName" value="{{user.get_full_name}}" required></v-text-field>
           </v-col>
 
-          <v-col sm="12" md="6">
+          <v-col cols="12" md="6">
             <v-combobox
               v-model="newSubscription.achAccountType"
               label="Bank Account Type"
@@ -209,11 +209,11 @@
             ></v-combobox>
           </v-col>
 
-          <v-col sm="12" md="6">
+          <v-col cols="12" md="6">
             <v-text-field label="Routing Number" type="number" outlined name="achRoutingNumber" placeholder="123456789" min="9" :required="newSubscription.paymentMethod == 'ACH'"></v-text-field>
           </v-col>
 
-          <v-col sm="12" md="6">
+          <v-col cols="12" md="6">
             <v-text-field label="Account Number" type="number" outlined name="achAccountNumber" placeholder="0000987654321" :required="newSubscription.paymentMethod == 'ACH'"></v-text-field>
           </v-col>
         </v-row>

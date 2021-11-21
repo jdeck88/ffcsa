@@ -15,7 +15,7 @@
         <v-row no-gutters>
 
           <!-- left side card -->
-          <v-col sm="12" md="3" class="pa-2">
+          <v-col cols="12" md="3" class="pa-2">
             <v-card >
               <v-list>
                 <v-subheader>Settings</v-subheader>
@@ -35,7 +35,7 @@
           </v-col>
           
           <!-- right side card -->
-          <v-col sm="12" md="9" class="pa-2">
+          <v-col cols="12" md="9" class="pa-2">
             <v-card class="pa-5">
               <!-- personal settings -->
               <div v-show="activeSettings == 'personal'">
@@ -538,8 +538,6 @@
   })
 
   
-
-
   const AccountVue = new Vue({
     el: '#accountSettings',
     delimiters: ['((', '))'],
