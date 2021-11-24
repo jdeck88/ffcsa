@@ -5,204 +5,224 @@
 
 {% block main %}
 <main id="signup">
+
+  <v-app>
+    <v-main class="grey lighten-5">
+      <v-container>
+        <!-- for logged in users -->
+        {% if request.user.is_authenticated %}
+        <p>{% trans "You're already logged in. If you'd like to create a new account, you'll need to log out first." %}</p>
+        {% else %}
+        <div class="max-w-screen-lg grid grid-cols-12 gap-10 mx-auto mt-20 p-3">
+          <!-- info part -->
+          <div class="col-span-12 md:col-span-5 text-base pt-20">
+            <h3 class="mb-5 mt-0 text-brown-7 font-bold text-lg	">Thanks for choosing the Full Farm CSA!</h3>
+            <p class="mb-3">
+              If you haven't done so already, you can check out our current selection of products <a class="text-primary" href="/">here</a>
+              and find out more information about our CSA by visiting our <a class="text-primary" target="_blank" href="https://deckfamilyfarm.com/faq/">FAQs</a> page.
+            </p>
+            <p class="mb-3">
+              We encourage all CSA members to visit the Deck Family Farm (in Junction City) at least once
+              during or before their time in the CSA, so come check us out! Our open gate policy is Monday - Saturday
+              during business hours. Let us know when you may be coming and we can arrange a mini tour.
+            </p>
+            
+            <div class="border-b-2 my-8"></div>
+            
+            <p class="mb-8">
+              Our Portland dropsites are currently full. <a class="text-primary" target="_blank" href="https://26403a96.sibforms.com/serve/MUIEAEe-Lhh9Ij9OVpUCDzojW-Mdekxfy3xZjo7tka8o97OAN5FCESzSdtZnYvRkQkahzra5SB0It2X_txOn8Osv64fHf6t3Cv15W_S8yXTczZbBQfQ7Z_voZO4w2Q48UtGXYMgQaelSC0ni3_GivthfTK9FvMchpVPz-q7Y2JscpW2VjQjQSGgfNoJ56dxcF6ASqRwLc5Qkpa2S">Join our waitlist</a> 
+              to be notified when a spot opens up. Thank you for understanding and supporting local farms!
+            </p>
+            
+            <!-- commented iframe -->
+            {#  <iframe width="540" height="450"#}
+            {#  src="https://26403a96.sibforms.com/serve/MUIEAEe-Lhh9Ij9OVpUCDzojW-Mdekxfy3xZjo7tka8o97OAN5FCESzSdtZnYvRkQkahzra5SB0It2X_txOn8Osv64fHf6t3Cv15W_S8yXTczZbBQfQ7Z_voZO4w2Q48UtGXYMgQaelSC0ni3_GivthfTK9FvMchpVPz-q7Y2JscpW2VjQjQSGgfNoJ56dxcF6ASqRwLc5Qkpa2S"#}
+            {#  frameborder="0" scrolling="auto" allowfullscreen#}
+            {#  style="display: block;margin-left: auto;margin-right: auto;max-width: 100%;"></iframe>#}
+            {#  {% errors_for form %}#}
+            <!-- commented iframe -->
+          </div>
+          <!-- info part -->
+          
+          
+          <!-- form part -->
+          <div class="col-span-12 md:col-span-7">
+            <div class="text-center mb-10">
+              <h1 class="font-bold text-3xl text-gray-900">REGISTER</h1>
+              <p>Enter your information to register</p>
+            </div>
+      
+            <v-form class="mb-7">
+              <v-container>
+                <v-row>
+                  <!-- first name -->
+                  <v-col cols="12" md="6">
+                    <v-text-field outlined label="First name *" v-model="user.first_name" required></v-text-field>
+                  </v-col>
+
+                  <!-- last name -->
+                  <v-col cols="12" md="6">
+                    <v-text-field outlined label="Last name *" v-model="user.last_name" required></v-text-field>
+                  </v-col>
+                  
+                  <!-- email -->
+                  <v-col cols="12">
+                    <v-text-field prepend-inner-icon="mdi-email" outlined label="Email *" v-model="user.email" required></v-text-field>
+                  </v-col>
+
+                  <!-- password -->
+                  <v-col cols="12" md="6">
+                    <v-text-field prepend-inner-icon="mdi-key-variant" outlined label="Password *" v-model="user.password" required></v-text-field>
+                  </v-col>
+
+                  <!-- confrim password -->
+                  <v-col cols="12" md="6">
+                    <v-text-field prepend-inner-icon="mdi-key-variant" outlined label="Confirm password *" v-model="user.password2" required></v-text-field>
+                  </v-col>
+
+                  <!-- Delivery Options -->
+                  {% if settings.HOME_DELIVERY_ENABLED %}
+                  <div>
+                    <v-col cols="12">
+                      <v-switch
+                        v-model="user.profile.home_delivery"
+                        inset
+                        label="Home Delivery"
+                        hint="Available in Eugene, Corvallis, and Springfield for a $5 fee. This fee is waived for all orders over $125."
+                        persistent-hint
+                      ></v-switch>
+                    </v-col>
   
-  <!-- for logged in users -->
-  {% if request.user.is_authenticated %}
-  <p>{% trans "You're already logged in. If you'd like to create a new account, you'll need to log out first." %}</p>
-  {% else %}
-  <div class="max-w-screen-lg grid grid-cols-12 gap-10 mx-auto mt-20 p-3">
-    <!-- info part -->
-    <div class="col-span-12 md:col-span-5 text-base pt-20">
-      <h3 class="mb-5 mt-0 text-brown-7 font-bold text-lg	">Thanks for choosing the Full Farm CSA!</h3>
-      <p class="mb-3">
-        If you haven't done so already, you can check out our current selection of products <a class="text-primary" href="/">here</a>
-        and find out more information about our CSA by visiting our <a class="text-primary" target="_blank" href="https://deckfamilyfarm.com/faq/">FAQs</a> page.
-      </p>
-      <p class="mb-3">
-        We encourage all CSA members to visit the Deck Family Farm (in Junction City) at least once
-        during or before their time in the CSA, so come check us out! Our open gate policy is Monday - Saturday
-        during business hours. Let us know when you may be coming and we can arrange a mini tour.
-      </p>
+                    <v-col cols="12" v-if="user.profile.home_delivery" v-observe-visibility="initAutoCompelete()">
+                      <v-text-field id="address" label="Address" outlined v-model="user.profile.delivery_address" required autocomplete="false"></v-text-field>
+                    </v-col>
+  
+                    <!-- Drop Sites -->
+                    <v-col cols="12">
+                      <v-combobox
+                          outlined
+                          v-if="user.profile.home_delivery"
+                          label="Drop Site Location"
+                          v-model="user.profile.drop_site"
+                          :items="store.state.drop_sites"
+                          item-text="text"
+                          item-value="value"
+                          :return-object="false"
+                        ></v-combobox>
+                    </v-col>
+                  </div>
+                  {% endif %}
+
+                  <!-- invite_code -->
+                  <v-col cols="12">
+                    <v-text-field outlined label="Invite Code (Portland dropsites only)" v-model="user.profile.code" required></v-text-field>
+                  </v-col>
+
+                  <!-- phone_number -->
+                  <v-col cols="12" md="6">
+                    <v-text-field
+                      outlined
+                      label="Contact Number *"
+                      v-model="user.profile.phone_number"
+                      @input="acceptPhoneNumber"
+                      hint="must match format 999-999-9999"
+                      persistent-hint
+                      maxlength=12
+                      required>
+                    </v-text-field>
+                  </v-col>
+
+                  <!-- phone_number_2 -->
+                  <v-col cols="12" md="6">
+                    <v-text-field
+                      outlined
+                      label="Alternate Contact Number"
+                      v-model="user.profile.phone_number_2"
+                      @input="acceptPhoneNumber2"
+                      hint="must match format 999-999-9999"
+                      persistent-hint
+                      maxlength=12
+                      required>
+                    </v-text-field>
+                  </v-col>
+
+                  <!-- num_adults -->
+                  <v-col cols="12" md=6>
+                    <v-text-field outlined label="How many adults are in your family? *" type="number" v-model="user.profile.num_adults" required></v-text-field>
+                  </v-col>
+
+                  <!-- num_children -->
+                  <v-col cols="12" md=6>
+                    <v-text-field outlined label="How many children are in your family? *" type="number" v-model="user.profile.num_children" required></v-text-field>
+                  </v-col>
+
+                  <v-col cols="12">
+                    <!-- communication_method -->
+                    <v-select
+                      :items="communication_methods"
+                      item-text="text"
+                      item-value="value"
+                      :return-object="false"
+                      label="What is your preferred method of communication?"
+                      outlined
+                    ></v-select>
+
+                    <!-- best_time_to_reach -->
+                    <v-text-field outlined label="What is the best time to reach you? *" type="time" v-model="user.profile.best_time_to_reach" required></v-text-field>
+                    
+                    <!-- hear_about_us -->
+                    <v-textarea outlined label="How did you hear about us? *" required></v-textarea>
+
+                    <!-- join_dairy_program -->
+                    <v-checkbox
+                      v-model="user.profile.join_dairy_program"
+                      label="Join Dairy Program"
+                      hint="I would like to join the Dairy program. I understand that I will be charged a $50 herd-share fee when making my first payment and will need to talk to the Dairy Manager before gaining access to dairy products. We'll be in touch soon."
+                      persistent-hint
+                    ></v-checkbox>
+
+                    <!-- payment_agreement -->
+                    <v-checkbox
+                      v-model="user.profile.payment_agreement"
+                      label="I agree to make monthly payments in order to maintain my membership with the FFCSA for 6 months, with a minimium of $172 per month."
+                      persistent-hint
+                    ></v-checkbox>
+
+                    <!-- pickup_agreement -->
+                    <v-checkbox
+                      v-model="user.profile.pickup_agreement"
+                      label="I agree to bring my own bags and coolers as needed to pick up my product. The containers that the product arrives in stay at the dropsite. I intend to maintain my membership with the FFCSA for 6 months, with a minimum payment of $172 per month"
+                      persistent-hint
+                    ></v-checkbox>
+                  </v-col>
+
+                  <v-btn block color="primary" class="font-weight-bold">Sign up</v-btn>
+                </v-row>
+              </v-container>
+            </v-form>
       
-      <div class="border-b-2 my-8"></div>
+            <p class="text-base text-gray-700 mb-3"><strong>After signing up, you will receive a welcome email and a Membership Agreement that you will need to sign.</strong></p>
+            <p class="text-base text-gray-700 mb-2">Once you have signed the agreement and set up your payments, you will be ready to make your first order!</p>
+            <p class="text-base text-gray-700 mb-2">If you do not see these 2 emails after signing up, check your spam folder and let us know if it isn't there.</p>
       
-      <p class="mb-8">
-        Our Portland dropsites are currently full. <a class="text-primary" target="_blank" href="https://26403a96.sibforms.com/serve/MUIEAEe-Lhh9Ij9OVpUCDzojW-Mdekxfy3xZjo7tka8o97OAN5FCESzSdtZnYvRkQkahzra5SB0It2X_txOn8Osv64fHf6t3Cv15W_S8yXTczZbBQfQ7Z_voZO4w2Q48UtGXYMgQaelSC0ni3_GivthfTK9FvMchpVPz-q7Y2JscpW2VjQjQSGgfNoJ56dxcF6ASqRwLc5Qkpa2S">Join our waitlist</a> 
-        to be notified when a spot opens up. Thank you for understanding and supporting local farms!
-      </p>
+            <!-- Regiser btn -->
+            <div class="flex text-center my-10 pb-20">
+              <div class="w-full px-3 mb-5">
+                <ff-button text="REGISTER NOW" cls="btn-primary ml-auto mr-3" :loading="personal.loading" v-on:click.native="saveUser"></ff-button>
+              </div>
+            </div>
       
-      <!-- commented iframe -->
-      {#  <iframe width="540" height="450"#}
-      {#  src="https://26403a96.sibforms.com/serve/MUIEAEe-Lhh9Ij9OVpUCDzojW-Mdekxfy3xZjo7tka8o97OAN5FCESzSdtZnYvRkQkahzra5SB0It2X_txOn8Osv64fHf6t3Cv15W_S8yXTczZbBQfQ7Z_voZO4w2Q48UtGXYMgQaelSC0ni3_GivthfTK9FvMchpVPz-q7Y2JscpW2VjQjQSGgfNoJ56dxcF6ASqRwLc5Qkpa2S"#}
-      {#  frameborder="0" scrolling="auto" allowfullscreen#}
-      {#  style="display: block;margin-left: auto;margin-right: auto;max-width: 100%;"></iframe>#}
-      {#  {% errors_for form %}#}
-      <!-- commented iframe -->
-    </div>
-    <!-- info part -->
-    
-    
-    <!-- form part -->
-    <div class="col-span-12 md:col-span-7">
-      <div class="text-center mb-10">
-        <h1 class="font-bold text-3xl text-gray-900">REGISTER</h1>
-        <p>Enter your information to register</p>
-      </div>
-
-      <form id="register-form" class="grid grid-cols-12 gap-5 mb-20" method="POST">
-        <!-- first name -->
-        <div class="col-span-12 md:col-span-6">
-          <label for="first_name" class="text-gray-700 px-1">First name *</label>
-          <input type="text" name="first_name" id="first_name" v-model="user.first_name" class="input-v" required>
+          </div>
+          <!-- form part -->
         </div>
-
-        <!-- last name -->
-        <div class="col-span-12 md:col-span-6">
-          <label for="last_name" class="text-gray-700 px-1">Last name *</label>
-          <input type="text" name="last_name" id="last_name" v-model="user.last_name" class="input-v" required>
-        </div>
-
-        <!-- email -->
-        <div class="col-span-12">
-          <label for="email" class="text-gray-700 px-1">Email *</label>
-          <input type="email" name="email" id="email" v-model="user.email" class="input-v" required>
-        </div>
-
-        <!-- password -->
-        <div class="col-span-12">
-          <label for="password" class="text-gray-700 px-1">Password *</label>
-          <input type="password" name="password" id="password" v-model="user.password" class="input-v" minlength="6" required>
-        </div>
-
-        <!-- confirm password -->
-        <div class="col-span-12">
-          <label for="password2" class="text-gray-700 px-1">Confirm password *</label>
-          <input type="password" name="password2" id="password2" v-model="user.password2" class="input-v" minlength="6" required>
-        </div>
-
-         <!-- Delivery Options -->
-        {% if settings.HOME_DELIVERY_ENABLED %}
-        <div class="col-span-12">
-           <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
-             <input type="checkbox" id="home_delivery" name="home_delivery" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" v-model="user.profile.home_delivery"/>
-             <label for="home_delivery" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer text-gray-700"></label>
-           </div>
-           <label for="toggle" class="cursor-pointer select-none text-gray-700">Home Delivery</label>
-           <small class="block text-gray-400 mt-2">Available in Eugene, Corvallis, and Springfield for a $5 fee. This fee is waived for all orders over $125.</small>
-         </div>
-
-         <div class="col-span-12" v-if="user.profile.home_delivery" v-observe-visibility="initAutoCompelete()">
-           <label for="address" class="text-gray-700">Address</label>
-           <input class="input-v" id="address" type="text" v-model="user.profile.delivery_address" autocomplete="off" required>
-        </div>
-
-        <!-- Drop Sites -->
-        <div class="col-span-12" v-if="user.profile.home_delivery">
-          <label for="drop_site" class="text-gray-700 block">Drop Site Location</label>
-          <select name="drop_site" id="drop_site" class="input-v" v-model="user.profile.drop_site" required>
-            {% for site in DROPSITE_CHOICES %}
-            <option value="{{site.0}}">{{site.1}}</option>
-            {% endfor %}
-          </select>
-        </div>
+      
         {% endif %}
-
-        <!-- invite_code -->
-        <div class="col-span-12">
-          <label for="invite_code" class="text-gray-700 px-1">Invite Code (Portland dropsites only)</label>
-          <input type="text" name="invite_code" id="invite_code" v-model="user.profile.code" class="input-v">
-        </div>
-
-        <!-- phone_number -->
-        <div class="col-span-6">
-          <label for="phone_number" class="text-gray-700 px-1">Contact Number *</label>
-          <input type="text" name="phone_number" id="phone_number" v-model="user.profile.phone_number" class="input-v" @input="acceptPhoneNumber" required pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
-          <small class="text-gray-400">must match format 999-999-9999</small>
-        </div>
-
-        <!-- phone_number_2 -->
-        <div class="col-span-6">
-          <label for="phone_number_2" class="text-gray-700 px-1">Alternate Contact Number</label>
-          <input type="text" name="phone_number_2" id="phone_number_2" v-model="user.profile.phone_number_2" class="input-v" @input="acceptPhoneNumber2" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
-          <small class="text-gray-400">must match format 999-999-9999</small>
-        </div>
-
-        <!-- num_adults -->
-        <div class="col-span-6">
-          <label for="num_adults" class="text-gray-700 px-1">How many adults are in your family? *</label>
-          <input type="number" name="num_adults" id="num_adults" v-model="user.profile.num_adults" class="input-v">
-        </div>
-
-        <!-- num_children -->
-        <div class="col-span-6">
-          <label for="num_children" class="text-gray-700 px-1">How many children are in your family? *</label>
-          <input type="number" name="num_children" id="num_children" v-model="user.profile.num_children" class="input-v">
-        </div>
-
-        <!-- communication_method -->
-        <div class="col-span-6">
-          <label for="communication_method" class="text-gray-700 block">What is your preferred method of communication?</label>
-          <select name="communication_method" id="communication_method" class="input-v" required>
-            <option value="email">Email</option>
-            <option value="phone">Phone</option>
-            <option value="text">Text</option>
-          </select>
-        </div>
-
-        <!-- best_time_to_reach -->
-        <div class="col-span-6">
-          <label for="best_time_to_reach" class="text-gray-700 px-1">What is the best time to reach you? *</label>
-          <input type="time" name="best_time_to_reach" id="best_time_to_reach" v-model="user.profile.best_time_to_reach" class="input-v">
-        </div>
-
-        <!-- hear_about_us -->
-        <div class="col-span-12">
-          <label for="hear_about_us" class="text-gray-700 px-1">How did you hear about us? *</label>
-          <textarea class="input-v" name="hear_about_us" id="hear_about_us" rows="4"></textarea>
-        </div>
-
-        <!-- join_dairy_program -->
-        <div class="col-span-12">
-          <label class="grid grid-cols-12 gap-1 cursor-pointer">
-            <input type="checkbox" class="col-span-1 form-radio h-4 w-4 m-2 text-gray-600" name="join_dairy_program" v-model="user.profile.join_dairy_program">
-            <span class="col-span-11 text-gray-700 select-none">Join Dairy Program</span>
-          </label>
-          <small class="block text-gray-400 pl-6">I would like to join the Dairy program. I understand that I will be charged a $50 herd-share fee when making my first payment and will need to talk to the Dairy Manager before gaining access to dairy products. We'll be in touch soon.</small>
-        </div>
         
-        <!-- payment_agreement -->
-        <div class="col-span-12">
-          <label class="grid grid-cols-12 gap-1 cursor-pointer">
-            <input type="checkbox" class="col-span-1 form-radio h-4 w-4 m-2 text-gray-600" name="payment_agreement" v-model="user.profile.payment_agreement">
-            <span class="col-span-11 text-gray-700 select-none">I agree to make monthly payments in order to maintain my membership with the FFCSA for 6 months, with a minimium of $172 per month.</span>
-          </label>
-        </div>
+      </v-container>
+    </v-main>
+  </v-app>
 
-        <!-- pickup_agreement -->
-        <div class="col-span-12">
-          <label class="grid grid-cols-12 gap-1 cursor-pointer">
-            <input type="checkbox" class="col-span-1 form-radio h-4 w-4 m-2 text-gray-600" name="pickup_agreement" v-model="user.profile.pickup_agreement">
-            <span class="col-span-11 text-gray-700 select-none">I agree to bring my own bags and coolers as needed to pick up my product. The containers that the product arrives in stay at the dropsite. I intend to maintain my membership with the FFCSA for 6 months, with a minimum payment of $172 per month</span>
-          </label>
-        </div>
-      </form>
-
-      <p class="text-base text-gray-700 mb-3"><strong>After signing up, you will receive a welcome email and a Membership Agreement that you will need to sign.</strong></p>
-      <p class="text-base text-gray-700 mb-2">Once you have signed the agreement and set up your payments, you will be ready to make your first order!</p>
-      <p class="text-base text-gray-700 mb-2">If you do not see these 2 emails after signing up, check your spam folder and let us know if it isn't there.</p>
-
-      <!-- Regiser btn -->
-      <div class="flex text-center my-10 pb-20">
-        <div class="w-full px-3 mb-5">
-          <ff-button text="REGISTER NOW" cls="btn-primary ml-auto mr-3" :loading="personal.loading" v-on:click.native="saveUser"></ff-button>
-        </div>
-      </div>
-
-    </div>
-    <!-- form part -->
-  </div>
-
-  {% endif %}
+  
 </main>
 {% endblock main %}
 
@@ -214,12 +234,16 @@
   const AccountVue = new Vue({
     el: '#signup',
     delimiters: ['((', '))'],
+    store,
+    vuetify: new Vuetify(opts),
     data: {
       // Personal
       // TODO - might need to update this
       personal: {
         loading: false
       },
+
+      communication_methods: [{text: 'Email', value: 'email'}, {text: 'Phone', value: 'phone'}, {text: 'Text', value: 'text'}],
 
       user: {
         first_name: '',
