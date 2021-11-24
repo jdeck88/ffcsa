@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.core import urlresolvers
+from mezzanine.conf import settings
 
 from mezzanine.pages.middleware import PageMiddleware
 from mezzanine.utils.deprecation import MiddlewareMixin
@@ -15,6 +16,7 @@ class ShopMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
         request.cart = Cart.objects.from_request(request)
+        request.STRIPE_API_KEY = settings.STRIPE_API_KEY
 
 
 class MultiurlPageMiddleware(PageMiddleware):

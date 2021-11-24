@@ -162,3 +162,12 @@ def set_locale():
                 "configure the SHOP_CURRENCY_LOCALE setting in your settings "
                 "module.")
         raise ImproperlyConfigured(msg % currency_locale)
+
+
+def recalculate_product_price(price):
+    """
+    Icrease product's price by QUICK_CHECKOUT_INCREASE
+    """
+    QUICK_CHECKOUT_INCREASE = Decimal('.05')
+    return round(Decimal(price) + Decimal(price) * QUICK_CHECKOUT_INCREASE, 2)
+

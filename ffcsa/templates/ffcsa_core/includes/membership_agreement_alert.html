@@ -1,6 +1,12 @@
 {% if request.user.is_authenticated and not request.user.profile.signed_membership_agreement %}
-    <p class="alert alert-warning">You will need to sign our Membership Agreement before you can order. You should
-        have received an email with this document upon signup. <a href="{% url 'signrequest' %}"
-                                                                  class="btn btn-xs btn-primary ml-3">Re-Send</a>
-    </p>
+<v-alert dense border="left" type="warning">
+  <v-row align="center">
+    <v-col class="grow">
+      You will need to sign our Membership Agreement before you can order. You should have received an email with this document upon signup.
+    </v-col>
+    <v-col class="shrink">
+      <v-btn color="blue" href="{% url 'signrequest' %}">Re-Send</v-btn>
+    </v-col>
+  </v-row>
+</v-alert>
 {% endif %}

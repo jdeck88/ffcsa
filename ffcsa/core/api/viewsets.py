@@ -21,6 +21,12 @@ from ffcsa.core.dropsites import DROPSITE_CHOICES
 User = get_user_model()
 
 
+class AppResources(viewsets.ViewSet):
+
+    @list_route(methods=['post'])
+    def get_drop_sites(self, request):
+        return Response({'sites': [{'value': site[0], 'text': site[1]} for site in DROPSITE_CHOICES]})
+
 
 class UserViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     serializer_class = UserSerializer
@@ -67,10 +73,6 @@ class UserViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.G
         request.user.save()
         auth.authenticate(request.user)
         return Response({'detail': 'Password updated'})
-
-    @list_route(methods=['post'])
-    def get_drop_sites(self, request):
-        return Response({'sites': [{'value': site[0], 'text': site[1]} for site in DROPSITE_CHOICES]})
 
 
 class LoginViewSet(viewsets.ViewSet):

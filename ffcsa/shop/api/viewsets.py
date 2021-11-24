@@ -6,7 +6,7 @@ from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
-from ffcsa.shop.utils import recalculate_cart
+from ffcsa.shop.utils import recalculate_cart, recalculate_product_price
 
 from ffcsa.shop.models.Cart import Cart, CartItem
 from ffcsa.shop.models.Product import Product, ProductVariation
@@ -34,7 +34,13 @@ class ProductViewSet(viewsets.ModelViewSet):
             )
         queryset = self.paginate_queryset(queryset)
         serializer = ProductDataSerializer(queryset, many=True)
-        return self.get_paginated_response(serializer.data)
+
+        data = serializer.data
+        if not request.user.is_authenticated():
+            # Increase products price by 5%
+            for product in data:
+                product['price'] = recalculate_product_price(product['price'])
+        return self.get_paginated_response(data)
 
     @list_route(methods=['get'])
     def get_parent_sub_categories(self, request):

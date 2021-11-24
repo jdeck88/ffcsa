@@ -1,10 +1,10 @@
 {% extends "pages/page.html" %}
 {% load mezzanine_tags shop_tags i18n static %}
-{% block body_id %}products{% endblock %}
 
-{% block body_class %}bg-gray-100{% endblock %}
+<!-- Title -->
+{% block meta_title %}Profile{% endblock %}
 
-
+<!-- Main Content -->
 {% block main %}
 <main id="accountSettings" v-cloak>
   <!-- Call block super -->
@@ -129,7 +129,7 @@
                       outlined
                       label="Drop Site Location"
                       v-model="user.profile.drop_site"
-                      :items="sites"
+                      :items="store.state.drop_sites"
                       item-text="text"
                       item-value="value"
                       :return-object="false"
@@ -210,7 +210,7 @@
 <script defer>
 
   // Stripe
-  const stripe = Stripe('{{ STRIPE_API_KEY }}')
+  const stripe = Stripe('{{ request.STRIPE_API_KEY }}')
   const elements = stripe.elements({
     fonts: [
       {
@@ -541,6 +541,7 @@
   const AccountVue = new Vue({
     el: '#accountSettings',
     delimiters: ['((', '))'],
+    store,
     vuetify: new Vuetify(opts),
     data: {
       // Current active tab
@@ -553,9 +554,6 @@
         { key: 'orders', text: 'Order history', icon: 'mdi-history' },
         { key: 'password', text: 'Change Password', icon: 'mdi-lock-outline' },
       ],
-
-      // drop_sites
-      sites: [],
 
       // Personal
       // TODO - might need to update this
@@ -635,20 +633,6 @@
         } catch (error) {
           console.log(error.response.data)
           NavVue.show_msg('Can not save user information', 'error')
-          this.personal.loading = false
-        }
-      },
-
-      async getDropSites() {
-        // get drop sites
-        try {
-          this.personal.loading = true
-          const res = await axios.post(`/api/users/get_drop_sites/`);
-          this.sites = res.data.sites
-          this.personal.loading = false
-        } catch (error) {
-          console.log(error.response.data)
-          // store.commit('showAlert', {type: 'error', content: error.response.data.detail})
           this.personal.loading = false
         }
       },
@@ -858,7 +842,6 @@
     },
     
     mounted() {
-      this.getDropSites()
       this.getUser()
       // this.getUserPayments()
       // this.getUserCredits()

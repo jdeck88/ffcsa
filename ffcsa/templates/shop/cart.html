@@ -1,169 +1,164 @@
 {% extends "shop/base.html" %}
 {% load mezzanine_tags shop_tags i18n %}
 
-{% nevercache %}
-    {% block meta_title %}
-        {% if request.user.profile.is_subscribing_member %}Weekly Order{% else %}Order{% endif %}
-    {% endblock %}
-{% endnevercache %}
+{% block meta_title %}
+  {% if request.user.profile.is_subscribing_member %}Weekly Order{% else %}Order{% endif %}
+{% endblock %}
 
 {% block title %}
-    {% nevercache %}
-        {% load ffcsa_core_tags %}
-        {% pickup_date_text %}
-    {% endnevercache %}
+  {% nevercache %}
+    {% load ffcsa_core_tags %}
+    {% pickup_date_text %}
+  {% endnevercache %}
 {% endblock %}
-
-{% block body_id %}cart{% endblock %}
 
 {% block breadcrumb_menu %}
-    {{ block.super }}
-    <li>{% nevercache %}
-        {% if request.user.profile.is_subscribing_member %}Weekly Order{% else %}Order{% endif %}
-    {% endnevercache %}</li>
+  {{ block.super }}
+  <li>{% nevercache %}
+    {% if request.user.profile.is_subscribing_member %}Weekly Order{% else %}Order{% endif %}
+  {% endnevercache %}</li>
 {% endblock %}
 
-{% block topbar %}
-    {#    {% if request.cart.total_price > request.user.profile.weekly_budget %}#}
-    {#        <div class="alert alert-warning text-center">#}
-    {#            The current value of the items in your weekly order is greater then your weekly membership contribution of#}
-    {#            <strong>${{ request.user.profile.weekly_budget }}</strong>. You may want to consider exchanging some of the#}
-    {#            the higher value items for lower cost alternatives.#}
-    {#        </div>#}
-    {#    {% endif %}#}
-{% endblock %}
 
 {% block main %}
-    {% include 'ffcsa_core/includes/membership_agreement_alert.html' %}
+<main id="cart" v-cloak>
+  <v-app>
+    <v-main class="grey lighten-5">
+      <v-container class="mb-10">
+        {% include 'ffcsa_core/includes/membership_agreement_alert.html' %}
 
-    {% if cart_formset.errors %}
-        {% for error in cart_formset.errors %}
-            {% if error and not error.values.0 %}
-                <div class="alert alert-dismissable alert-danger" data-alert="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    {{ error }}
-                </div>
-            {% endif %}
-        {% endfor %}
-    {% endif %}
-    {% if cart_formset.forms %}
-        <form method="post" class="cart-form">
-            {% csrf_token %}
-            {% if cart_formset.errors %}
-                {% for error in cart_formset.errors %}
-                    {% if error.values.0 %}{{ error.values.0 }}{% endif %}
-                {% endfor %}
-            {% endif %}
-            {{ cart_formset.management_form }}
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th colspan="2" class="left">{% trans "Item" %}</th>
-                    <th class="center">{% trans "Qty" %}</th>
-                    <th class="center">{% trans "Price" %}</th>
-                    <th class="center">{% trans "Remove?" %}</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for form in cart_formset.forms %}
-                    {% with form.instance as item %}
-                        <tr>
-                            <td width="30">
-                                {{ form.id }}
-                                {% if item.image %}
-                                    <a href="{{ item.get_absolute_url }}">
-                                        <img alt="{{ item.description }}"
-                                             src="{{ MEDIA_URL }}{% thumbnail item.image 30 30 %}">
-                                    </a>
-                                {% endif %}
-                            </td>
-                            <td class="left">
-                                <a href="{{ item.get_absolute_url }}">{{ item.description }}</a>
-                            </td>
-                            <td class="quantity">{{ form.quantity }}</td>
-                            <td class="center price">{{ item.total_price|currency }}</td>
-                            <td width="50" class="center">{{ form.DELETE }}</td>
-                        </tr>
-                    {% endwith %}
-                {% endfor %}
-                <tr>
-                    <td colspan="5">{% order_totals %}</td>
-                    <td>&nbsp;</td>
-                </tr>
-                </tbody>
-            </table>
-
-            {#            {% if dinner_week %}#}
-            {#                <div class="form-group">#}
-            {#                    {{ cart_dinner_form.attending_dinner.errors }}#}
-            {#                    <label for="{{ cart_dinner_form.id_for_label }}">Number of people attending Friday Dinner at the#}
-            {#                        Farm 5:30pm (If coming to dinner, we will have your order waiting for you at the farm) </label>#}
-            {#                    {{ cart_dinner_form.attending_dinner }}#}
-            {#                </div>#}
-            {#            {% endif %}#}
-
-            <div class="form-actions">
-                <input type="submit" name="update_cart" class="btn btn-primary btn-lg pull-right"
-                       value="{% if request.user.profile.is_subscribing_member %}Update Weekly Order{% else %}Update Order{% endif %}"/>
-                <input type="button" name="clear_cart" class="btn btn-primary btn-lg"
-                       value="{% trans 'Clear Cart' %}"/>
-            </div>
-        </form>
-
-        {#        {% if discount_form %}#}
-        {#            <form method="post" class="discount-form col-md-12 text-right">#}
-        {#                {% fields_for discount_form %}#}
-        {#                <input type="submit" class="btn btn-default" value="{% trans 'Apply' %}">#}
-        {#            </form>#}
-        {#        {% endif %}#}
-
-        {% if settings.SHOP_USE_UPSELL_PRODUCTS %}
-            {% with request.cart.upsell_products as upsell_products %}
-                {% if upsell_products %}
-                    <h2>{% trans "You may also like:" %}</h2>
-                    <div class="row">
-                        {% for product in upsell_products %}
-                            <div class="col-xs-6 col-sm-4 col-md-3 product-thumb">
-                                <a class="thumbnail" href="{{ product.get_absolute_url }}">
-                                    {% if product.image %}
-                                        <img src="{{ MEDIA_URL }}{% thumbnail product.image 90 90 %}">
-                                    {% endif %}
-                                    <div class="caption">
-                                        <h6>{{ product }}</h6>
-                                        <div class="price-info">
-                                            {% if product.has_price %}
-                                                {% if product.on_sale %}
-                                                    <span class="old-price">{{ product.unit_price|currency }}</span>
-                                                    {% trans "On sale:" %}
-                                                {% endif %}
-                                                <span class="price">{{ product.price|currency }}</span>
-                                            {% else %}
-                                                <span class="coming-soon">{% trans "Coming soon" %}</span>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        {% endfor %}
+        <!-- Cart Items -->
+        <v-row :class="cartDisplay.rowClass">
+          <v-col cols=12 :md="cartDisplay.cartMdCol">
+            <template v-if="store.state.cart.items.length > 0" v-for="item in store.state.cart.items">
+              <v-card elevation="1" class="mb-2">
+                <v-row>
+                  <v-col cols="12" sm=4>
+                    <v-img height=150 :src="'/media/' + item.image"></v-img>
+                  </v-col>
+  
+                  <v-col cols="12" sm=4>
+                    <h3>((item.description))</h3>
+                    <h3 class="mt-20">$((item.unit_price))</h3>
+                  </v-col>
+  
+                  <v-col cols="12" sm=4>
+                    <div class="flex justify-center	mt-5">
+                      <v-btn small fab elevation="2" @click="App.decreaseItemQuantity(item, $event)">
+                        <v-icon color="accent">mdi-minus</v-icon>
+                      </v-btn>
+                      
+                      <p class="px-4 pt-1 select-none">((item.quantity))</p>
+  
+                      <v-btn small fab elevation="2" @click="App.increaseItemQuantity(item, $event)" :disabled="item.all_quantity_in_cart">
+                        <v-icon color="accent">mdi-plus</v-icon>
+                      </v-btn>
                     </div>
-                {% endif %}
-            {% endwith %}
-        {% endif %}
+  
+                    <h3 class="text-center font-weight-bold mt-4">$((item.total_price))</h3>
+                  </v-col>
+  
+                </v-row>
+  
+              </v-card>
+            </template>
+          </v-col>
 
-    {% else %}
-        <p>{% trans "Your order is empty." %}</p>
-    {% endif %}
+          {% if not user.is_authenticated %}
+          <!-- for not signed members -->
+          <v-col cols=12 md=5>
+            <v-card class="mb-3 pa-4" flat tile>
+              <v-combobox
+                outlined
+                label="Drop Site Location"
+                v-model="site"
+                :items="store.state.drop_sites"
+                item-text="text"
+                item-value="value"
+                :return-object="false"
+              ></v-combobox>
+
+              <div class="d-flex justify-space-between mt-5">
+                <h4>SUBTOTAL</h4>
+                <h4 class="font-weight-bold">$((store.state.cart.total_price))</h4>
+              </div>
+            </v-card>
+
+            <v-card class="mb-6 " flat tile>
+              <div id="one-time-payment-card" class="w-11/12 my-5 mx-auto"></div>
+            </v-card>
+
+            <v-btn large color="primary" class="font-weight-bold mt-3" block>Pay</v-btn>
+          </v-col>
+          {% endif %}
+        </v-row>
+        
+      </v-container>
+    </v-main>
+  </v-app>
+</main>
+{% endblock %}
 
 
-    <script type="text/javascript">
-      (function () {
-        $('input[name="clear_cart"]').click(function () {
-          $(':checkbox[id$="-DELETE"]').each(function (i, el) {
-            el.checked = true
-          })
-          $('input[name="update_cart"]').click()
-        })
-      })()
-    </script>
+{% block js %}
+<script src="https://js.stripe.com/v3/"></script>
+<script>
 
+  // {% if not user.is_authenticated %}
+  // Stripe
+  const stripe = Stripe('{{ request.STRIPE_API_KEY }}')
+  const elements = stripe.elements({
+    fonts: [
+      {
+        cssSrc: "https://rsms.me/inter/inter.css"
+      }
+    ],
+    // Stripe's examples are localized to specific languages, but if
+    // you wish to have Elements automatically detect your user's locale,
+    // use `locale: 'auto'` instead.
+    locale: window.__exampleLocale
+  });
+
+  /**
+   * Card Element
+   */
+  const card = elements.create("card", {
+    style: {
+      base: {
+        color: "#32325D",
+        fontWeight: 500,
+        fontFamily: "Inter, Open Sans, Segoe UI, sans-serif",
+        fontSize: "20px",
+        fontSmoothing: "antialiased",
+
+        "::placeholder": {
+          color: "#CFD7DF"
+        }
+      },
+      invalid: {
+        color: "#E25950"
+      }
+    }
+  });
+
+  card.mount('#one-time-payment-card')
+  // {% endif %}
+
+  const CartVue = new Vue({
+    el: '#cart',
+    delimiters: ['((', '))'],
+    store,
+    vuetify: new Vuetify(opts),
+    data: {
+      site: '',
+      cartDisplay: {
+        // {% if user.is_authenticated %}
+        cartMdCol: 12, rowClass: 'mt-5 w-3/4 mx-auto',
+        // {% else %}
+        cartMdCol: 7, rowClass: 'mt-5',
+        // {% endif %}
+      }
+    }
+  })
+</script>
 {% endblock %}

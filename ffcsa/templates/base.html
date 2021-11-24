@@ -118,18 +118,23 @@
         <!-- Side Cart -->
         <v-navigation-drawer class="cart-drawer" v-model="drawer" width=456 right fixed temporary>
           <!-- header and close button -->
-          <div class="flex mb-2 py-4 border-b-2 border-black border-opacity-10">
-            <p class="font-bold text-black mx-auto pt-2">YOUR CART ( ((store.state.cart.items.length)) )</p>
-            
-            <!-- Close button -->
-            <v-btn class="ma-2" absolute top right icon plain @click="drawer = !drawer" class="ml-auto mt-1 mr-5" >
-              <v-icon large color="gray lighten-2">mdi-close</v-icon>
-            </v-btn>
-          </div>
+          <v-toolbar elevation="1">
+            <v-row>
+              <v-col cols="2"></v-col>
+              <v-col class="d-flex justify-space-around">
+                <v-toolbar-title class="pt-2">Your Cart ( ((store.state.cart.items.length)) )</v-toolbar-title>
+              </v-col>
+              <v-col cols="2" class="d-flex justify-end">
+                <v-btn icon plain @click="drawer = !drawer" >
+                  <v-icon color="gray lighten-2">mdi-close</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-toolbar>
           <!-- header and close button -->
 
           <!-- content -->
-          <section class="cart-items pl-3 pr-0 mt-5 mt-10 overflow-y-scroll" style="min-width: 25rem; max-height: 70vh;">
+          <section class="cart-items pl-3 pr-0 mt-5 mt-5 overflow-y-scroll" style="max-height: 70vh;">
             <template v-if="store.state.cart.items.length > 0" v-for="item in store.state.cart.items">
               <div class="grid grid-cols-3 gap-4 border-b-2 border-black border-opacity-10 mb-4 pb-4">
                 <!-- item image -->
@@ -141,7 +146,7 @@
                 <!-- item control -->
                 <div class="col-span-2 pr-2">
                   <div class="flex">
-                    <h4 class="font-bold capitalize">((item.description))</h4>
+                    <h4 class="subtitle-1 font-weight-bold capitalize">((item.description))</h4>
                     <v-spacer></v-spacer>
                     <v-btn text icon color="red lighten-2" @click.prevent="removeCartItem(item)">
                       <v-icon small color="gray lighten-2">mdi-close</v-icon>
@@ -153,7 +158,6 @@
       
                     <div class="ml-auto">
                       <div class="flex">
-                        <!-- <button @click="decreaseItemQuantity(item, $event)" :class="[(item.quantity == 0 ? 'btn-disabled' : ''), 'border rounded-sm font-bold px-3 py-1']">-</button> -->
                         <v-btn small fab elevation="2" @click="decreaseItemQuantity(item, $event)">
                           <v-icon color="accent">mdi-minus</v-icon>
                         </v-btn>
@@ -163,8 +167,6 @@
                         <v-btn small fab elevation="2" @click="increaseItemQuantity(item, $event)" :disabled="item.all_quantity_in_cart">
                           <v-icon color="accent">mdi-plus</v-icon>
                         </v-btn>
-
-                        <!-- <button @click="increaseItemQuantity(item, $event)" :class="[(item.all_quantity_in_cart ? 'btn-disabled' : ''), 'border rounded-sm font-bold px-3 py-1']">+</button> -->
                       </div>
                     </div>
                   </div>
@@ -351,8 +353,6 @@
     </div>
 
 
-
-
     
     <!-- main content -->
     <div id="wrapper" class="hiddens">
@@ -437,6 +437,7 @@
             remaining_budget: 0,
             attending_dinner: 0
           },
+          drop_sites: [],
           alert: {
             type: 'success',
             value: false,
@@ -561,6 +562,16 @@
             }
           },
           
+          // get drop sites
+          async getDropSites() {
+            try {
+              const res = await axios.post(`/api/resources/get_drop_sites/`);
+              store.state.drop_sites = res.data.sites
+            } catch (error) {
+              console.log(error.response.data)
+              store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+            }
+          },
 
           hide_alert: function (event) {
             // console.log('Hide')
@@ -585,6 +596,7 @@
         async mounted() {
           // get the cart using user session
           this.fetchCart()
+          this.getDropSites()
 
           // hide alert
           // if(alert){

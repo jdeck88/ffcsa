@@ -286,5 +286,5 @@
         <p>{% trans "You have not yet made any payments." %}</p>
     {% endif %}
 
-    <input type="hidden" id="stripeApiKey" value="{{ STRIPE_API_KEY }}"/>
+    <input type="hidden" id="stripeApiKey" value="{{ request.STRIPE_API_KEY }}"/>
 {% endblock %}

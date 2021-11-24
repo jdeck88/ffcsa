@@ -137,7 +137,7 @@ class Cart(models.Model):
         """
         Cart total including discount & delivery fees
         """
-        return self.item_total_price() - self.discount() + Decimal(self.delivery_fee())
+        return round(self.item_total_price() - self.discount() + Decimal(self.delivery_fee()), 2)
 
     def has_items(self):
         """
@@ -237,7 +237,12 @@ class CartItem(models.Model):
     @property
     def unit_price(self):
         # TODO :: Does this need to account for membership discounts?
-        return self.variation.price()
+        price = self.variation.price()
+        if not self.cart.user_id:
+            # Increase products price by 5%
+            from ffcsa.shop.utils import recalculate_product_price
+            price = recalculate_product_price(price)
+        return price
 
     @property
     def category(self):

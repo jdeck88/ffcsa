@@ -69,7 +69,8 @@ class CartItemSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = CartItem
-        fields = ('id', 'product_id', 'variation_id', 'description', 'unit_price', 'image', 'quantity', 'all_quantity_in_cart')
+        fields = ('id', 'product_id', 'variation_id', 'description', 'unit_price', 'total_price', 
+                'image', 'quantity', 'all_quantity_in_cart')
 
     def get_image(self, obj):
         if obj.image:
@@ -90,7 +91,7 @@ class CartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Cart
-        fields = ('id', 'attending_dinner', 'items', 'total_price', 'delivery_fee', 'remaining_budget')
+        fields = ('id', 'attending_dinner', 'items', 'total_price', 'delivery_fee', 'remaining_budget', 'upsell_products')
 
 
 class OrderSerializer(serializers.ModelSerializer):
