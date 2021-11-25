@@ -1,3 +1,4 @@
+from itertools import product
 from ffcsa.shop import fields
 from rest_framework import serializers
 
@@ -8,16 +9,17 @@ from ffcsa.shop.models.Order import Order
 
 
 # used for all CRUD operations
-class ProductVariationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProductVariation
-        fields = '__all__'
-
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
 
+class ProductVariationSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
+    
+    class Meta:
+        model = ProductVariation
+        fields = '__all__'
 
 # used for all CRUD operations
 
@@ -60,6 +62,7 @@ class ProductDataSerializer(serializers.ModelSerializer):
 
 class CartItemSerializer(serializers.ModelSerializer):
     # image = serializers.CharField(source='image.file')
+    variation = ProductVariationSerializer()
     product_id = serializers.CharField(source='variation.product.id')   # delete me
     variation_id = serializers.CharField(source='variation.id')
     image = serializers.SerializerMethodField()
@@ -69,7 +72,7 @@ class CartItemSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = CartItem
-        fields = ('id', 'product_id', 'variation_id', 'description', 'unit_price', 'total_price', 
+        fields = ('id', 'product_id', 'variation_id', 'description', 'unit_price', 'total_price', 'variation',
                 'image', 'quantity', 'all_quantity_in_cart')
 
     def get_image(self, obj):

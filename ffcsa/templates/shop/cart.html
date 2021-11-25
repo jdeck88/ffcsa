@@ -38,8 +38,14 @@
                   </v-col>
   
                   <v-col cols="12" sm=4>
-                    <h3>((item.description))</h3>
-                    <h3 class="mt-20">$((item.unit_price))</h3>
+                    <div class="flex flex-col justify-space-between h-full py-2">
+                      <h3>((item.description))</h3>
+                      <h3 class="mt-auto">
+                        $((item.unit_price))
+                        <span v-if="item.variation.product.unit" class="">/((item.variation.product.unit))</span>
+                        <h3 class="text-gray-500">((item.variation.product.weight))</h3>
+                      </h3>
+                    </div>
                   </v-col>
   
                   <v-col cols="12" sm=4>
@@ -68,9 +74,14 @@
           <!-- for not signed members -->
           <v-col cols=12 md=5>
             <v-card class="mb-3 pa-4" flat tile>
+              <!-- Name -->
+              <v-text-field outlined prepend-inner-icon="mdi-account" label="Name" v-model="order.name" required></v-text-field>
+              <!-- Email -->
+              <v-text-field outlined prepend-inner-icon="mdi-email" label="Email" v-model="order.email" required></v-text-field>
+              <!-- Pickup Location -->
               <v-combobox
                 outlined
-                label="Drop Site Location"
+                label="Pickup Location"
                 v-model="site"
                 :items="store.state.drop_sites"
                 item-text="text"
@@ -157,6 +168,10 @@
         // {% else %}
         cartMdCol: 7, rowClass: 'mt-5',
         // {% endif %}
+      },
+      order: {
+        name: '',
+        email: ''
       }
     }
   })

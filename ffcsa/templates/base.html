@@ -504,7 +504,8 @@
               store.state.cart.remaining_budget = remaining_budget;
               store.state.cart.attending_dinner = attending_dinner;
             } catch (error) {
-              console.log('Can not fetch Cart')
+              console.log('Fetch Cart Error', error)
+              // console.log('Fetch Cart Error', error.response.data)
             }
           },
           async addToCart(variation) {
