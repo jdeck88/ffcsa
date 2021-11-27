@@ -15,7 +15,6 @@
       <v-container>
         <v-row no-gutters>
           <v-col cols="12" md="6">
-
             <v-container fill-height fluid>
               <v-row align="center" justify="center">
                 <v-col>
@@ -26,7 +25,7 @@
           </v-col>
   
           <v-col cols="12" md="6">
-            <img src="{% static 'img/about-us.svg' %}" alt="about-us">
+            <v-parallax class="select-none" src="{% static 'img/about-us.svg' %}"></v-parallax>
           </v-col>
         </v-row>
 
@@ -141,6 +140,87 @@
         </template>
       </v-container>
 
+
+
+      <!-- Deck Family in Spring of 2012 -->
+      <section class="my-5">
+        <v-parallax height="600" class="select-none" src="{% static 'img/deck-family-spring-2012.jpg' %}">
+          <v-row align="end" justify="end" class="pa-3">
+            <!-- <p class="text-3xl text-brown-7 font-weight-bold">Deck Family in Spring of 2012</p> -->
+            <p class="text-3xl text-primary font-extrabold">Deck Family in Spring of 2012</p>
+          </v-row>
+        </v-parallax>
+        <v-container class="my-5">
+          <p class="subtitle-1">We recently celebrated our 15th anniversary of farming in the Willamette Valley. In that time, we have raised and cared for thousands of animals, watched our children grow, and provided a place for our colleagues to work and interns to live as together we all learned the ins and outs of pasture-based farming. In an effort to support our local food community and be a resource to the aspiring generations of regenerative farmers, we intend to make no compromises in practicing and teaching what we believe to be the necessary future of farming. The journey has surprised and humbled us, we have triumphed and been defeated; but the joys of our labor reward us every day, reminding us why we love to do what we do.</p>
+          <p class="subtitle-1">Our farm operation is varied and involved. Our enterprises include management intensive grazing, livestock handling and birthing, haying, meat processing, building projects, and general farm maintenance. Our conservation initiatives have included wetland, riparian, and forest restoration projects.</p>
+        </v-container>
+      </section>
+
+      <!-- Deck Family Farm Hayfield, 2014 -->
+      <section class="my-20 bg-yellow-extralightest">
+        <v-row>
+          <v-col cols="12" md="6" class="pa-0 ma-0">
+            <!-- <v-parallax class="select-none" src="{% static 'img/deck-family-farm-Hayfield-2014.jpg' %}"></v-parallax> -->
+
+            <v-img height="100%" src="{% static 'img/deck-family-farm-Hayfield-2014.jpg' %}"></v-img>
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-container>
+              <h3 class="display-3 text-brown-7 mb-7">Deck Family Farm Hayfield, 2014</h3>
+              <p class="subtitle-1">At Deck Family Farm, we take a long-term approach developing a sustainable livestock operation. We intend to improve the health of the land that houses and surrounds the farm, which will in turn produce a greater bounty and allow us to work in closer tandem with nature. The farm does not use herbicides, pesticides, hormones, antibiotics or synthetic nitrogen fertilizers. Instead, we generate soil fertility through the natural cycles of composting, grazing management, and seeding a variety of grasses. We aspire to create a model that can be replicated and that does not harm the planet in ways that are associated with industrial, mono-cropped systems of agriculture.</p>
+            </v-container>
+          </v-col>
+        </v-row>
+      </section>
+      
+      <!-- Visiting the Farm -->
+      <!-- <section class="my-20"> -->
+      <section class="grey lighten-5 my-20">
+        <v-container>
+          <h2 class="display-2 text-primary">Visiting the Farm</h2>
+          <p class="subtitle-1 my-5">You’re welcome to enjoy a self-guided walk around the farm with your family and friends Monday-Friday during business hours 9am-3pm. If you’d like to purchase some of our scrumptious pasture raised meats or eggs, please create a pre-order through our website before you visit. Guided tours, Interviews, and large groups (6+ people) are by appointment only! Email us at info@deckfamilyfarm.com to place your request.</p>
+        </v-container>
+
+        <v-row>
+          <v-col cols="12" md="7">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3775.2938288349137!2d-123.34906273554886!3d44.21954311040262!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54c1007cd9f7eb3f%3A0x9981e40e5724792f!2sDeck%20Family%20Farm!5e1!3m2!1sen!2sru!4v1637970291931!5m2!1sen!2sru" width="100%" height="800" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+          </v-col>
+
+          <v-col cols="12" md="5">
+            <v-container>
+              <v-card elevation="1" class="mb-3" >
+                <v-img src="{% static 'img/aerial-view-of-farm.jpg' %}"></v-img>
+                <v-card-title>Physical Address</v-card-title>
+                <v-card-text>
+                  25362 High Pass Road <br>
+                  Junction City, OR 97448
+                </v-card-text>
+              </v-card>
+
+              <v-card elevation="1" class="mb-3" >
+                <v-card-title>Mailing Address</v-card-title>
+                <v-card-text>
+                  PO Box 565 <br>
+                  Junction City, OR 97448 <br>
+                  (541) 998-4697
+                </v-card-text>
+
+                <v-card-actions>
+                  <v-btn color="primary" text href="tel:+1541-998-4697">Call us</v-btn>
+                  <v-btn color="blue" text href="mailto:info@deckfamilyfarm.com">Send an email</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-container>
+          </v-col>
+        </v-row>
+      </section>
+
+
+
+
+
+      <!-- deck-family-farm-Hayfield-2014.jpg -->
     </v-main>
   </v-app>
 

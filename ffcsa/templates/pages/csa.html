@@ -6,533 +6,537 @@
 <img alt="Placeholder" src="https://picsum.photos/600/400/?random" class="block h-auto w-full mb-2">
 
 {% block main %}
-<main id="FAQVue">
+<main id="csa" v-cloak>
   <!-- Call block super -->
   {{ block.super }}
-  
-  <!-- banner section -->
-  <section class="min-h-300px lg:min-h-400px bg-cover bg-center bg-overlay-dark flex" style="background-image: var(--products-banner-bg);">
-    <div class="text-white text-center m-auto font-bold px-5 py-4 max-w-2xl">
-      <p>FULL FARM CSA</p>
-      <p class="text-3xl">Your Customized weekly grocery box From a Farmer You Can Trust.</p>
-      <p>Stop wondering where your food comes from. Local Farms are collaborating to bring you your entire list.</p>
-    </div>
-  </section>
-  <!-- banner section -->
-
-  <!-- 3 features -->
-  <section class="text-white font-bold text-lg text-center grid grid-cols-12 items-center bg-green-light">
-    <p class="col-span-12 md:col-span-4 h-full p-6">HIGH QUALITY, NUTRIENT-DENSE FOOD</p>
-    <p class="col-span-12 md:col-span-4 h-full p-6 bg-green">STRAIGHT FROM THE FARM TO YOUR DOOR</p>
-    <p class="col-span-12 md:col-span-4 h-full p-6">CONFIDENCE IN YOUR FOOD SOURCE</p>
-  </section>
-  <!-- 3 features -->
-
-  <!-- Where does your food come from? -->
-  <section class="container mx-auto text-center my-20 text-brown-7">
-    <h3 class="text-2xl font-bold mb-10">Where does your food come from?</h3>
-    <img alt="thinking-asian-woman" src="{% static 'img/csa-thinking-asian-woman-question-mark.jpg' %}" class="block max-w-7xl mx-auto mb-20">
-    <div class="grid grid-cols-12 gap-4">
-      <div class="col-span-3">Are you <strong class="block">OVERWHELMED</strong> shopping around and researching better food options?</div>
-      <div class="col-span-3">Feeling <strong class="block">POWERLESS</strong> in making a positive impact in your community and the world?</div>
-      <div class="col-span-3">Getting <strong class="block">FRUSTRATED</strong> over unclear or misleading health food claims?</div>
-      <div class="col-span-3">Still <strong class="block">DISCONNECTED</strong> with where your food is coming from?</div>
-    </div>
-
-    {% if not user %}
-    <div class="text-center">
-      <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
-    </div>
-    {% endif %}
-  </section>
-  <!-- Where does your food come from? -->
-
-  <!-- There’s a Better Way -->
-  <section class="bg-swirl p-20">
-    <h3 class="text-2xl text-brown-7 text-center font-bold mb-10">There’s a Better Way</h3>
-
-    <div class="grid grid-cols-12 gap-4 mb-16">
-      <article class="col-span-4 bg-pearlBush">
-        <!-- image -->
-        <img alt="Placeholder" src="{% static 'img/csa-happy-family-in-the-kitchen.jpg' %}" class="block rounded shadow">
-
-        <hr class="border-8 border-swirl">
-        <!-- content -->
-        <div class="p-10">
-          <h3 class="text-xl font-bold mb-10">Conquer the chaos of searching for a healthy food source.</h3>
-          <p class="text-xl font-light relative mb-4 pl-5"><i class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Save time! Get your groceries in one place.</p>
-          <p class="text-xl font-light relative mb-4 pl-5"><i class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Spend your time with loved ones instead of researching food.</p>
-          <p class="text-xl font-light relative pl-5"><i class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Be Confident in your food choices.</p>
+  <v-app>
+    <v-main>
+      <!-- banner section -->
+      <section class="min-h-300px lg:min-h-400px bg-cover bg-center bg-overlay-dark flex" style="background-image: var(--products-banner-bg);">
+        <div class="text-white text-center m-auto font-bold px-5 py-4 max-w-2xl">
+          <p>FULL FARM CSA</p>
+          <p class="text-3xl">Your Customized weekly grocery box From a Farmer You Can Trust.</p>
+          <p>Stop wondering where your food comes from. Local Farms are collaborating to bring you your entire list.</p>
         </div>
-      </article>
-
-      <article class="col-span-4 bg-pearlBush">
-        <!-- image -->
-        <img alt="Placeholder" src="{% static 'img/csa-keeping-a-close-watch-on-his-crops.jpg' %}" class="block rounded shadow">
-
-        <hr class="border-8 border-swirl">
-        <!-- content -->
-        <div class="p-10">
-          <h3 class="text-xl font-bold mb-10">Get savvy with the help of your trusted local farmer.</h3>
-          <p class="text-xl font-light relative mb-4 pl-5"><i class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Get in touch with where your food comes from.</p>
-          <p class="text-xl font-light relative mb-4 pl-5"><i class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Know what’s in season, and cook with quality ingredients.</p>
-          <p class="text-xl font-light relative pl-5"><i class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Say goodbye to unclear health food claims.</p>
-        </div>
-      </article>
-
-      <article class="col-span-4 bg-pearlBush">
-        <!-- image -->
-        <img alt="Placeholder" src="{% static 'img/csa-zero-waste-lifestyle-plastic-free-eco.jpg' %}" class="block rounded shadow">
-
-        <hr class="border-8 border-swirl">
-        <!-- content -->
-        <div class="p-10">
-          <h3 class="text-xl font-bold mb-10">Take charge of the footprint your food sources make.</h3>
-          <p class="text-xl font-light relative mb-4 pl-5"><i class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Support Local Farms and Farmers.</p>
-          <p class="text-xl font-light relative mb-4 pl-5"><i class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Contribute to your community with your food dollars.</p>
-          <p class="text-xl font-light relative pl-5"><i class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Ensure a heritage of sustainable farming.</p>
-          <p class="text-xl font-light relative pl-5"><i class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Leave a legacy of healthy choices.</p>
-        </div>
-      </article>
-    </div>
-
-    {% if not user %}
-    <div class="text-center">
-      <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
-    </div>
-    {% endif %}
-
-  </section>
-  <!-- There’s a Better Way -->
-
-  <!-- Why buy direct from the farm? -->
-  <section class="container mx-auto text-center p-20">
-    <h3 class="text-3xl text-brown-7 font-bold mb-10">Why buy direct from the farm?</h3>
-    <div class="text-xl font-light">
-      <p >Most food these days has <strong>natural sounding labels.</strong> But labels can be confusing and misleading. It’s just so hard to find a food source that offers true straight-from-the-farm options.</p>
-      <strong class="block my-8">We’ve got you, you can rely on us!</strong>
-      <p>We are putting our <strong>generations of farming experience</strong> to good use by collaborating with several other local farms to help you customize your weekly grocery box.</p>
-    </div>
-
-
-    <div class="grid grid-cols-12 gap-4 mt-20">
-      <div class="col-span-12 md:col-span-4 mb-10">
-        <!-- circle -->
-        <div class="bg-orange text-white text-6xl rounded-full h-36 w-36 flex items-center justify-center mx-auto">174</div>
-        <!-- description -->
-        <p class="text-base w-40 mx-auto text-brown-7 pt-3">HOUSEHOLDS SERVED</p>
-      </div>
-
-      <div class="col-span-12 md:col-span-4 mb-10">
-        <!-- circle -->
-        <div class="bg-green text-white rounded-full h-36 w-36 flex items-center justify-center mx-auto">
-          <div class="relative">
-            <div class="text-sm absolute -top-4 left-3">OVER</div>
-            <span class="text-6xl"><span class="text-3xl align-top">$</span>5K</span>
-          </div>
-        </div>
-        <!-- description -->
-        <p class="text-base w-40 mx-auto text-brown-7 pt-3">FOOD DOLLARS TO LOCAL FARMS</p>
-      </div>
-
-      <div class="col-span-12 md:col-span-4 mb-10">
-        <!-- circle -->
-        <div class="bg-orange text-white text-6xl rounded-full h-36 w-36 flex items-center justify-center mx-auto">75</div>
-        <!-- description -->
-        <p class="text-base w-40 mx-auto text-brown-7 pt-3">COMBINED YEARS OF FARMING EXPERIENCE</p>
-      </div>
-
-      <div class="col-span-12 md:col-span-4 mb-10">
-        <!-- circle -->
-        <div class="bg-green text-white text-6xl rounded-full h-36 w-36 flex items-center justify-center mx-auto">365</div>
-        <!-- description -->
-        <p class="text-base w-40 mx-auto text-brown-7 pt-3">DAYS OPEN PER YEAR</p>
-      </div>
-
-      <div class="col-span-12 md:col-span-4 mb-10">
-        <!-- circle -->
-        <div class="bg-orange text-white text-6xl rounded-full h-36 w-36 flex items-center justify-center mx-auto">15</div>
-        <!-- description -->
-        <p class="text-base w-40 mx-auto text-brown-7 pt-3">LOCAL FARM COLLABORATIONS</p>
-      </div>
-
-      <div class="col-span-12 md:col-span-4 mb-10">
-        <!-- circle -->
-        <div class="bg-green text-white text-6xl rounded-full h-36 w-36 flex items-center justify-center mx-auto">4</div>
-        <!-- description -->
-        <p class="text-base w-40 mx-auto text-brown-7 pt-3">GENERATIONS FARMING</p>
-      </div>
-    </div>
-  </section>
-  <!-- Why buy direct from the farm? -->
-
-
-  <!-- Video section -->
-  <section>
-    <p class="text-center my-10 text-red-2">!!! VIDEO HERE !!!</p>
+      </section>
+      <!-- banner section -->
     
-    {% if not user %}
-    <div class="text-center">
-      <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
-    </div>
-    {% endif %}
-  </section>
-  <!-- Video section -->
-
-  <!-- Ready for Better Food Choices? -->
-  <section class="text-center bg-yellow-extralightest p-14 md:p-24">
-    <h3 class="text-brown-7 font-bold text-3xl mb-20">Ready for Better Food Choices?</h3>
+      <!-- 3 features -->
+      <section class="text-center font-weight-bold bg-green-light text-white">
+        <v-row>
+          <v-col cols="12" md="4" class="pa-4">HIGH QUALITY, NUTRIENT-DENSE FOOD</v-col>
+          <v-col cols="12" md="4" class="pa-4 bg-green">STRAIGHT FROM THE FARM TO YOUR DOOR</v-col>
+          <v-col cols="12" md="4" class="pa-4">CONFIDENCE IN YOUR FOOD SOURCE</v-col>
+        </v-row>
+      </section>
+      <!-- 3 features -->
     
-    <div class="grid grid-cols-12 gap-4 max-w-4xl mx-auto">
-      <div class="col-span-12 md:col-span-4 text-center">
-        <img src="{% static 'img/leaf-1.png' %}" alt="leaf" class="w-28 my-10 mx-auto">
-        <h3 class="text-green font-bold mb-3">BECOME A <br> MEMBER</h3>
-        <p class="font-thin w-52 mx-auto text-brown-7">Join the family and gain your share of the farm.</p>
-      </div>
-      <div class="col-span-12 md:col-span-4 text-center">
-        <img src="{% static 'img/leaf-2.png' %}" alt="leaf" class="w-28 my-10 mx-auto">
-        <h3 class="text-green font-bold mb-3">CUSTOMIZE YOUR <br> WEEKLY FOOD BOX</h3>
-        <p class="font-thin w-52 mx-auto text-brown-7">You choose how much to invest and what items you receive.</p>
-      </div>
-      <div class="col-span-12 md:col-span-4 text-center">
-        <img src="{% static 'img/leaf-3.png' %}" alt="leaf" class="w-28 my-10 mx-auto">
-        <h3 class="text-green font-bold mb-3">EAT BETTER <br> EVERY DAY</h3>
-        <p class="font-thin w-52 mx-auto text-brown-7">Rest easy knowing your high-quality food is from a trusted local source.</p>
-      </div>
-    </div>
-
-    {% if not user %}
-    <div class="text-center mt-20">
-      <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
-    </div>
-    {% endif %}
-  </section>
-  <!-- Ready for Better Food Choices? -->
-
-  <!-- Download our Free Guide -->
-  <section class="p-24">
-    <div class="grid grid-cols-12 gap-4 max-w-4xl mx-auto">
-      <div class="col-span-12 md:col-span-6 text-center">
-        <h4 class="text-2xl mb-3">Download our Free Guide:</h4>
-        <p>7 Things About Misleading Labels</p>
-
-        <!-- form -->
-        <form class="mt-10">
-          <div class="grid grid-cols-12 gap-4 mb-5">
-            <div class="col-span-6">
-              <input type="text" name="last_name" id="last_name" class="input-v" placeholder="FIRST NAME" required>
-            </div>
-            <div class="col-span-6">
-              <input type="text" name="last_name" id="last_name" class="input-v" placeholder="LAST NAME" required>
-            </div>
-            <div class="col-span-12">
-              <input type="email" name="email" id="email" class="input-v" placeholder="EMAIL" required>
-            </div>
-          </div>
-
-          <button class="btn-green">DOWNLOAD</button>
-        </form>
-        <!-- form -->
-      </div>
-
-      <div class="col-span-12 md:col-span-6 text-center">
-        <img alt="Placeholder" src="https://picsum.photos/600/400/?random" class="block h-auto w-full mb-2">
-      </div>
-    </div>
-  </section>
-  <!-- Download our Free Guide -->
-
-  <!-- What Members are Saying -->
-  <section class="bg-green-lightest p-24 text-center">
-    <h3 class="text-3xl font-bold text-brown-7">What Members are Saying</h3>
-
-    <div id="reviews-slider" class="reviews-slider mt-10 mb-10 text-brown-6">
-      <div class="max-w-6xl mx-auto">
-        <div class="reviews-slider-prev mr-5 hidden outline-none lg:flex" tabindex="0" aria-label="Previous review">
-          <svg width="48" height="48" viewBox="0 0 25 25" style="fill: #999;" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M20 .755l-14.374 11.245 14.374 11.219-.619.781-15.381-12 15.391-12 .609.755z"/></svg>
+      <!-- Where does your food come from? -->
+      <section class="container mx-auto text-center my-20 text-brown-7">
+        <h3 class="text-2xl font-bold mb-10">Where does your food come from?</h3>
+        <img alt="thinking-asian-woman" src="{% static 'img/csa-thinking-asian-woman-question-mark.jpg' %}" class="block max-w-7xl mx-auto mb-20">
+        <div class="grid grid-cols-12 gap-4">
+          <div class="col-span-3">Are you <strong class="block">OVERWHELMED</strong> shopping around and researching better food options?</div>
+          <div class="col-span-3">Feeling <strong class="block">POWERLESS</strong> in making a positive impact in your community and the world?</div>
+          <div class="col-span-3">Getting <strong class="block">FRUSTRATED</strong> over unclear or misleading health food claims?</div>
+          <div class="col-span-3">Still <strong class="block">DISCONNECTED</strong> with where your food is coming from?</div>
         </div>
-  
-        <div class="reviews-slider-contents max-w-3xl">
-          <div class="review-panel">
-            <p class="leading-snug md:leading-relaxed text-2xl mb-10">Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi esse reprehenderit, et quibusdam cumque a ratione dolor laudantium veniam hic. Tempore perferendis dolore molestias deleniti.</p>
-            <p><span class="font-bold">- Happy Customer,</span> Portland, OR</p>
-          </div>
-  
-          <div class="review-panel">
-            <p class="leading-snug md:leading-relaxed text-2xl mb-10">Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi esse reprehenderit, et quibusdam cumque a ratione dolor laudantium veniam hic. Tempore perferendis dolore molestias deleniti.</p>
-            <p><span class="font-bold">- Happy Customer 2,</span> Eugene, OR</p>
-          </div>
-  
-          <div class="review-panel">
-            <p class="leading-snug md:leading-relaxed text-2xl mb-10">Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi esse reprehenderit, et quibusdam cumque a ratione dolor laudantium veniam hic. Tempore perferendis dolore molestias deleniti.</p>
-            <p><span class="font-bold">- Happy Customer 3,</span> Junction City, OR</p>
-          </div>
-        </div>
-  
-        <div class="reviews-slider-next ml-5 hidden outline-none lg:flex" tabindex="0" aria-label="Next review">
-          <svg width="48" height="48" viewBox="0 0 25 25" style="fill: #999;" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M4 .755l14.374 11.245-14.374 11.219.619.781 15.381-12-15.391-12-.609.755z"/></svg>
-        </div>
-      </div>
-
-      <div class="review-slider-dots my-10 lg:hidden"></div>
-    </div>
-
-    {% if not user %}
-    <div class="text-center mt-20">
-      <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
-    </div>
-    {% endif %}
-  </section>
-  <!-- What Members are Saying -->
-
-  <!-- Meet Your Trusted Farmers -->
-  <section class="p-24 text-center text-brown-7">
-    <h3 class="font-bold text-3xl mb-20">Meet Your Trusted Farmers</h3>
-
-    <div class="grid grid-cols-12 gap-5 max-w-4xl mx-auto">
-      <div class="col-span-12 md:col-span-4">
-        <div class="w-40 h-40 m-auto flex items-center">
-          <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/camas country.png' %}">
-        </div>
-
-        <h4 class="font-bold">CAMAS COUNTRY</h4>
-        <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
-        <p class="text-base font-thin">Juntion City, OR</p>
-      </div>
-
-      <div class="col-span-12 md:col-span-4">
-        <div class="w-40 h-40 m-auto flex items-center">
-          <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/camas swale logo.jpg' %}">
-        </div>
-        
-        <h4 class="font-bold">CAMAS SWALE</h4>
-        <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
-        <p class="text-base font-thin">Juntion City, OR</p>
-      </div>
-
-      <div class="col-span-12 md:col-span-4">
-        <div class="w-40 h-40 m-auto flex items-center">
-          <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/deck logo.jpg' %}">
-        </div>
-
-        <h4 class="font-bold">DECK FAMILY FARM</h4>
-        <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
-        <p class="text-base font-thin">Juntion City, OR</p>
-      </div>
-
-      <div class="col-span-12 md:col-span-4">
-        <div class="w-40 h-40 m-auto flex items-center">
-          <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/elegant elephant.jpg' %}">
-        </div>
-
-        
-        <h4 class="font-bold">ELEGANT ELEPHANT</h4>
-        <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
-        <p class="text-base font-thin">Juntion City, OR</p>
-      </div>
-
-      <div class="col-span-12 md:col-span-4">
-        <div class="w-40 h-40 m-auto flex items-center">
-          <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/lonesome whistle.png' %}">
-        </div>
-
-        
-        <h4 class="font-bold">LONESOME WHISTLE</h4>
-        <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
-        <p class="text-base font-thin">Juntion City, OR</p>
-      </div>
-
-      <div class="col-span-12 md:col-span-4">
-        <div class="w-40 h-40 m-auto flex items-center">
-          <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/ogc logo.jpg' %}">
-        </div>
-
-        
-        <h4 class="font-bold">OGC</h4>
-        <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
-        <p class="text-base font-thin">Juntion City, OR</p>
-      </div>
-
-      <div class="col-span-12 md:col-span-4">
-        <div class="w-40 h-40 m-auto flex items-center">
-          <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/radiant coffee.png' %}">
-        </div>
-
-        
-        <h4 class="font-bold">RADIANT COFFEE</h4>
-        <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
-        <p class="text-base font-thin">Juntion City, OR</p>
-      </div>
-
-      <div class="col-span-12 md:col-span-4">
-        <div class="w-40 h-40 m-auto flex items-center">
-          <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/reality kitchen.png' %}">
-        </div>
-
-        
-        <h4 class="font-bold">Reality Kitchen</h4>
-        <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
-        <p class="text-base font-thin">Juntion City, OR</p>
-      </div>
-
-      <div class="col-span-12 md:col-span-4">
-        <div class="w-40 h-40 m-auto flex items-center">
-          <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/sweet creek.png' %}">
-        </div>
-
-        
-        <h4 class="font-bold">Sweet Creek</h4>
-        <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
-        <p class="text-base font-thin">Juntion City, OR</p>
-      </div>
-
-      <div class="col-span-12 md:col-span-4">
-        <div class="w-40 h-40 m-auto flex items-center">
-          <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/sweet leaf.webp' %}">
-        </div>
-
-        
-        <h4 class="font-bold">Sweet Leaf</h4>
-        <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
-        <p class="text-base font-thin">Juntion City, OR</p>
-      </div>
-    </div>
-
-    {% if not user %}
-    <div class="text-center mt-20">
-      <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
-    </div>
-    {% endif %}
-  </section>
-  <!-- Meet Your Trusted Farmers -->
-
-  <!-- Why Trust Your Local Farmer? -->
-  <section class="bg-orange-extralightest p-24">
-    <h3 class="text-brown-7 text-center font-bold text-3xl mb-20">Why Trust Your Local Farmer?</h3>
-
-    <div class="grid grid-cols-12 gap-4 max-w-5xl mx-auto">
-      <div class="col-span-12 md:col-span-6">
-        <p class="mb-5">Looking for a trusted local partner who can make
-          your search for environmentally responsible and
-          healthy food choices easier? <strong>Search no more!</strong>
-          Just because you’re not the farmer doesn’t mean
-          you can’t be confident in knowing where your food
-          came from.</p>
-
-          <p class="mb-5"><strong>Most food these days has natural sounding
-            claims on their packaging, but how do you
-            actually know how your food has been grown?</strong>
-            There’s only one way, and that is to know your
-            farmer.</p>
-
-          <a href="#" class="text-red-2 font-bold text-base">READ MORE</a>
-      </div>
-
-      <div class="col-span-12 md:col-span-6">
-        <img class="w-full mx-auto" alt="Two workers holding bags of fresh veggies" src="{% static 'img/bags-of-veggies.jpg' %}">
-      </div>
-    </div>
-
-    <section class="text-center max-w-xl mx-auto mt-24">
-      <a href="{% url 'signup' %}" class="btn btn-primary mx-5">BECOME A MEMBER</a>
-      <a href="/products" class="btn btn-green mx-5">BROWSE THE STORE</a>
-    </section>
-  </section>
-  <!-- Why Trust Your Local Farmer? -->
-
-  <!-- Full Farm CSA Quick Facts -->
-  <section class="p-24">
-    <h3 class="text-brown-7 text-center font-bold text-3xl mb-20">Full Farm CSA Quick Facts</h3>
     
-    <div class="grid grid-cols-12 gap-4 max-w-5xl mx-auto">
-      <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
-        Is Full Farm CSA a CSA? <i class="fas fa-plus ml-auto text-base p-1"></i>
-      </p>
-
-      <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
-        Can I do a trial order before committing?  <i class="fas fa-plus ml-auto text-base p-1"></i>
-      </p>
-
-      <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
-        How does it work? <i class="fas fa-plus ml-auto text-base p-1"></i>
-      </p>
-
-      <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
-        What if I go out of town? <i class="fas fa-plus ml-auto text-base p-1"></i>
-      </p>
-
-      <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
-        How much do I pay? <i class="fas fa-plus ml-auto text-base p-1"></i>
-      </p>
-
-      <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
-        Do I choose what’s in my box? <i class="fas fa-plus ml-auto text-base p-1"></i>
-      </p>
-
-      <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
-        Do you deliver? <i class="fas fa-plus ml-auto text-base p-1"></i>
-      </p>
-
-      <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
-        Are all products from Deck Family Farm? <i class="fas fa-plus ml-auto text-base p-1"></i>
-      </p>
-
-    </div>
-
-  </section>
-  <!-- Full Farm CSA Quick Facts -->
-
-  <hr>
-
-  <!-- Your Customized Weekly Membership Box -->
-  <section class="p-24">
-    <h3 class="text-brown-7 text-center font-bold text-3xl mb-20">Your Customized Weekly Membership Box</h3>
-
-    <div class="grid grid-cols-12 gap-10 max-w-5xl mx-auto">
-      <!-- WEEKLY MEMBERSHIP BOX -->
-      <div class="col-span-12 md:col-span-8 bg-orange-lighter">
-        <div class="bg-orange-light text-center p-5">
-          <p class="font-bold">WEEKLY MEMBERSHIP BOX</p>
-          <p class="text-base opacity-60">You choose what budget works for your family!</p>
+        {% if not user %}
+        <div class="text-center">
+          <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
         </div>
-
-        <ul class="list-disc list-inside p-5 px-10 h-52">
-          <li class="text-base font-thin">Customizable box of seasonal ingredients</li>
-          <li class="text-base font-thin">5% discount on all items</li>
-          <li class="text-base font-thin">Monthly member only specials (up to 30% discount)</li>
-          <li class="text-base font-thin">Access to limited availability items</li>
-          <li class="text-base font-thin">Home delivery options + access to member only pickup sites.</li>
-          <li class="text-base font-thin">Free weekly recipes using the week’s seasonal ingredients</li>
-          <li class="text-base font-thin">Access to seasonal farm dinners</li>
-        </ul>
-
-        <div class="bg-orange-light p-5">
-          <p class="font-bold">$40</p>
+        {% endif %}
+      </section>
+      <!-- Where does your food come from? -->
+    
+      <!-- There’s a Better Way -->
+      <section class="bg-swirl p-20">
+        <h3 class="text-2xl text-brown-7 text-center font-bold mb-10">There’s a Better Way</h3>
+    
+        <div class="grid grid-cols-12 gap-4 mb-16">
+          <article class="col-span-4 bg-pearlBush">
+            <!-- image -->
+            <img alt="Placeholder" src="{% static 'img/csa-happy-family-in-the-kitchen.jpg' %}" class="block rounded shadow">
+    
+            <hr class="border-8 border-swirl">
+            <!-- content -->
+            <div class="p-10">
+              <h3 class="text-xl font-bold mb-10">Conquer the chaos of searching for a healthy food source.</h3>
+              <p class="text-xl font-light relative mb-4 pl-5"><i class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Save time! Get your groceries in one place.</p>
+              <p class="text-xl font-light relative mb-4 pl-5"><i class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Spend your time with loved ones instead of researching food.</p>
+              <p class="text-xl font-light relative pl-5"><i class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Be Confident in your food choices.</p>
+            </div>
+          </article>
+    
+          <article class="col-span-4 bg-pearlBush">
+            <!-- image -->
+            <img alt="Placeholder" src="{% static 'img/csa-keeping-a-close-watch-on-his-crops.jpg' %}" class="block rounded shadow">
+    
+            <hr class="border-8 border-swirl">
+            <!-- content -->
+            <div class="p-10">
+              <h3 class="text-xl font-bold mb-10">Get savvy with the help of your trusted local farmer.</h3>
+              <p class="text-xl font-light relative mb-4 pl-5"><i class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Get in touch with where your food comes from.</p>
+              <p class="text-xl font-light relative mb-4 pl-5"><i class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Know what’s in season, and cook with quality ingredients.</p>
+              <p class="text-xl font-light relative pl-5"><i class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Say goodbye to unclear health food claims.</p>
+            </div>
+          </article>
+    
+          <article class="col-span-4 bg-pearlBush">
+            <!-- image -->
+            <img alt="Placeholder" src="{% static 'img/csa-zero-waste-lifestyle-plastic-free-eco.jpg' %}" class="block rounded shadow">
+    
+            <hr class="border-8 border-swirl">
+            <!-- content -->
+            <div class="p-10">
+              <h3 class="text-xl font-bold mb-10">Take charge of the footprint your food sources make.</h3>
+              <p class="text-xl font-light relative mb-4 pl-5"><i class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Support Local Farms and Farmers.</p>
+              <p class="text-xl font-light relative mb-4 pl-5"><i class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Contribute to your community with your food dollars.</p>
+              <p class="text-xl font-light relative pl-5"><i class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Ensure a heritage of sustainable farming.</p>
+              <p class="text-xl font-light relative pl-5"><i class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Leave a legacy of healthy choices.</p>
+            </div>
+          </article>
         </div>
-      </div>
-      <!-- WEEKLY MEMBERSHIP BOX -->
+    
+        {% if not user %}
+        <div class="text-center">
+          <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
+        </div>
+        {% endif %}
+    
+      </section>
+      <!-- There’s a Better Way -->
+    
+      <!-- Why buy direct from the farm? -->
+      <section class="container mx-auto text-center p-20">
+        <h3 class="text-3xl text-brown-7 font-bold mb-10">Why buy direct from the farm?</h3>
+        <div class="text-xl font-light">
+          <p >Most food these days has <strong>natural sounding labels.</strong> But labels can be confusing and misleading. It’s just so hard to find a food source that offers true straight-from-the-farm options.</p>
+          <strong class="block my-8">We’ve got you, you can rely on us!</strong>
+          <p>We are putting our <strong>generations of farming experience</strong> to good use by collaborating with several other local farms to help you customize your weekly grocery box.</p>
+        </div>
+    
+    
+        <div class="grid grid-cols-12 gap-4 mt-20">
+          <div class="col-span-12 md:col-span-4 mb-10">
+            <!-- circle -->
+            <div class="bg-orange text-white text-6xl rounded-full h-36 w-36 flex items-center justify-center mx-auto">174</div>
+            <!-- description -->
+            <p class="text-base w-40 mx-auto text-brown-7 pt-3">HOUSEHOLDS SERVED</p>
+          </div>
+    
+          <div class="col-span-12 md:col-span-4 mb-10">
+            <!-- circle -->
+            <div class="bg-green text-white rounded-full h-36 w-36 flex items-center justify-center mx-auto">
+              <div class="relative">
+                <div class="text-sm absolute -top-4 left-3">OVER</div>
+                <span class="text-6xl"><span class="text-3xl align-top">$</span>5K</span>
+              </div>
+            </div>
+            <!-- description -->
+            <p class="text-base w-40 mx-auto text-brown-7 pt-3">FOOD DOLLARS TO LOCAL FARMS</p>
+          </div>
+    
+          <div class="col-span-12 md:col-span-4 mb-10">
+            <!-- circle -->
+            <div class="bg-orange text-white text-6xl rounded-full h-36 w-36 flex items-center justify-center mx-auto">75</div>
+            <!-- description -->
+            <p class="text-base w-40 mx-auto text-brown-7 pt-3">COMBINED YEARS OF FARMING EXPERIENCE</p>
+          </div>
+    
+          <div class="col-span-12 md:col-span-4 mb-10">
+            <!-- circle -->
+            <div class="bg-green text-white text-6xl rounded-full h-36 w-36 flex items-center justify-center mx-auto">365</div>
+            <!-- description -->
+            <p class="text-base w-40 mx-auto text-brown-7 pt-3">DAYS OPEN PER YEAR</p>
+          </div>
+    
+          <div class="col-span-12 md:col-span-4 mb-10">
+            <!-- circle -->
+            <div class="bg-orange text-white text-6xl rounded-full h-36 w-36 flex items-center justify-center mx-auto">15</div>
+            <!-- description -->
+            <p class="text-base w-40 mx-auto text-brown-7 pt-3">LOCAL FARM COLLABORATIONS</p>
+          </div>
+    
+          <div class="col-span-12 md:col-span-4 mb-10">
+            <!-- circle -->
+            <div class="bg-green text-white text-6xl rounded-full h-36 w-36 flex items-center justify-center mx-auto">4</div>
+            <!-- description -->
+            <p class="text-base w-40 mx-auto text-brown-7 pt-3">GENERATIONS FARMING</p>
+          </div>
+        </div>
+      </section>
+      <!-- Why buy direct from the farm? -->
+    
+    
+      <!-- Video section -->
+      <section>
+        <p class="text-center my-10 text-red-2">!!! VIDEO HERE !!!</p>
+        
+        {% if not user %}
+        <div class="text-center">
+          <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
+        </div>
+        {% endif %}
+      </section>
+      <!-- Video section -->
+    
+      <!-- Ready for Better Food Choices? -->
+      <section class="text-center bg-yellow-extralightest p-14 md:p-24">
+        <h3 class="text-brown-7 font-bold text-3xl mb-20">Ready for Better Food Choices?</h3>
+        
+        <div class="grid grid-cols-12 gap-4 max-w-4xl mx-auto">
+          <div class="col-span-12 md:col-span-4 text-center">
+            <img src="{% static 'img/leaf-1.png' %}" alt="leaf" class="w-28 my-10 mx-auto">
+            <h3 class="text-green font-bold mb-3">BECOME A <br> MEMBER</h3>
+            <p class="font-thin w-52 mx-auto text-brown-7">Join the family and gain your share of the farm.</p>
+          </div>
+          <div class="col-span-12 md:col-span-4 text-center">
+            <img src="{% static 'img/leaf-2.png' %}" alt="leaf" class="w-28 my-10 mx-auto">
+            <h3 class="text-green font-bold mb-3">CUSTOMIZE YOUR <br> WEEKLY FOOD BOX</h3>
+            <p class="font-thin w-52 mx-auto text-brown-7">You choose how much to invest and what items you receive.</p>
+          </div>
+          <div class="col-span-12 md:col-span-4 text-center">
+            <img src="{% static 'img/leaf-3.png' %}" alt="leaf" class="w-28 my-10 mx-auto">
+            <h3 class="text-green font-bold mb-3">EAT BETTER <br> EVERY DAY</h3>
+            <p class="font-thin w-52 mx-auto text-brown-7">Rest easy knowing your high-quality food is from a trusted local source.</p>
+          </div>
+        </div>
+    
+        {% if not user %}
+        <div class="text-center mt-20">
+          <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
+        </div>
+        {% endif %}
+      </section>
+      <!-- Ready for Better Food Choices? -->
+    
+      <!-- Download our Free Guide -->
+      <section class="p-24">
+        <v-row>
+          <v-col cols="12" md="6">
+            <h4 class="text-2xl mb-3">Download our Free Guide:</h4>
+            <p>7 Things About Misleading Labels</p>
+
+            <!-- Download form -->
+            <v-form class="mt-10">
+              <v-row>
+                <v-col cols="12" md="6">
+                  <v-text-field label="First name" outlined></v-text-field>
+                </v-col>
+                <v-col cols="12" md="6">
+                  <v-text-field label="Last name" outlined></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field label="Email" type="email" outlined></v-text-field>
+                </v-col>
+              </v-row>
+
+              <v-btn block large dark color="green" class="font-weight-bold">Download</v-btn>
+            </v-form>
+            <!-- Download form -->
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-img height="100%" src="https://picsum.photos/600/400/?random"></v-img>
+          </v-col>
+        </v-row>
+      </section>
+      <!-- Download our Free Guide -->
+    
+      <!-- What Members are Saying -->
+      <section class="bg-green-lightest p-24 text-center">
+        <h3 class="text-3xl font-bold text-brown-7">What Members are Saying</h3>
+    
+        <div id="reviews-slider" class="reviews-slider mt-10 mb-10 text-brown-6">
+          <div class="max-w-6xl mx-auto">
+            <div class="reviews-slider-prev mr-5 hidden outline-none lg:flex" tabindex="0" aria-label="Previous review">
+              <svg width="48" height="48" viewBox="0 0 25 25" style="fill: #999;" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M20 .755l-14.374 11.245 14.374 11.219-.619.781-15.381-12 15.391-12 .609.755z"/></svg>
+            </div>
       
-      <!-- ONE TIME GUEST ORDER -->
-      <div class="col-span-12 md:col-span-4 bg-green-lighter">
-        <div class="bg-green-light text-center p-5">
-          <p class="font-bold">ONE TIME <br> GUEST ORDER</p>
+            <div class="reviews-slider-contents max-w-3xl">
+              <div class="review-panel">
+                <p class="leading-snug md:leading-relaxed text-2xl mb-10">Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi esse reprehenderit, et quibusdam cumque a ratione dolor laudantium veniam hic. Tempore perferendis dolore molestias deleniti.</p>
+                <p><span class="font-bold">- Happy Customer,</span> Portland, OR</p>
+              </div>
+      
+              <div class="review-panel">
+                <p class="leading-snug md:leading-relaxed text-2xl mb-10">Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi esse reprehenderit, et quibusdam cumque a ratione dolor laudantium veniam hic. Tempore perferendis dolore molestias deleniti.</p>
+                <p><span class="font-bold">- Happy Customer 2,</span> Eugene, OR</p>
+              </div>
+      
+              <div class="review-panel">
+                <p class="leading-snug md:leading-relaxed text-2xl mb-10">Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi esse reprehenderit, et quibusdam cumque a ratione dolor laudantium veniam hic. Tempore perferendis dolore molestias deleniti.</p>
+                <p><span class="font-bold">- Happy Customer 3,</span> Junction City, OR</p>
+              </div>
+            </div>
+      
+            <div class="reviews-slider-next ml-5 hidden outline-none lg:flex" tabindex="0" aria-label="Next review">
+              <svg width="48" height="48" viewBox="0 0 25 25" style="fill: #999;" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M4 .755l14.374 11.245-14.374 11.219.619.781 15.381-12-15.391-12-.609.755z"/></svg>
+            </div>
+          </div>
+    
+          <div class="review-slider-dots my-10 lg:hidden"></div>
         </div>
-
-        <ul class="list-disc list-inside p-5 px-10 h-52">
-          <li class="text-base font-thin">Customizable box of seasonal local ingredients</li>
-          <li class="text-base font-thin">Home delivery options OR pick up at local farmers market</li>
-          <li class="text-base font-thin">Trial our CSA without the commitment</li>
-        </ul>
-
-        <div class="bg-green-light p-5 mt-auto">
-          <p class="font-bold">$40</p>
+    
+        {% if not user %}
+        <div class="text-center mt-20">
+          <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
         </div>
-      </div>
-      <!-- ONE TIME GUEST ORDER -->
-    </div>
-  </section>
-  <!-- Your Customized Weekly Membership BOX -->
-
+        {% endif %}
+      </section>
+      <!-- What Members are Saying -->
+    
+      <!-- Meet Your Trusted Farmers -->
+      <section class="p-24 text-center text-brown-7">
+        <h3 class="font-bold text-3xl mb-20">Meet Your Trusted Farmers</h3>
+    
+        <div class="grid grid-cols-12 gap-5 max-w-4xl mx-auto">
+          <div class="col-span-12 md:col-span-4">
+            <div class="w-40 h-40 m-auto flex items-center">
+              <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/camas country.png' %}">
+            </div>
+    
+            <h4 class="font-bold">CAMAS COUNTRY</h4>
+            <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
+            <p class="text-base font-thin">Juntion City, OR</p>
+          </div>
+    
+          <div class="col-span-12 md:col-span-4">
+            <div class="w-40 h-40 m-auto flex items-center">
+              <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/camas swale logo.jpg' %}">
+            </div>
+            
+            <h4 class="font-bold">CAMAS SWALE</h4>
+            <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
+            <p class="text-base font-thin">Juntion City, OR</p>
+          </div>
+    
+          <div class="col-span-12 md:col-span-4">
+            <div class="w-40 h-40 m-auto flex items-center">
+              <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/deck logo.jpg' %}">
+            </div>
+    
+            <h4 class="font-bold">DECK FAMILY FARM</h4>
+            <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
+            <p class="text-base font-thin">Juntion City, OR</p>
+          </div>
+    
+          <div class="col-span-12 md:col-span-4">
+            <div class="w-40 h-40 m-auto flex items-center">
+              <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/elegant elephant.jpg' %}">
+            </div>
+    
+            
+            <h4 class="font-bold">ELEGANT ELEPHANT</h4>
+            <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
+            <p class="text-base font-thin">Juntion City, OR</p>
+          </div>
+    
+          <div class="col-span-12 md:col-span-4">
+            <div class="w-40 h-40 m-auto flex items-center">
+              <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/lonesome whistle.png' %}">
+            </div>
+    
+            
+            <h4 class="font-bold">LONESOME WHISTLE</h4>
+            <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
+            <p class="text-base font-thin">Juntion City, OR</p>
+          </div>
+    
+          <div class="col-span-12 md:col-span-4">
+            <div class="w-40 h-40 m-auto flex items-center">
+              <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/ogc logo.jpg' %}">
+            </div>
+    
+            
+            <h4 class="font-bold">OGC</h4>
+            <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
+            <p class="text-base font-thin">Juntion City, OR</p>
+          </div>
+    
+          <div class="col-span-12 md:col-span-4">
+            <div class="w-40 h-40 m-auto flex items-center">
+              <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/radiant coffee.png' %}">
+            </div>
+    
+            
+            <h4 class="font-bold">RADIANT COFFEE</h4>
+            <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
+            <p class="text-base font-thin">Juntion City, OR</p>
+          </div>
+    
+          <div class="col-span-12 md:col-span-4">
+            <div class="w-40 h-40 m-auto flex items-center">
+              <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/reality kitchen.png' %}">
+            </div>
+    
+            
+            <h4 class="font-bold">Reality Kitchen</h4>
+            <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
+            <p class="text-base font-thin">Juntion City, OR</p>
+          </div>
+    
+          <div class="col-span-12 md:col-span-4">
+            <div class="w-40 h-40 m-auto flex items-center">
+              <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/sweet creek.png' %}">
+            </div>
+    
+            
+            <h4 class="font-bold">Sweet Creek</h4>
+            <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
+            <p class="text-base font-thin">Juntion City, OR</p>
+          </div>
+    
+          <div class="col-span-12 md:col-span-4">
+            <div class="w-40 h-40 m-auto flex items-center">
+              <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/sweet leaf.webp' %}">
+            </div>
+    
+            
+            <h4 class="font-bold">Sweet Leaf</h4>
+            <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
+            <p class="text-base font-thin">Juntion City, OR</p>
+          </div>
+        </div>
+    
+        {% if not user %}
+        <div class="text-center mt-20">
+          <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
+        </div>
+        {% endif %}
+      </section>
+      <!-- Meet Your Trusted Farmers -->
+    
+      <!-- Why Trust Your Local Farmer? -->
+      <section class="bg-orange-extralightest p-24">
+        <h3 class="text-brown-7 text-center font-bold text-3xl mb-20">Why Trust Your Local Farmer?</h3>
+    
+        <div class="grid grid-cols-12 gap-4 max-w-5xl mx-auto">
+          <div class="col-span-12 md:col-span-6">
+            <p class="mb-5">Looking for a trusted local partner who can make
+              your search for environmentally responsible and
+              healthy food choices easier? <strong>Search no more!</strong>
+              Just because you’re not the farmer doesn’t mean
+              you can’t be confident in knowing where your food
+              came from.</p>
+    
+              <p class="mb-5"><strong>Most food these days has natural sounding
+                claims on their packaging, but how do you
+                actually know how your food has been grown?</strong>
+                There’s only one way, and that is to know your
+                farmer.</p>
+    
+              <a href="#" class="text-red-2 font-bold text-base">READ MORE</a>
+          </div>
+    
+          <div class="col-span-12 md:col-span-6">
+            <img class="w-full mx-auto" alt="Two workers holding bags of fresh veggies" src="{% static 'img/bags-of-veggies.jpg' %}">
+          </div>
+        </div>
+    
+        <section class="text-center max-w-xl mx-auto mt-24">
+          <v-btn large color="primary" class="font-weight-bold mx-3" href="{% url 'signup' %}">BECOME A MEMBER</v-btn>
+          <v-btn large color="green" dark class="font-weight-bold mx-3" href="/products/">BROWSE THE STORE</v-btn>
+        </section>
+      </section>
+      <!-- Why Trust Your Local Farmer? -->
+    
+      <!-- Full Farm CSA Quick Facts -->
+      <section class="p-24">
+        <h3 class="text-brown-7 text-center font-bold text-3xl mb-20">Full Farm CSA Quick Facts</h3>
+        
+        <div class="grid grid-cols-12 gap-4 max-w-5xl mx-auto">
+          <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
+            Is Full Farm CSA a CSA? <i class="fas fa-plus ml-auto text-base p-1"></i>
+          </p>
+    
+          <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
+            Can I do a trial order before committing?  <i class="fas fa-plus ml-auto text-base p-1"></i>
+          </p>
+    
+          <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
+            How does it work? <i class="fas fa-plus ml-auto text-base p-1"></i>
+          </p>
+    
+          <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
+            What if I go out of town? <i class="fas fa-plus ml-auto text-base p-1"></i>
+          </p>
+    
+          <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
+            How much do I pay? <i class="fas fa-plus ml-auto text-base p-1"></i>
+          </p>
+    
+          <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
+            Do I choose what’s in my box? <i class="fas fa-plus ml-auto text-base p-1"></i>
+          </p>
+    
+          <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
+            Do you deliver? <i class="fas fa-plus ml-auto text-base p-1"></i>
+          </p>
+    
+          <p class="col-span-12 md:col-span-6 flex bg-green-extralightest p-2 px-4">
+            Are all products from Deck Family Farm? <i class="fas fa-plus ml-auto text-base p-1"></i>
+          </p>
+    
+        </div>
+    
+      </section>
+      <!-- Full Farm CSA Quick Facts -->
+    
+      <hr>
+    
+      <!-- Your Customized Weekly Membership Box -->
+      <section class="p-24">
+        <h3 class="text-brown-7 text-center font-bold text-3xl mb-20">Your Customized Weekly Membership Box</h3>
+    
+        <div class="grid grid-cols-12 gap-10 max-w-5xl mx-auto">
+          <!-- WEEKLY MEMBERSHIP BOX -->
+          <div class="col-span-12 md:col-span-8 bg-orange-lighter">
+            <div class="bg-orange-light text-center p-5">
+              <p class="font-bold">WEEKLY MEMBERSHIP BOX</p>
+              <p class="text-base opacity-60">You choose what budget works for your family!</p>
+            </div>
+    
+            <ul class="list-disc list-inside p-5 px-10 h-52">
+              <li class="text-base font-thin">Customizable box of seasonal ingredients</li>
+              <li class="text-base font-thin">5% discount on all items</li>
+              <li class="text-base font-thin">Monthly member only specials (up to 30% discount)</li>
+              <li class="text-base font-thin">Access to limited availability items</li>
+              <li class="text-base font-thin">Home delivery options + access to member only pickup sites.</li>
+              <li class="text-base font-thin">Free weekly recipes using the week’s seasonal ingredients</li>
+              <li class="text-base font-thin">Access to seasonal farm dinners</li>
+            </ul>
+    
+            <div class="bg-orange-light p-5">
+              <p class="font-bold">$40</p>
+            </div>
+          </div>
+          <!-- WEEKLY MEMBERSHIP BOX -->
+          
+          <!-- ONE TIME GUEST ORDER -->
+          <div class="col-span-12 md:col-span-4 bg-green-lighter">
+            <div class="bg-green-light text-center p-5">
+              <p class="font-bold">ONE TIME <br> GUEST ORDER</p>
+            </div>
+    
+            <ul class="list-disc list-inside p-5 px-10 h-52">
+              <li class="text-base font-thin">Customizable box of seasonal local ingredients</li>
+              <li class="text-base font-thin">Home delivery options OR pick up at local farmers market</li>
+              <li class="text-base font-thin">Trial our CSA without the commitment</li>
+            </ul>
+    
+            <div class="bg-green-light p-5 mt-auto">
+              <p class="font-bold">$40</p>
+            </div>
+          </div>
+          <!-- ONE TIME GUEST ORDER -->
+        </div>
+      </section>
+      <!-- Your Customized Weekly Membership BOX -->
+    </v-main>
+  </v-app>
 
 </main>
 {% endblock main %}
@@ -540,6 +544,15 @@
 {% block js %}
 <script type="text/javascript" src="{% static 'js/glider/glider.min.js' %}"></script>
 <script>
+
+  const CSAApp = new Vue({
+    el: '#csa',
+    delimiters: ['((', '))'],
+    vuetify: new Vuetify(opts),
+    data: {}
+  })
+
+
   window.addEventListener('load', function(){
     new Glider(document.querySelector('#reviews-slider .reviews-slider-contents'), {
       slidesToShow: 1,
