@@ -249,36 +249,31 @@
       <section class="bg-green-lightest p-24 text-center">
         <h3 class="text-3xl font-bold text-brown-7">What Members are Saying</h3>
     
-        <div id="reviews-slider" class="reviews-slider mt-10 mb-10 text-brown-6">
-          <div class="max-w-6xl mx-auto">
-            <div class="reviews-slider-prev mr-5 hidden outline-none lg:flex" tabindex="0" aria-label="Previous review">
-              <svg width="48" height="48" viewBox="0 0 25 25" style="fill: #999;" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M20 .755l-14.374 11.245 14.374 11.219-.619.781-15.381-12 15.391-12 .609.755z"/></svg>
-            </div>
-      
-            <div class="reviews-slider-contents max-w-3xl">
-              <div class="review-panel">
-                <p class="leading-snug md:leading-relaxed text-2xl mb-10">Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi esse reprehenderit, et quibusdam cumque a ratione dolor laudantium veniam hic. Tempore perferendis dolore molestias deleniti.</p>
-                <p><span class="font-bold">- Happy Customer,</span> Portland, OR</p>
-              </div>
-      
-              <div class="review-panel">
-                <p class="leading-snug md:leading-relaxed text-2xl mb-10">Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi esse reprehenderit, et quibusdam cumque a ratione dolor laudantium veniam hic. Tempore perferendis dolore molestias deleniti.</p>
-                <p><span class="font-bold">- Happy Customer 2,</span> Eugene, OR</p>
-              </div>
-      
-              <div class="review-panel">
-                <p class="leading-snug md:leading-relaxed text-2xl mb-10">Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi esse reprehenderit, et quibusdam cumque a ratione dolor laudantium veniam hic. Tempore perferendis dolore molestias deleniti.</p>
-                <p><span class="font-bold">- Happy Customer 3,</span> Junction City, OR</p>
-              </div>
-            </div>
-      
-            <div class="reviews-slider-next ml-5 hidden outline-none lg:flex" tabindex="0" aria-label="Next review">
-              <svg width="48" height="48" viewBox="0 0 25 25" style="fill: #999;" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M4 .755l14.374 11.245-14.374 11.219.619.781 15.381-12-15.391-12-.609.755z"/></svg>
-            </div>
-          </div>
-    
-          <div class="review-slider-dots my-10 lg:hidden"></div>
-        </div>
+        <v-carousel 
+          v-model="model"
+          :cycle="false"
+          height="800"
+          hide-delimiter-background
+          >
+          <v-carousel-item v-for="testimonial in testimonials" :key="testimonial.id">
+            <v-sheet height="100%" tile color="transparent">
+              <v-row class="fill-height" align="center" justify="center">
+                <div class="text-brown-6 mx-auto p-3" style="max-width: 65%;">
+
+                  <p class="relative">
+                    <v-icon x-large class="text-h1 opacity-20" style="position: absolute; top: -3rem; left: -3rem;">mdi-format-quote-open</v-icon>
+                    ((testimonial.text))
+                    <v-icon x-large class="text-h1 opacity-20" style="position: absolute; top: 75%; right: 0;">mdi-format-quote-close</v-icon>
+                  </p>
+                  
+                  <p class="subtitle-1 text-center mt-5">
+                    <span class="font-weight-bold">- ((testimonial.owner))</span> ((testimonial.date))
+                  </p>
+                </div>
+              </v-row>
+            </v-sheet>
+          </v-carousel-item>
+        </v-carousel>
     
         {% if not user %}
         <div class="text-center mt-20">
@@ -542,29 +537,34 @@
 {% endblock main %}
 
 {% block js %}
-<script type="text/javascript" src="{% static 'js/glider/glider.min.js' %}"></script>
 <script>
-
   const CSAApp = new Vue({
     el: '#csa',
     delimiters: ['((', '))'],
     vuetify: new Vuetify(opts),
-    data: {}
+    data: {
+      model: 0,
+      testimonials: [
+        {
+          id: 1,
+          text: `Everything we’ve had from DFF or associated with DFF has been top shelf...we’ve been members of 7 different CSAs in several different states over the years and the Full Farm CSA is by far the nicest CSA because of all the choice and options…it’s the crème de la creme of all CSAs`,
+          owner: 'Andrew Taylor, PDX member on phone',
+          date: '8/6/21'
+        },
+        {
+          id: 2,
+          text: `Eating is one of the most valuable and enjoyable things we as families and communities get to take part of. It's something that has changed enormously over time in our culture, and we are more distanced now than we once were to our food and where it comes from. Eugene and the surrounding areas, however, have a culture of their own, where we have access to locally grown, fresh product. It makes finding our food exciting when you know who and where your product comes from. Our family use to shop at the downtown farmers market during the season, and the atmosphere between the community and the farms joining together is much different than the atmosphere in say, a grocery store. Going up to your favorite farm stand and not knowing exactly what they have, because crops grow according to conditions, can actually be fun. Why not have surprises when it comes to food? Seeing a fresh harvest of Spinach or Strawberries for the kids brings joy in our home. This same joy grew even deeper when we joined our CSA. It's one thing to shop locally from time to time, and that's great to do, but to make a commitment to help sustain a local farm, and reap the benefits from what they produce on a weekly basis, brings a greater sense of meaning to buying food. Food is something that truly fuels our bodies at its core. It is a part of the beginning and ending to our day. Why we subscribe to a CSA is so that we may have a relationship with our farm communities, and so that we can help fuel each other as we live and grow.`,
+          owner: 'Hannah Griffin',
+          date: '2/22/18, email'
+        },
+        {
+          id: 3,
+          text: `Regrettably I need to cancel our account, we are moving out of state and so won’t be able to use your amazing CSA any longer. Thank you for bringing such an amazing opportunity for farm fresh groceries year round. I have enjoyed it so much, and tell friends often. I hope to find an equivalent situation where we end up.`,
+          owner: 'Loyally, Kate Brown',
+          date: ''
+        }
+      ]
+    }
   })
-
-
-  window.addEventListener('load', function(){
-    new Glider(document.querySelector('#reviews-slider .reviews-slider-contents'), {
-      slidesToShow: 1,
-      draggable: true,
-      scrollLock: true,
-      rewind: true,
-      arrows: {
-        prev: '#reviews-slider .reviews-slider-prev',
-        next: '#reviews-slider .reviews-slider-next'
-      },
-      dots: '#reviews-slider .review-slider-dots'
-    });
-  });
 </script>
 {% endblock %}
