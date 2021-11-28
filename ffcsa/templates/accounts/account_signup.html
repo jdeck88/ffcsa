@@ -105,10 +105,15 @@
                           label="Drop Site Location"
                           v-model="user.profile.drop_site"
                           :items="store.state.drop_sites"
-                          item-text="text"
-                          item-value="value"
+                          item-text="description"
+                          item-value="name"
                           :return-object="false"
-                        ></v-combobox>
+                        >
+                        <template slot="item" slot-scope="data">
+                          <v-icon class="mr-2" :color="data.item.color + ' darken-1'">mdi-book-marker-outline</v-icon>
+                          ((data.item.description))
+                        </template>
+                      </v-combobox>
                     </v-col>
                   </div>
                   {% endif %}

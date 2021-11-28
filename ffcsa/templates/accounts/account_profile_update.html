@@ -133,7 +133,12 @@
                       item-text="text"
                       item-value="value"
                       :return-object="false"
-                    ></v-combobox>
+                    >
+                    <template slot="item" slot-scope="data">
+                      <v-icon class="mr-2" :color="data.item.color + ' darken-1'">mdi-book-marker-outline</v-icon>
+                      ((data.item.description))
+                    </template>
+                  </v-combobox>
                   </div>
         
                   <!-- Preferences -->

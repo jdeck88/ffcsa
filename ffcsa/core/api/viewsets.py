@@ -2,6 +2,9 @@ import datetime
 import stripe
 from django.contrib import auth
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
+from django.conf import settings
+
 from rest_framework import mixins, views
 from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
@@ -9,14 +12,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route, permission_classes
 from rest_framework.exceptions import NotAcceptable
-from django.shortcuts import get_object_or_404
 
 from ffcsa.core import sendinblue, signrequest
 from ffcsa.core.api.permissions import IsOwner
 from ffcsa.core.api.serializers import *
 from ffcsa.core.models import Payment, Address
 from ffcsa.core.subscriptions import *
-from ffcsa.core.dropsites import DROPSITE_CHOICES
+
 
 User = get_user_model()
 
@@ -25,7 +27,7 @@ class AppResources(viewsets.ViewSet):
 
     @list_route(methods=['post'])
     def get_drop_sites(self, request):
-        return Response({'sites': [{'value': site[0], 'text': site[1]} for site in DROPSITE_CHOICES]})
+        return Response({'sites': settings.DROPSITES})
 
 
 class UserViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):

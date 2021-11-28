@@ -94,6 +94,7 @@ DROPSITES = [
         'description': 'Junction City - Deck Family Farm (Friday)',
         'allowOneTimeOrders': True,
         'pickupDay': 5,
+        'members_only': False
     },
     {
         'name': 'Farm - Tuesday',
@@ -102,6 +103,7 @@ DROPSITES = [
         'description': 'Junction City - Deck Family Farm (Tuesday)',
         'allowOneTimeOrders': True,
         'pickupDay': 2,
+        'members_only': True
     },
     {
         'name': 'W 11th',
@@ -110,6 +112,7 @@ DROPSITES = [
         'description': 'Eugene - W 11th & Van Buren (Tuesday)',
         'allowOneTimeOrders': False,
         'pickupDay': 2,
+        'members_only': True
     },
     {
         'name': 'Friendly',
@@ -118,6 +121,7 @@ DROPSITES = [
         'description': 'Eugene - Adams & 26th (Tuesday)',
         'allowOneTimeOrders': False,
         'pickupDay': 2,
+        'members_only': True
     },
     {
         'name': 'LCFM',
@@ -126,6 +130,7 @@ DROPSITES = [
         'description': 'Eugene - Lane County Farmers Market (Saturday)',
         'allowOneTimeOrders': True,
         'pickupDay': 6,
+        'members_only': False
     },
     {
         'name': 'PSU',
@@ -134,6 +139,7 @@ DROPSITES = [
         'description': 'Portland - PSU Farmers Market (Saturday)',
         'allowOneTimeOrders': True,
         'pickupDay': 6,
+        'members_only': False
     },
     {
         'name': 'Hollywood',
@@ -142,6 +148,7 @@ DROPSITES = [
         'description': 'Portland - Hollywood Farmers Market (Saturday)',
         'allowOneTimeOrders': True,
         'pickupDay': 6,
+        'members_only': False
     },
     {
         'name': 'Cully',
@@ -150,6 +157,7 @@ DROPSITES = [
         'description': 'Portland - Killingsworth & NE 60th (Saturday)',
         'allowOneTimeOrders': False,
         'pickupDay': 6,
+        'members_only': True
     },
     {
         'name': 'Irvington',
@@ -158,6 +166,7 @@ DROPSITES = [
         'description': 'Portland - Irvington Neighborhood (Saturday)',
         'allowOneTimeOrders': False,
         'pickupDay': 6,
+        'members_only': True
     },
     {
         'name': 'Woodstock',
@@ -166,6 +175,7 @@ DROPSITES = [
         'description': 'Portland - Woodstock Neighborhood (Saturday)',
         'allowOneTimeOrders': False,
         'pickupDay': 6,
+        'members_only': True
     },
     # {
     #     'name': 'St Johns',
@@ -174,6 +184,7 @@ DROPSITES = [
     #     'description': 'Portland - St Johns Farmers Market (Saturday)',
     #     'allowOneTimeOrders': False,
     #     'pickupDay': 6,
+    #     'members_only': False
     # },
     {
         'name': 'Banzhaf',
@@ -182,6 +193,7 @@ DROPSITES = [
         'description': 'Corvallis - NW Walnut & NW Aspen (Saturday)',
         'allowOneTimeOrders': False,
         'pickupDay': 6,
+        'members_only': True
     },
     {
         'name': 'Zafar',
@@ -191,6 +203,7 @@ DROPSITES = [
         'allowOneTimeOrders': False,
         'private': True,
         'pickupDay': 6,
+        'members_only': True
     },
     # # ('Woodstock', 'Portland - Woodstock Farmers Market (Sunday)'),
     # DROP_SITE_COLORS = {
