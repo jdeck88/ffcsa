@@ -12,148 +12,139 @@
   <!-- product detail modal -->
   {% include 'partials/product_modal.html' %}
 
-  <!-- banner section -->
-  <section class="min-h-300px lg:min-h-400px bg-cover bg-center bg-overlay-dark flex" style="background-image: var(--products-banner-bg);">
-    <div class="text-white text-center text-3xl m-auto font-bold bg-black bg-opacity-25 px-5 py-4">Placeholder text</div>
-  </section>
-  <!-- banner section -->
+  <v-app>
+    <v-main>
 
-  <!-- filters section -->
-  <section class="md:flex justify-center mt-10 text-green md:text-xl font-bold">
+      <!-- banner section -->
+      <section class="min-h-300px lg:min-h-400px bg-cover bg-center bg-overlay-dark flex" style="background-image: var(--products-banner-bg);">
+        <div class="text-white text-center text-3xl m-auto font-bold bg-black bg-opacity-25 px-5 py-4">Placeholder text</div>
+      </section>
+      <!-- banner section -->
     
-    <div v-for="category in categories" class="inline-blocks relative hover-trigger text-base">
-      <a href="#" @click.prevent="selectedCategory=category.title" :class="[categorySelected(category.title), 'hover:text-primary block m-3']">
-        ((category.display_name))
-      </a>
-
-      <!-- list of sub gategories -->
-      <ul v-if="category.sub_cats.length > 0" class="absolute w-full hidden bg-white text-secondary rounded border shadow-2xl py-3 px-2 hover-target" style="min-width: 16rem !important;">
-        <li v-for="sub in category.sub_cats" :class="[categorySelected(sub), 'text-base hover:text-primary']">
-          <a @click.prevent="selectedCategory=sub" class="py-2 px-4 block" href="#">((sub))</a>
-        </li>
-      </ul>
-    </div>
-    
-    <a href="#" class="hover:text-primary block m-3 text-base">RECIPIES</a>
-  </section>
-  <!-- filters section -->
-
-  <!-- remove filter -->
-  <section class="container mx-auto flex justify-end text-green">
-    <a href="#" v-if="selectedCategory" @click.prevent="selectedCategory=''"  class="hover:underline text-sm">
-      Show all products
-    </a>
-  </section>
-  <!-- remove filter -->
-
-  <!-- Products list -->
-  <section class="min-h-screen">
-    <div v-if="products.length > 0" class="container my-12 mx-auto">
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 min-h-screen">
-        <div class="text-center mb-4" v-for="product in products">
-          <!-- product image -->
-          <a :href="'#' + product.slug" @click="showProduct(product)">
-            <div :style="'background-image: url(/media/' + product.image + ');background-position: center; background-repeat: no-repeat; background-size: cover;width: 100%; height: 20rem;'"></div>
+      <!-- filters section -->
+      <section class="md:flex justify-center mt-10 text-green md:text-xl font-bold">
+        
+        <div v-for="category in categories" class="inline-blocks relative hover-trigger text-base">
+          <a href="#" @click.prevent="selectedCategory=category.title" :class="[categorySelected(category.title), 'hover:text-primary block m-3']">
+            ((category.display_name))
           </a>
-  
-          <h3 class="text-brown-7 text-xl font-bold truncate">(( product.title ))</h3>
-          <div class="my-2">
-            <template v-if="product.has_in_stock_variations">
-              <!-- at least one variation in stock -->
-              <template v-if="product.variations.length == 1">
-                <p class="text-brown-7 text-xl">$(( product.price ))<span v-if="product.unit">/(( product.unit ))</span></p>
-                <button class="btn-add-to-card" @click.prevent="App.addToCart(product.variations[0])">ADD TO CART</button>
-              </template>
-              
-              <template v-else>
-                <p>
-                  <span class="italic text-gray-500">From </span>
-                  <span class="text-brown-7 text-xl">$(( getProductStartFrom(product) ))<span v-if="product.unit">/(( product.unit ))</span></span>
-                </p>
-                <button class="btn-add-to-card" @click.prevent="showProduct(product)">CHOOSE VARIATION</button>
-              </template>
-            </template>
-            <template v-else>
-              <!-- all product variations are out of stock -->
-              <button class="disabled:opacity-50 focus:outline-none bg-gray-100 text-gray-500 p-4 px-6 cursor-default rounded">
-                OUT OF STOCK
-              </button>
-            </template>
-          </div>
-          <!-- <a :href="(( product.url ))" class="text-green-light">Quantity/Weight Details Here</a> -->
-          <p class="text-green-light">(( product.weight ))</p>
-          <p class="text-brown-7 text-sm italic font-thin">(( product.vendor ))</p>
+    
+          <!-- list of sub gategories -->
+          <ul v-if="category.sub_cats.length > 0" class="absolute w-full hidden bg-white text-secondary rounded border shadow-2xl py-3 px-2 hover-target" style="min-width: 16rem !important;">
+            <li v-for="sub in category.sub_cats" :class="[categorySelected(sub), 'text-base hover:text-primary']">
+              <a @click.prevent="selectedCategory=sub" class="py-2 px-4 block text-green" href="#">((sub))</a>
+            </li>
+          </ul>
         </div>
-      </div>
-  
-  
-      <!-- Page pagination -->
-      <div class="flex justify-center mb-5">
-        <a :class="[(previous == null) ? 'pointer-events-none' : '', 'next-prev p-1 pt-2 mr-2']" href="#" @click.prevent="goToPage(currentPage - 1)">
-          <svg width="11" height="19" viewBox="0 0 11 19" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.0058 18.0041C8.87419 18.0049 8.74373 17.9796 8.62189 17.9299C8.50005 17.8801 8.38924 17.8068 8.2958 17.7141L0.295798 9.71409C0.20207 9.62113 0.127676 9.51053 0.0769072 9.38867C0.0261385 9.26681 0 9.1361 0 9.00409C0 8.87208 0.0261385 8.74137 0.0769072 8.61951C0.127676 8.49766 0.20207 8.38706 0.295798 8.29409L8.2958 0.294092C8.4841 0.105788 8.7395 0 9.0058 0C9.2721 0 9.52749 0.105788 9.7158 0.294092C9.9041 0.482395 10.0099 0.73779 10.0099 1.00409C10.0099 1.27039 9.9041 1.52579 9.7158 1.71409L2.4158 9.00409L9.7158 16.2941C9.80953 16.3871 9.88392 16.4977 9.93469 16.6195C9.98546 16.7414 10.0116 16.8721 10.0116 17.0041C10.0116 17.1361 9.98546 17.2668 9.93469 17.3887C9.88392 17.5105 9.80953 17.6211 9.7158 17.7141C9.62236 17.8068 9.51154 17.8801 9.38971 17.9299C9.26787 17.9796 9.1374 18.0049 9.0058 18.0041Z" fill="#6F4131"/></svg>
+        
+        <a href="#" class="hover:text-primary block m-3 text-base">RECIPIES</a>
+      </section>
+      <!-- filters section -->
+    
+      <!-- remove filter -->
+      <section class="container mx-auto flex justify-end text-green">
+        <a href="#" v-if="selectedCategory" @click.prevent="selectedCategory=''"  class="hover:underline text-sm">
+          Show all products
         </a>
-  
-        <template v-for="i in pageRange">
-          <p class="mt-1 p-1 mx-1" v-if="i == currentPage">(( i ))</p>
-          <a v-else class="pagination-page mt-1 p-1 mx-1 font-thin" href="#" @click.prevent="goToPage(i)">(( i ))</a>
-        </template>
-  
-        <a :class="[(next == null) ? 'pointer-events-none' : '', 'next-prev p-1 pt-2 mr-2']" href="#" @click.prevent="goToPage(currentPage + 1)">
-          <svg width="11" height="19" viewBox="0 0 11 19" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.00592 5.83405e-05C1.13753 -0.000702541 1.26799 0.0245221 1.38983 0.0742867C1.51167 0.124051 1.62248 0.197378 1.71592 0.290059L9.71592 8.29006C9.80965 8.38302 9.88404 8.49362 9.93481 8.61548C9.98558 8.73734 10.0117 8.86805 10.0117 9.00006C10.0117 9.13207 9.98558 9.26278 9.93481 9.38464C9.88404 9.5065 9.80965 9.6171 9.71592 9.71006L1.71592 17.7101C1.52762 17.8984 1.27222 18.0041 1.00592 18.0041C0.739619 18.0041 0.484225 17.8984 0.295921 17.7101C0.107618 17.5218 0.00182921 17.2664 0.00182924 17.0001C0.00182926 16.7338 0.107618 16.4784 0.295921 16.2901L7.59592 9.00006L0.295923 1.71006C0.202194 1.61709 0.127798 1.50649 0.0770297 1.38464C0.0262611 1.26278 0.000123545 1.13207 0.000123557 1.00006C0.000123568 0.868046 0.0262611 0.737341 0.0770298 0.615481C0.127798 0.493622 0.202194 0.383022 0.295923 0.290059C0.389363 0.197378 0.500177 0.124051 0.622015 0.0742866C0.743852 0.024522 0.874315 -0.000702564 1.00592 5.83405e-05Z" fill="#6F4131"/></svg>
-        </a>
-      </div>
-      <!-- Page pagination -->
-  
-    </div>
-  
-    <!-- Spinner -->
-    <template v-else>
-      <div class="text-center mt-20">
+      </section>
+      <!-- remove filter -->
+
+
+      <!-- Spinner -->
+      <div v-if="loading" class="text-center mt-20">
         <v-progress-circular indeterminate class="text-primary"></v-progress-circular>
       </div>
-    </template>
-  </section>
-  <!-- Products list -->
-
-
-  
-
-
-  <!-- WHAT’S IN SEASON? -->
-  <div class="flex justify-center py-6">
-    <a href="/in-season/" class="btn-outline-secondary">BECOME A MEMBER</a>
-  </div>
-  <!-- WHAT’S IN SEASON? -->
-
-
-  <!-- Beyond the Groceries -->
-  <section class="text-center bg-orange-lightest p-5">
-    <div class="container mx-auto">
-      <h3 class="text-3xl font-bold text-brown-7 my-5 py-5">Beyond the Groceries</h3>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-12 my-5 py-5">
-        <div>
-          <img alt="Placeholder" class="block h-auto w-full mb-2" src="{% static 'img/products-spices-and-herbs-border-on-rustic-wood-kitchen-table-with-recipes.png' %}">
-          <a href="#" class="text-3xl font-bold text-brown-7">RECIPIES FROM THE FARM</a>
+    
+      <!-- Products list -->
+      <section id="productsListSection" class="min-h-screen">
+        <div v-if="products.results.length > 0" class="container my-12 mx-auto">
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 min-h-screen">
+            <div class="text-center mb-4" v-for="product in products.results">
+              <!-- product image -->
+              <a :href="'#' + product.slug" @click="showProduct(product)">
+                <div :style="'background-image: url(/media/' + product.image + ');background-position: center; background-repeat: no-repeat; background-size: cover;width: 100%; height: 20rem;'"></div>
+              </a>
+      
+              <h3 class="text-brown-7 text-xl font-bold truncate">(( product.title ))</h3>
+              <div class="my-2">
+                <template v-if="product.has_in_stock_variations">
+                  <!-- at least one variation in stock -->
+                  <template v-if="product.variations.length == 1">
+                    <p class="text-brown-7 text-xl">$(( product.price ))<span v-if="product.unit">/(( product.unit ))</span></p>
+                    <button class="btn-add-to-card" @click.prevent="App.addToCart(product.variations[0])">ADD TO CART</button>
+                  </template>
+                  
+                  <template v-else>
+                    <p>
+                      <span class="italic text-gray-500">From </span>
+                      <span class="text-brown-7 text-xl">$(( getProductStartFrom(product) ))<span v-if="product.unit">/(( product.unit ))</span></span>
+                    </p>
+                    <button class="btn-add-to-card" @click.prevent="showProduct(product)">CHOOSE VARIATION</button>
+                  </template>
+                </template>
+                <template v-else>
+                  <!-- all product variations are out of stock -->
+                  <button class="disabled:opacity-50 focus:outline-none bg-gray-100 text-gray-500 p-4 px-6 cursor-default rounded">
+                    OUT OF STOCK
+                  </button>
+                </template>
+              </div>
+              <!-- <a :href="(( product.url ))" class="text-green-light">Quantity/Weight Details Here</a> -->
+              <p class="text-green-light">(( product.weight ))</p>
+              <p class="text-brown-7 text-sm italic font-thin">(( product.vendor ))</p>
+            </div>
+          </div>
+      
+      
+          <!-- Page pagination -->
+          <div class="text-center mt-20">
+            <v-pagination v-model="page" :length="products.num_pages"></v-pagination>
+          </div>
+          <!-- Page pagination -->
         </div>
-
-        <div>
-          <img alt="Placeholder" class="block h-auto w-full mb-2" src="{% static 'img/products-homemade-pizza-for-dinner.jpg' %}">
-          <a href="#" class="text-3xl font-bold text-brown-7">PRODUCTS & SWAG</a>
-        </div>
+      </section>
+      <!-- Products list -->
+    
+    
+    
+      <!-- WHAT’S IN SEASON? -->
+      <div class="flex justify-center py-6">
+        <v-btn x-large dark outlined color="brown darken-2" class="font-weight-bold" href="/in-season/">WHAT’S IN SEASON?</v-btn>
       </div>
-    </div>
-  </section>
-  <!-- Beyond the Groceries -->
+      <!-- WHAT’S IN SEASON? -->
+    
+      <!-- Beyond the Groceries -->
+      <section class="text-center bg-orange-lightest p-5">
+        <div class="container mx-auto">
+          <h3 class="text-3xl font-bold text-brown-7 my-5 py-5">Beyond the Groceries</h3>
+    
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-12 my-5 py-5">
+            <div>
+              <img alt="Placeholder" class="block h-auto w-full mb-2" src="{% static 'img/products-spices-and-herbs-border-on-rustic-wood-kitchen-table-with-recipes.png' %}">
+              <a href="#" class="text-3xl font-bold text-brown-7">RECIPIES FROM THE FARM</a>
+            </div>
+    
+            <div>
+              <img alt="Placeholder" class="block h-auto w-full mb-2" src="{% static 'img/products-homemade-pizza-for-dinner.jpg' %}">
+              <a href="#" class="text-3xl font-bold text-brown-7">PRODUCTS & SWAG</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Beyond the Groceries -->
+    
+      <!-- Ready for Better Food Choices? -->
+      <section class="text-center p-5 py-20 max-w-xl mx-auto">
+        <h3 class="text-3xl text-primary font-bold mb-5">Ready for Better Food Choices?</h3>
+        <p class="text-secondary text-xl mb-10">Join the hundreds of households who trust local farmers to provide high quality food for a full diet.</p>
+        <v-btn x-large color="primary" class="font-weight-bold" href="{% url 'signup' %}">BECOME A MEMBER</v-btn>
+      </section>
+      <!-- Ready for Better Food Choices? -->
+
+    </v-main>
+  </v-app>
 
 
-  <!-- Ready for Better Food Choices? -->
-  <section class="text-center p-5 py-20 max-w-xl mx-auto">
-    <h3 class="text-3xl text-primary font-bold mb-5">Ready for Better Food Choices?</h3>
-    <p class="text-secondary text-xl mb-10">Join the hundreds of households who trust local farmers to provide high quality food for a full diet.</p>
-    <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
-  </section>
-  <!-- Ready for Better Food Choices? -->
 </main>
 {% endblock main %}
 
@@ -162,18 +153,24 @@
   const ProductsVue = new Vue({
     el: '#productsVue',
     delimiters: ['((', '))'],
+    vuetify: new Vuetify(opts),
     data: {
-      // products
-      count: 0,
-      limit:21,
-      offset:0,
-      selectedCategory: '',
-      products: [],
+      loading: true,
+      
       categories: [],
-
-      // pages
-      next: null,
-      previous: null,
+      
+      query: '',
+      page: 1,
+      selectedCategory: '',
+      
+      // products
+      products: {
+        count: 0,
+        num_pages: 0,
+        next: null,
+        previous: null,
+        results: []
+      },
 
       // product
       currentProduct: null,
@@ -196,8 +193,13 @@
       },
 
       selectedCategory: function(val, oldVal) {
-        this.products = []
         this.getProducts()
+        this.scrollToProducts()
+      },
+      
+      page: function(val, oldVal) {
+        this.getProducts()
+        this.scrollToProducts()
       }
     },
 
@@ -239,33 +241,34 @@
 
     methods: {
       async getProducts() {
-        // make sure we are not overpassing the count
-        if (this.count > 0 && this.offset > this.count) this.offset = this.count - this.limit;
-        
+        this.loading = true;
+        this.products.results = []
+
         // get products and assign the results
         try {
-          const res = await axios.get(`/api/products/?limit=${this.limit}&offset=${this.offset}&category=${encodeURIComponent(this.selectedCategory)}`);
-          const { count, next, previous, results } = res.data;
-          this.products = results;
-          this.next = next;
-          this.previous = previous;
-          this.count = count;
 
+          const query = encodeURIComponent(this.query);
+          const category = encodeURIComponent(this.selectedCategory);
 
-          // data = {selectedCategory: this.selectedCategory,count}
-          // // data = {count}
-          // url = Object.keys(data).map(function(k) {
-          //     return encodeURIComponent(k) + '=' + encodeURIComponent(data[k])
-          // }).join('&')
-
-          // console.log(url)
+          const res = await axios.get(`/api/products/?query=${query}&page=${this.page}&category=${category}`);
+          this.products = {...res.data}
+          this.loading = false;
           
-          // console.log(res.data)
+          // sync query params with url
+          const params = new URLSearchParams(location.search);
+          params.set('query', this.query);
+          params.set('page', this.page);
+          params.set('category', this.selectedCategory);
+
+          params.toString(); // => query=&page=1&category=
+          window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
+          
           // after fetching the products, check if the url 
           // has product slug to open it
           this.openProductWithSlug()
         } catch (error) {
           console.log(error)
+          this.loading = false;
         }
       },
       async getCategories() {
@@ -280,14 +283,19 @@
       openProductWithSlug() {
         // open product if we got its slug in the urls hash
         const slug    = location.hash.slice(1);
-        const matched = this.products.filter(product => product.slug == slug)
+        const matched = this.products.results.filter(product => product.slug == slug)
         if (matched.length > 0) this.showProduct(matched[0])
       },
-      goToPage(page) {
-        toOffset = (page - 1) * this.limit;
-        this.offset = toOffset
-        this.getProducts()
+      
+
+      scrollToProducts() {
+        const id = 'productsListSection';
+        const yOffset = -170; 
+        const element = document.getElementById(id);
+        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({top: y, behavior: 'smooth'});
       },
+
       showProduct(product) {
         this.currentProduct = product;
       },
@@ -308,11 +316,17 @@
 
     async mounted() {
       // Sync URL params
-      var url = new URL(location.href);
-      var selectedCategory = url.searchParams.get("selectedCategory");
-      if (selectedCategory !== null) {
-        this.selectedCategory = selectedCategory
-      }
+      const url = new URL(location.href);
+      
+      const page = url.searchParams.get("page");
+      if (page !== null) this.page = page || 1
+      
+      const query = url.searchParams.get("query");
+      if (query !== null) this.query = query || ''
+
+      const category = url.searchParams.get("category");
+      if (category !== null) this.selectedCategory = category || ''
+
       // get products and categories
       this.getProducts()
       this.getCategories()
