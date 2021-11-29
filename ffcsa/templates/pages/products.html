@@ -25,14 +25,14 @@
       <section class="md:flex justify-center mt-10 text-green md:text-xl font-bold">
         
         <div v-for="category in categories" class="inline-blocks relative hover-trigger text-base">
-          <a href="#" @click.prevent="selectedCategory=category.title" :class="[categorySelected(category.title), 'hover:text-primary block m-3']">
+          <a href="#" @click.prevent="selectedCategory=category.title; page=1" :class="[categorySelected(category.title), 'hover:text-primary block m-3']">
             ((category.display_name))
           </a>
     
           <!-- list of sub gategories -->
           <ul v-if="category.sub_cats.length > 0" class="absolute w-full hidden bg-white text-secondary rounded border shadow-2xl py-3 px-2 hover-target" style="min-width: 16rem !important;">
             <li v-for="sub in category.sub_cats" :class="[categorySelected(sub), 'text-base hover:text-primary']">
-              <a @click.prevent="selectedCategory=sub" class="py-2 px-4 block text-green" href="#">((sub))</a>
+              <a @click.prevent="selectedCategory=sub; page=1" class="py-2 px-4 block text-green" href="#">((sub))</a>
             </li>
           </ul>
         </div>
