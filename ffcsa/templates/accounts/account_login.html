@@ -1,59 +1,52 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% load staticfiles static %}
 {% block meta_title %}Login{% endblock %}
 
 {% block main %}
-<main>
-  <div class="min-w-screen flex items-center justify-center px-5 py-5 mt-32">
-    <div class="bg-gray-100 text-gray-500 rounded-3xl shadow-xl overflow-hidden" style="min-width:27rem">
-      <div class="md:flex w-full">
-        <div class="w-full py-10 px-5 md:px-10">
-          <div class="text-center mb-10">
-            <h1 class="font-bold text-3xl text-gray-900">LOGIN</h1>
-            <p>Welcome back</p>
-          </div>
-          <form action="" method="POST">
-            {% csrf_token %}
-            <div class="flex -mx-3">
-              <div class="w-full px-3 mb-5">
-                <label for="" class="text-xs font-semibold px-1">Email</label>
-                <div class="flex">
-                  <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-email-outline text-gray-400 text-lg"></i></div>
-                  <input name="username" type="email" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-primary" placeholder="johnsmith@example.com" required>
-                </div>
-              </div>
+<main id="login" v-cloak>
+  <v-app>
+    <v-main>
+      <v-row align="center" justify="center" class="h-screen">
+        {% if request.user.is_authenticated %}
+          <p>{% trans "You're already logged in. If you'd like to log in as a different user, you'll need to log out first." %}</p>
+        {% else %}
+        <v-card class="mx-auto pa-5" width="400">
+          <v-card-text>
+            <div class="text-center mb-10">
+              <h1 class="font-bold text-3xl text-gray-900">LOGIN</h1>
+              <p class="subtitle-1">Welcome back</p>
             </div>
-            <div class="flex -mx-3">
-              <div class="w-full px-3 mb-12">
-                <label for="" class="text-xs font-semibold px-1">Password</label>
-                <div class="flex">
-                  <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-lock-outline text-gray-400 text-lg"></i></div>
-                  <input name="password" type="password" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-primary" placeholder="************" required>
-                </div>
-              </div>
-            </div>
-            <div class="flex -mx-3">
-              <div class="w-full px-3 mb-5">
-                <button type="submit" class="block w-full max-w-xs mx-auto btn-primary text-white rounded-lg px-3 py-3 font-semibold">LOGIN</button>
-              </div>
-            </div>
-          </form>
 
+            <v-form action="" method="POST" validate-on-blur>
+              {% csrf_token %}
+              <v-text-field outlined prepend-inner-icon="mdi-email" label="Email" name="username" type="email" :rules="[store.state.rules.required, store.state.rules.email]" required></v-text-field>
+              <v-text-field outlined prepend-inner-icon="mdi-key-variant" label="Password" name="password" type="password" :rules="[store.state.rules.required]" required></v-text-field>
+              <v-btn large block color="primary" class="font-weight-bold" type="submit">Login</v-btn>
+            </v-form>
 
-          <p class="mt-3">
-            Don't have an account?
-            <a href="{% url 'signup' %}{% if not 'account' in request.path %}?next={{ request.path }}{% else %}?next=/{% endif %}" class="text-primary">Register now!</a>
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
+            <p class="mt-4">
+              Don't have an account?
+              <v-btn text color="primary" href="{% url 'signup' %}{% if not 'account' in request.path %}?next={{ request.path }}{% else %}?next=/{% endif %}">Register now!</v-btn>
+            </p>
+          </v-card-text>
+        </v-card>
+        {% endif %}
+      </v-row>
+    </v-main>
+  </v-app>
 </main>
 {% endblock main %}
 
 {% block js %}
 <script>
-  // console.log(123)
+  const LoginApp = new Vue({
+    el: '#login',
+    delimiters: ['((', '))'],
+    store,
+    vuetify: new Vuetify(opts),
+    data: {}
+  })
 </script>
 {% endblock js %}
