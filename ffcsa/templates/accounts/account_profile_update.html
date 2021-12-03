@@ -614,7 +614,6 @@
       async getUser() {
         try {
           const res = await axios.get(`/api/users/{{user.id}}`);
-          console.log(res.data)
           this.user = res.data
         } catch (error) {
           NavVue.show_msg('Can not get user information', 'error')
@@ -817,13 +816,20 @@
         const x = this.user.profile.phone_number_2.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
         this.user.profile.phone_number_2 = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
       },
-      updateActiveSettings(e) {
-        this.activeSettings = e.target.id;
-        console.log()
-      }
+      
     },
 
     watch: {
+      // activeSettings 
+      'activeSettings': function(val) {
+        console.log(val)
+        // sync query params with url
+        const params = new URLSearchParams(location.search);
+        params.set('section', val);
+        window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
+
+        
+      },
       // Onetime Payment
       'oneTimePayment.paymentMethod': function(val) {
         // mount the card ui elements when method is CC
@@ -846,6 +852,16 @@
       this.getUser()
       // this.getUserPayments()
       // this.getUserCredits()
+
+      // Sync URL params
+      const url = new URL(location.href);
+      const section = url.searchParams.get("section");
+      const sectionList = this.items.map(item => item.key)
+      if (section !== null && sectionList.includes(section)) {
+        this.selectedItem = sectionList.indexOf(section) || 0
+        this.activeSettings = section || 'personal'
+      }
+
     }
   })
 </script>

@@ -498,7 +498,7 @@
             items: [
               { title: 'Account settings', href: '/accounts/update/'},
               { title: 'Support', href: '#'},
-              { title: 'My orders', href: '#'},
+              { title: 'My orders', href: '/accounts/update/?section=orders'},
               { title: 'Logout', href: `{% url 'logout' %}?next={{ request.get_full_path }}`},
             ],
 
