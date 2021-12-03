@@ -42,9 +42,9 @@
           <div class="col-span-3">Still <strong class="block">DISCONNECTED</strong> with where your food is coming from?</div>
         </div>
     
-        {% if not user %}
-        <div class="text-center">
-          <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
+        {% if not user.is_authenticated %}
+        <div class="text-center mt-20">
+          <v-btn large color="primary" class="font-weight-bold mx-3" href="{% url 'signup' %}">BECOME A MEMBER</v-btn>
         </div>
         {% endif %}
       </section>
@@ -99,9 +99,9 @@
           </article>
         </div>
     
-        {% if not user %}
+        {% if not user.is_authenticated %}
         <div class="text-center">
-          <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
+          <v-btn large color="primary" class="font-weight-bold mx-3" href="{% url 'signup' %}">BECOME A MEMBER</v-btn>
         </div>
         {% endif %}
     
@@ -171,12 +171,12 @@
     
     
       <!-- Video section -->
-      <section>
+      <section class="p-20">
         <p class="text-center my-10 text-red-2">!!! VIDEO HERE !!!</p>
         
-        {% if not user %}
+        {% if not user.is_authenticated %}
         <div class="text-center">
-          <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
+          <v-btn large color="primary" class="font-weight-bold mx-3" href="{% url 'signup' %}">BECOME A MEMBER</v-btn>
         </div>
         {% endif %}
       </section>
@@ -204,9 +204,9 @@
           </div>
         </div>
     
-        {% if not user %}
+        {% if not user.is_authenticated %}
         <div class="text-center mt-20">
-          <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
+          <v-btn large color="primary" class="font-weight-bold mx-3" href="{% url 'signup' %}">BECOME A MEMBER</v-btn>
         </div>
         {% endif %}
       </section>
@@ -275,9 +275,9 @@
           </v-carousel-item>
         </v-carousel>
     
-        {% if not user %}
+        {% if not user.is_authenticated %}
         <div class="text-center mt-20">
-          <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
+          <v-btn large color="primary" class="font-weight-bold mx-3" href="{% url 'signup' %}">BECOME A MEMBER</v-btn>
         </div>
         {% endif %}
       </section>
@@ -288,117 +288,117 @@
         <h3 class="font-bold text-3xl mb-20">Meet Your Trusted Farmers</h3>
     
         <div class="grid grid-cols-12 gap-5 max-w-4xl mx-auto">
-          <div class="col-span-12 md:col-span-4">
+          <div class="col-span-12 md:col-span-4 p-1">
             <div class="w-40 h-40 m-auto flex items-center">
-              <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/camas country.png' %}">
+              <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/camas country.png' %}"></v-img>
             </div>
     
-            <h4 class="font-bold">CAMAS COUNTRY</h4>
-            <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
-            <p class="text-base font-thin">Juntion City, OR</p>
+            <h4 class="font-bold mt-4">Camas Country Mill</h4>
+            <p class="text-base font-thin mb-0">Whole grains and artisan flours</p>
+            <p class="text-base font-thin">Eugene, OR</p>
           </div>
     
-          <div class="col-span-12 md:col-span-4">
+          <div class="col-span-12 md:col-span-4 p-1">
             <div class="w-40 h-40 m-auto flex items-center">
-              <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/camas swale logo.jpg' %}">
+              <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/camas swale logo.jpg' %}"></v-img>
             </div>
             
-            <h4 class="font-bold">CAMAS SWALE</h4>
-            <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
-            <p class="text-base font-thin">Juntion City, OR</p>
+            <h4 class="font-bold mt-4">Camas Swale Farm</h4>
+            <p class="text-base font-thin mb-0"> Organically grown vegetables, herbs flowers and fruit</p>
+            <p class="text-base font-thin">Coburg, OR</p>
           </div>
     
-          <div class="col-span-12 md:col-span-4">
+          <div class="col-span-12 md:col-span-4 p-1">
             <div class="w-40 h-40 m-auto flex items-center">
-              <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/deck logo.jpg' %}">
+              <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/deck logo.jpg' %}"></v-img>
             </div>
     
-            <h4 class="font-bold">DECK FAMILY FARM</h4>
-            <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
+            <h4 class="font-bold mt-4">Deck Family Farm</h4>
+            <p class="text-base font-thin mb-0">Pasture Raised Meat and Eggs</p>
             <p class="text-base font-thin">Juntion City, OR</p>
           </div>
     
-          <div class="col-span-12 md:col-span-4">
+          <div class="col-span-12 md:col-span-4 p-1">
             <div class="w-40 h-40 m-auto flex items-center">
-              <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/elegant elephant.jpg' %}">
-            </div>
-    
-            
-            <h4 class="font-bold">ELEGANT ELEPHANT</h4>
-            <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
-            <p class="text-base font-thin">Juntion City, OR</p>
-          </div>
-    
-          <div class="col-span-12 md:col-span-4">
-            <div class="w-40 h-40 m-auto flex items-center">
-              <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/lonesome whistle.png' %}">
+              <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/elegant elephant.jpg' %}"></v-img>
             </div>
     
             
-            <h4 class="font-bold">LONESOME WHISTLE</h4>
-            <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
-            <p class="text-base font-thin">Juntion City, OR</p>
+            <h4 class="font-bold mt-4">Elegant Elephant Baking Co.</h4>
+            <p class="text-base font-thin mb-0">Gluten free & vegan bakery</p>
+            <p class="text-base font-thin">Eugene, OR</p>
           </div>
     
-          <div class="col-span-12 md:col-span-4">
+          <div class="col-span-12 md:col-span-4 p-1">
             <div class="w-40 h-40 m-auto flex items-center">
-              <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/ogc logo.jpg' %}">
+              <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/lonesome whistle.png' %}"></v-img>
             </div>
     
             
-            <h4 class="font-bold">OGC</h4>
-            <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
-            <p class="text-base font-thin">Juntion City, OR</p>
+            <h4 class="font-bold mt-4">Lonesome Whistle Farm</h4>
+            <p class="text-base font-thin mb-0">Popcorn, polenta, whole grains, stone milled flour, milled oats and pasta</p>
+            <p class="text-base font-thin">Junction City, OR</p>
           </div>
     
-          <div class="col-span-12 md:col-span-4">
+          <div class="col-span-12 md:col-span-4 p-1">
             <div class="w-40 h-40 m-auto flex items-center">
-              <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/radiant coffee.png' %}">
+              <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/ogc logo.jpg' %}"></v-img>
             </div>
     
             
-            <h4 class="font-bold">RADIANT COFFEE</h4>
-            <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
-            <p class="text-base font-thin">Juntion City, OR</p>
+            <h4 class="font-bold mt-4">OGC</h4>
+            <p class="text-base font-thin mb-0">Fresh organic produce</p>
+            <p class="text-base font-thin">Eugene, OR</p>
           </div>
     
-          <div class="col-span-12 md:col-span-4">
+          <div class="col-span-12 md:col-span-4 p-1">
             <div class="w-40 h-40 m-auto flex items-center">
-              <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/reality kitchen.png' %}">
+              <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/radiant coffee.png' %}"></v-img>
             </div>
     
             
-            <h4 class="font-bold">Reality Kitchen</h4>
-            <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
-            <p class="text-base font-thin">Juntion City, OR</p>
+            <h4 class="font-bold mt-4">Radiant Coffee Roasters</h4>
+            <p class="text-base font-thin mb-0">Fresh, artisan, small batch roasted coffee from the Pacific Northwest</p>
+            <p class="text-base font-thin">Eugene, OR</p>
           </div>
     
-          <div class="col-span-12 md:col-span-4">
+          <div class="col-span-12 md:col-span-4 p-1">
             <div class="w-40 h-40 m-auto flex items-center">
-              <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/sweet creek.png' %}">
+              <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/reality kitchen.png' %}"></v-img>
             </div>
     
             
-            <h4 class="font-bold">Sweet Creek</h4>
-            <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
-            <p class="text-base font-thin">Juntion City, OR</p>
+            <h4 class="font-bold mt-4">Reality Kitchen</h4>
+            <p class="text-base font-thin mb-0">Community Supported Baking</p>
+            <p class="text-base font-thin">Eugene, OR</p>
           </div>
     
-          <div class="col-span-12 md:col-span-4">
+          <div class="col-span-12 md:col-span-4 p-1">
             <div class="w-40 h-40 m-auto flex items-center">
-              <img alt="Trusted-Farmers" src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/sweet leaf.webp' %}">
+              <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/sweet creek.png' %}"></v-img>
             </div>
     
             
-            <h4 class="font-bold">Sweet Leaf</h4>
-            <p class="text-base font-thin">Pasture Raised Meat and Eggs</p>
-            <p class="text-base font-thin">Juntion City, OR</p>
+            <h4 class="font-bold mt-4">Sweet Creek Foods</h4>
+            <p class="text-base font-thin mb-0">Locally harvested and small batch co-packing</p>
+            <p class="text-base font-thin">Elmira, OR</p>
+          </div>
+    
+          <div class="col-span-12 md:col-span-4 p-1">
+            <div class="w-40 h-40 m-auto flex items-center">
+              <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/sweet leaf.webp' %}"></v-img>
+            </div>
+    
+            
+            <h4 class="font-bold mt-4">Sweet Leaf Organic Farm</h4>
+            <p class="text-base font-thin mb-0">Organic vegetables, fruits and hemp</p>
+            <p class="text-base font-thin">Eugene, OR</p>
           </div>
         </div>
     
-        {% if not user %}
+        {% if not user.is_authenticated %}
         <div class="text-center mt-20">
-          <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
+          <v-btn large color="primary" class="font-weight-bold mx-3" href="{% url 'signup' %}">BECOME A MEMBER</v-btn>
         </div>
         {% endif %}
       </section>
@@ -423,7 +423,7 @@
                 There’s only one way, and that is to know your
                 farmer.</p>
     
-              <a href="#" class="text-red-2 font-bold text-base">READ MORE</a>
+              <v-btn text color="red" class="font-weight-bold">READ MORE</v-btn>
           </div>
     
           <div class="col-span-12 md:col-span-6">
@@ -489,12 +489,12 @@
         <div class="grid grid-cols-12 gap-10 max-w-5xl mx-auto">
           <!-- WEEKLY MEMBERSHIP BOX -->
           <div class="col-span-12 md:col-span-8 bg-orange-lighter">
-            <div class="bg-orange-light text-center p-5">
+            <div class="bg-orange-light text-center p-5 md:h-28">
               <p class="font-bold">WEEKLY MEMBERSHIP BOX</p>
               <p class="text-base opacity-60">You choose what budget works for your family!</p>
             </div>
     
-            <ul class="list-disc list-inside p-5 px-10 h-52">
+            <ul class="list-disc list-inside p-5 px-10 md:h-56">
               <li class="text-base font-thin">Customizable box of seasonal ingredients</li>
               <li class="text-base font-thin">5% discount on all items</li>
               <li class="text-base font-thin">Monthly member only specials (up to 30% discount)</li>
@@ -512,11 +512,11 @@
           
           <!-- ONE TIME GUEST ORDER -->
           <div class="col-span-12 md:col-span-4 bg-green-lighter">
-            <div class="bg-green-light text-center p-5">
+            <div class="bg-green-light text-center p-5 md:h-28">
               <p class="font-bold">ONE TIME <br> GUEST ORDER</p>
             </div>
     
-            <ul class="list-disc list-inside p-5 px-10 h-52">
+            <ul class="list-disc list-inside p-5 px-10 md:h-56">
               <li class="text-base font-thin">Customizable box of seasonal local ingredients</li>
               <li class="text-base font-thin">Home delivery options OR pick up at local farmers market</li>
               <li class="text-base font-thin">Trial our CSA without the commitment</li>
