@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 
-from rest_framework import mixins, views
+from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
@@ -13,8 +13,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route, permission_classes
 from rest_framework.exceptions import NotAcceptable
 
-from ffcsa.core import sendinblue, signrequest
-from ffcsa.core.api.permissions import IsOwner
+from ffcsa.core import sendinblue
+from ffcsa.core.api.permissions import IsOwner, CanPay
 from ffcsa.core.api.serializers import *
 from ffcsa.core.models import Payment, Address
 from ffcsa.core.subscriptions import *
@@ -124,7 +124,18 @@ class PaymentViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
 
 class PayViewSet(viewsets.ViewSet):
     ''' Handels all types of user payments '''
-    permission_classes = [IsAuthenticated]
+    permission_classes = [CanPay]
+
+    # TODO: handle permission classes here
+
+
+    # quick checkout (non-members)
+    @list_route(methods=['post'])
+    def non_member_payment(self, request):
+        serializer = OneTimePaymentSerializer(data=request.data, context={"request": request})
+        serializer.is_valid(raise_exception=True)
+        return Response({'detail': 'yay, done'})
+
 
     # >>>>>> make_payment
     @list_route(methods=['post'])

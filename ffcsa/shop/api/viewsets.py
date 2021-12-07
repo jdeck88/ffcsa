@@ -53,7 +53,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         query = request.GET.get('query')
         queryset = queryset.filter(Q(title__icontains=query) | Q(categories__title__icontains=query) | Q(categories__parent__title__icontains=query))
 
-        queryset = self.paginate_queryset(queryset)
+        queryset = self.paginate_queryset(queryset.distinct())
         serializer = ProductDataSerializer(queryset, many=True)
 
         data = serializer.data

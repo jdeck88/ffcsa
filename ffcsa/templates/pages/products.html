@@ -16,10 +16,12 @@
     <v-main>
 
       <!-- banner section -->
-      <section class="min-h-300px lg:min-h-400px bg-cover bg-center bg-overlay-dark flex" style="background-image: var(--products-banner-bg);">
-        <div class="text-white text-center text-3xl m-auto font-bold bg-black bg-opacity-25 px-5 py-4">Placeholder text</div>
-      </section>
-      <!-- banner section -->
+      <v-img src="{% static 'img/cows-banner-2.jpg' %}" height="400">
+        <v-overlay :absolute="true" :opacity=".3" class="text-center">
+          <h3 class="text-h3">Welcome to our farm's products</h3>
+          <p>please check our organic products</p>
+        </v-overlay>
+      </v-img>
     
       <!-- filters section -->
       <section class="md:flex justify-center mt-10 text-green md:text-xl font-bold">
@@ -39,7 +41,6 @@
         
         <a href="#" class="hover:text-primary block m-3 text-base">RECIPIES</a>
       </section>
-      <!-- filters section -->
     
       <!-- remove filter -->
       <section class="container mx-auto flex justify-end text-green">
@@ -47,8 +48,6 @@
           Show all products
         </a>
       </section>
-      <!-- remove filter -->
-
 
       <!-- Spinner -->
       <div v-if="loading" class="text-center mt-20">
@@ -198,8 +197,10 @@
       },
       
       page: function(val, oldVal) {
-        this.getProducts()
-        this.scrollToProducts()
+        if (val != '1') {
+          this.getProducts()
+          this.scrollToProducts()
+        }
       }
     },
 

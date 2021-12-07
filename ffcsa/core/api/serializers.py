@@ -61,7 +61,6 @@ class OneTimePaymentSerializer(serializers.Serializer):
     def validate(self, data):
         # Validate user has stripe_customer_id
         user = self.context['request'].user
-        # todo - uncomment below line
         # if not user.profile.stripe_customer_id:
         #     raise NotAcceptable('Could not find a valid customer id. Please contact the site administrator.')
         return data

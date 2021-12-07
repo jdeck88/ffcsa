@@ -206,7 +206,7 @@
 
         </v-navigation-drawer>
 
-        <!-- Menu drawer -->
+        <!-- Menu drawer (mobile only) -->
         <v-navigation-drawer  v-model="menu" width='100%' right fixed temporary class="opacity-95">
           <v-btn class="ma-2" absolute top right icon plain @click="menu = !menu" class="ml-auto mt-1 mr-5" >
             <v-icon x-large color="gray lighten-2">mdi-close</v-icon>
@@ -413,6 +413,7 @@
     <script src="https://unpkg.com/vuex@3.6.2/dist/vuex.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
 
     <!-- Global Config & Variables -->
     <script>
@@ -444,11 +445,11 @@
             content: 'Updated now!'
           },
           rules: {
-            required: value => !!value || 'Required.',
+            required: value => !!value || 'This field is required',
             counter: value => value.length <= 20 || 'Max 20 characters',
             email: value => {
               const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-              return pattern.test(value) || 'Invalid e-mail.'
+              return pattern.test(value) || 'Invalid email'
             },
           }
         },
