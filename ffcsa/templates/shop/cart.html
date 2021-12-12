@@ -73,7 +73,7 @@
           {% if not user.is_authenticated %}
           <!-- for not signed members -->
           <v-col cols=12 md=5>
-            <v-form ref="entryForm" @submit.prevent="submitHandler" :disabled="formDisabled">
+            <v-form ref="entryForm" @submit.prevent="submitHandler">
               <v-card class="mb-3 pa-4" flat tile>
                 <!-- Name -->
                 <v-text-field outlined prepend-inner-icon="mdi-account" label="Name" v-model="order.name" :rules="[store.state.rules.required]" required></v-text-field>
@@ -104,7 +104,7 @@
                 <div v-if="formDisabled" class="text-red-2 text-center p-3">You need to purchace for not less than $20</div>
               </v-card>
   
-              <v-btn block large color="primary" class="font-weight-bold mt-3" type="submit" :disabled="formDisabled">Pay</v-btn>
+              <v-btn block large color="primary" class="font-weight-bold mt-3" type="submit" :disabled="formDisabled||order.disabled" :loading="order.loading">Pay</v-btn>
             </v-form>
           </v-col>
           {% endif %}
@@ -182,39 +182,63 @@
       },
       order: {
         name: '',
-        email: ''
+        email: '',
+        loading: false,
+        disabled: false,
       }
     },
     methods: {
       async submitHandler() {
-        // validate the form
-        // if (this.$refs.entryForm.validate()) return
+        this.order.loading = true;
+        this.order.disabled = true;
 
+        // validate the form
+        if (!this.$refs.entryForm.validate()) {
+          this.order.loading = false;
+          this.order.disabled = false;
+          return
+        }
+
+        // pay
         stripe.createToken(card).then(async (result) => {
+          
+
+
           if (result.error) {
             // Inform the customer that there was an error.
             console.log(result.error.message)
             this.$refs.cardErrors.innerText = result.error.message;
+
+            this.order.loading = false;
+            this.order.disabled = false;
+
           } else {
-            console.log(result.token.id)
             // Send the token to your server.
             try {
               const res = await axios.post('/api/pay/non_member_payment/', {
+                name: this.name,
+                email: this.email,
                 stripeToken: result.token.id,
-                // amount: parseFloat(this.oneTimePayment.amount)
                 amount: parseFloat(store.state.cart.total_price)
               });
 
               // Show success message
               store.commit('showAlert', {type: 'success', content: res.data.detail})
+
+              this.order.loading = false;
+              this.order.disabled = false;
               
             } catch (error) {
               console.log(error.response.data)
               store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+
+              this.order.loading = false;
+              this.order.disabled = false;
             }
 
           }
         });
+
       }
     },
     computed: {

@@ -53,6 +53,14 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('first_name', 'last_name', 'email', 'profile')
 
 
+# NonMember Serializer
+class NonMemberSerializer(serializers.Serializer):
+    name = serializers.CharField(required=False)
+    email = serializers.EmailField(required=False)
+    amount = serializers.FloatField(min_value=20)
+    stripeToken = serializers.CharField(required=False)
+
+
 # OneTimePayment Serializer
 class OneTimePaymentSerializer(serializers.Serializer):
     amount = serializers.FloatField(min_value=20)
@@ -61,8 +69,8 @@ class OneTimePaymentSerializer(serializers.Serializer):
     def validate(self, data):
         # Validate user has stripe_customer_id
         user = self.context['request'].user
-        # if not user.profile.stripe_customer_id:
-        #     raise NotAcceptable('Could not find a valid customer id. Please contact the site administrator.')
+        if not user.profile.stripe_customer_id:
+            raise NotAcceptable('Could not find a valid customer id. Please contact the site administrator.')
         return data
 
 

@@ -32,7 +32,7 @@
           </a>
     
           <!-- list of sub gategories -->
-          <ul v-if="category.sub_cats.length > 0" class="absolute w-full hidden bg-white text-secondary rounded border shadow-2xl py-3 px-2 hover-target" style="min-width: 16rem !important;">
+          <ul v-if="category.sub_cats.length > 0" class="absolute w-full hidden bg-white text-secondary rounded border shadow-2xl py-3 px-2 hover-target" style="min-width: 16rem !important; z-index: 1000000;">
             <li v-for="sub in category.sub_cats" :class="[categorySelected(sub), 'text-base hover:text-primary']">
               <a @click.prevent="selectedCategory=sub; page=1" class="py-2 px-4 block text-green" href="#">((sub))</a>
             </li>
@@ -42,12 +42,33 @@
         <a href="#" class="hover:text-primary block m-3 text-base">RECIPIES</a>
       </section>
     
-      <!-- remove filter -->
-      <section class="container mx-auto flex justify-end text-green">
-        <a href="#" v-if="selectedCategory" @click.prevent="selectedCategory=''"  class="hover:underline text-sm">
-          Show all products
-        </a>
-      </section>
+      <!-- query and remove filters -->
+      <template>
+        <v-container>
+          <v-row no-gutters>
+            <v-col md="4" offset-md="8">
+              <v-form @submit.prevent="getProducts">
+                <v-text-field 
+                  solo
+                  label="search"
+                  :loading="loading"
+                  v-model="query"
+                  append-icon="mdi-magnify"
+                  @click:append="getProducts"
+                >
+                </v-text-field>
+              </v-form>
+            </v-col>
+          </v-row>
+
+          <v-row no-gutters>
+            <v-col md="4" offset-md="10">
+              <v-btn text small color="red" v-if="selectedCategory || query" @click="resetProductsFilter">Show all products</v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
+      </template>
+
 
       <!-- Spinner -->
       <div v-if="loading" class="text-center mt-20">
@@ -60,21 +81,19 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 min-h-screen">
             <div class="text-center mb-4" v-for="product in products.results">
               <!-- product image -->
-              <a :href="'#' + product.slug" @click="showProduct(product)">
-                <div :style="'background-image: url(/media/' + product.image + ');background-position: center; background-repeat: no-repeat; background-size: cover;width: 100%; height: 20rem;'"></div>
-              </a>
+              <v-img :src="'/media/' + product.image" height="20rem" width="100%" @click="showProduct(product)" class="cursor-pointer"></v-img>
       
-              <h3 class="text-brown-7 text-xl font-bold truncate">(( product.title ))</h3>
+              <h3 class="text-brown-7 text-xl font-bold truncate mt-4">(( product.title ))</h3>
               <div class="my-2">
                 <template v-if="product.has_in_stock_variations">
                   <!-- at least one variation in stock -->
                   <template v-if="product.variations.length == 1">
-                    <p class="text-brown-7 text-xl">$(( product.price ))<span v-if="product.unit">/(( product.unit ))</span></p>
+                    <p class="h-8 text-brown-7 text-xl">$(( product.price ))<span v-if="product.unit">/(( product.unit ))</span></p>
                     <button class="btn-add-to-card" @click.prevent="App.addToCart(product.variations[0])">ADD TO CART</button>
                   </template>
                   
                   <template v-else>
-                    <p>
+                    <p class="h-8">
                       <span class="italic text-gray-500">From </span>
                       <span class="text-brown-7 text-xl">$(( getProductStartFrom(product) ))<span v-if="product.unit">/(( product.unit ))</span></span>
                     </p>
@@ -83,13 +102,13 @@
                 </template>
                 <template v-else>
                   <!-- all product variations are out of stock -->
+                  <p class="h-8"></p>
                   <button class="disabled:opacity-50 focus:outline-none bg-gray-100 text-gray-500 p-4 px-6 cursor-default rounded">
                     OUT OF STOCK
                   </button>
                 </template>
               </div>
-              <!-- <a :href="(( product.url ))" class="text-green-light">Quantity/Weight Details Here</a> -->
-              <p class="text-green-light">(( product.weight ))</p>
+              <p class="text-green-light mb-0">(( product.weight ))</p>
               <p class="text-brown-7 text-sm italic font-thin">(( product.vendor ))</p>
             </div>
           </div>
@@ -104,8 +123,7 @@
       </section>
       <!-- Products list -->
     
-    
-    
+
       <!-- WHAT’S IN SEASON? -->
       <div class="flex justify-center py-6">
         <v-btn x-large dark outlined color="brown darken-2" class="font-weight-bold" href="/in-season/">WHAT’S IN SEASON?</v-btn>
@@ -173,9 +191,8 @@
 
       // product
       currentProduct: null,
-      currentProductMapping: null,  // store number_in_cart
-
-      quantity: 1, // todo - might delete this one??
+      selectedProduct: null,
+      dialog: false,
 
       // product details
       modalShown: false,
@@ -188,6 +205,14 @@
           this.modalShown = true
         } else {
           this.modalShown = false
+        }
+      },
+
+      selectedProduct: function(val, oldVal) {
+        if (val !== null) {
+          this.dialog = true
+        } else {
+          this.dialog = false
         }
       },
 
@@ -204,41 +229,7 @@
       }
     },
 
-    computed: {
-      pages: function() {
-        return Math.ceil(parseInt(this.count) / parseInt(this.limit))
-      },
-      
-      currentPage: function() {
-        return Math.ceil((parseInt(this.offset) + parseInt(this.limit))/ parseInt(this.limit))
-      },
-
-      pageRange: function() {
-        const pages = Array.from({length: this.pages}, (_, i) => i + 1)
-        const index = pages.indexOf(this.currentPage);
-
-        const prev = []
-        for (i = index; i > 0; i--) {
-          prev.unshift(i)
-        }
-
-        const next = []
-        for (i = index + 1; i <= pages.length; i++) {
-          next.push(i)
-        }
-
-
-        let total = prev.slice(Math.max(prev.length - 3, 0))
-
-        for (item in next) {
-          if (total.length < 6) total.push(next[item])
-        }
-
-        // console.log('total', total)
-        return total
-      },
-      
-    },
+    computed: {},
 
     methods: {
       async getProducts() {
@@ -254,24 +245,19 @@
           const res = await axios.get(`/api/products/?query=${query}&page=${this.page}&category=${category}`);
           this.products = {...res.data}
           this.loading = false;
-          
-          // sync query params with url
-          const params = new URLSearchParams(location.search);
-          params.set('query', this.query);
-          params.set('page', this.page);
-          params.set('category', this.selectedCategory);
 
-          params.toString(); // => query=&page=1&category=
-          window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
+          // if a product is selected, open product (has to be after loading products)
+          this.parseProductFromURL()
+
+          // sync query params with url
+          this.syncParamsURL()
           
-          // after fetching the products, check if the url 
-          // has product slug to open it
-          this.openProductWithSlug()
         } catch (error) {
           console.log(error)
           this.loading = false;
         }
       },
+      
       async getCategories() {
         // get categories and clean up the data
         try {
@@ -281,13 +267,6 @@
           console.log(error)
         }
       },
-      openProductWithSlug() {
-        // open product if we got its slug in the urls hash
-        const slug    = location.hash.slice(1);
-        const matched = this.products.results.filter(product => product.slug == slug)
-        if (matched.length > 0) this.showProduct(matched[0])
-      },
-      
 
       scrollToProducts() {
         const id = 'productsListSection';
@@ -297,20 +276,50 @@
         window.scrollTo({top: y, behavior: 'smooth'});
       },
 
-      showProduct(product) {
-        this.currentProduct = product;
-      },
-
       getProductStartFrom(product) {
         prices = []
         product.variations.forEach(v => prices.push(parseFloat(v.unit_price)));
         return Math.min(...prices)
       },
+      
+      showProduct(product) {
+        this.currentProduct = product;
+        this.syncParamsURL()
+      },
+
       hideProductModal() {
         this.currentProduct = null;
-        location.hash = ' ';
+        this.syncParamsURL();
       },
+
+      resetProductsFilter() {
+        this.selectedCategory = ''
+        this.query = ''
+        this.getProducts()
+      },
+
+      parseProductFromURL() {
+        // if a product is selected, open product (has to be after loading products)
+        const url = new URL(location.href);
+        const pid = url.searchParams.get("pid");
+        const matched = this.products.results.filter(product => product.id == parseInt(pid))
+        if (matched.length > 0) this.currentProduct = matched[0]
+      },
+
+      syncParamsURL() {
+        // sync query params with url
+        const params = new URLSearchParams(location.search);
+        params.set('query', this.query);
+        params.set('page', this.page);
+        params.set('category', this.selectedCategory);
+        params.set('pid', this.currentProduct ? this.currentProduct.id : null);
+
+        params.toString(); // => query=&page=1&category=
+        window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
+      },
+
       categorySelected(category) {
+        // TODO: not working!
         return this.selectedCategory == category ? 'text-primary' : ''
       }
     },

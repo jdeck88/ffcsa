@@ -132,10 +132,24 @@ class PayViewSet(viewsets.ViewSet):
     # quick checkout (non-members)
     @list_route(methods=['post'])
     def non_member_payment(self, request):
-        serializer = OneTimePaymentSerializer(data=request.data, context={"request": request})
+        serializer = NonMemberSerializer(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
-        return Response({'detail': 'yay, done'})
 
+        try:
+            res = stripe.Charge.create(
+                amount=(int(serializer.data.get('amount') * 100)),  # in cents
+                currency='usd',
+                description=PAYMENT_DESCRIPTION,
+                source='tok_visa',
+                statement_descriptor=PAYMENT_DESCRIPTION,
+            )
+
+            # Payment will be created when the charge is successful
+            return Response({'detail': 'Your payment is pending'})
+
+        except Exception as e:
+            raise NotAcceptable(e.user_message)
+            
 
     # >>>>>> make_payment
     @list_route(methods=['post'])

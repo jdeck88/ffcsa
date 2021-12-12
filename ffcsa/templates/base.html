@@ -251,49 +251,7 @@
           <!-- NavLinks -->
           <div class="d-none d-md-block">
             <v-btn plain class="text-capitalize font-weight-bold" href="/csa/">Full Farm CSA</v-btn>
-            <v-menu offset-y open-on-hover transition="slide-y-transition" bottom close-delay=120 nudge-bottom=5 content-class="menu-triangle" >
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn plain v-bind="attrs" v-on="on" text href="/products/">
-                  <span class="mx-2 text-capitalize font-weight-bold">Shop</span>
-                </v-btn>
-              </template>
-  
-              <v-card>
-                <v-row >
-                  <v-col>
-                    <v-list class="rounded">
-                      <v-list-item-group color="primary">
-                        <v-list-item href="/products/?category=Pasture Raised Meats">
-                          <v-list-item-title>PASTURE RAISED MEATS</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item href="/products/?category=ORGANIC VEGETABLES">
-                          <v-list-item-title>ORGANIC VEGETABLES</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item href="/products/?category=RAW DAIRY">
-                          <v-list-item-title>RAW DAIRY</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item href="/products/?category=ORGANIC FRUIT">
-                          <v-list-item-title>ORGANIC FRUIT</v-list-item-title>
-                        </v-list-item>
-                      </v-list-item-group>
-                    </v-list>
-                  </v-col>
-  
-                  <v-col>
-                    <v-list class="rounded">
-                      <v-list-item-group color="primary">
-                        <v-list-item href="/products/?selectedCategory=PANTRY">
-                          <v-list-item-title>PANTRY</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item>
-                          <v-list-item-title>RECIPIES</v-list-item-title>
-                        </v-list-item>
-                      </v-list-item-group>
-                    </v-list>
-                  </v-col>
-                </v-row>
-              </v-card>
-            </v-menu>
+            <v-btn plain class="text-capitalize font-weight-bold" href="/products/">Shop</v-btn>
             <v-btn plain class="text-capitalize font-weight-bold" href="/about/">About</v-btn>
             <v-btn plain class="text-capitalize font-weight-bold" href="/faq/">FAQ</v-btn>
           </div>
