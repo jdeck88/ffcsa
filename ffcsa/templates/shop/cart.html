@@ -101,7 +101,7 @@
               <v-card class="mb-6" flat tile>
                 <div id="non-members-payment-card" ref="StripeElement" class="w-11/12 my-5 mx-auto"></div>
                 <div id="card-errors" ref="cardErrors" class="text-red-2 p-3"></div>
-                <div v-if="formDisabled" class="text-red-2 text-center p-3">You need to purchace for not less than $20</div>
+                <div v-if="formDisabled" class="text-red-2 text-center p-3">You need to purchace for not less than $((store.state.NON_MEMBERS_MIN_PURCHACE))</div>
               </v-card>
   
               <v-btn block large color="primary" class="font-weight-bold mt-3" type="submit" :disabled="formDisabled||order.disabled" :loading="order.loading">Pay</v-btn>
@@ -243,7 +243,7 @@
     },
     computed: {
       formDisabled: function() {
-        return store.state.cart.total_price <= 20;
+        return store.state.cart.total_price <= store.state.NON_MEMBERS_MIN_PURCHACE;
       }
     }
   })

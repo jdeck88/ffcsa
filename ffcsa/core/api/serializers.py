@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.conf import settings
 from googleapiclient import model
 from rest_framework import serializers
 from rest_framework.exceptions import NotAcceptable
@@ -57,7 +58,7 @@ class UserSerializer(serializers.ModelSerializer):
 class NonMemberSerializer(serializers.Serializer):
     name = serializers.CharField(required=False)
     email = serializers.EmailField(required=False)
-    amount = serializers.FloatField(min_value=20)
+    amount = serializers.FloatField(min_value=settings.NON_MEMBERS_MIN_PURCHACE)
     stripeToken = serializers.CharField(required=False)
 
 

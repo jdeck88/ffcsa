@@ -277,6 +277,9 @@ DELIVERY_CSVS = {
     ]
 }
 
+# SETTINGS FOR NON-MEMBERS
+NON_MEMBERS_MIN_PURCHACE = 50
+
 # SETTINGS FOR ONE-TIME ORDERS
 # TODO make this 5% when we enable one-time orders
 MEMBER_ONE_TIME_ORDER_DISCOUNT = .00  # Percentage expressed as a decimal

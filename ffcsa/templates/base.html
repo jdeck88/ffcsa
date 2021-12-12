@@ -402,6 +402,7 @@
             value: false,
             content: 'Updated now!'
           },
+          NON_MEMBERS_MIN_PURCHACE: parseFloat('{{ request.NON_MEMBERS_MIN_PURCHACE }}'),
           rules: {
             required: value => !!value || 'This field is required',
             counter: value => value.length <= 20 || 'Max 20 characters',
