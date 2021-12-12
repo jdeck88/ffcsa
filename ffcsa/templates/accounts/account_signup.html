@@ -96,23 +96,23 @@
                     <v-col cols="12" v-if="user.profile.home_delivery" v-observe-visibility="initAutoCompelete()">
                       <v-text-field id="address" label="Address" outlined v-model="user.profile.delivery_address" required autocomplete="false"></v-text-field>
                     </v-col>
-  
-                    <!-- Drop Sites -->
-                    <v-col cols="12">
-                      <v-combobox
-                          outlined
-                          v-if="user.profile.home_delivery"
-                          label="Drop Site Location"
-                          v-model="user.profile.drop_site"
-                          :items="store.state.drop_sites"
-                          item-text="description"
-                          item-value="name"
-                          :return-object="false"
-                        >
-                      </v-combobox>
-                    </v-col>
                   </div>
                   {% endif %}
+
+                  <!-- Drop Sites -->
+                  <v-col cols="12">
+                    <v-combobox
+                        outlined
+                        v-if="!user.profile.home_delivery"
+                        label="Drop Site Location"
+                        v-model="user.profile.drop_site"
+                        :items="store.state.drop_sites"
+                        item-text="description"
+                        item-value="name"
+                        :return-object="false"
+                      >
+                    </v-combobox>
+                  </v-col>
 
                   <!-- invite_code -->
                   <v-col cols="12">
