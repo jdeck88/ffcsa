@@ -361,19 +361,19 @@
           <h2 class="text-lg font-bold">Download Our Free Tips:</h2>
           <h3 class="text-lg mt-3 mb-15">&lt;Lead Generation PDF Title Here&gt;</h3>
           
-          <v-form class="max-w-3xl mx-auto">
+          <v-form class="max-w-3xl mx-auto" ref="downloadForm" @submit.prevent="submitHandler">
             <v-row>
               <v-col cols="12" md="3">
-                <v-text-field outlined label="First name"></v-text-field>
+                <v-text-field outlined label="First name" v-model="downloadFreeTips.first_name" :rules="[store.state.rules.required]"></v-text-field>
               </v-col>
               <v-col cols="12" md="3">
-                <v-text-field outlined label="Last name"></v-text-field>
+                <v-text-field outlined label="Last name" v-model="downloadFreeTips.last_name"></v-text-field>
               </v-col>
               <v-col cols="12" md="3">
-                <v-text-field outlined label="Email" type="email"></v-text-field>
+                <v-text-field outlined label="Email" type="email" v-model="downloadFreeTips.email" :rules="[store.state.rules.required, store.state.rules.email]" required></v-text-field>
               </v-col>
               <v-col cols="12" md="3">
-                <v-btn block x-large dark color="green" class="font-weight-bold" elevation="0">Download</v-btn>
+                <v-btn block x-large dark color="green" class="font-weight-bold" elevation="0" type="submit">Download</v-btn>
               </v-col>
             </v-row>
           </v-form>
@@ -391,9 +391,20 @@
           <p class="text-lg mb-5">The problem is that meat and egg production standards are lacking, leaving you craving a better option. You deserve to know that your food was raised a better way.</p>
 
           <v-expand-transition>
-            <p class="text-lg" v-show="longTermBenefits.more" transition="slide-x-transition">
-              Like you, we want meat from sustainably raised and humanely treated animals, raised in harmony with nature. That’s why our multigenerational farm is deeply committed to raising the bar for production standards and holds the highest certification. You can Help Raise the Bar By shopping at Deck Family Farm you support your local food community and enable us to be a resource to aspiring generations fo young farmers. You can be confident that our goal is to make no compromises in practicing and teaching what we believe to be necessary to reclaim a farming economy. At Deck Family Farm, you’ll benefit from our long-term approach in developing a sustainable livestock operation. By seeking to improve the health of the land, we pass on to you a greater nutrient-dense bounty working in closer tandem with nature. With your health in mind, the farm does not use herbicides, pesticides, growth hormones, sub-therapeutic antibiotics, or synthetic nitrogen fertilizers. Instead, we generate soil fertility through the natural cycles of composting, grazing management, and seeding a variety of grasses. We know you want a farm that is creating a regenerative model that doesn’t harm the planet in ways that are associated with industrial, mono-cropped systems of agriculture. So stop questioning if your meat and eggs were produced responsibly, and feel confident your farmer is putting the health of both you and the planet first. Read our FAQ to learn more about our operations and conservation initiatives. Interested in working on the farm? Read more about our Internship Program.
-            </p>
+            <div class="text-lg" v-show="longTermBenefits.more">
+              <p>Like you, we want meat from sustainably raised and humanely treated animals, raised in harmony with nature. That’s why our multigenerational farm is deeply committed to raising the bar for production standards and holds the highest certification.</p>
+              <p>
+                <strong class="bl">You can Help Raise the Bar</strong> <br>
+                By shopping at Deck Family Farm you support your local food community and enable us to be a resource to aspiring generations for young farmers. You can be confident that our goal is to make no compromises in practicing and teaching what we believe to be necessary to reclaim a farming economy.
+              </p>
+              <p>At Deck Family Farm, you’ll benefit from our long-term approach in developing a sustainable livestock operation. By seeking to improve the health of the land, we pass on to you a greater nutrient-dense bounty working in closer tandem with nature.</p>
+              <p>With your health in mind, the farm does not use herbicides, pesticides, growth hormones, sub-therapeutic antibiotics, or synthetic nitrogen fertilizers. Instead, we generate soil fertility through the natural cycles of composting, grazing management, and seeding a variety of grasses. We know you want a farm that is creating a regenerative model that doesn’t harm the planet in ways that are associated with industrial, mono-cropped systems of agriculture.</p>
+              <p>So stop questioning if your meat and eggs were produced responsibly, and feel confident your farmer is putting the health of both you and the planet first.</p>
+              <p>
+                Read our <a href="/faq/">FAQ</a> to learn more about our operations and conservation initiatives. <br>
+                Interested in working on the farm? Read more about our <a href="/internship/">Internship Program</a>.
+              </p>
+            </div>
           </v-expand-transition>
           
           <v-btn text color="red" class="font-weight-bold" @click="longTermBenefits.more = !longTermBenefits.more">
@@ -469,6 +480,34 @@
       ],
       longTermBenefits: {
         more: false
+      },
+      downloadFreeTips: {
+        loading: false,
+        first_name: '',
+        last_name: '',
+        email: ''
+      }
+    },
+    methods: {
+      async submitHandler() {
+        // validate the form
+        if (!this.$refs.downloadForm.validate()) {
+          this.downloadFreeTips.loading = false;
+          return
+        }
+
+        const data = {
+          first_name: this.downloadFreeTips.first_name,
+          last_name: this.downloadFreeTips.last_name,
+          email: this.downloadFreeTips.email
+        }
+
+
+        console.log(data)
+
+
+
+
       }
     }
   })

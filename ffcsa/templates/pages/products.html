@@ -120,6 +120,15 @@
           </div>
           <!-- Page pagination -->
         </div>
+
+        <!-- no products found -->
+        <div v-if="products.results.length == 0 && loading == false" class="text-center">
+          <v-img src="{% static 'img/notfound.svg' %}" width="500" class="mx-auto mb-7"></v-img>
+          <h1>
+            Opps! No products found! 
+            <a href="/products/">return to products page</a>
+          </h1>
+        </div>
       </section>
       <!-- Products list -->
     
@@ -143,7 +152,7 @@
     
             <div>
               <img alt="Placeholder" class="block h-auto w-full mb-2" src="{% static 'img/products-homemade-pizza-for-dinner.jpg' %}">
-              <a href="#" class="text-3xl font-bold text-brown-7">PRODUCTS & SWAG</a>
+              <a href="/products/?query=&category=Pantry" class="text-3xl font-bold text-brown-7">PRODUCTS & SWAG</a>
             </div>
           </div>
         </div>

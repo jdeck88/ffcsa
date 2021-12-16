@@ -408,37 +408,28 @@
       <section class="bg-orange-extralightest p-24">
         <h3 class="text-brown-7 text-center font-bold text-3xl mb-20">Why Trust Your Local Farmer?</h3>
     
-        <div class="grid grid-cols-12 gap-4 max-w-5xl mx-auto">
-          <div class="col-span-12 md:col-span-6">
-            <p class="mb-5">Looking for a trusted local partner who can make
-              your search for environmentally responsible and
-              healthy food choices easier? <strong>Search no more!</strong>
-              Just because you’re not the farmer doesn’t mean
-              you can’t be confident in knowing where your food
-              came from.</p>
-    
-              <p class="mb-5"><strong>Most food these days has natural sounding
-                claims on their packaging, but how do you
-                actually know how your food has been grown?</strong>
-                There’s only one way, and that is to know your
-                farmer.</p>
-
-
+        <!-- <div class="grid grid-cols-12 gap-4 max-w-5xl mx-auto"> -->
+        <div style="min-height: 70vh;">
+          <div >
+            <div style="float:right; width:50%;" class="ml-3 mb-3">
+              <v-img src="{% static 'img/bags-of-veggies.jpg' %}"  style="float: right; margin: 5px;"></v-img>
+            </div>
+            <div style="float:none;">
+              <p class="mb-5">Looking for a trusted local partner who can make your search for environmentally responsible and healthy food choices easier? <strong>Search no more!</strong> Just because you’re not the farmer doesn’t mean you can’t be confident in knowing where your food came from.</p>
+              <p class="mb-5"><strong>Most food these days has natural sounding claims on their packaging, but how do you actually know how your food has been grown?</strong>There’s only one way, and that is to know your farmer.</p>
+              
               <v-expand-transition>
-                <p v-show="trustedLocalPartner.more" class="subtitle-1 text-justify">
-                  That’s why Deck Family Farm holds fast to its commitment to transparency, inviting you to take advantage of the farm’s Open Gate policy. In fact, all members are highly encouraged to pick up their customized box at the farm at least once so that you can truly see how your food is being grown! It doesn’t stop there, though. Members become connected with the farm on an even deeper level through attending farm dinners throughout the summer using the week’s seasonal CSA ingredients. Now you know a farm that can help you get everything on your grocery list. And, by partnering with neighboring farms we are able to bring you the most local and nutrient-dense food options available. Not only do these partnerships provide you with a truly full diet CSA, but they also put money back into our local community, nourish our community with fresh high-quality food, and empower you to leave a positive footprint in the world. There’s no need to run around to multiple stores searching for the best food. Our convenient pick-up locations and home delivery options provide you with a simple way to get truly straight-from-the-farm groceries. With generations of experience, our farm is here to help when you’re ready to make a better food choice.
-                </p>
+                <div v-show="trustedLocalPartner.more">
+                  <p>That’s why Deck Family Farm holds fast to its commitment to transparency, inviting you to take advantage of the farm’s Open Gate policy. In fact, all members are highly encouraged to pick up their customized box at the farm at least once so that you can truly see how your food is being grown! It doesn’t stop there, though. Members become connected with the farm on an even deeper level through attending farm dinners throughout the summer using the week’s seasonal CSA ingredients.</p>
+                  <p>Now you know a farm that can help you get everything on your grocery list. And, by partnering with neighboring farms we are able to bring you the most local and nutrient-dense food options available. Not only do these partnerships provide you with a truly full diet CSA, but they also put money back into our local community, nourish our community with fresh high-quality food, and empower you to leave a positive footprint in the world.</p>
+                  <p>There’s no need to run around to multiple stores searching for the best food. Our convenient pick-up locations and home delivery options provide you with a simple way to get truly straight-from-the-farm groceries. With generations of experience, our farm is here to help when you’re ready to make a better food choice.</p>
+                </div>
               </v-expand-transition>
-    
-              <!-- <v-btn text color="red" class="font-weight-bold">READ MORE</v-btn> -->
-
+  
               <v-btn text color="red" class="font-weight-bold" @click="trustedLocalPartner.more = !trustedLocalPartner.more">
                 <template v-if="!trustedLocalPartner.more">READ MORE</template> <template v-else>READ LESS</template>
               </v-btn>
-          </div>
-    
-          <div class="col-span-12 md:col-span-6">
-            <img class="w-full mx-auto" alt="Two workers holding bags of fresh veggies" src="{% static 'img/bags-of-veggies.jpg' %}">
+            </div>
           </div>
         </div>
     
