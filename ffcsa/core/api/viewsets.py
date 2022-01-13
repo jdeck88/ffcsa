@@ -109,9 +109,11 @@ class SignupViewSet(viewsets.ViewSet):
         with transaction.atomic():
             user = User.objects.create(**user_data)
             user.profile.__dict__.update(profile_data)
+            
+            user.profile.delivery_address = profile_data.get("delivery_address")
             user.profile.save()
-            # user = auth.authenticate(username=user.email, password=user_raw.get("password"))
 
+            # login user
             auth.login(request, user)
             token, created = Token.objects.get_or_create(user=user)
             user_serializer = UserSerializer(user)
