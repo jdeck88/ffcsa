@@ -46,41 +46,65 @@
           
           
           <!-- form part -->
-          <div class="col-span-12 md:col-span-7">
+          <div class="col-span-12 md:col-span-7 mb-10">
             <div class="text-center mb-10">
               <h1 class="font-bold text-3xl text-gray-900">REGISTER</h1>
               <p>Enter your information to register</p>
             </div>
       
-            <v-form class="mb-7">
+            <v-form class="mb-7" ref="signupForm">
               <v-container>
                 <v-row>
                   <!-- first name -->
                   <v-col cols="12" md="6">
-                    <v-text-field outlined label="First name *" v-model="user.first_name" required></v-text-field>
+                    <v-text-field outlined label="First name *" v-model="user.first_name" :rules="[store.state.rules.required]"></v-text-field>
                   </v-col>
 
                   <!-- last name -->
                   <v-col cols="12" md="6">
-                    <v-text-field outlined label="Last name *" v-model="user.last_name" required></v-text-field>
+                    <v-text-field outlined label="Last name *" v-model="user.last_name" :rules="[store.state.rules.required]"></v-text-field>
                   </v-col>
                   
                   <!-- email -->
                   <v-col cols="12">
-                    <v-text-field prepend-inner-icon="mdi-email" outlined label="Email *" v-model="user.email" required></v-text-field>
+                    <v-text-field
+                      prepend-inner-icon="mdi-email"
+                      outlined
+                      label="Email *"
+                      v-model="user.email"
+                      :rules="[store.state.rules.required, store.state.rules.email]"
+                    >
+                    </v-text-field>
                   </v-col>
 
                   <!-- password -->
                   <v-col cols="12" md="6">
-                    <v-text-field prepend-inner-icon="mdi-key-variant" outlined label="Password *" v-model="user.password" required></v-text-field>
+                    <v-text-field 
+                      prepend-inner-icon="mdi-key-variant"
+                      outlined
+                      label="Password *"
+                      type="password"
+                      v-model="user.password"
+                      :rules="[store.state.rules.required, store.state.rules.password]"
+                    >
+                    </v-text-field>
                   </v-col>
 
                   <!-- confrim password -->
                   <v-col cols="12" md="6">
-                    <v-text-field prepend-inner-icon="mdi-key-variant" outlined label="Confirm password *" v-model="user.password2" required></v-text-field>
+                    <v-text-field
+                      prepend-inner-icon="mdi-key-variant"
+                      outlined
+                      label="Confirm password *"
+                      type="password"
+                      v-model="user.password2"
+                      :rules="[store.state.rules.required, store.state.rules.password]"
+                    >
+                    </v-text-field>
+
                   </v-col>
 
-                  <!-- Delivery Options -->
+                  <!-- home_delivery -->
                   {% if settings.HOME_DELIVERY_ENABLED %}
                   <div>
                     <v-col cols="12">
@@ -94,12 +118,12 @@
                     </v-col>
   
                     <v-col cols="12" v-if="user.profile.home_delivery" v-observe-visibility="initAutoCompelete()">
-                      <v-text-field id="address" label="Address" outlined v-model="user.profile.delivery_address" required autocomplete="false"></v-text-field>
+                      <v-text-field id="address" ref="address" label="Address" outlined v-model="user.profile.delivery_address" :error-messages="homeDelivery.errorMessages" :rules="[store.state.rules.required]" autocomplete="false"></v-text-field>
                     </v-col>
                   </div>
                   {% endif %}
 
-                  <!-- Drop Sites -->
+                  <!-- drop_site -->
                   <v-col cols="12">
                     <v-combobox
                         outlined
@@ -110,6 +134,7 @@
                         item-text="description"
                         item-value="name"
                         :return-object="false"
+                        :rules="[store.state.rules.required]"
                       >
                     </v-combobox>
                   </v-col>
@@ -129,7 +154,8 @@
                       hint="must match format 999-999-9999"
                       persistent-hint
                       maxlength=12
-                      required>
+                      :rules="[store.state.rules.required, store.state.rules.phone]"
+                    >
                     </v-text-field>
                   </v-col>
 
@@ -143,36 +169,39 @@
                       hint="must match format 999-999-9999"
                       persistent-hint
                       maxlength=12
-                      required>
+                      :rules="[store.state.rules.phone]"
+                    >
                     </v-text-field>
                   </v-col>
 
                   <!-- num_adults -->
                   <v-col cols="12" md=6>
-                    <v-text-field outlined label="How many adults are in your family? *" type="number" v-model="user.profile.num_adults" required></v-text-field>
+                    <v-text-field outlined label="How many adults are in your family? *" type="number" v-model="user.profile.num_adults" :rules="[store.state.rules.required]"></v-text-field>
                   </v-col>
 
                   <!-- num_children -->
                   <v-col cols="12" md=6>
-                    <v-text-field outlined label="How many children are in your family? *" type="number" v-model="user.profile.num_children" required></v-text-field>
+                    <v-text-field outlined label="How many children are in your family? *" type="number" v-model="user.profile.num_children" :rules="[store.state.rules.required]"></v-text-field>
                   </v-col>
 
                   <v-col cols="12">
                     <!-- communication_method -->
                     <v-select
                       :items="communication_methods"
+                      v-model="user.profile.communication_method"
                       item-text="text"
                       item-value="value"
                       :return-object="false"
                       label="What is your preferred method of communication?"
                       outlined
+                      :rules="[store.state.rules.required]"
                     ></v-select>
 
                     <!-- best_time_to_reach -->
-                    <v-text-field outlined label="What is the best time to reach you? *" type="time" v-model="user.profile.best_time_to_reach" required></v-text-field>
+                    <v-text-field outlined label="What is the best time to reach you? *" type="time" v-model="user.profile.best_time_to_reach"></v-text-field>
                     
                     <!-- hear_about_us -->
-                    <v-textarea outlined label="How did you hear about us? *" required></v-textarea>
+                    <v-textarea outlined label="How did you hear about us? *"></v-textarea>
 
                     <!-- join_dairy_program -->
                     <v-checkbox
@@ -187,6 +216,7 @@
                       v-model="user.profile.payment_agreement"
                       label="I agree to make monthly payments in order to maintain my membership with the FFCSA for 6 months, with a minimium of $172 per month."
                       persistent-hint
+                      :rules="[store.state.rules.required]"
                     ></v-checkbox>
 
                     <!-- pickup_agreement -->
@@ -194,24 +224,18 @@
                       v-model="user.profile.pickup_agreement"
                       label="I agree to bring my own bags and coolers as needed to pick up my product. The containers that the product arrives in stay at the dropsite. I intend to maintain my membership with the FFCSA for 6 months, with a minimum payment of $172 per month"
                       persistent-hint
+                      :rules="[store.state.rules.required]"
                     ></v-checkbox>
                   </v-col>
-
-                  <v-btn block color="primary" class="font-weight-bold">Sign up</v-btn>
                 </v-row>
+
+                <v-btn block color="primary" :loading="loading" @click="saveUser" class="font-weight-bold">Sign up</v-btn>
               </v-container>
             </v-form>
       
             <p class="text-base text-gray-700 mb-3"><strong>After signing up, you will receive a welcome email and a Membership Agreement that you will need to sign.</strong></p>
             <p class="text-base text-gray-700 mb-2">Once you have signed the agreement and set up your payments, you will be ready to make your first order!</p>
             <p class="text-base text-gray-700 mb-2">If you do not see these 2 emails after signing up, check your spam folder and let us know if it isn't there.</p>
-      
-            <!-- Regiser btn -->
-            <div class="flex text-center my-10 pb-20">
-              <div class="w-full px-3 mb-5">
-                <ff-button text="REGISTER NOW" cls="btn-primary ml-auto mr-3" :loading="personal.loading" v-on:click.native="saveUser"></ff-button>
-              </div>
-            </div>
       
           </div>
           <!-- form part -->
@@ -238,13 +262,12 @@
     store,
     vuetify: new Vuetify(opts),
     data: {
-      // Personal
-      // TODO - might need to update this
-      personal: {
-        loading: false
-      },
+      loading: false,
+      disabled: false,
 
-      communication_methods: [{text: 'Email', value: 'email'}, {text: 'Phone', value: 'phone'}, {text: 'Text', value: 'text'}],
+      communication_methods: [
+        { text: 'Email', value: 'email' }, { text: 'Phone', value: 'phone' }, { text: 'Text', value: 'text' }
+      ],
 
       user: {
         first_name: '',
@@ -262,37 +285,48 @@
           best_time_to_reach: '',
           hear_about_us: '',
           home_delivery: false,
-          drop_site: 'Farm',
+          drop_site: '',
           join_dairy_program: false,
           payment_agreement: false,
           pickup_agreement: false
         }
       },
 
+      homeDelivery: {
+        // error: false,
+        errorMessages: []
+      }
+
     },
     methods: {
       // Save user info
       async saveUser() {
-        const form = document.getElementById('register-form');
-        if (!form.reportValidity()) return
+        // validate the form
+        if (!this.$refs.signupForm.validate()) {
+          this.disabled = true
+          return
+        }
 
-
+        // validate address
+        if (this.homeDelivery.errorMessages.length > 0) {
+          store.commit('showAlert', {type: 'error', content: 'Can not deliver to provided address'})
+          return
+        }
 
         console.log(this.user)
-        console.log(this.user.profile)
 
-        return
-        
         try {
-          this.personal.loading = true
-          const res = await axios.patch(`/api/users/{{user.id}}/`, {...this.user});
-          store.commit('showAlert')
+          this.loading = true
+          const res = await axios.post(`/api/signup/`, {...this.user});
+          location.replace('/')
+          // store.commit('showAlert', {type: 'success', content: res.data.detail})
 
-          this.personal.loading = false
+          this.loading = false
         } catch (error) {
           console.log(error.response.data)
-          NavVue.show_msg('Can not save user information', 'error')
-          this.personal.loading = false
+          // store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+          store.commit('showAlert', {type: 'error', content: 'Can not signup user'})
+          this.loading = false
         }
       },
 
@@ -358,19 +392,22 @@
           .done(function (data) {
             if (data.is_full) {
               success = false
-              NavVue.show_msg('Unfortunately, our delivery route is full and we can not offer home delivery to your zip code at this time. Please check again at a later date as members change drop sites from time-to-time. You can also <a href="mailto:fullfarmcsa@deckfamilyfarm.com">contact us</a> to be notified when a spot opens up!', 'error')
+              AccountVue.homeDelivery.errorMessages.push('Unfortunately, our delivery route is full and we can not offer home delivery to your zip code at this time. Please check again at a later date as members change drop sites from time-to-time. You can also contact us to be notified when a spot opens up!')
+            } else {
+              AccountVue.homeDelivery.errorMessages = [] 
             }
           })
           .fail(function () {
             success = false
-            NavVue.show_msg('An error occurred. Please try again later. Please <a href="mailto:fullfarmcsa@deckfamilyfarm.com">contact us</a> if this problem persists.', 'error')
+              AccountVue.homeDelivery.errorMessages.push('An error occurred. Please try again later. Please contact us if this problem persists.')
           })
         }
       }
       
       // we don't deliver to this address
       if (!success) {
-        NavVue.show_msg('We do not currently offer delivery service to this address. Please <a class="text-blue-500" href="mailto:fullfarmcsa@deckfamilyfarm.com">contact us</a> to be notified when our delivery options expand.', 'error')
+        AccountVue.homeDelivery.errorMessages.push('We do not currently offer delivery service to this address. Please contact us to be notified when our delivery options expand.')
+        // store.commit('showAlert', {type: 'error', content: 'We do not currently offer delivery service to this address. Please <a class="text-blue-500" href="mailto:fullfarmcsa@deckfamilyfarm.com">contact us</a> to be notified when our delivery options expand.'})
       }
     })
   }

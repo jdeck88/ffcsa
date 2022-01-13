@@ -8,6 +8,32 @@ from ffcsa.core.models import Profile, Payment, Address
 User = get_user_model()
 
 
+# Signup Serializer
+class SignupProfileSerializer(serializers.Serializer):
+    invite_code = serializers.CharField(required=False)   # ? not included in the model
+    phone_number = serializers.CharField()
+    phone_number_2 = serializers.CharField(required=False)
+    num_adults = serializers.IntegerField()
+    num_children = serializers.IntegerField(required=False)   # ? not included in the model
+    drop_site = serializers.CharField(required=False)
+    home_delivery = serializers.BooleanField(required=False)
+    delivery_address = serializers.CharField(required=False)
+    join_dairy_program = serializers.BooleanField()
+    payment_agreement = serializers.BooleanField()
+    pickup_agreement = serializers.BooleanField(required=False)   # ? not included in the model
+    delivery_notes = serializers.CharField(required=False)
+    communication_method = serializers.CharField(required=False)   # ? not included in the model
+    best_time_to_reach = serializers.TimeField(required=False)   # ? not included in the model
+    hear_about_us = serializers.CharField(required=False)   # ? not included in the mode
+    
+class SignupSerializer(serializers.Serializer):
+    first_name = serializers.CharField(max_length=100)
+    last_name = serializers.CharField(max_length=100)
+    email = serializers.EmailField()
+    password = serializers.CharField(min_length=6)
+    password2 = serializers.CharField(min_length=6)
+    # profile = SignupProfileSerializer() # we validate it seperatly
+
 # Login Serializer
 class LoginSerializer(serializers.Serializer):
     username = serializers.EmailField()

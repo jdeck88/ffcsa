@@ -2,6 +2,7 @@ import datetime
 import stripe
 from django.contrib import auth
 from django.contrib.auth import get_user_model
+from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 
@@ -77,6 +78,48 @@ class UserViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.G
         return Response({'detail': 'Password updated'})
 
 
+class SignupViewSet(viewsets.ViewSet):
+    """Signup user"""
+    
+    serializer_class = SignupSerializer
+    ignored_fields = ["num_children", "pickup_agreement", "communication_method", "best_time_to_reach"]
+
+    def create(self, request):
+        # extract user and profle info
+        user_raw = request.data
+        profile_raw = {k: v for (k, v) in request.data['profile'].items() if k not in self.ignored_fields and v != ""}
+
+        # validate provided data (user/profile)
+        user_serializer = SignupSerializer(data=user_raw)
+        user_serializer.is_valid(raise_exception=True)
+
+        profile_serializer = SignupProfileSerializer(data=profile_raw)
+        profile_serializer.is_valid(raise_exception=True)
+
+        # validate passwords match
+        if not user_raw["password"] == user_raw["password2"]:
+            raise NotAcceptable("Passwords do not match")
+
+        user_data = user_serializer.data
+        profile_data = profile_serializer.data
+
+        # remove password2
+        del user_data["password2"]
+
+        with transaction.atomic():
+            user = User.objects.create(**user_data)
+            user.profile.__dict__.update(profile_data)
+            user.profile.save()
+            # user = auth.authenticate(username=user.email, password=user_raw.get("password"))
+
+            auth.login(request, user)
+            token, created = Token.objects.get_or_create(user=user)
+            user_serializer = UserSerializer(user)
+            return Response({'token': token.key, 'user': user_serializer.data})
+
+        return Response({})
+
+
 class LoginViewSet(viewsets.ViewSet):
     ''' Authenticate user and return user with token '''
     serializer_class = LoginSerializer
@@ -87,8 +130,7 @@ class LoginViewSet(viewsets.ViewSet):
         )
         serializer.is_valid(raise_exception=True)
 
-        user = auth.authenticate(**serializer.data)
-        if user:
+        if (user := auth.authenticate(**serializer.data)):
             auth.login(request, user)
             token, created = Token.objects.get_or_create(user=user)
             user_serializer = UserSerializer(user)
