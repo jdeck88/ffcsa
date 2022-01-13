@@ -61,14 +61,3 @@ a.btn {
   @apply text-brown-7 border border-brown-7 tracking-wide hover:border-brown-7 hover:bg-brown-7 hover:text-white;
   @apply rounded text-lg px-6 py-5 transition duration-300 ease-in-out;
 }
-
-/* todo - enhance below */
-/* add to card button */
-.btn-add-to-card {
-  @apply px-6 py-3 font-light text-brown-7 text-lg;
-  background-color: theme('colors.brown.0'); /* TODO */
-}
-
-.btn-add-to-card:hover {
-  @apply underline;
-}

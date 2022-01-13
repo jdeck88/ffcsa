@@ -61,16 +61,12 @@
               <div class="col-span-3 md:col-span-1">
                 <!-- product variations out of stock -> can't manpulate -->
                 <template v-if="variation.number_in_stock == 0">
-                  <button class="w-full disabled:opacity-50 focus:outline-none cursor-default bg-gray-100 text-gray-500 p-3 rounded">
-                    OUT OF STOCK
-                  </button>
+                  <v-btn x-large disabled>OUT OF STOCK</v-btn>
                 </template>
 
                 <template v-else>
                   <!-- todo disable button when user purchace all in stock for item -->
-                  <button class="btn-add-to-card w-full" @click="App.addToCart(variation)">
-                    ADD TO CART
-                  </button>
+                  <v-btn color="brown_lightest" elevation="0" x-large @click="App.addToCart(variation)">ADD TO CART</v-btn>
                 </template>
 
               </div>
