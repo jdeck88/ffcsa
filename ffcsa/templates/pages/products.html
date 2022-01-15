@@ -79,35 +79,56 @@
       <section id="productsListSection" class="min-h-screen">
         <div v-if="products.results.length > 0" class="container my-12 mx-auto">
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 min-h-screen">
-            <div class="text-center mb-4" v-for="product in products.results">
+            <div class="mb-4 relative" v-for="product in products.results">
               <!-- product image -->
-              <v-img :src="'/media/' + product.image" height="20rem" width="100%" @click="showProduct(product)" class="cursor-pointer"></v-img>
+              <v-img :src="'/media/' + product.image" height="20rem" @click="showProduct(product)" class="cursor-pointer">
+                <div class="rounded-tr-lg absolute left-0 bottom-0 bg-blue-50 p-2 px-3">(( product.weight || '-'))</div>
+              </v-img>
       
-              <h3 class="text-brown-7 text-xl font-bold truncate mt-4">(( product.title ))</h3>
-              <div class="my-2">
-                <template v-if="product.has_in_stock_variations">
-                  <!-- at least one variation in stock -->
-                  <template v-if="product.variations.length == 1">
-                    <p class="h-8 text-brown-7 text-xl">$(( product.price ))<span v-if="product.unit">/(( product.unit ))</span></p>
-                    <v-btn color="brown_lightest" elevation="0" x-large @click="App.addToCart(product.variations[0])">ADD TO CART</v-btn>
-                </template>
-                  
-                  <template v-else>
-                    <p class="h-8">
-                      <span class="italic text-gray-500">From </span>
-                      <span class="text-brown-7 text-xl">$(( getProductStartFrom(product) ))<span v-if="product.unit">/(( product.unit ))</span></span>
-                    </p>
-                    <v-btn color="brown_lightest" elevation="0" x-large @click="showProduct(product)">CHOOSE VARIATION</v-btn>
+              <h3 class="text-center text-lg truncate mt-4">(( product.title ))</h3>
+
+              <v-row class="mt-5 items-end">
+                <!-- price and vendor -->
+                <v-col sm="12" md="6">
+                  <template v-if="product.has_in_stock_variations">
+                    <!-- at least one variation in stock -->
+                    <template v-if="product.variations.length == 1">
+                      <p color="blue-grey darken-4" class="h-8 text-xl mb-0">
+                        <span class="text-3xl font-bold">$(( product.price ))</span>
+                        <span v-if="product.unit">/(( product.unit ))</span>
+                      </p>
+                    </template>
+                    
+                    <template v-else>
+                      <p class="h-8 mb-0">
+                        <span class="italic text-gray-500">From </span>
+                        <span class="text-brown-7 text-xl">$(( getProductStartFrom(product) ))<span v-if="product.unit">/(( product.unit ))</span></span>
+                      </p>
+                    </template>
                   </template>
-                </template>
-                <template v-else>
-                  <!-- all product variations are out of stock -->
-                  <p class="h-8"></p>
-                  <v-btn x-large disabled>OUT OF STOCK</v-btn>
-                </template>
-              </div>
-              <p class="text-green-light mb-0">(( product.weight ))</p>
-              <p class="text-brown-7 text-sm italic font-thin">(( product.vendor ))</p>
+                  <template v-else>
+                    <!-- all product variations are out of stock -->
+                  </template>
+
+                  <p class="text-brown-7 text-sm font-thin mt-2 mb-0">(( product.vendor ))</p>
+                </v-col>
+
+                <!-- add to cart btn -->
+                <v-col sm="12" md="6">
+                  <template v-if="product.has_in_stock_variations">
+                    <template v-if="product.variations.length == 1">
+                      <v-btn color="brown_lightest" elevation="0" x-large @click="App.addToCart(product.variations[0])">ADD TO CART</v-btn>
+                  </template>
+                    
+                    <template v-else>
+                      <v-btn color="brown_lightest" elevation="0" x-large @click="showProduct(product)">CHOOSE VARIATION</v-btn>
+                    </template>
+                  </template>
+                  <template v-else>
+                    <v-btn x-large disabled>OUT OF STOCK</v-btn>
+                  </template>
+                </v-col>
+              </v-row>
             </div>
           </div>
       
