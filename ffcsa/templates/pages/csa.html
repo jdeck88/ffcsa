@@ -487,16 +487,15 @@
       <!-- Your Customized Weekly Membership Box -->
       <section class="p-24">
         <h3 class="text-brown-7 text-center font-bold text-3xl mb-20">Your Customized Weekly Membership Box</h3>
-    
-        <div class="grid grid-cols-12 gap-10 max-w-5xl mx-auto">
+        <v-row>
           <!-- WEEKLY MEMBERSHIP BOX -->
-          <div class="col-span-12 md:col-span-8 bg-orange-lighter">
-            <div class="bg-orange-light text-center p-5 md:h-28">
-              <p class="font-bold">WEEKLY MEMBERSHIP BOX</p>
-              <p class="text-base opacity-60">You choose what budget works for your family!</p>
+          <v-col md="8">
+            <div class="bg-orange-light text-center p-5">
+              <p class="font-bold mb-0">WEEKLY MEMBERSHIP BOX</p>
+              <p class="text-base font-bold opacity-70 mb-0">You choose what budget works for your family!</p>
             </div>
     
-            <ul class="list-disc list-inside p-5 px-10 md:h-56">
+            <ul class="bg-orange-lightest list-disc list-inside p-5 px-10 md:h-56">
               <li class="text-base font-thin">Customizable box of seasonal ingredients</li>
               <li class="text-base font-thin">5% discount on all items</li>
               <li class="text-base font-thin">Monthly member only specials (up to 30% discount)</li>
@@ -505,33 +504,90 @@
               <li class="text-base font-thin">Free weekly recipes using the week’s seasonal ingredients</li>
               <li class="text-base font-thin">Access to seasonal farm dinners</li>
             </ul>
-    
-            <div class="bg-orange-light p-5">
-              <p class="font-bold">$40</p>
+
+            <div class="bg-orange-light p-5 px-10">
+              <v-row class="items-center text-center">
+                <v-col md="3">
+                  <h3 class="font-bold mb-0">
+                    <span class="relative">
+                      <span class="absolute" style="top: -1rem;left: -0.7rem;">$</span>
+                      <span class="text-4xl">40</span>
+                    </span>
+                  </h3>
+                  <p class="text-sm mb-0">WEEKLY MINIMUM</p>
+                </v-col>
+
+                <v-col md="6">
+                  <v-img src="{% static 'img/arrow_forward.svg' %}" height="4rem" alt=""></v-img>
+                </v-col>
+                
+                <v-col md="3">
+                  <h3 class="font-bold mb-0 mt-3">
+                    <span class="relative">
+                      <span class="absolute" style="top: -1rem;left: -0.7rem;">$</span>
+                      <span class="text-4xl">125</span>
+                      <span class="absolute" style="top: -0.6rem;right: -1rem;">+</span>
+                    </span>
+                  </h3>
+                </v-col>
+              </v-row>
+
             </div>
-          </div>
-          <!-- WEEKLY MEMBERSHIP BOX -->
-          
+
+            <div class="text-center mt-10">
+              <v-btn large color="primary" class="font-weight-bold mx-3" href="{% url 'signup' %}">BECOME A MEMBER</v-btn>
+            </div>
+          </v-col>
+
           <!-- ONE TIME GUEST ORDER -->
-          <div class="col-span-12 md:col-span-4 bg-green-lighter">
-            <div class="bg-green-light text-center p-5 md:h-28">
-              <p class="font-bold">ONE TIME <br> GUEST ORDER</p>
+          <v-col md="4">
+            <div class="bg-green-light text-center p-5 ">
+              <!-- <p class="font-bold mb-0"></p> -->
+              <h3 class="text-xl font-bold w-44 mx-auto">ONE TIME GUEST ORDER</h3>
             </div>
     
-            <ul class="list-disc list-inside p-5 px-10 md:h-56">
+            <ul class="bg-green-lightest list-disc list-inside p-5 px-10 md:h-56">
               <li class="text-base font-thin">Customizable box of seasonal local ingredients</li>
               <li class="text-base font-thin">Home delivery options OR pick up at local farmers market</li>
               <li class="text-base font-thin">Trial our CSA without the commitment</li>
             </ul>
     
-            <div class="bg-green-light p-5 mt-auto">
-              <p class="font-bold">$40</p>
+            <div class="bg-green-light p-5 mt-auto text-center">
+              <h3 class="font-bold relative mb-0">
+                <span class="relative">
+                  <span class="absolute" style="top: -1rem;left: -0.7rem;">$</span>
+                  <span class="text-4xl">40</span>
+                </span>
+              </h3>
+              <p class="text-sm mb-0">MINIMUM</p>
             </div>
-          </div>
-          <!-- ONE TIME GUEST ORDER -->
-        </div>
+
+            <div class="text-center mt-10">
+              <v-btn large color="green" dark class="font-weight-bold mx-3" href="/products/">BROWSE THE STORE</v-btn>
+            </div>
+          </v-col>
+        </v-row>
+        
+        <!-- FULL DIET CHALLENGE -->
+        <v-row class="mt-10 pt-10">
+          <v-col sm="7" class="bg-yellow">
+            <p class="font-bold text-2xl mb-0 mt-2 p-3">
+              FULL DIET CHALLENGE    
+              <span class="relative ml-3">
+                <span class="absolute text-sm" style="top: -0.1rem;left: -0.5rem;">$</span>
+                <span>80</span>
+              </span>
+              /Person/Wk
+            </p>
+          </v-col>
+
+          <v-col sm="5" class="bg-yellow-extralightest">
+            <p class="text-base mb-0 p-3">Take the 3-Month Full Diet Challenge and feel great knowing you’re eating 100% local!</p>
+          </v-col>
+        </v-row>
       </section>
       <!-- Your Customized Weekly Membership BOX -->
+
     </v-main>
   </v-app>
 
