@@ -172,8 +172,6 @@
     
       <!-- Video section -->
       <section class="p-20">
-        <p class="text-center my-10 text-red-2">!!! VIDEO HERE !!!</p>
-        
         {% if not user.is_authenticated %}
         <div class="text-center">
           <v-btn large color="primary" class="font-weight-bold mx-3" href="{% url 'signup' %}">BECOME A MEMBER</v-btn>
@@ -434,8 +432,8 @@
         </div>
     
         <section class="text-center max-w-xl mx-auto mt-24">
-          <v-btn large color="primary" class="font-weight-bold mx-3" href="{% url 'signup' %}">BECOME A MEMBER</v-btn>
-          <v-btn large color="green" dark class="font-weight-bold mx-3" href="/products/">BROWSE THE STORE</v-btn>
+          <v-btn large color="primary" class="font-weight-bold mx-3 mb-5" href="{% url 'signup' %}">BECOME A MEMBER</v-btn>
+          <v-btn large color="green" dark class="font-weight-bold mx-3 mb-5" href="/products/">BROWSE THE STORE</v-btn>
         </section>
       </section>
       <!-- Why Trust Your Local Farmer? -->
