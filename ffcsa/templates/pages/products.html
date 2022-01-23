@@ -83,7 +83,7 @@
             <v-col md="6" lg="4" class="mb-4 relative" v-for="product in products.results">
               <!-- product image -->
               <v-img :src="'/media/' + product.image" height="20rem" @click="showProduct(product)" class="cursor-pointer">
-                <div class="rounded-tr-lg absolute left-0 bottom-0 bg-blue-50 p-2 px-3">(( product.weight || '-'))</div>
+                <div v-if="product.weight" class="rounded-tr-lg absolute left-0 bottom-0 bg-blue-50 p-2 px-3">(( product.weight ))</div>
               </v-img>
       
               <h3 class="text-center text-lg truncate mt-4">(( product.title ))</h3>
@@ -95,7 +95,7 @@
                     <!-- at least one variation in stock -->
                     <template v-if="product.variations.length == 1">
                       <p color="blue-grey darken-4" class="h-8 text-xl mb-0">
-                        <span class="text-3xl font-bold">$(( product.price ))</span>
+                        <span class="text-3xl font-bold">$(( parseFloat(product.price).toFixed(2) ))</span>
                         <span v-if="product.unit">/(( product.unit ))</span>
                       </p>
                     </template>
@@ -251,10 +251,8 @@
       },
       
       page: function(val, oldVal) {
-        if (val != '1') {
-          this.getProducts()
-          this.scrollToProducts()
-        }
+        this.getProducts()
+        this.scrollToProducts()
       }
     },
 
