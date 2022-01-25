@@ -6,22 +6,6 @@
 
 {% block css %}
 <style>
-  .contactUsBackground {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 120vh;
-    z-index: -100;
-
-    /* background-image: var(--products-aboutus-bg); */
-    background: linear-gradient( rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) ), var(--products-aboutus-bg);
-    background-color: #cccccc; /* Used if the image is unavailable */
-    background-position: center; /* Center the image */
-    background-repeat: no-repeat; /* Do not repeat the image */
-    background-size: cover;
-    filter: blur(7px);
-  }
 
   input:checked + label {
     border-color: #e16231;
@@ -33,16 +17,14 @@
 
 {% block main %}
 <!-- background -->
-<div class="contactUsBackground"></div>
 
-<main id="contactUs">
+<main id="contactUs" style="background-color: #fafafa;">
   <!-- Call block super -->
   {{ block.super }}
 
-  <section class="bg-orange-extralightests max-w-3xl mx-auto mt-16 p-5 mb-20">
-    <h3 class="text-4xl font-bold mb-16 text-white text-center">Get in touch</h3>
+  <section class="bg-orange-extralightests max-w-3xl mx-auto p-5 mb-20 pt-20 hidden">
 
-    <div class="grid grid-cols-12 gap-10 text-center text-sm items-center">
+    <div class="grid grid-cols-12 gap-10 text-center text-sm items-center hidden">
       <a 
         href="https://www.google.com/maps/place/25362+High+Pass+Rd,+Junction+City,+OR+97448,+USA/@44.2196354,-123.3481561,17z/data=!3m1!4b1!4m5!3m4!1s0x54c1007cd9f7eb3f:0x6094b5f30ebbb486!8m2!3d44.2196354!4d-123.3459621" target="_blank"
         class="bg-white bg-opacity-80 col-span-12 md:col-span-4 p-3 hover:bg-orange-lightest focus:outline-none transition duration-300 ease-in-out rounded shadow h-full">
@@ -68,29 +50,62 @@
       </a>
     </div>
 
-    <v-app class="mt-4 rounded">
-      <v-main>
+  </section>
 
-        <v-card class="pa-5">
-          <div class="">
-            <form id="contactUsFrom" class="grid grid-cols-12 gap-4">
-              <p class="text-base font-bold text-gray-700 col-span-12">Send us a message</p>
-      
-              <div class="col-span-12 md:col-span-6">
-                <v-text-field outlined label="Your name" required></v-text-field>
-                <v-text-field outlined label="Email" type="email" required></v-text-field>
-                <v-text-field outlined label="Phone" required></v-text-field>
-              </div>
-        
-              <!-- message -->
-              <div class="col-span-12 md:col-span-6">
-                <v-textarea outlined label="Message" rows="8" no-resize></v-textarea>
-              </div>
-      
-              <!-- Reason -->
-              <div class="col-span-12 select-none -mt-4">
+  <v-app class="mt-4" style="background-color: #fafafa;">
+    <v-main>
+      <v-container class="mx-auto mt-10" style="max-width: 70rem;">
+
+        <v-row>
+          <v-col lg="7">
+            <h3 class="text-4xl font-bold mb-16 text-primary">Get in touch</h3>
+
+            <!-- Farm Inquiries -->
+            <h3 class="mb-3">Farm Inquiries</h3>
+
+            <a href="tel:+1541-998-4697" class="text-base">
+              <v-icon small color="primary" class="mr-4">mdi-phone</v-icon>
+              541-998-4697
+            </a>
+            <br>
+            <a href="mailto:info@deckfamilyfarm.com" class="text-base">
+              <v-icon small color="primary" class="mr-4">mdi-at</v-icon>
+              info@deckfamilyfarm.com
+            </a>
+
+            <!-- CSA Inquiries -->
+            <h3 class="mt-10">CSA Inquiries</h3>
+
+            <a href="tel:+1541-321-0925" class="text-base">
+              <v-icon small color="primary" class="mr-4">mdi-phone</v-icon>
+              541-321-0925
+            </a>
+            <br>
+            <a href="mailto:fullfarmcsa@deckfamilyfarm.com" class="text-base">
+              <v-icon small color="primary" class="mr-4">mdi-at</v-icon>
+              fullfarmcsa@deckfamilyfarm.com
+            </a>
+
+            <!-- Address -->
+            <h3 class="mt-10">Address</h3>
+            <a href="https://www.google.com/maps/place/25362+High+Pass+Rd,+Junction+City,+OR+97448,+USA/@44.2196354,-123.3481561,17z/data=!3m1!4b1!4m5!3m4!1s0x54c1007cd9f7eb3f:0x6094b5f30ebbb486!8m2!3d44.2196354!4d-123.3459621" target="_blank" class="text-base">
+              <v-icon small color="primary" class="mr-4">mdi-map-marker</v-icon>
+              25362 High Pass Rd, Junction City, OR 97448
+            </a>
+
+          </v-col>
+
+          <v-col lg="5">
+            <v-card class="pa-5 mt-10">
+              <h3 class="text-base text-center font-bold text-gray-600 col-span-12 mb-6">Send us a message</h3>
+
+              <form id="contactUsFrom">
+                <v-text-field solo label="Your name" name="name" required></v-text-field>
+                <v-text-field solo label="Email" name="email" type="email" required></v-text-field>
+                <v-text-field solo label="Phone" name="phone" required></v-text-field>
+                <v-textarea solo label="Message" rows="5" no-resize></v-textarea>
                 <v-select
-                  outlined
+                  solo
                   label="Reason"
                   v-model="reason"
                   :items="contactReasons"
@@ -98,22 +113,24 @@
                   item-value="value"
                   :return-object="false"
                 ></v-select>
+              </form>
+        
+              <div class="text-center mt-2">
+                <v-btn color="primary" class="font-weight-bold">Send message</v-btn>
               </div>
-            </form>
+          
       
-            <div class="text-center mt-2">
-              <v-btn color="primary" class="font-weight-bold">Send message</v-btn>
-            </div>
-      
-          </div>
+            </v-card>
+          </v-col>
 
-        </v-card>
-
-      </v-main>
-    </v-app>
-
+          
+        </v-row>
   
-  </section>
+      </v-container>
+
+
+    </v-main>
+  </v-app>
 
 </main>
 

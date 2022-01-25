@@ -56,7 +56,7 @@ class ProductDataSerializer(serializers.ModelSerializer):
 
     def get_has_in_stock_variations(self, obj):
         # if all variations are out of stock, then main product is too
-        variations_stock = [variation.number_in_stock != 0 for variation in obj.variations.all()]
+        variations_stock = [variation.live_num_in_stock() != 0 for variation in obj.variations.all()]
         return any(variations_stock)
 
 

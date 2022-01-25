@@ -119,7 +119,7 @@
                 <v-col sm="6">
                   <template v-if="product.has_in_stock_variations">
                     <template v-if="product.variations.length == 1">
-                      <v-btn block color="brown_lightest" elevation="0" x-large @click="App.addToCart(product.variations[0])">ADD TO CART</v-btn>
+                      <v-btn block color="brown_lightest" elevation="0" x-large @click="App.addToCart(product.variations[0]);getProducts()">ADD TO CART</v-btn>
                   </template>
                     
                     <template v-else>
