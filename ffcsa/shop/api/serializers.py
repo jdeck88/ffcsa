@@ -84,7 +84,8 @@ class CartItemSerializer(serializers.ModelSerializer):
 
     def get_addable(self, obj):
         # returns whether or not you can add an item
-        if obj.variation.live_num_in_stock() > 0:
+        live_num_in_stock = obj.variation.live_num_in_stock()
+        if live_num_in_stock and live_num_in_stock > 0:
             return obj.quantity != obj.variation.number_in_stock
         
         return False
