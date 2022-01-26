@@ -161,7 +161,7 @@
                         
                         <p class="px-4 pt-1 select-none">((item.quantity))</p>
 
-                        <v-btn icon elevation="1" @click="increaseItemQuantity(item, $event)" :disabled="item.all_quantity_in_cart">
+                        <v-btn icon elevation="1" @click="increaseItemQuantity(item, $event)" :disabled="!item.addable">
                           <v-icon color="accent">mdi-plus</v-icon>
                         </v-btn>
                       </div>

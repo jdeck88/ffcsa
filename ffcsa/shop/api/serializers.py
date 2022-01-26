@@ -66,14 +66,14 @@ class CartItemSerializer(serializers.ModelSerializer):
     product_id = serializers.CharField(source='variation.product.id')   # delete me
     variation_id = serializers.CharField(source='variation.id')
     image = serializers.SerializerMethodField()
-    all_quantity_in_cart = serializers.SerializerMethodField()
+    addable = serializers.SerializerMethodField()
 
     # note - 'description' here is like the title
     
     class Meta:
         model = CartItem
         fields = ('id', 'product_id', 'variation_id', 'description', 'unit_price', 'total_price', 'variation',
-                'image', 'quantity', 'all_quantity_in_cart')
+                'image', 'quantity', 'addable')
 
     def get_image(self, obj):
         if obj.image:
@@ -82,9 +82,12 @@ class CartItemSerializer(serializers.ModelSerializer):
         # TODO - return default product image if none were given
         return ''
 
-    def get_all_quantity_in_cart(self, obj):
-        # return True if all item stock-available quantity already in Cart
-        return obj.quantity == obj.variation.number_in_stock
+    def get_addable(self, obj):
+        # returns whether or not you can add an item
+        if obj.variation.live_num_in_stock() > 0:
+            return obj.quantity != obj.variation.number_in_stock
+        
+        return False
 
 
 class CartSerializer(serializers.ModelSerializer):
