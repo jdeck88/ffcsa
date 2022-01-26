@@ -22,7 +22,10 @@
           <p>please check our organic products</p>
         </v-overlay>
       </v-img>
-    
+
+      <!-- Progress bar -->
+      <v-progress-linear :active="loading" :indeterminate="loading" color="primary"></v-progress-linear>
+      
       <!-- filters section -->
       <section class="md:flex justify-center mt-10 text-green md:text-xl font-bold">
         
@@ -72,9 +75,9 @@
 
 
       <!-- Spinner -->
-      <div v-if="loading" class="text-center mt-20">
+      <!-- <div v-if="loading" class="text-center mt-20">
         <v-progress-circular indeterminate class="text-primary"></v-progress-circular>
-      </div>
+      </div> -->
     
       <!-- Products list -->
       <section id="productsListSection" class="min-h-screen">
@@ -261,7 +264,7 @@
     methods: {
       async getProducts() {
         this.loading = true;
-        this.products.results = []
+        // this.products.results = []
 
         // get products and assign the results
         try {

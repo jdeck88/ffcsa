@@ -117,7 +117,7 @@
         <!-- Side Cart -->
         <v-navigation-drawer class="cart-drawer" v-model="drawer" width=456 right fixed temporary>
           <!-- header and close button -->
-          <v-toolbar elevation="1">
+          <v-toolbar elevation="1" >
             <v-row>
               <v-col cols="2"></v-col>
               <v-col class="d-flex justify-space-around">
@@ -129,56 +129,50 @@
                 </v-btn>
               </v-col>
             </v-row>
+            <v-progress-linear absolute bottom :active="store.state.cart.loading" :indeterminate="store.state.cart.loading" color="primary"></v-progress-linear>
           </v-toolbar>
           <!-- header and close button -->
 
           <!-- content -->
-          <section class="cart-items pl-3 pr-0 mt-5 mt-5 overflow-y-scroll" style="max-height: 70vh;">
-            <template v-if="store.state.cart.items.length > 0" v-for="item in store.state.cart.items">
-              <div class="grid grid-cols-3 gap-4 border-b-2 border-black border-opacity-10 mb-4 pb-4">
-                <!-- item image -->
-                <div class="col-span-1">
-                  <div class="block h-auto w-full mb-2" :style="'background-image: url(/media/' + item.image + ');background-position: center; background-repeat: no-repeat; background-size: cover;width: 100%;height: 6rem;'"></div>
-                </div>
-                <!-- item image -->
-      
-                <!-- item control -->
-                <div class="col-span-2 pr-2">
+          <v-virtual-scroll class="mt-2" height="700" :items="store.state.cart.items" :item-height="130">
+            <template v-slot:default="{ item }">
+              <v-row class="max-w-full">
+                <v-col sm="4">
+                  <v-img :src="'/media/' + item.image" height="100"></v-img>
+                </v-col>
+
+                <v-col sm="8">
                   <div class="flex">
-                    <h4 class="subtitle-1 font-weight-bold capitalize">((item.description))</h4>
+                    <h4 class="text-base capitalize">(( item.description.slice(0, 29) ))</h4>
                     <v-spacer></v-spacer>
                     <v-btn text icon color="red lighten-2" @click.prevent="removeCartItem(item)">
                       <v-icon small color="gray lighten-2">mdi-close</v-icon>
                     </v-btn>
                   </div>
-      
-                  <div class="flex mt-10">
-                    <p>$((item.unit_price))</p>
-      
+
+                  <div class="flex mt-5 items-end">
+                    <p class="text-base capitalize">$(( item.unit_price.toFixed(2) ))</p>
+                    
                     <div class="ml-auto">
                       <div class="flex">
-                        <v-btn small fab elevation="2" @click="decreaseItemQuantity(item, $event)">
+                        <v-btn icon elevation="1" @click="decreaseItemQuantity(item, $event)">
                           <v-icon color="accent">mdi-minus</v-icon>
                         </v-btn>
                         
                         <p class="px-4 pt-1 select-none">((item.quantity))</p>
 
-                        <v-btn small fab elevation="2" @click="increaseItemQuantity(item, $event)" :disabled="item.all_quantity_in_cart">
+                        <v-btn icon elevation="1" @click="increaseItemQuantity(item, $event)" :disabled="item.all_quantity_in_cart">
                           <v-icon color="accent">mdi-plus</v-icon>
                         </v-btn>
                       </div>
                     </div>
                   </div>
-                </div>
-                <!-- item control -->
-              </div>
-            </template>
+                </v-col>
+              </v-row>
 
-            <template v-else>
-              <p class="opacity-50 text-center mt-10 font-thin">No items in cart</p>
+              <v-divider class="my-2"></v-divider>
             </template>
-
-          </section>
+          </v-virtual-scroll>
           <!-- content -->
 
           <!-- total and checkout -->
@@ -389,6 +383,7 @@
           count: 200,
           cart: {
             shown: false,
+            loading: false,
             items: [],
             total_price: 0,
             delivery_fee: 0,
@@ -470,6 +465,8 @@
         },
         methods: {
           async fetchCart() {
+            store.state.cart.loading = true;
+            
             try {
               const res = await axios.get('/api/cart/');
               const { id, items, total_price, delivery_fee, remaining_budget, attending_dinner } = res.data
@@ -479,8 +476,10 @@
               store.state.cart.delivery_fee = delivery_fee;
               store.state.cart.remaining_budget = remaining_budget;
               store.state.cart.attending_dinner = attending_dinner;
+              store.state.cart.loading = false;
             } catch (error) {
               console.log('Fetch Cart Error', error)
+              store.state.cart.loading = false;
               // console.log('Fetch Cart Error', error.response.data)
             }
           },
@@ -491,16 +490,31 @@
             ProductsVue.hideProductModal();
             this.drawer = !this.drawer;
             this.fetchCart();
+            
+            // update products if user in products page
+            if (location.href.includes('/products/')) {
+              ProductsVue.getProducts()
+            }
           },
           async removeCartItem(item) {
             // remove an item from cart
             const res = await axios.post(`/api/cart/${item.id}/remove_item/`);
             this.fetchCart()
+            
+            // update products if user in products page
+            if (location.href.includes('/products/')) {
+              ProductsVue.getProducts()
+            }
           },
           async clearCart() {
             // remove all items from cart and rest attending_dinner to 0
             const res = await axios.post('/api/cart/clear/');
             this.fetchCart()
+            
+            // update products if user in products page
+            if (location.href.includes('/products/')) {
+              ProductsVue.getProducts()
+            }
           },
         
           // per item
@@ -513,6 +527,12 @@
             try {
               const res = await axios.post(`/api/cart/${item.id}/increase_item/`);
               this.fetchCart();
+              
+              // update products if user in products page
+              if (location.href.includes('/products/')) {
+                ProductsVue.getProducts()
+              }
+
               // enable buttons
               controlContainer.querySelectorAll('button').forEach(btn => btn.disabled = false);
             } catch (error) {
@@ -530,6 +550,12 @@
             try {
               const res = await axios.post(`/api/cart/${item.id}/decrease_item/`);
               this.fetchCart();
+
+              // update products if user in products page
+              if (location.href.includes('/products/')) {
+                ProductsVue.getProducts()
+              }
+
               // enable buttons
               controlContainer.querySelectorAll('button').forEach(btn => btn.disabled = false);
             } catch (error) {
