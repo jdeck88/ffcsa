@@ -24,7 +24,9 @@
       </v-img>
 
       <!-- Progress bar -->
-      <v-progress-linear :active="loading" :indeterminate="loading" color="primary"></v-progress-linear>
+      <div class="relative">
+        <v-progress-linear absolute bottom :active="loading" :indeterminate="loading" color="primary"></v-progress-linear>
+      </div>
       
       <!-- filters section -->
       <section class="md:flex justify-center mt-10 text-green md:text-xl font-bold">
