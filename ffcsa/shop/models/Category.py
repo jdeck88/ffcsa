@@ -131,6 +131,7 @@ class Category(Page, RichText):
         for cat_title in target_cats:
             cat = Category.objects.get(title=cat_title)
             # sub_cat( published and have at least one available product)
+            # sub_cats = [cat.title for cat in cat.children.all() if cat.published() and Product.objects.filter(categories__title=cat.title, available=True).count() > 0]
             sub_cats = [cat.title for cat in cat.children.all() if cat.published() and Product.objects.filter(categories__title=cat.title, available=True).count() > 0]
 
             categories.append({
@@ -139,4 +140,8 @@ class Category(Page, RichText):
                 'sub_cats': sub_cats
             })
 
+        for cat in categories:
+            if cat["title"] == "Pantry":
+                cat["sub_cats"].append("Products & Swag")
+        
         return categories

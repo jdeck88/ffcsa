@@ -42,8 +42,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         queryset = Product.objects.filter(available=True)
         
         # filter category
-        filt_category = request.GET.get('category')
-        if filt_category:
+        if (filt_category := request.GET.get('category')):
             # queryset to get the products/subproducts
             queryset = Product.objects.filter(
                 (Q(categories__title=filt_category) | Q(categories__parent__title=filt_category)) & Q(available=True)
