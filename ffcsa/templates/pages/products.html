@@ -11,10 +11,6 @@
 
   <v-app>
     <v-main>
-
-      <!-- product detail modal -->
-      {% include 'partials/product_modal.html' %}
-
       <!-- banner section -->
       <v-img src="{% static 'img/cows-banner-2.jpg' %}" height="400">
         <v-overlay :absolute="true" :opacity=".3" class="text-center">
@@ -75,11 +71,6 @@
         </v-container>
       </template>
 
-
-      <!-- Spinner -->
-      <!-- <div v-if="loading" class="text-center mt-20">
-        <v-progress-circular indeterminate class="text-primary"></v-progress-circular>
-      </div> -->
     
       <!-- Products list -->
       <section id="productsListSection" class="min-h-screen">
@@ -106,8 +97,8 @@
                     </template>
                     
                     <template v-else>
+                      <span class="text-base italic text-gray-500">From </span>
                       <p class="h-8 mb-0">
-                        <span class="italic text-gray-500">From </span>
                         <span class="text-brown-7 text-xl">$(( getProductStartFrom(product) ))<span v-if="product.unit">/(( product.unit ))</span></span>
                       </p>
                     </template>
@@ -128,7 +119,7 @@
                   </template>
                     
                     <template v-else>
-                      <v-btn block color="brown_lightest" elevation="0" x-large @click="showProduct(product)">CHOOSE VARIATION</v-btn>
+                      <v-btn block color="brown_lightest" elevation="0" large @click="showProduct(product)">CHOOSE VARIATION</v-btn>
                     </template>
                   </template>
                   <template v-else>
@@ -156,7 +147,95 @@
         </div>
       </section>
       <!-- Products list -->
-    
+
+      <!-- Products dialog -->
+      <template>
+        <div class="text-center">
+          <v-dialog v-model="dialog" width="800" @click:outside="hideProductModal">
+            <v-card v-if="currentProduct" class="brown_darkest--text">
+              <!-- header (title, vendor and season) -->
+              <v-card-title class="text-h5 relative">
+                <div class="flex mb-1 pt-5">
+                  <div class="grid grid-cols-2">
+                    <h3 class="col-span-2 md:col-span-1 text-2xl font-bold capitalize pr-2">((currentProduct.title))</h3>
+                    <p class="col-span-2 md:col-span-1 text-base font-light italic pt-2 mt-auto">((currentProduct.vendor))</p>
+                  </div>
+
+                  <!-- Show products seasons -->
+                  <template v-if="currentProduct.seasons.length < 4">
+                    <p class="ml-auto mt-2 font-thin italic">(( currentProduct.seasons.join(' - ') ))</p>
+                  </template>
+
+                  <!-- Show all seasons -->
+                  <template v-else>
+                    <p class="ml-auto mt-2 font-thin italic">ALL SEASON</p>
+                  </template>
+                </div>
+
+                <v-btn text icon color="red lighten-2" absolute top right @click.prevent="hideProductModal">
+                  <v-icon color="gray lighten-2">mdi-close</v-icon>
+                </v-btn>
+              </v-card-title>
+      
+              <v-divider></v-divider>
+      
+              <v-card-text class="py-4">
+                <!-- product details -->
+                <template v-for="variation in currentProduct.variations">
+                  <v-row>
+                    <!-- Variation image -->
+                    <v-col md="4">
+                      <v-img :src="'/media/' + variation.image.file" height="150"></v-img>
+                    </v-col>
+                    
+                    <!-- Variation price -->
+                    <v-col md="4" class="brown_darkest--text">
+                      <template v-if="variation.addable">
+                        <p>
+                          <span class="text-h5">$((variation.unit_price))</span> 
+                          <span class="text-base text-green">AVAILABLE</span>
+                        </p>
+                      </template>
+        
+                      <template v-else-if="!variation.live_num_in_stock">
+                        <p class="text-red-1">NOT AVAILABLE</p>
+                      </template>
+        
+                      <template v-else>
+                        <p>
+                          <span class="text-h5">$((variation.unit_price))</span> 
+                          <span class="text-base text-green">((variation.number_in_stock)) AVAILABLE</span>
+                        </p>
+                      </template>
+                    </v-col>
+        
+                    <!-- Variation action -->
+                    <v-col md="4" class="text-right">
+                      <template v-if="variation.addable">
+                        <v-btn color="brown_lightest" elevation="0" x-large @click="App.addToCart(variation)">ADD TO CART</v-btn>
+                      </template>
+        
+                      <template v-else-if="!variation.live_num_in_stock">
+                        <v-btn x-large disabled>OUT OF STOCK</v-btn>
+                      </template>
+        
+                      <template v-else>
+                        <v-btn color="brown_lightest" elevation="0" x-large @click="App.addToCart(variation)">ADD TO CART</v-btn>
+                      </template>
+                    </v-col>
+        
+                  </v-row>
+                </template>
+
+                <!-- product content -->
+                <div class="text-base p-4 mt-4 bg-gray-100" v-if="currentProduct.content" v-html="currentProduct.content"></div>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
+        </div>
+      </template>
+      <!-- Products dialog -->
+
 
       <!-- WHAT’S IN SEASON? -->
       <div class="flex justify-center py-6">
@@ -225,7 +304,6 @@
 
       // product
       currentProduct: null,
-      selectedProduct: null,
       dialog: false,
 
       // product details
@@ -235,14 +313,6 @@
 
     watch: {
       currentProduct: function(val, oldVal) {
-        if (val !== null) {
-          this.modalShown = true
-        } else {
-          this.modalShown = false
-        }
-      },
-
-      selectedProduct: function(val, oldVal) {
         if (val !== null) {
           this.dialog = true
         } else {

@@ -109,6 +109,7 @@
 
   <body id="{% block body_id %}body{% endblock %}" class="{% block body_class %}{% endblock %}">
 
+    <!-- everything -->
     <div id="app" v-cloak>
       <v-app>
         <!-- alert compoent -->
@@ -303,7 +304,6 @@
       </v-app>
     </div>
 
-
     
     <!-- main content -->
     <div id="wrapper" class="hiddens">
@@ -337,7 +337,6 @@
       {% endif %}
 
     </div>
-
     
     {% compress js %}    
     <!-- Facebook Pixel Code -->
@@ -431,6 +430,7 @@
               green: '#5f8c49',
               brown: '#914323',
               brown_lightest: '#efe8e4',
+              brown_darkest: '#502616',
               green_lightest: '#e8ebe2',
             },
             dark: {

@@ -1,9 +1,7 @@
-from itertools import product
-from ffcsa.shop import fields
 from rest_framework import serializers
 
 from ffcsa.shop.models.Cart import Cart, CartItem
-from ffcsa.shop.models.Product import Product, ProductSeason, ProductVariation
+from ffcsa.shop.models.Product import Product, ProductImage, ProductVariation
 from ffcsa.shop.models.Order import Order
 
 
@@ -24,19 +22,29 @@ class ProductVariationSerializer(serializers.ModelSerializer):
 # used for all CRUD operations
 
 
+
+class ProductImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImage
+        fields = ('id', 'file', 'description')
+
 # used to display some data
 class ProductVariationDataSerializer(serializers.ModelSerializer):
-    is_unlimited = serializers.SerializerMethodField()
+    image = ProductImageSerializer()
+    addable = serializers.SerializerMethodField()
 
     class Meta:
         model = ProductVariation
-        fields = ['id', 'in_inventory', 'is_frozen', 'unit_price', 'sku', 
-                    'options', 'unit', 'is_unlimited', 'number_in_stock']
+        fields = ('id', 'in_inventory', 'is_frozen', 'unit_price', 'sku', 'options', 'unit', 
+                    'number_in_stock', 'live_num_in_stock', 'image', 'addable')
     
-    def get_is_unlimited(self, obj):
+
+    def get_addable(self, obj):
         # if number_in_stock is None means that the product amount
         # is unlimited
-        return obj.number_in_stock is None
+        if (is_unlimited := obj.number_in_stock is None):
+            return True
+        ...
 
 
 class ProductDataSerializer(serializers.ModelSerializer):
@@ -85,7 +93,11 @@ class CartItemSerializer(serializers.ModelSerializer):
     def get_addable(self, obj):
         # returns whether or not you can add an item
         live_num_in_stock = obj.variation.live_num_in_stock()
-        if live_num_in_stock and live_num_in_stock > 0:
+
+        if (is_unlimited := live_num_in_stock == None):
+            return True
+   
+        if live_num_in_stock > 0:
             return obj.quantity != obj.variation.number_in_stock
         
         return False
