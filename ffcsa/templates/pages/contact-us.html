@@ -3,11 +3,9 @@
 {% load mezzanine_tags shop_tags i18n static %}
 {% block body_id %}Contact Us{% endblock %}
 
-
 {% block css %}
 <style>
-
-  input:checked + label {
+  input:checked+label {
     border-color: #e16231;
     color: #e16231;
   }
@@ -18,15 +16,15 @@
 {% block main %}
 <!-- background -->
 
-<main id="contactUs" style="background-color: #fafafa;">
+<main id="contactUs" style="background-color: #fafafa;" v-cloak>
   <!-- Call block super -->
   {{ block.super }}
 
   <section class="bg-orange-extralightests max-w-3xl mx-auto p-5 mb-20 pt-20 hidden">
 
     <div class="grid grid-cols-12 gap-10 text-center text-sm items-center hidden">
-      <a 
-        href="https://www.google.com/maps/place/25362+High+Pass+Rd,+Junction+City,+OR+97448,+USA/@44.2196354,-123.3481561,17z/data=!3m1!4b1!4m5!3m4!1s0x54c1007cd9f7eb3f:0x6094b5f30ebbb486!8m2!3d44.2196354!4d-123.3459621" target="_blank"
+      <a href="https://www.google.com/maps/place/25362+High+Pass+Rd,+Junction+City,+OR+97448,+USA/@44.2196354,-123.3481561,17z/data=!3m1!4b1!4m5!3m4!1s0x54c1007cd9f7eb3f:0x6094b5f30ebbb486!8m2!3d44.2196354!4d-123.3459621"
+        target="_blank"
         class="bg-white bg-opacity-80 col-span-12 md:col-span-4 p-3 hover:bg-orange-lightest focus:outline-none transition duration-300 ease-in-out rounded shadow h-full">
         <i class="text-gray-700 fas fa-map-marker text-2xl block mb-3"></i>
         <p>
@@ -35,15 +33,13 @@
         </p>
       </a>
 
-      <a 
-        href="tel:+1541-998-4697"
+      <a href="tel:+1541-998-4697"
         class="bg-white bg-opacity-80 col-span-12 md:col-span-4 p-3 hover:bg-orange-lightest focus:outline-none transition duration-300 ease-in-out rounded shadow h-full">
         <i class="text-gray-700 fas fa-phone-alt text-2xl block mb-3"></i>
         <p>541-998-4697</p>
       </a>
-      
-      <a 
-        href="mailto:info@deckfamilyfarm.com"
+
+      <a href="mailto:info@deckfamilyfarm.com"
         class="bg-white bg-opacity-80 col-span-12 md:col-span-4 p-3 hover:bg-orange-lightest focus:outline-none transition duration-300 ease-in-out rounded shadow h-full">
         <i class="text-gray-700 fas fa-envelope text-2xl block mb-3"></i>
         <p>info@deckfamilyfarm.com</p>
@@ -88,7 +84,8 @@
 
             <!-- Address -->
             <h3 class="mt-10">Address</h3>
-            <a href="https://www.google.com/maps/place/25362+High+Pass+Rd,+Junction+City,+OR+97448,+USA/@44.2196354,-123.3481561,17z/data=!3m1!4b1!4m5!3m4!1s0x54c1007cd9f7eb3f:0x6094b5f30ebbb486!8m2!3d44.2196354!4d-123.3459621" target="_blank" class="text-base">
+            <a href="https://www.google.com/maps/place/25362+High+Pass+Rd,+Junction+City,+OR+97448,+USA/@44.2196354,-123.3481561,17z/data=!3m1!4b1!4m5!3m4!1s0x54c1007cd9f7eb3f:0x6094b5f30ebbb486!8m2!3d44.2196354!4d-123.3459621"
+              target="_blank" class="text-base">
               <v-icon small color="primary" class="mr-4">mdi-map-marker</v-icon>
               25362 High Pass Rd, Junction City, OR 97448
             </a>
@@ -99,33 +96,30 @@
             <v-card class="pa-5 mt-10">
               <h3 class="text-base text-center font-bold text-gray-600 col-span-12 mb-6">Send us a message</h3>
 
-              <form id="contactUsFrom">
-                <v-text-field solo label="Your name" name="name" required></v-text-field>
-                <v-text-field solo label="Email" name="email" type="email" required></v-text-field>
-                <v-text-field solo label="Phone" name="phone" required></v-text-field>
-                <v-textarea solo label="Message" rows="5" no-resize></v-textarea>
-                <v-select
-                  solo
-                  label="Reason"
-                  v-model="reason"
-                  :items="contactReasons"
-                  item-text="text"
-                  item-value="value"
-                  :return-object="false"
-                ></v-select>
-              </form>
-        
-              <div class="text-center mt-2">
-                <v-btn color="primary" class="font-weight-bold">Send message</v-btn>
-              </div>
-          
-      
+              <v-form ref="form" @submit.prevent="submit">
+                <v-select solo label="Target" v-model="target" :items="targets" item-text="text" item-value="value"
+                  :return-object="false" :rules="[store.state.rules.required]"></v-select>
+                <v-text-field solo label="Your name" v-model="name" :rules="[store.state.rules.required]">
+                </v-text-field>
+                <v-text-field solo label="Email" v-model="email" type="email"
+                  :rules="[store.state.rules.required, store.state.rules.email]"></v-text-field>
+                <v-text-field solo label="Phone" v-model="phone" :rules="[store.state.rules.required]"></v-text-field>
+                <v-textarea solo label="Message" rows="5" v-model="message" :rules="[store.state.rules.required]"
+                  no-resize></v-textarea>
+                <v-select solo label="Reason" v-model="reason" :items="contactReasons" item-text="text"
+                  item-value="value" :return-object="false" :rules="[store.state.rules.required]"></v-select>
+                <div class="text-center mt-2">
+                  <v-btn color="primary" class="font-weight-bold" type="submit" :loading="loading" :disable="loading">
+                    Send message</v-btn>
+                </div>
+              </v-form>
+
             </v-card>
           </v-col>
 
-          
+
         </v-row>
-  
+
       </v-container>
 
 
@@ -144,13 +138,52 @@
     delimiters: ['((', '))'],
     vuetify: new Vuetify(opts),
     data: {
-      reason: 'inquiry',
+      loading: false,
+
+      target: { key: 'farm', text: 'General Farm Inquiry' },
+      name: '',
+      email: '',
+      phone: '',
+      message: '',
+      reason: { key: 'inquiry', text: 'Inquiry' },
+
+      targets: [
+        { key: 'farm', text: 'General Farm Inquiry' },
+        { key: 'csa', text: 'CSA Inquiry' }
+      ],
       contactReasons: [
-        {key: 'inquiry', text:'Inquiry'},
-        {key: 'complain', text:'Complain'},
-        {key: 'report', text:'Report'}
+        { key: 'inquiry', text: 'Inquiry' },
+        { key: 'complain', text: 'Complain' },
+        { key: 'report', text: 'Report' }
       ]
-    }
+    },
+    methods: {
+      async submit() {
+        if (!this.$refs.form.validate()) {
+          return
+        }
+
+        this.loading = true;
+
+        try {
+          const res = await axios.post(`/api/contactus/mail_us/`, {
+            target: this.target.key,
+            name: this.name,
+            email: this.email,
+            phone: this.phone,
+            message: this.message,
+            reason: this.reason.key
+          });
+          this.loading = false
+          console.log(res)
+        } catch (error) {
+          this.loading = false
+          console.log(error)
+        }
+
+
+      }
+    },
   })
 </script>
 {% endblock %}

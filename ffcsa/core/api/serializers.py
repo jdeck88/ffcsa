@@ -25,19 +25,20 @@ class SignupProfileSerializer(serializers.Serializer):
     communication_method = serializers.CharField(required=False)   # ? not included in the model
     best_time_to_reach = serializers.TimeField(required=False)   # ? not included in the model
     hear_about_us = serializers.CharField(required=False)   # ? not included in the mode
-    
+
 class SignupSerializer(serializers.Serializer):
     first_name = serializers.CharField(max_length=100)
     last_name = serializers.CharField(max_length=100)
     email = serializers.EmailField()
     password = serializers.CharField(min_length=6)
     password2 = serializers.CharField(min_length=6)
-    # profile = SignupProfileSerializer() # we validate it seperatly
+
 
 # Login Serializer
 class LoginSerializer(serializers.Serializer):
     username = serializers.EmailField()
     password = serializers.CharField(min_length=6)
+
 
 # Change password Serializer
 class ChangePasswordSerializer(serializers.Serializer):
@@ -45,11 +46,13 @@ class ChangePasswordSerializer(serializers.Serializer):
     password = serializers.CharField(min_length=6)
     password2 = serializers.CharField(min_length=6)
 
+
 # Address Serializer
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         exclude = ('id', )
+
 
 # Profile Serializer
 class ProfileSerializer(serializers.ModelSerializer):
@@ -63,6 +66,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     def get_delivery_address(self, obj):
         return str(obj.delivery_address)
+
 
 # Payment Serializer
 class PaymentSerializer(serializers.ModelSerializer):
@@ -120,3 +124,11 @@ class SubscribeSerializer(serializers.Serializer):
     stripeToken = serializers.CharField()
     paymentType = serializers.ChoiceField(choices=('CC', 'ACH'))
 
+# ContactUs Serializer
+class ContactUsSerializer(serializers.Serializer):
+    target = serializers.CharField()
+    name = serializers.CharField()
+    email = serializers.EmailField()
+    phone = serializers.CharField()
+    message = serializers.CharField()
+    reason = serializers.CharField()
