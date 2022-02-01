@@ -7,8 +7,7 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 
-from rest_framework import mixins
-from rest_framework import viewsets
+from rest_framework import mixins, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -323,14 +322,13 @@ class PayViewSet(viewsets.ViewSet):
 
 
 class ContacUs(viewsets.ViewSet):
-    @list_route(methods=["post"])
-    def mail_us(self, request):
+    
+    def create(self, request):
         serializer = ContactUsSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         data = DictClass(serializer.data)
 
-        
 
         if data.target == "farm":
             TO_EMAIL = "info@deckfamilyfarm.com"
@@ -364,10 +362,24 @@ class ContacUs(viewsets.ViewSet):
                 "htmlContent": HTML_CONTENT,
             },
             headers={
-                "api-key": "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",
+                "api-key": settings.SENDINBLUE_API_KEY,
                 "accept": "application/json",
                 "content-type": "application/json",
             },
         )
 
         return Response({"details": "sent"})
+
+
+class LeadGenPDF(viewsets.ViewSet):
+
+    def create(self, request):
+        serializer = LeadGenPDFSerializer(data=request.data)
+        serializer.is_valid()
+
+        # TODO: add user to lead gen
+
+        # send back the pdf url
+        pdf = '/static/pdf/DFF_Hogwash-or-Greenwash%20V03.pdf'
+  
+        return Response({"pdf": pdf})

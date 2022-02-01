@@ -124,6 +124,7 @@ class SubscribeSerializer(serializers.Serializer):
     stripeToken = serializers.CharField()
     paymentType = serializers.ChoiceField(choices=('CC', 'ACH'))
 
+
 # ContactUs Serializer
 class ContactUsSerializer(serializers.Serializer):
     target = serializers.CharField()
@@ -131,3 +132,10 @@ class ContactUsSerializer(serializers.Serializer):
     email = serializers.EmailField()
     phone = serializers.CharField(allow_blank=True)
     message = serializers.CharField()
+
+
+# Lead Gen PDF
+class LeadGenPDFSerializer(serializers.Serializer):
+    first_name = serializers.CharField(allow_blank=True, required=False)
+    last_name = serializers.CharField(allow_blank=True, required=False)
+    email = serializers.EmailField()

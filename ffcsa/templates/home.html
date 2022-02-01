@@ -359,21 +359,21 @@
       <section class="flex flex-col justify-center text-center my-20">
         <v-container>
           <h2 class="text-lg font-bold">Download Our Free Tips:</h2>
-          <h3 class="text-lg mt-3 mb-15">&lt;Lead Generation PDF Title Here&gt;</h3>
+          <v-img class="mx-auto text-center my-5 mb-10" width="400" src="{% static 'img/DFF-Greenwash the New Hogwash Mockup.png' %}"></v-img>
           
-          <v-form class="max-w-3xl mx-auto" ref="downloadForm" @submit.prevent="submitHandler">
+          <v-form class="max-w-3xl mx-auto" ref="form" @submit.prevent="submit">
             <v-row>
               <v-col cols="12" md="3">
-                <v-text-field outlined label="First name" v-model="downloadFreeTips.first_name" :rules="[store.state.rules.required]"></v-text-field>
+                <v-text-field outlined label="First name" v-model="leadGen.first_name"></v-text-field>
               </v-col>
               <v-col cols="12" md="3">
-                <v-text-field outlined label="Last name" v-model="downloadFreeTips.last_name"></v-text-field>
+                <v-text-field outlined label="Last name" v-model="leadGen.last_name"></v-text-field>
               </v-col>
               <v-col cols="12" md="3">
-                <v-text-field outlined label="Email" type="email" v-model="downloadFreeTips.email" :rules="[store.state.rules.required, store.state.rules.email]" required></v-text-field>
+                <v-text-field outlined label="Email" type="email" v-model="leadGen.email" :rules="[store.state.rules.required, store.state.rules.email]" required></v-text-field>
               </v-col>
               <v-col cols="12" md="3">
-                <v-btn block x-large dark color="green" class="font-weight-bold" elevation="0" type="submit">Download</v-btn>
+                <v-btn block x-large dark color="green" class="font-weight-bold" :loading="loading" elevation="0" type="submit">Download</v-btn>
               </v-col>
             </v-row>
           </v-form>
@@ -458,6 +458,8 @@
     vuetify: new Vuetify(opts),
     data: {
       model: 0,
+      loading: false,
+
       testimonials: [
         {
           id: 1,
@@ -481,31 +483,40 @@
       longTermBenefits: {
         more: false
       },
-      downloadFreeTips: {
-        loading: false,
-        first_name: '',
-        last_name: '',
-        email: ''
+      leadGen: {
+        first_name: "",
+        last_name: "",
+        email: ""
       }
     },
     methods: {
-      async submitHandler() {
-        // validate the form
-        if (!this.$refs.downloadForm.validate()) {
-          this.downloadFreeTips.loading = false;
+      async submit() {
+        if (!this.$refs.form.validate()) {
           return
         }
 
-        const data = {
-          first_name: this.downloadFreeTips.first_name,
-          last_name: this.downloadFreeTips.last_name,
-          email: this.downloadFreeTips.email
+        this.loading = true;
+
+        try {
+          const res = await axios.post(`/api/leadgen_pdf/`, {
+            first_name: this.leadGen.first_name,
+            last_name: this.leadGen.last_name,
+            email: this.leadGen.email
+          });
+
+          // download the pdf file
+          const link = document.createElement('a');
+          link.href = res.data.pdf;
+          link.download = 'DFF_Hogwash-or-Greenwash V03.pdf';
+          link.dispatchEvent(new MouseEvent('click'));
+
+          this.loading = false
+          console.log(res)
+
+        } catch (error) {
+          this.loading = false
+          console.log(error)
         }
-
-
-        console.log(data)
-
-
 
 
       }
