@@ -348,7 +348,6 @@ class ContacUs(viewsets.ViewSet):
                 <li>Email: {data.email}</li>
                 <li>Phone: {data.phone}</li>
                 <li>Message: {data.message}</li>
-                <li>Reason: {data.reason.upper()}</li>
             </ul>
         </body>
 

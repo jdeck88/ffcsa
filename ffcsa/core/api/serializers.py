@@ -129,6 +129,5 @@ class ContactUsSerializer(serializers.Serializer):
     target = serializers.CharField()
     name = serializers.CharField()
     email = serializers.EmailField()
-    phone = serializers.CharField()
+    phone = serializers.CharField(allow_blank=True)
     message = serializers.CharField()
-    reason = serializers.CharField()

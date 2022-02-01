@@ -103,11 +103,9 @@
                 </v-text-field>
                 <v-text-field solo label="Email" v-model="email" type="email"
                   :rules="[store.state.rules.required, store.state.rules.email]"></v-text-field>
-                <v-text-field solo label="Phone" v-model="phone" :rules="[store.state.rules.required]"></v-text-field>
+                <v-text-field solo label="Phone" v-model="phone"></v-text-field>
                 <v-textarea solo label="Message" rows="5" v-model="message" :rules="[store.state.rules.required]"
                   no-resize></v-textarea>
-                <v-select solo label="Reason" v-model="reason" :items="contactReasons" item-text="text"
-                  item-value="value" :return-object="false" :rules="[store.state.rules.required]"></v-select>
                 <div class="text-center mt-2">
                   <v-btn color="primary" class="font-weight-bold" type="submit" :loading="loading" :disable="loading">
                     Send message</v-btn>
@@ -145,16 +143,9 @@
       email: '',
       phone: '',
       message: '',
-      reason: { key: 'inquiry', text: 'Inquiry' },
-
       targets: [
         { key: 'farm', text: 'General Farm Inquiry' },
         { key: 'csa', text: 'CSA Inquiry' }
-      ],
-      contactReasons: [
-        { key: 'inquiry', text: 'Inquiry' },
-        { key: 'complain', text: 'Complain' },
-        { key: 'report', text: 'Report' }
       ]
     },
     methods: {
@@ -172,7 +163,6 @@
             email: this.email,
             phone: this.phone,
             message: this.message,
-            reason: this.reason.key
           });
           this.loading = false
           console.log(res)
