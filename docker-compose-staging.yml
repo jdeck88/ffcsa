@@ -12,16 +12,16 @@ services:
       - .:/app
       - ./static:/app/static
       - ./media:/app/media
-    ports: 
+    ports:
       - 8000:8000
-    depends_on: 
+    depends_on:
       - mysql
 
   mysql:
     container_name: ffcsa_db
     image: mysql:5.7
     restart: always
-    environment: 
+    environment:
       MYSQL_ROOT_PASSWORD: U7srFFgcmtzE
       MYSQL_DATABASE: ffcsa
       # MYSQL_USER: ffcsa
@@ -31,6 +31,13 @@ services:
     ports:
       - 3306
 
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/usr/local/etc/redis
 
 volumes:
   db_data:
+  redis_data:
