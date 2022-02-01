@@ -11,7 +11,7 @@ services:
       - 80:80
     depends_on:
       - django_gunicorn
-  
+
   django_gunicorn:
     container_name: ffcsa_web
     build:
@@ -24,9 +24,9 @@ services:
       - .:/app
       - static_volume:/app/static
       - media_volume:/app/media
-    ports: 
+    ports:
       - 8000
-    depends_on: 
+    depends_on:
       - mysql
       # - frontend
 
@@ -34,7 +34,7 @@ services:
     container_name: ffcsa_db
     image: mysql:5.7
     restart: always
-    environment: 
+    environment:
       MYSQL_ROOT_PASSWORD: U7srFFgcmtzE
       MYSQL_DATABASE: ffcsa
       # MYSQL_USER: ffcsa
@@ -44,21 +44,15 @@ services:
     ports:
       - 3306
 
-  # todo -> we comment this out and run `npm run dev` for dev env 
-  # todo    so we get live updates for frontend changes
-  # frontend:
-  #   container_name: ffcsa_frontend
-  #   build:
-  #     context: .
-  #     dockerfile: ./docker/frontend.dev.Dockerfile
-  #   env_file: .env
-  #   volumes:
-  #     - static_volume:/app/static
-  #   ports: 
-  #     - 4000:4000
-
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/usr/local/etc/redis
 
 volumes:
   db_data:
   static_volume:
   media_volume:
+  redis_data:
