@@ -322,13 +322,11 @@ class PayViewSet(viewsets.ViewSet):
 
 
 class ContacUs(viewsets.ViewSet):
-    
     def create(self, request):
         serializer = ContactUsSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         data = DictClass(serializer.data)
-
 
         if data.target == "farm":
             TO_EMAIL = "info@deckfamilyfarm.com"
@@ -372,14 +370,31 @@ class ContacUs(viewsets.ViewSet):
 
 
 class LeadGenPDF(viewsets.ViewSet):
-
     def create(self, request):
         serializer = LeadGenPDFSerializer(data=request.data)
         serializer.is_valid()
 
-        # TODO: add user to lead gen
+        # Create new contact and add contact to list 59 "FFCSA Leads"
+        data = DictClass(serializer.data)
 
-        # send back the pdf url
-        pdf = '/static/pdf/DFF_Hogwash-or-Greenwash%20V03.pdf'
-  
-        return Response({"pdf": pdf})
+        res = requests.post(
+            "https://api.sendinblue.com/v3/contacts",
+            json={
+                "attributes": {"first_name": data.first_name, "last_name": data.last_name},
+                "listIds": [59],
+                "updateEnabled": True,
+                "email": data.email,
+            },
+            headers={
+                "api-key": settings.SENDINBLUE_API_KEY,
+                "accept": "application/json",
+                "content-type": "application/json",
+            },
+        )
+
+        if res.status_code in [200, 204]:
+            # send back the pdf url
+            pdf = "/static/pdf/DFF_Hogwash-or-Greenwash%20V03.pdf"
+            return Response({"pdf": pdf})
+
+        raise NotAcceptable("Something went wrong")
