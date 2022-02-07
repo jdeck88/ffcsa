@@ -38,8 +38,8 @@ services:
     restart: always
     command: celery -A ffcsa.core worker -l INFO
     env_file: .env
-    volumes:
-      - .:/app
+    # volumes:
+    #   - .:/app
     depends_on:
       - redis
   
@@ -51,8 +51,8 @@ services:
     restart: always
     command: celery -A ffcsa.core beat -l INFO
     env_file: .env
-    volumes:
-      - .:/app
+    # volumes:
+    #   - .:/app
     depends_on:
       - redis
 
