@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.utils.timezone import now
 from django.db.models import  Q, query
 from rest_framework import viewsets
 from rest_framework import mixins
@@ -108,6 +109,9 @@ class CartViewSet(viewsets.ModelViewSet):
     def increase_item(self, request, pk=None):
         item = get_object_or_404(CartItem, pk=pk)
         item.update_quantity(item.quantity + 1)
+
+        request.cart.last_updated = now()
+        request.cart.save()
         return Response({'message': 'Item increased'})
     
     @detail_route(methods=['post'])
@@ -119,6 +123,9 @@ class CartViewSet(viewsets.ModelViewSet):
             return Response({'message': 'Item decreased'})
             
         item.update_quantity(item.quantity - 1)
+
+        request.cart.last_updated = now()
+        request.cart.save()
         return Response({'message': 'Item decreased'})
     
     @detail_route(methods=['post'])
@@ -126,6 +133,9 @@ class CartViewSet(viewsets.ModelViewSet):
         # remove item from cart
         item = get_object_or_404(CartItem, pk=pk)
         item.delete()
+
+        request.cart.last_updated = now()
+        request.cart.save()
         return Response({'message': 'Item removed'})
 
     @list_route(methods=['post'])

@@ -7,6 +7,7 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 
+from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework import mixins, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated

@@ -122,7 +122,10 @@
             <v-row>
               <v-col cols="2"></v-col>
               <v-col class="d-flex justify-space-around">
-                <v-toolbar-title class="pt-2">Your Cart ( ((store.state.cart.items.length)) )</v-toolbar-title>
+                <v-toolbar-title class="pt-2">
+                  Your Cart ( ((store.state.cart.items.length)) ) 
+                  <span id="countDown" class="text-base text-red-600"></span>
+                </v-toolbar-title>
               </v-col>
               <v-col cols="2" class="d-flex justify-end">
                 <v-btn icon plain @click="drawer = !drawer" >
@@ -387,7 +390,8 @@
             total_price: 0,
             delivery_fee: 0,
             remaining_budget: 0,
-            attending_dinner: 0
+            attending_dinner: 0,
+            last_updated: null
           },
           drop_sites: [],
           alert: {
@@ -470,14 +474,21 @@
             
             try {
               const res = await axios.get('/api/cart/');
-              const { id, items, total_price, delivery_fee, remaining_budget, attending_dinner } = res.data
+              const { id, items, total_price, delivery_fee, remaining_budget, attending_dinner, last_updated } = res.data
               console.log(res.data)
               store.state.cart.items = items;
               store.state.cart.total_price = total_price;
               store.state.cart.delivery_fee = delivery_fee;
               store.state.cart.remaining_budget = remaining_budget;
               store.state.cart.attending_dinner = attending_dinner;
+              store.state.cart.last_updated = last_updated;
               store.state.cart.loading = false;
+              
+              if (items.length > 0) {
+                this.startCartCountDown()
+              }
+
+
             } catch (error) {
               console.log('Fetch Cart Error', error)
               store.state.cart.loading = false;
@@ -577,6 +588,35 @@
             }
           },
 
+          startCartCountDown() {
+            // Set the date we're counting down to
+            // var countDownDate = new Date(new Date(store.state.cart.last_updated).getTime() + 21*60000);
+
+            // Update the count down every 1 second
+            var x = setInterval(function() {
+
+              // Get today's date and time
+              var now = new Date().getTime();
+
+              // Find the distance between now and the count down date
+              var distance = App.countDownDate - now;
+
+              // Time calculations for days, hours, minutes and seconds
+              var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+              var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+              // Display the result in the element with id="countDown"
+              document.getElementById("countDown").innerHTML = "Expires in " + minutes + "m " + seconds + "s ";
+
+              // If the count down is finished, write some text
+              if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("countDown").innerHTML = "EXPIRED";
+                location.reload()
+              }
+            }, 1000);
+          },
+
           hide_alert: function (event) {
             // console.log('Hide')
             // `event` is the native DOM event
@@ -596,7 +636,12 @@
             }
           }
         },
-        computed: {},
+        computed: {
+          countDownDate() {
+            return new Date(new Date(store.state.cart.last_updated).getTime() + 21*60000);
+          }
+
+        },
         async mounted() {
           // get the cart using user session
           this.fetchCart()
