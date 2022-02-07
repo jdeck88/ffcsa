@@ -380,7 +380,7 @@ class LeadGenPDF(viewsets.ViewSet):
         res = requests.post(
             "https://api.sendinblue.com/v3/contacts",
             json={
-                "attributes": {"first_name": data.first_name, "last_name": data.last_name},
+                "attributes": {"FIRSTNAME": data.first_name, "LASTNAME": data.last_name},
                 "listIds": [59],
                 "updateEnabled": True,
                 "email": data.email,
