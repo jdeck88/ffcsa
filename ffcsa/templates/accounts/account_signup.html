@@ -151,8 +151,6 @@
                       label="Contact Number *"
                       v-model="user.profile.phone_number"
                       @input="acceptPhoneNumber"
-                      hint="must match format 999-999-9999"
-                      persistent-hint
                       maxlength=12
                       :rules="[store.state.rules.required, store.state.rules.phone]"
                     >
@@ -166,8 +164,6 @@
                       label="Alternate Contact Number"
                       v-model="user.profile.phone_number_2"
                       @input="acceptPhoneNumber2"
-                      hint="must match format 999-999-9999"
-                      persistent-hint
                       maxlength=12
                       :rules="[store.state.rules.phone]"
                     >

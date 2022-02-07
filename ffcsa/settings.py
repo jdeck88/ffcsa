@@ -643,22 +643,21 @@ DATABASES = {
 #############
 # Celery application definition
 # http://docs.celeryproject.org/en/v4.0.2/userguide/configuration.html
-CELERY_BROKER_URL = 'redis://redis:6379'
-CELERY_RESULT_BACKEND = 'redis://redis:6379'
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'America/Los_Angeles'
-CELERY_BEAT_SCHEDULE = {}
-
 
 from celery.schedules import crontab
 
 # Other Celery settings
 CELERY_BEAT_SCHEDULE = {
-    'task-number-one': {
+    'task-anonymous-carts': {
         'task': 'ffcsa.core.tasks.clean_anonymous_carts',
-        'schedule': crontab(minute="*", hour="*"),
+        # 'schedule': crontab(minute="*", hour="*"),
+        'schedule': crontab(),
         # 'args': (*args)
     }
 }

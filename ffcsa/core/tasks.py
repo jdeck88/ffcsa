@@ -6,6 +6,9 @@ from django.utils.timezone import utc
 from ffcsa.celery_tasks import app
 from ffcsa.shop.models.Cart import Cart
 
+# from celery.utils.log import get_task_logger
+# logger = get_task_logger(__name__)
+
 
 @app.task(bind=True)
 def clean_anonymous_carts(self):

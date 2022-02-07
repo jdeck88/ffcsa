@@ -17,6 +17,32 @@ services:
     depends_on:
       - mysql
 
+  django_celery_worker:
+    container_name: ffcsa_celery_worker
+    build:
+      context: .
+      dockerfile: ./docker/gunicorn.dev.Dockerfile
+    restart: always
+    command: celery -A ffcsa.core worker -l INFO
+    env_file: .env
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+  
+  django_celery_beat:
+    container_name: ffcsa_celery_beat
+    build:
+      context: .
+      dockerfile: ./docker/gunicorn.dev.Dockerfile
+    restart: always
+    command: celery -A ffcsa.core beat -l INFO
+    env_file: .env
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+
   mysql:
     container_name: ffcsa_db
     image: mysql:5.7

@@ -1,4 +1,4 @@
-{% extends "pages/page.html" %}
+{% extends "base.html" %}
 {% load mezzanine_tags shop_tags i18n static %}
 
 <!-- Title -->
@@ -54,32 +54,30 @@
           
                   <!-- email -->
                   <div class="col-span-12">
-                    <v-text-field label="Email" outlined v-model="user.email"></v-text-field>
+                    <v-text-field label="Email" outlined v-model="user.email" :rules="[store.state.rules.required, store.state.rules.email]"></v-text-field>
                   </div>
           
                   <!-- Contact Number -->
                   <div class="col-span-6">
                     <v-text-field
-                      label="Contact Number"
                       outlined
+                      label="Contact Number"
                       v-model="user.profile.phone_number"
-                      hint="must match format 999-999-9999"
-                      persistent-hint
                       @input="acceptPhoneNumber"
-                      required
+                      maxlength=12
+                      :rules="[store.state.rules.required, store.state.rules.phone]"
                       ></v-text-field>
                   </div>
           
                   <!-- Alternate Contact Number -->
                   <div class="col-span-6">
                     <v-text-field
-                      label="Alternate Contact Number"
                       outlined
+                      label="Alternate Contact Number"
                       v-model="user.profile.phone_number_2"
-                      hint="must match format 999-999-9999"
-                      persistent-hint
                       @input="acceptPhoneNumber"
-                      required
+                      maxlength=12
+                      :rules="[store.state.rules.required, store.state.rules.phone]"
                       ></v-text-field>
                   </div>
         
