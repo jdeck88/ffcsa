@@ -19,10 +19,38 @@
               <p class="subtitle-1">Welcome back</p>
             </div>
 
-            <v-form action="" method="POST" validate-on-blur>
+            <v-form @submit.prevent="submit" method="POST" ref="form" validate-on-blur>
               {% csrf_token %}
-              <v-text-field outlined prepend-inner-icon="mdi-email" label="Email" name="username" type="email" :rules="[store.state.rules.required, store.state.rules.email]" required></v-text-field>
-              <v-text-field outlined prepend-inner-icon="mdi-key-variant" label="Password" name="password" type="password" :rules="[store.state.rules.required]" required></v-text-field>
+              <!-- <v-text-field outlined prepend-inner-icon="mdi-email" label="Email" name="username" type="email" :rules="[store.state.rules.required, store.state.rules.email]" required></v-text-field> -->
+              <!-- <v-text-field outlined prepend-inner-icon="mdi-key-variant" label="Password" name="password" type="password" :rules="[store.state.rules.required]" required></v-text-field> -->
+
+
+              <!-- email -->
+              <v-col cols="12">
+                <v-text-field
+                  prepend-inner-icon="mdi-email"
+                  outlined
+                  label="Email *"
+                  v-model="email"
+                  :rules="[store.state.rules.required, store.state.rules.email]"
+                >
+                </v-text-field>
+              </v-col>
+
+              <!-- password -->
+              <v-col cols="12" md="6">
+                <v-text-field 
+                  prepend-inner-icon="mdi-key-variant"
+                  outlined
+                  label="Password *"
+                  type="password"
+                  v-model="password"
+                  :rules="[store.state.rules.required, store.state.rules.password]"
+                >
+                </v-text-field>
+              </v-col>
+
+
               <v-btn large block color="primary" class="font-weight-bold" type="submit">Login</v-btn>
             </v-form>
 
@@ -46,7 +74,33 @@
     delimiters: ['((', '))'],
     store,
     vuetify: new Vuetify(opts),
-    data: {}
+    data: {
+      email: "",
+      password: ""
+    },
+    methods: {
+      async submit() {
+        try {
+          const res = await axios.post('/api/login/', data={
+            username: this.email,
+            password: this.password
+          });
+          
+          location.replace("/")
+
+
+        } catch (error) {
+          store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+          console.log('Login Error', error)
+          console.log(error.response.data)
+          store.state.cart.loading = false;
+          // console.log('Fetch Cart Error', error.response.data)
+        }
+
+      }
+      
+    },
+    // async mounted () {}
   })
 </script>
 {% endblock js %}

@@ -137,7 +137,8 @@ class LoginViewSet(viewsets.ViewSet):
             token, created = Token.objects.get_or_create(user=user)
             user_serializer = UserSerializer(user)
             return Response({"token": token.key, "user": user_serializer.data})
-        return Response({"msg": "Wrong credintial"}, status=400)
+        
+        raise NotAcceptable("Wrong credintial")
 
 
 class PaymentViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
