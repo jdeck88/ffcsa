@@ -122,17 +122,19 @@
                   {% endif %}
         
                   <!-- Drop Sites -->
-                  <div class="col-span-12" v-if="user.profile.home_delivery">
+                  <div class="col-span-12 mt-4">
                     <v-combobox
                       outlined
+                      v-if="!user.profile.home_delivery"
                       label="Drop Site Location"
                       v-model="user.profile.drop_site"
                       :items="store.state.drop_sites"
-                      item-text="text"
-                      item-value="value"
+                      item-text="description"
+                      item-value="name"
                       :return-object="false"
-                    >
-                  </v-combobox>
+                      :rules="[store.state.rules.required]"
+                      >
+                    </v-combobox>
                   </div>
         
                   <!-- Preferences -->
