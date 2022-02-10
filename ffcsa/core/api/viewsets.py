@@ -1,4 +1,5 @@
 import datetime
+import email
 import requests
 import stripe
 from django.contrib import auth
@@ -7,13 +8,13 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 
-from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework import mixins, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route, permission_classes
-from rest_framework.exceptions import NotAcceptable
+from rest_framework.exceptions import NotAcceptable, NotFound
+from mezzanine.utils.email import send_verification_mail
 
 from ffcsa.core import sendinblue
 from ffcsa.core.api.permissions import IsOwner, CanPay
@@ -139,6 +140,19 @@ class LoginViewSet(viewsets.ViewSet):
             return Response({"token": token.key, "user": user_serializer.data})
         
         raise NotAcceptable("Wrong credintial")
+
+
+class ResetPasswordViewSet(viewsets.ViewSet):
+
+    def create(self, request):
+        serializer = ResetPasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        if (user := User.objects.filter(email=serializer.data['email']).first()):
+            send_verification_mail(request, user, "password_reset_verify")
+            return Response({})
+
+        raise NotFound("User not found")
 
 
 class PaymentViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):

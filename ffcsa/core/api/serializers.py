@@ -40,6 +40,11 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(min_length=6)
 
 
+# Reset password Serializer
+class ResetPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
 # Change password Serializer
 class ChangePasswordSerializer(serializers.Serializer):
     cpassword = serializers.CharField(min_length=6)
