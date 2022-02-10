@@ -139,7 +139,7 @@ class LoginViewSet(viewsets.ViewSet):
             user_serializer = UserSerializer(user)
             return Response({"token": token.key, "user": user_serializer.data})
         
-        raise NotAcceptable("Wrong credintial")
+        raise NotAcceptable("Invalid email or password")
 
 
 class ResetPasswordViewSet(viewsets.ViewSet):
