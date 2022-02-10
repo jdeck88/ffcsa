@@ -612,7 +612,7 @@
               if (distance < 0) {
                 clearInterval(x);
                 document.getElementById("countDown").innerHTML = "EXPIRED";
-                location.reload()
+                this.fetchCart()
               }
             }, 1000);
           },
