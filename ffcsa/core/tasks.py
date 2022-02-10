@@ -17,7 +17,7 @@ def clean_anonymous_carts(self):
     """
 
     # time to remove cart
-    CART_TIMEOUT = 20 * 30
+    CART_TIMEOUT = 20 * 60
 
     carts = Cart.objects.filter(user_id=None)
     for cart in carts:
