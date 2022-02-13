@@ -70,7 +70,10 @@ class ProfileSerializer(serializers.ModelSerializer):
             'payment_method', 'ach_status', 'discount_code', 'user', 'paid_signup_fee', 'can_order_dairy', 'google_person_id')
 
     def get_delivery_address(self, obj):
-        return str(obj.delivery_address)
+        if obj.delivery_address:
+            return str(obj.delivery_address)
+        
+        return ""
 
 
 # Payment Serializer
