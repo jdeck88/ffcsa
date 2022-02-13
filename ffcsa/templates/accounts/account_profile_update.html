@@ -585,6 +585,7 @@
         paymentMethod: 'ACH',
         amount: null,
         stripeError: null,
+        success: false,
         loading: false
       },
       // {% endif %}
@@ -690,18 +691,16 @@
                   });
   
                   // Show success message
-                  store.commit('showAlert', {type: 'success', content: res.data.detail})
+                  // store.commit('showAlert', {type: 'success', content: res.data.detail})
+                  this.oneTimePayment.success = true
                   
                 } catch (error) {
-                  store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+                  // store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+                  this.oneTimePayment.stripeError = error.response.data.detail;
                   
                 }
 
-
-                oneTimePayment.reset()
-                card.unmount()
                 this.oneTimePayment.loading = false
-                this.oneTimePayment.dialog = false
               }
             });
           } else {
@@ -710,7 +709,8 @@
               NavVue.show_msg(res.data.detail)
               this.oneTimePayment.dialog = false
             } catch (error) {
-              store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+              // store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+              this.oneTimePayment.stripeError = error.response.data.detail;
             }
             this.oneTimePayment.loading = false
           }
@@ -830,6 +830,17 @@
         
       },
       // Onetime Payment
+      'oneTimePayment.dialog': function(val) {
+        // mount the card ui elements when method is CC
+        console.info(val)
+        if (val == false) {
+          card.unmount()
+          this.oneTimePayment.success = false
+          this.oneTimePayment.stripeError = null
+          this.oneTimePayment.amount = null
+
+        }
+      },
       'oneTimePayment.paymentMethod': function(val) {
         // mount the card ui elements when method is CC
         if (val == 'CC') {

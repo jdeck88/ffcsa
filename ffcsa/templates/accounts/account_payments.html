@@ -54,9 +54,9 @@
             <p class="alert-info">This is a one time payment that will be credited to your account.</p>
             {% endif %}
   
-            <form action="{% url 'make_payment' %}" method="POST" id="oneTimePayment" class="mt-8">
+            <form v-if="!oneTimePayment.success" action="{% url 'make_payment' %}" method="POST" id="oneTimePayment" class="mt-8">
               <!-- Amount -->              
-              <v-text-field outlined v-model="oneTimePayment.amount" label="Payment Amount" prefix="$" type="number" min="20" max="999" required></v-text-field>
+              <v-text-field outlined v-model="oneTimePayment.amount" label="Payment Amount" v-model="oneTimePayment.amount" prefix="$" type="number" min="20" max="999" required></v-text-field>
               
               <!-- ACH & non_subscribing_member user -->
               {% if user.profile.payment_method == 'ACH' or user.profile.non_subscribing_member %}
@@ -88,9 +88,14 @@
               {% endif %}
   
               <!-- Stripe errors -->
-              <div id="OTP-StripeErrors" v-if="oneTimePayment.stripeError" class="alert-danger mt-5">((oneTimePayment.stripeError))</div>
-             
+              <div id="OTP-StripeErrors" v-if="oneTimePayment.stripeError" class="alert-danger my-3">((oneTimePayment.stripeError))</div>
             </form>
+
+            <div v-if="oneTimePayment.success" id="OTP-success">
+              <v-alert outlined type="success" class="mt-10">
+                Thank you for your order. Please check your email for your order confirmation which includes information on how to pickup your order.
+              </v-alert>
+            </div>
           </section>
         </v-card-text>
 
@@ -98,7 +103,7 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" :loading="oneTimePayment.loading" @click="OPT_Pay">Add Funds</v-btn>
+          <v-btn color="primary" v-if="!oneTimePayment.success" :loading="oneTimePayment.loading" @click="OPT_Pay">Add Funds</v-btn>
           <v-btn color="red" text @click="oneTimePayment.dialog = false">Close</v-btn>
         </v-card-actions>
       </v-card>
