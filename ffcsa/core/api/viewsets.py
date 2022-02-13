@@ -149,7 +149,10 @@ class ResetPasswordViewSet(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
 
         if (user := User.objects.filter(email=serializer.data['email']).first()):
-            send_verification_mail(request, user, "password_reset_verify")
+            try:
+                send_verification_mail(request, user, "password_reset_verify")
+            except:
+                raise NotAcceptable("Something went wrong, try again later!")
             return Response({})
 
         raise NotFound("User not found")
