@@ -259,7 +259,6 @@
 </section>
 
 <!-- NOT non_subscribing_member -->
-<!-- todo - there are two buttons here, why? -->
 {% elif not user.profile.non_subscribing_member %}
 <section class="mt-20">
   <div class="mb-4">
@@ -270,7 +269,7 @@
         ACH Bank Transfer
       {% endif %}.
     </p>
-    <p>You next payment is scheduled for <strong>{{ next_payment_date }}</strong>.</p>
+    <p>You next payment is scheduled for <strong>(( user.profile.next_payment_date ))</strong>.</p>
     {% if user.profile.payment_method == 'ACH' %}
       <p class="alert-info my-4">Note: It will take 3-5 business days before the payment is reflected in your account.</p>
     {% endif %}
@@ -282,8 +281,9 @@
     {% endfor %}
   </div>
 
-  <button class="btn-primary" id="edit-payment-info">Update Payment Method</button>
-  <button class="btn-primary" id="edit-payment-amount-btn">Update Monthly Contribution</button>
+
+  <v-btn large color="primary" class="font-weight-bold" id="edit-payment-info">Update Payment Method</v-btn>
+  <v-btn large color="primary" class="font-weight-bold" id="edit-payment-amount-btn">Update Monthly Contribution</v-btn>
 
   <!-- update payment method -->
 
