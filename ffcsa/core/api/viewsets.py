@@ -7,6 +7,9 @@ from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.conf import settings
+from django.urls import reverse
+from django.utils.http import int_to_base36
+from django.contrib.auth.tokens import default_token_generator
 
 from rest_framework import mixins, viewsets
 from rest_framework.authtoken.models import Token
@@ -14,7 +17,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route, permission_classes
 from rest_framework.exceptions import NotAcceptable, NotFound
-from mezzanine.utils.email import send_verification_mail
+from mezzanine.utils.urls import next_url
+from mezzanine.utils.email import subject_template
 
 from ffcsa.core import sendinblue
 from ffcsa.core.api.permissions import IsOwner, CanPay
@@ -150,7 +154,36 @@ class ResetPasswordViewSet(viewsets.ViewSet):
 
         if (user := User.objects.filter(email=serializer.data['email']).first()):
             try:
-                send_verification_mail(request, user, "password_reset_verify")
+                # send_verification_mail(request, user, site_url, "password_reset_verify")
+                site_url = settings.BASE_SITE_URL
+                verification_type = "password_reset_verify"
+
+                verify_url = (
+                    reverse(
+                        verification_type,
+                        kwargs={
+                            "uidb36": int_to_base36(user.id),
+                            "token": default_token_generator.make_token(user),
+                        },
+                    )
+                    + "?next="
+                    + (next_url(request) or "/")
+                )
+                context = {
+                    "request": request,
+                    "user": user,
+                    "verify_url": verify_url,
+                    "site_url": site_url
+                }
+                subject_template_name = "email/%s_subject.txt" % verification_type
+                subject = subject_template(subject_template_name, context)
+                send_mail_template(
+                    subject,
+                    "email/%s" % verification_type,
+                    settings.DEFAULT_FROM_EMAIL,
+                    user.email,
+                    context=context,
+                )
             except:
                 raise NotAcceptable("Something went wrong, try again later!")
             return Response({})
