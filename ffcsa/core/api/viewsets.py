@@ -1,5 +1,4 @@
 import datetime
-import email
 import requests
 import stripe
 from django.contrib import auth
@@ -37,10 +36,14 @@ class AppResources(viewsets.ViewSet):
         return Response({"sites": settings.DROPSITES})
 
 
-class UserViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
+class UserViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-    permission_classes = [IsAuthenticated, IsOwner]
+    permission_classes = [IsOwner]
+
+    def list(self, request, *args, **kwargs):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
         user = get_object_or_404(User, pk=kwargs["pk"])

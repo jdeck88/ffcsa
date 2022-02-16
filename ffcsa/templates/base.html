@@ -123,8 +123,14 @@
               <v-col cols="2"></v-col>
               <v-col class="d-flex justify-space-around">
                 <v-toolbar-title class="pt-2">
-                  Your Cart ( ((store.state.cart.items.length)) ) 
-                  <span id="countDown" class="text-base text-red-600"></span>
+                  <template v-if="store.state.is_authenticated">
+                    Your Cart ( ((store.state.cart.items.length)) ) 
+                    <span id="countDown" class="text-base text-red-600"></span>
+                  </template>
+                  
+                  <template v-else>
+                    Coming Soon!
+                  </template>
                 </v-toolbar-title>
               </v-col>
               <v-col cols="2" class="d-flex justify-end">
@@ -138,7 +144,7 @@
           <!-- header and close button -->
 
           <!-- content -->
-          <v-virtual-scroll class="mt-2" height="700" :items="store.state.cart.items" :item-height="130">
+          <v-virtual-scroll v-if="store.state.is_authenticated" class="mt-2" height="700" :items="store.state.cart.items" :item-height="130">
             <template v-slot:default="{ item }">
               <v-row class="max-w-full">
                 <v-col sm="4">
@@ -179,8 +185,14 @@
           </v-virtual-scroll>
           <!-- content -->
 
+          <v-row v-else align="center" justify="center" class="p-5" style="height: 80vh;">
+            <p class="text-center p-5 opacity-75	" color="grey lighten-2">
+              Currently we are only accepting online orders for Full Farm CSA members. If you are a member, log in to place your order. If you would like to place an order for Deck Family Farm products, please send give us a call or send us an email.
+            </p>
+          </v-row>
+
           <!-- total and checkout -->
-          <section class="bg-white absolute px-3 pt-4 mt-10 inset-x-0 bottom-5 border border-top">
+          <section v-if="store.state.is_authenticated" class="bg-white absolute px-3 pt-4 mt-10 inset-x-0 bottom-5 border border-top">
             <div class="flex text-black font-bold">
               <p class="mb-2">SUBTOTAL</p>
               <p class="mb-2 ml-auto">$((store.state.cart.total_price))</p>
@@ -385,7 +397,7 @@
       // Vuex Store
       const store = new Vuex.Store({
         state: {
-          count: 200,
+          is_authenticated: false,
           cart: {
             shown: false,
             loading: false,
@@ -415,9 +427,6 @@
           }
         },
         mutations: {
-          increment (state) {
-            state.count++
-          },
           showAlert(state, val={type: 'success', content: 'Updated successfuly'}) {
             this.state.alert = {...this.state.alert, ...val}
             this.state.alert.value = true;
@@ -472,6 +481,15 @@
           }
         },
         methods: {
+          async getUser() {
+            fetch('/api/users/')
+              .then(response => response.json())
+              .then(data => {
+                if (Object.keys(data).length > 0) {
+                  store.state.is_authenticated = true
+                }
+              })
+          },
           async fetchCart() {
             store.state.cart.loading = true;
             
@@ -652,6 +670,7 @@
         },
         async mounted() {
           // get the cart using user session
+          this.getUser()
           this.fetchCart()
           this.getDropSites()
 

@@ -615,7 +615,7 @@
       // get user info
       async getUser() {
         try {
-          const res = await axios.get(`/api/users/{{user.id}}`);
+          const res = await axios.get(`/api/users/`);
           this.user = res.data
         } catch (error) {
           NavVue.show_msg('Can not get user information', 'error')
@@ -628,7 +628,7 @@
         
         try {
           this.personal.loading = true
-          const res = await axios.patch(`/api/users/{{user.id}}/`, {...this.user});
+          const res = await axios.patch(`/api/users//`, {...this.user});
           store.commit('showAlert')
 
           this.personal.loading = false
@@ -795,7 +795,7 @@
 
         try {
           this.personal.loading = true
-          const res = await axios.post(`/api/users/{{user.id}}/change_password/`, formData);
+          const res = await axios.post(`/api/users//change_password/`, formData);
           store.commit('showAlert')
           this.personal.loading = false
           location.reload()

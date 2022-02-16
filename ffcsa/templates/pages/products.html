@@ -113,18 +113,25 @@
 
                 <!-- add to cart btn -->
                 <v-col sm="6">
-                  <template v-if="product.has_in_stock_variations">
-                    <template v-if="product.variations.length == 1">
-                      <v-btn block color="brown_lightest" elevation="0" x-large @click="App.addToCart(product.variations[0]);getProducts()">ADD TO CART</v-btn>
-                  </template>
-                    
+                  <template v-if="store.state.is_authenticated">
+                    <template v-if="product.has_in_stock_variations">
+                      <template v-if="product.variations.length == 1">
+                        <v-btn block color="brown_lightest" elevation="0" x-large @click="App.addToCart(product.variations[0]);getProducts()">ADD TO CART</v-btn>
+                    </template>
+                      
+                      <template v-else>
+                        <v-btn block color="brown_lightest" elevation="0" large @click="showProduct(product)">CHOOSE VARIATION</v-btn>
+                      </template>
+                    </template>
                     <template v-else>
-                      <v-btn block color="brown_lightest" elevation="0" large @click="showProduct(product)">CHOOSE VARIATION</v-btn>
+                      <v-btn block x-large disabled>OUT OF STOCK</v-btn>
                     </template>
                   </template>
+
                   <template v-else>
-                    <v-btn block x-large disabled>OUT OF STOCK</v-btn>
+                    <v-btn block x-large disabled>Coming Soon!</v-btn>
                   </template>
+
                 </v-col>
               </v-row>
             </v-col>
@@ -211,16 +218,22 @@
         
                     <!-- Variation action -->
                     <v-col md="4" class="text-right">
-                      <template v-if="variation.addable">
-                        <v-btn color="brown_lightest" elevation="0" x-large @click="App.addToCart(variation)">ADD TO CART</v-btn>
+                      <template v-if="store.state.is_authenticated">
+                        <template v-if="variation.addable">
+                          <v-btn color="brown_lightest" elevation="0" x-large @click="App.addToCart(variation)">ADD TO CART</v-btn>
+                        </template>
+          
+                        <template v-else-if="!variation.live_num_in_stock">
+                          <v-btn x-large disabled>OUT OF STOCK</v-btn>
+                        </template>
+          
+                        <template v-else>
+                          <v-btn color="brown_lightest" elevation="0" x-large @click="App.addToCart(variation)">ADD TO CART</v-btn>
+                        </template>
                       </template>
-        
-                      <template v-else-if="!variation.live_num_in_stock">
-                        <v-btn x-large disabled>OUT OF STOCK</v-btn>
-                      </template>
-        
+
                       <template v-else>
-                        <v-btn color="brown_lightest" elevation="0" x-large @click="App.addToCart(variation)">ADD TO CART</v-btn>
+                        <v-btn block x-large disabled>Coming Soon!</v-btn>
                       </template>
                     </v-col>
         
