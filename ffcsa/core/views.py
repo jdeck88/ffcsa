@@ -7,7 +7,7 @@ import stripe
 from dal import autocomplete
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages import error, info, success
@@ -25,6 +25,7 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.decorators.http import require_POST
 from django.views import View
 from django_common import http
+from django.http import JsonResponse
 from mezzanine.conf import settings
 from mezzanine.core.models import CONTENT_STATUS_PUBLISHED
 from mezzanine.utils.email import send_mail_template
@@ -61,6 +62,35 @@ def home(request, template="home.html"):
     }
 
     return TemplateResponse(request, template, context)
+
+
+def password_reset_verify(request, uidb36=None, token=None):
+
+    user = authenticate(uidb36=uidb36, token=token, is_active=True)
+
+    if request.method == "POST":
+        if not user:
+            return JsonResponse({"detail": "Not allowed"}, status=400)
+
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+
+        if not body["password"] == body["password2"]:
+            return JsonResponse({"detail": "Passwords does not match"}, status=400)
+
+        # update user password and ask user to login
+        user.set_password(body["password"])
+        user.save()
+        return JsonResponse({"detail": "Password updated please login"})
+
+
+    if request.user.is_authenticated():
+        return redirect("/")
+
+    template = "accounts/account_password_verify.html"
+    valid_link = True if user else False
+
+    return TemplateResponse(request, template, context={"valid_link": valid_link})
 
 
 def shop_home(request, template="shop_home.html"):

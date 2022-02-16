@@ -6,6 +6,7 @@ from django.contrib import admin
 from django.views.i18n import set_language
 from django.views.generic import TemplateView
 from mezzanine.conf import settings
+from mezzanine.accounts.urls import PASSWORD_RESET_VERIFY_URL, _verify_pattern, _slash
 
 import ffcsa.core.views as ffcsa_core
 import ffcsa.shop.views as shop_ciews
@@ -59,6 +60,14 @@ urlpatterns += [
     url("^account/payments/update$", ffcsa_core.payments_update, name="payments_update"),
     url("^account/payments/update/amount$", ffcsa_core.payments_update_amount, name="payments_update_amount"),
     url("^account/payments/new$", ffcsa_core.make_payment, name="make_payment"),
+
+    url(
+        r"^{}{}{}$".format(
+            PASSWORD_RESET_VERIFY_URL.strip("/"), _verify_pattern, _slash
+        ),
+        ffcsa_core.password_reset_verify,
+        name="password_reset_verify",
+    ),
 
     # We don't want to presume how your homepage works, so here are a
     # few patterns you can use to set it up.
