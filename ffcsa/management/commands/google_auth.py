@@ -8,7 +8,7 @@ class Command(BaseCommand):
     """
     Authenticate fullfarmcsa user using google OAUTH2
     """
-    help = 'Authenticate fullfarmcsa@gmail.com to access google apis'
+    help = 'Authenticate fullfarmcsa@deckfamilyfarm.com.com to access google apis'
 
     def handle(self, *args, **options):
         if not authenticate():

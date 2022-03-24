@@ -364,8 +364,13 @@ def make_payment(request):
 
     user = request.user
     if not user.profile.stripe_customer_id:
-        hasError = True
-        error(request, 'Could not find a valid customer id. Please contact the site administrator.')
+        # create stripe user if not already existing. This should have been created on signup, but we've had an issue in the past where it wasn't for some reason
+        customer = stripe.Customer.create(
+            email=user.email,
+            description=user.get_full_name()
+        )
+        user.profile.stripe_customer_id = customer.id
+        user.profile.save()
 
     if not request.POST.get('chargeAcknowledgement') == 'True':
         hasError = True

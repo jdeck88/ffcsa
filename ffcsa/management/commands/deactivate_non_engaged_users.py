@@ -55,7 +55,7 @@ class Command(BaseCommand):
 
             # If the user has less then $40 remaining and their last order was > then 2 months ago
             # TODO: in Oct 2021, remove the $40 condition if they have not placed an order in 3 months. They will have received at least 4 reminders by now
-            if last_order is None or \
+            if (last_order is None and remaining_budget < 40) or \
                     (remaining_budget < 20 and last_order.time.date() < one_months_date and not yearly_member) or \
                     (remaining_budget < 40 and last_order.time.date() < two_months_date and not yearly_member) or \
                     (remaining_budget < 40 and last_order.time.date() < three_months_date):
