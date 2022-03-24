@@ -17,8 +17,11 @@
 # De-activate non active users
 0 3 * * 1 %(user)s %(manage)s deactivate_non_engaged_users
 
-# Send KPI email
+# Send monthly KPI email
  0 2 1 * * %(user)s %(manage)s kpis
+
+# Send weekly KPI email Monday at 3am
+0 3 * * 1 %(user)s %(manage)s weekly_kpis
 
 # Send outstanding balance email
  0 1 9 * * %(user)s %(manage)s outstanding_member_credits
