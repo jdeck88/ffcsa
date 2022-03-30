@@ -55,8 +55,8 @@
                   :loading="loading"
                   v-model="query"
                   append-icon="mdi-magnify"
-                  @click:append="getProducts"
-                  @input="getProducts"
+                  @click:append="getProducts()"
+                  @input="isTyping = true"
                 >
                 </v-text-field>
               </v-form>
@@ -304,6 +304,7 @@
 {% endblock main %}
 
 {% block js %}
+<script src="{% static "js/lodash.js" %}"></script>
 <script>
   const ProductsVue = new Vue({
     el: '#productsVue',
@@ -315,6 +316,7 @@
       categories: [],
       
       query: '',
+      isTyping: false,
       page: 1,
       selectedCategory: '',
       
@@ -345,6 +347,16 @@
         }
       },
 
+      query: _.debounce(function() {
+        this.isTyping = false;
+      }, 1000),
+
+      isTyping: function(value) {
+       if (!value) {
+        this.getProducts(this.query);
+       }
+     },
+
       selectedCategory: function(val, oldVal) {
         this.getProducts()
         this.scrollToProducts()
@@ -359,14 +371,19 @@
     computed: {},
 
     methods: {
-      async getProducts() {
+      async getProducts(searchQuery=null) {
         this.loading = true;
         // this.products.results = []
 
         // get products and assign the results
         try {
 
-          const query = encodeURIComponent(this.query);
+          if (searchQuery != null){
+            var query = encodeURIComponent(searchQuery);
+          }else{
+            var query = encodeURIComponent(this.query);
+          }
+
           const category = encodeURIComponent(this.selectedCategory);
 
           const res = await axios.get(`/api/products/?query=${query}&page=${this.page}&category=${category}`);
