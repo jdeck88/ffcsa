@@ -112,6 +112,9 @@ class SignupViewSet(viewsets.ViewSet):
         user_data = user_serializer.data
         profile_data = profile_serializer.data
 
+        # add username
+        user_data["username"] = user_data["first_name"] + '_' + user_data["last_name"]
+
         # remove password2
         del user_data["password2"]
 
