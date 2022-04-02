@@ -176,13 +176,27 @@
         <p class="text-center text-2xl leading-snug mt-20 mb-16">Your health matters to us. That’s why our meat comes from humanely treated animals <br class="hidden lg:inline">that were raised sustainably on organic-pastures without growth hormones or confined spaces. <br class="hidden lg:inline">Food that’s good for you and tastes good, too.</p>
         
         <div id="organic-certifications" class="flex flex-wrap w-full mx-auto mb-20 text-center" style="max-width: 1150px;">
-          <v-img max-width="250" max-height="200" contain class="rounded-lg m-3" src="{% static 'img/Certification Images/American Grassfed Association Certified.png' %}"></v-img>
-          <v-img max-width="250" max-height="200" contain class="rounded-lg m-3" src="{% static 'img/Certification Images/Global Animal Partnership (GAP) Animal Welfare Certified.png' %}"></v-img>
-          <v-img max-width="250" max-height="200" contain class="rounded-lg m-3" src="{% static 'img/Certification Images/Oregon Department of Agriculture (ODA) Inspected.png' %}"></v-img>
-          <v-img max-width="250" max-height="200" contain class="rounded-lg m-3" src="{% static 'img/Certification Images/Oregon Pasture Network (OPN) member.png' %}"></v-img>
-          <v-img max-width="250" max-height="200" contain class="rounded-lg m-3" src="{% static 'img/Certification Images/Oregon Tilth Organic Certified.png' %}"></v-img>
-          <v-img max-width="250" max-height="200" contain class="rounded-lg m-3" src="{% static 'img/Certification Images/Salmon Safe Certified.png' %}"></v-img>
-          <v-img max-width="250" max-height="200" contain class="rounded-lg m-3" src="{% static 'img/Certification Images/USDA United States Department of Agriculture Certified.png' %}"></v-img>
+          <div class="cursor-pointer" @click="goToWebSite('https://www.americangrassfed.org')">
+            <v-img max-width="250" max-height="200" contain class="rounded-lg m-3" src="{% static 'img/Certification Images/American Grassfed Association Certified.png' %}"></v-img>
+          </div>
+          <div class="cursor-pointer" @click="goToWebSite('https://globalanimalpartnership.org')">
+            <v-img max-width="250" max-height="200" contain class="rounded-lg m-3" src="{% static 'img/Certification Images/Global Animal Partnership (GAP) Animal Welfare Certified.png' %}"></v-img>
+          </div>
+          <div class="cursor-pointer" @click="goToWebSite('https://www.oregon.gov')">
+            <v-img max-width="250" max-height="200" contain class="rounded-lg m-3" src="{% static 'img/Certification Images/Oregon Department of Agriculture (ODA) Inspected.png' %}"></v-img>
+          </div>
+          <div class="cursor-pointer" @click="goToWebSite('https://oregonpasturenetwork.org')">
+            <v-img max-width="250" max-height="200" contain class="rounded-lg m-3" src="{% static 'img/Certification Images/Oregon Pasture Network (OPN) member.png' %}"></v-img>
+          </div>
+          <div class="cursor-pointer" @click="goToWebSite('https://tilth.org')">
+            <v-img max-width="250" max-height="200" contain class="rounded-lg m-3" src="{% static 'img/Certification Images/Oregon Tilth Organic Certified.png' %}"></v-img>
+          </div>
+          <div class="cursor-pointer" @click="goToWebSite('https://salmonsafe.org')">
+            <v-img max-width="250" max-height="200" contain class="rounded-lg m-3" src="{% static 'img/Certification Images/Salmon Safe Certified.png' %}"></v-img>
+          </div>
+          <div class="cursor-pointer" @click="goToWebSite('https://www.usda.gov')">
+            <v-img max-width="250" max-height="200" contain class="rounded-lg m-3" src="{% static 'img/Certification Images/USDA United States Department of Agriculture Certified.png' %}"></v-img>
+          </div>
         </div>
 
         <v-carousel 
@@ -505,6 +519,9 @@
       }
     },
     methods: {
+      goToWebSite(website) {
+        window.open(website, '_blank')
+      },
       async submit() {
         if (!this.$refs.form.validate()) {
           return
