@@ -199,13 +199,13 @@
                     <!-- hear_about_us -->
                     <v-textarea outlined label="How did you hear about us? *"></v-textarea>
 
-                    <!-- join_dairy_program -->
-                    <v-checkbox
-                      v-model="user.profile.join_dairy_program"
-                      label="Join Dairy Program"
-                      hint="I would like to join the Dairy program. I understand that I will be charged a $50 herd-share fee when making my first payment and will need to talk to the Dairy Manager before gaining access to dairy products. We'll be in touch soon."
-                      persistent-hint
-                    ></v-checkbox>
+{#                    <!-- join_dairy_program -->#}
+{#                    <v-checkbox#}
+{#                      v-model="user.profile.join_dairy_program"#}
+{#                      label="Join Dairy Program"#}
+{#                      hint="I would like to join the Dairy program. I understand that I will be charged a $50 herd-share fee when making my first payment and will need to talk to the Dairy Manager before gaining access to dairy products. We'll be in touch soon."#}
+{#                      persistent-hint#}
+{#                    ></v-checkbox>#}
 
                     <!-- payment_agreement -->
                     <v-checkbox
@@ -314,7 +314,8 @@
         try {
           this.loading = true
           const res = await axios.post(`/api/signup/`, {...this.user});
-          location.replace('/')
+          const profile_id = res.data.profile
+          location.replace('/account/dairy/program/?profile_id='+profile_id)
           // store.commit('showAlert', {type: 'success', content: res.data.detail})
 
           this.loading = false

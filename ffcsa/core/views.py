@@ -1022,3 +1022,10 @@ class SignRequest(View):
 
     def post(self, request):
         return signrequest.handle_webhook(json.loads(request.body.decode()))
+
+
+@login_required
+def dairy_program(request, template="ffcsa_core/dairy_program.html", extra_context=None):
+    context = {}
+    context.update(extra_context or {})
+    return TemplateResponse(request, template, context)

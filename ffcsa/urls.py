@@ -60,6 +60,7 @@ urlpatterns += [
     url("^account/payments/update$", ffcsa_core.payments_update, name="payments_update"),
     url("^account/payments/update/amount$", ffcsa_core.payments_update_amount, name="payments_update_amount"),
     url("^account/payments/new$", ffcsa_core.make_payment, name="make_payment"),
+    url("^account/dairy/program/$", ffcsa_core.dairy_program, name="dairy_program"),
 
     url(
         r"^{}{}{}$".format(

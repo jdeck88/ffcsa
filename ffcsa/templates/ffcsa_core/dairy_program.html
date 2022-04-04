@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load mezzanine_tags shop_tags static i18n %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static "css/ffcsa_core/payments.css" %}">
+{% endblock %}
+
+{% block meta_title %}Dairy Program{% endblock %}
+
+{% block main %}
+    <main id="dairy" v-cloak>
+        <v-app>
+            <v-main class="grey lighten-5">
+                <v-row align="center" justify="center" class="h-screen">
+                    <v-card class="mx-auto pa-5">
+                        <v-card-text>
+                            <div class="text-center mb-10">
+                                <h1 class="font-bold text-3xl text-gray-900">Dairy Program</h1>
+                                <p class="subtitle-1">Do you would like to join the Dairy program ?</p>
+                            </div>
+                            <v-form @submit.prevent="submit" ref="form">
+                                {% csrf_token %}
+                                <p class="text-justify">
+                                    You will be charged a $50 herd-share fee when
+                                    making your first payment and will need to talk to <br> the Dairy Manager before
+                                    gaining access to dairy products.
+
+                                    <br><br>We'll be in touch soon.
+                                </p>
+                                <v-row class="pa-md-8">
+                                    <v-col cols="6">
+                                        <v-btn large block color="primary" class="font-weight-bold" @click="updateProfile(1)" value="1">Yes
+                                        </v-btn>
+                                    </v-col>
+                                    <v-col cols="6">
+                                        <v-btn large block color="primary" class="font-weight-bold" @click="updateProfile(0)" value="0">No
+                                        </v-btn>
+                                    </v-col>
+                                </v-row>
+                            </v-form>
+                        </v-card-text>
+                    </v-card>
+                </v-row>
+            </v-main>
+        </v-app>
+    </main>
+{% endblock main %}
+
+{% block js %}
+    <script>
+        const DairyApp = new Vue({
+            el: '#dairy',
+            delimiters: ['((', '))'],
+            store,
+            vuetify: new Vuetify(opts),
+            data: {
+
+            },
+            methods:{
+              async updateProfile(joinDairyProgram){
+
+                 try {
+                  var query = window.location.search.substring(1);
+                  const profileId = query.split("=")[1];
+                  if (profileId !== undefined) {
+                      const res = await axios.put('/api/signup/' + profileId + '/', data={
+                        join_dairy_program: joinDairyProgram,
+                      });
+                  }
+
+                  location.href = "/account/payments/"
+
+                } catch (error) {
+                  store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+                  console.log(error.response.data)
+                }
+
+             }
+            },
+        })
+    </script>
+{% endblock js %}

@@ -112,8 +112,8 @@ class SignupViewSet(viewsets.ViewSet):
         user_data = user_serializer.data
         profile_data = profile_serializer.data
 
-        # # add username
-        # user_data["username"] = user_data["first_name"] + '_' + user_data["last_name"]
+        # add username
+        user_data["username"] = user_data["first_name"] + '_' + user_data["last_name"]
 
         # remove password2
         del user_data["password2"]
@@ -129,7 +129,20 @@ class SignupViewSet(viewsets.ViewSet):
             auth.login(request, user)
             token, created = Token.objects.get_or_create(user=user)
             user_serializer = UserSerializer(user)
-            return Response({"token": token.key, "user": user_serializer.data})
+            return Response({"token": token.key, "user": user_serializer.data, "profile": user.profile.id})
+
+        return Response({})
+
+    def update(self, request, *args, **kwargs):
+        profile = get_object_or_404(Profile, pk=kwargs["pk"])
+        join_dairy_program = request.data.get("join_dairy_program")
+
+        profile_raw = ProfileSerializer(profile).data
+        profile_raw['join_dairy_program'] = join_dairy_program
+
+        serializer = ProfileSerializer(profile, data=profile_raw)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
         return Response({})
 
