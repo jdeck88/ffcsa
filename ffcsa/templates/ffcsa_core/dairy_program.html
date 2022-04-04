@@ -16,14 +16,15 @@
                         <v-card-text>
                             <div class="text-center mb-10">
                                 <h1 class="font-bold text-3xl text-gray-900">Raw Dairy Program</h1>
-                                <p class="subtitle-1">Do you want to join our Raw Dairy Program ?</p>
+                                <p class="subtitle-1">Would you like to join our Raw Dairy Program?</p>
                             </div>
                             <v-form @submit.prevent="submit" ref="form">
                                 {% csrf_token %}
                                 <p class="text-justify">
-									Raw dairy products are only available to members of our Raw Dairy Program. If you decide to join,
-                                    you will be charged a $50 fee to become a member of our herd-share. We will also reach out to have
-									a quick conversation about Raw dairy products before you will be able to order them.
+									Raw dairy products are only available to members of our Raw Dairy Program.
+
+									<br/><br/>You will be charged a $50 fee to become a member of our herd-share. 
+									<br/>We will reach out within a few days to have a quick conversation about Raw dairy products before you will be able to order them.
 
                                     <br><br>You can always join the program in the future. Just shoot us an email!
                                 </p>
