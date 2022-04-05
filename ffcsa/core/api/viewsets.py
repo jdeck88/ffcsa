@@ -43,7 +43,11 @@ class UserViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
 
     def list(self, request, *args, **kwargs):
         serializer = UserSerializer(request.user)
-        return Response(serializer.data)
+        response = {
+            'id': request.user.id
+        }
+        response.update(serializer.data)
+        return Response(response)
 
     def update(self, request, *args, **kwargs):
         user = get_object_or_404(User, pk=kwargs["pk"])

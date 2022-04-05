@@ -81,12 +81,12 @@
                       ></v-text-field>
                   </div>
         
-                  <hr class="col-span-12 my-5">
-        
-                  <!-- num_adults -->
-                  <div class="col-span-6">
-                    <v-text-field label="Number of adults" outlined v-model="user.profile.num_adults"></v-text-field>
-                  </div>
+{#                  <hr class="col-span-12 my-5">#}
+{#        #}
+{#                  <!-- num_adults -->#}
+{#                  <div class="col-span-6">#}
+{#                    <v-text-field label="Number of adults" outlined v-model="user.profile.num_adults"></v-text-field>#}
+{#                  </div>#}
                 </form>
         
                 <!-- save button -->
@@ -564,6 +564,7 @@
       },
 
       user: {
+        id: '',
         first_name: '',
         last_name: '',
         email: '',
@@ -628,7 +629,7 @@
         
         try {
           this.personal.loading = true
-          const res = await axios.patch(`/api/users//`, {...this.user});
+          const res = await axios.put(`/api/users/` + this.user.id + '/', data=this.user);
           store.commit('showAlert')
 
           this.personal.loading = false
