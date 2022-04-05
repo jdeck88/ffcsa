@@ -2,6 +2,8 @@
 {% load staticfiles static %}
 {% load i18n mezzanine_tags ffcsa_core_tags %}
 
+<!-- Title -->
+{% block meta_title %}Register{% endblock %}
 
 {% block main %}
 <main id="signup">
@@ -132,7 +134,7 @@
                         v-model="user.profile.drop_site"
                         :items="store.state.drop_sites"
                         item-text="description"
-                        item-value="name"
+                        item-value="description"
                         :return-object="false"
                         :rules="[store.state.rules.required]"
                       >
