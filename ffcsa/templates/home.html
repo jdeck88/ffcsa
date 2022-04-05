@@ -51,23 +51,31 @@
         <v-app>
             <v-main>
                 <!-- banner section -->
-                <section class="min-h-300px lg:min-h-400px bg-cover bg-center bg-overlay-dark flex"
+                <section class="min-h-300px lg:min-h-400px bg-cover bg-center bg-overlay-dark flex p-20 p-mobile"
                          style="background-image: var(--products-banner-bg);">
-                    <div class="text-white text-center m-auto font-bold px-5 py-4 max-w-2xl">
-                        <p>FULL FARM CSA</p>
-                        <p class="text-3xl">Your Customized weekly grocery box From a Farmer You Can Trust.</p>
-                        <p>Stop wondering where your food comes from. Local Farms are collaborating to bring you your
-                            entire list.</p>
+                    <div class="text-white text-center m-auto font-bold max-w-2xl">
+                        <p>Full Farm CSA</p>
+                        <p class="text-3xl font-bold">Your Customized Weekly Grocery Box From a Farmer You Can Trust.</p>
+                        <p>Stop wondering where your food comes from. </p>
+                        <p>Local Farms are collaborating to bring you your entire list.</p>
+                        {% if not user.is_authenticated %}
+                            <p class="text-center">
+                                <v-btn large color="primary" class="font-weight-bold mx-3" href="{% url 'signup' %}">BECOME
+                                    A FULL FARM CSA MEMBER
+                                </v-btn>
+                            </p>
+                        {% endif %}
                     </div>
+
                 </section>
                 <!-- banner section -->
 
                 <!-- 3 features -->
                 <section class="text-center font-weight-bold bg-green-light text-white">
                     <v-row>
-                        <v-col cols="12" md="4" class="pa-4">HIGH QUALITY, NUTRIENT-DENSE FOOD</v-col>
-                        <v-col cols="12" md="4" class="pa-4 bg-green">STRAIGHT FROM THE FARM TO YOUR DOOR</v-col>
-                        <v-col cols="12" md="4" class="pa-4">CONFIDENCE IN YOUR FOOD SOURCE</v-col>
+                        <v-col cols="12" md="4" class="pa-6">HIGH QUALITY, <br>NUTRIENT-DENSE FOOD</v-col>
+                        <v-col cols="12" md="4" class="pa-6 bg-green">STRAIGHT FROM THE FARM<br> TO YOUR DOOR</v-col>
+                        <v-col cols="12" md="4" class="pa-6">CONFIDENCE IN<br> YOUR FOOD SOURCE</v-col>
                     </v-row>
                 </section>
                 <!-- 3 features -->
@@ -78,16 +86,16 @@
                     <img alt="thinking-asian-woman" src="{% static 'img/csa-thinking-asian-woman-question-mark.jpg' %}"
                          class="block mx-auto mb-20">
                     <div class="row">
-                        <div class="col-md-3 col-12">Are you <strong class="block">OVERWHELMED</strong> shopping around
+                        <div class="col-md-3 col-12 px-6">Are you <strong class="block">OVERWHELMED</strong> shopping around
                             and researching better food options?
                         </div>
-                        <div class="col-md-3 col-12">Feeling <strong class="block">POWERLESS</strong> in making a
+                        <div class="col-md-3 col-12 px-6">Feeling <strong class="block">POWERLESS</strong> in making a
                             positive impact in your community and the world?
                         </div>
-                        <div class="col-md-3 col-12">Getting <strong class="block">FRUSTRATED</strong> over unclear or
+                        <div class="col-md-3 col-12 px-6">Getting <strong class="block">FRUSTRATED</strong> over unclear or
                             misleading health food claims?
                         </div>
-                        <div class="col-md-3 col-12">Still <strong class="block">DISCONNECTED</strong> with where your
+                        <div class="col-md-3 col-12 px-6">Still <strong class="block">DISCONNECTED</strong> with where your
                             food is coming from?
                         </div>
                     </div>
@@ -788,7 +796,7 @@
 
 {% block js %}
     <script>
-        const CSAApp = new Vue({
+        const HomeApp = new Vue({
             el: '#home',
             delimiters: ['((', '))'],
             vuetify: new Vuetify(opts),
