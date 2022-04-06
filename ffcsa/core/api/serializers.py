@@ -177,3 +177,8 @@ class LeadGenPDFSerializer(serializers.Serializer):
     first_name = serializers.CharField(allow_blank=True, required=False)
     last_name = serializers.CharField(allow_blank=True, required=False)
     email = serializers.EmailField()
+
+
+# Donate Serializer
+class DonateSerializer(serializers.Serializer):
+    amount = serializers.FloatField()

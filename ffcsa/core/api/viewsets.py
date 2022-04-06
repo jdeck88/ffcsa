@@ -9,6 +9,8 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils.http import int_to_base36
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.models import Site
+from decimal import Decimal
 
 from rest_framework import mixins, viewsets
 from rest_framework.authtoken.models import Token
@@ -22,6 +24,7 @@ from mezzanine.utils.email import subject_template
 from ffcsa.core import sendinblue
 from ffcsa.core.api.permissions import IsOwner, CanPay
 from ffcsa.core.api.serializers import *
+from ffcsa.shop.models import Order
 from ffcsa.core.models import Payment, Address
 from ffcsa.core.subscriptions import *
 from ffcsa.utils import DictClass
@@ -473,3 +476,61 @@ class LeadGenPDF(viewsets.ViewSet):
             return Response({"pdf": pdf})
 
         raise NotAcceptable("Something went wrong")
+
+
+class Donate(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request):
+        user = request.user
+        serializer = DonateSerializer(data=request.data)
+        serializer.is_valid()
+
+        amount = Decimal(serializer.data.get('amount'))
+
+        ytd_contrib = Payment.objects.total_for_user(user)
+        ytd_ordered = Order.objects.total_for_user(user)
+        if not ytd_ordered:
+            ytd_ordered = Decimal(0)
+        if not ytd_contrib:
+            ytd_contrib = Decimal(0)
+
+        # get remaining_budget
+        print("cart : ", request.cart.total_price())
+        remaining_budget = float("{0:.2f}".format(ytd_contrib - ytd_ordered - request.cart.total_price()))
+
+        if amount > Decimal(remaining_budget):
+            raise NotAcceptable("You can not donate more then your remaining budget.")
+
+        feed_a_friend, created = User.objects.get_or_create(username=settings.FEED_A_FRIEND_USER)
+
+        order_dict = {
+            'user_id': user.id,
+            'time': datetime.datetime.now(),
+            'site': Site.objects.get(id=1),
+            'billing_detail_first_name': user.first_name,
+            'billing_detail_last_name': user.last_name,
+            'billing_detail_email': user.email,
+            'billing_detail_phone': user.profile.phone_number,
+            'billing_detail_phone_2': user.profile.phone_number_2,
+            'total': amount,
+        }
+
+        order = Order.objects.create(**order_dict)
+
+        item_dict = {
+            'sku': 0,
+            'description': 'Feed-A-Friend Donation',
+            'quantity': 1,
+            'unit_price': amount,
+            'total_price': amount,
+            'category': 'Feed-A-Friend',
+            'vendor': 'Feed-A-Friend',
+            'vendor_price': 0,
+        }
+
+        order.items.create(**item_dict)
+        Payment.objects.create(amount=amount, user=feed_a_friend, is_credit=True,
+                               notes="Donation from {}".format(user.get_full_name()))
+
+        return Response({"details": "Thank you for your donation to the Feed-A-Friend fund!"})
