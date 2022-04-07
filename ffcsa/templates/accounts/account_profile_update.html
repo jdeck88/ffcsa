@@ -79,9 +79,9 @@
                                                     outlined
                                                     label="Alternate Contact Number"
                                                     v-model="user.profile.phone_number_2"
-                                                    @input="acceptPhoneNumber"
+                                                    @input="acceptPhoneNumber2"
                                                     maxlength=12
-                                                    :rules="[store.state.rules.required, store.state.rules.phone]"
+                                                    :rules="[store.state.rules.phone]"
                                             ></v-text-field>
                                         </div>
 
@@ -671,7 +671,7 @@
                         const res = await axios.get(`/api/users/`);
                         this.user = res.data
                     } catch (error) {
-                        NavVue.show_msg('Can not get user information', 'error')
+                        store.commit('showAlert', {type: 'error', content: error.response.data.detail})
                     }
                 },
                 // Save user info
@@ -687,7 +687,7 @@
                         this.personal.loading = false
                     } catch (error) {
                         console.log(error.response.data)
-                        NavVue.show_msg('Can not save user information', 'error')
+                        store.commit('showAlert', {type: 'error', content: error.response.data})
                         this.personal.loading = false
                     }
                 },
@@ -761,7 +761,7 @@
                             } else {
                                 try {
                                     const res = await axios.post('/api/pay/one_time_payment/', {amount: parseFloat(this.oneTimePayment.amount)});
-                                    NavVue.show_msg(res.data.detail)
+                                    store.commit('showAlert', {type: 'error', content: res.data.detail})
                                     this.oneTimePayment.dialog = false
                                 } catch (error) {
                                     // store.commit('showAlert', {type: 'error', content: error.response.data.detail})
@@ -787,7 +787,7 @@
                                     amount2: VerifyACH.amount2.value
                                 })
 
-                                NavVue.show_msg(res.data.detail)
+                                store.commit('showAlert', {type: 'error', content: res.data.detail})
                                 setTimeout(() => location.reload(), 20000)
 
                             } catch (error) {
@@ -998,19 +998,22 @@
                             .done(function (data) {
                                 if (data.is_full) {
                                     success = false
-                                    NavVue.show_msg('Unfortunately, our delivery route is full and we can not offer home delivery to your zip code at this time. Please check again at a later date as members change drop sites from time-to-time. You can also <a href="mailto:fullfarmcsa@deckfamilyfarm.com">contact us</a> to be notified when a spot opens up!', 'error')
+                                    var errMsg = 'Unfortunately, our delivery route is full and we can not offer home delivery to your zip code at this time. Please check again at a later date as members change drop sites from time-to-time. You can also contact us to be notified when a spot opens up!'
+                                    store.commit('showAlert', {type: 'error', content: errMsg})
                                 }
                             })
                             .fail(function () {
                                 success = false
-                                NavVue.show_msg('An error occurred. Please try again later. Please <a href="mailto:fullfarmcsa@deckfamilyfarm.com">contact us</a> if this problem persists.', 'error')
+                                var errMsg = 'An error occurred. Please try again later. Please contact us if this problem persists.'
+                                store.commit('showAlert', {type: 'error', content: errMsg})
                             })
                     }
                 }
 
                 // we don't deliver to this address
                 if (!success) {
-                    NavVue.show_msg('We do not currently offer delivery service to this address. Please <a class="text-blue-500" href="mailto:fullfarmcsa@deckfamilyfarm.com">contact us</a> to be notified when our delivery options expand.', 'error')
+                    var errMsg = 'We do not currently offer delivery service to this address. Please contact us to be notified when our delivery options expand.'
+                    store.commit('showAlert', {type: 'error', content: errMsg})
                 }
             })
         }
