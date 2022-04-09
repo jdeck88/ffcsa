@@ -26,6 +26,10 @@
                 padding: 3em 0 3em 0 !important;
             }
 
+            .p0-mobile {
+                padding: 0 !important;
+            }
+
             .section-download-pdf {
                 padding: 2em !important;
             }
@@ -86,13 +90,13 @@
                     <img alt="thinking-asian-woman" src="{% static 'img/csa-thinking-asian-woman-question-mark.jpg' %}"
                          class="block mx-auto mb-20">
                     <div class="row">
-                        <div class="col-md-3 col-12 px-6">Are you <strong class="block">OVERWHELMED</strong> shopping around
+                        <div class="col-md-3 col-12 px-6 pb-10">Are you <strong class="block">OVERWHELMED</strong> shopping around
                             and researching better food options?
                         </div>
-                        <div class="col-md-3 col-12 px-6">Feeling <strong class="block">POWERLESS</strong> in making a
+                        <div class="col-md-3 col-12 px-6 pb-10">Feeling <strong class="block">POWERLESS</strong> in making a
                             positive impact in your community and the world?
                         </div>
-                        <div class="col-md-3 col-12 px-6">Getting <strong class="block">FRUSTRATED</strong> over unclear or
+                        <div class="col-md-3 col-12 px-6 pb-10">Getting <strong class="block">FRUSTRATED</strong> over unclear or
                             misleading health food claims?
                         </div>
                         <div class="col-md-3 col-12 px-6">Still <strong class="block">DISCONNECTED</strong> with where your
@@ -195,8 +199,8 @@
 
                 <!-- Why buy direct from the farm? -->
                 <section class="container mx-auto text-center p-20 p-mobile">
-                    <h3 class="text-3xl text-brown-7 font-bold mb-10">Why buy direct from the farm?</h3>
-                    <div class="text-xl font-light">
+                    <h3 class="text-3xl text-brown-7 font-bold mb-10 mr-3 ml-3">Why buy direct from the farm?</h3>
+                    <div class="text-xl font-light p-5">
                         <p>Most food these days has <strong>natural sounding labels.</strong> But labels can be
                             confusing and misleading. It’s just so hard to find a food source that offers true
                             straight-from-the-farm options.</p>
@@ -207,8 +211,8 @@
                     </div>
 
 
-                    <div class="row mt-20">
-                        <div class="col-md-4 col-12 mb-10">
+                    <div class="row mt-20 mr-2 ml-2">
+                        <div class="col-md-4 col-6 mb-10">
                             <!-- circle -->
                             <div class="bg-orange text-white text-6xl rounded-full h-36 w-36 flex items-center justify-center mx-auto">
                                 650
@@ -217,7 +221,7 @@
                             <p class="text-base w-40 mx-auto text-brown-7 pt-3">FAMILIES SERVED</p>
                         </div>
 
-                        <div class="col-md-4 col-12 mb-10">
+                        <div class="col-md-4 col-6 mb-10">
                             <!-- circle -->
                             <div class="bg-green text-white text-5xl rounded-full h-36 w-36 flex items-center justify-center mx-auto">
                                 <div class="relative">
@@ -229,7 +233,7 @@
                             <p class="text-base w-40 mx-auto text-brown-7 pt-3">FOOD DOLLARS TO LOCAL FARMS</p>
                         </div>
 
-                        <div class="col-md-4 col-12 mb-10">
+                        <div class="col-md-4 col-6 mb-10">
                             <!-- circle -->
                             <div class="bg-orange text-white text-6xl rounded-full h-36 w-36 flex items-center justify-center mx-auto">
                                 75
@@ -238,7 +242,7 @@
                             <p class="text-base w-40 mx-auto text-brown-7 pt-3">COMBINED YEARS OF FARMING EXPERIENCE</p>
                         </div>
 
-                        <div class="col-md-4 col-12 mb-10">
+                        <div class="col-md-4 col-6 mb-10">
                             <!-- circle -->
                             <div class="bg-green text-white text-6xl rounded-full h-36 w-36 flex items-center justify-center mx-auto">
                                 365
@@ -247,7 +251,7 @@
                             <p class="text-base w-40 mx-auto text-brown-7 pt-3">DAYS OPEN PER YEAR</p>
                         </div>
 
-                        <div class="col-md-4 col-12 mb-10">
+                        <div class="col-md-4 col-6 mb-10">
                             <!-- circle -->
                             <div class="bg-orange text-white text-6xl rounded-full h-36 w-36 flex items-center justify-center mx-auto">
                                 15
@@ -256,7 +260,7 @@
                             <p class="text-base w-40 mx-auto text-brown-7 pt-3">LOCAL FARM COLLABORATIONS</p>
                         </div>
 
-                        <div class="col-md-4 col-12 mb-10">
+                        <div class="col-md-4 col-6 mb-10">
                             <!-- circle -->
                             <div class="bg-green text-white text-6xl rounded-full h-36 w-36 flex items-center justify-center mx-auto">
                                 4
@@ -320,10 +324,19 @@
 
                 <!-- Download our Free Guide -->
                 <section class="p-24 section-download-pdf">
-                    <v-row align="center">
-                        <v-col cols="12" md="6">
-                            <h4 class="text-2xl mb-3">Download our Free Guide:</h4>
-                            <p>7 Things About Misleading Labels</p>
+                    <v-row justify="center" align="center">
+
+                        <v-col cols="12">
+                            <h4 class="text-3xl text-brown-7 font-bold mb-5 text-center">Download our Free Guide</h4>
+                            <h3 class="text-center">7 Things About Misleading Labels</h3>
+                        </v-col>
+
+                        <v-col md="6" sm="12">
+                            <v-img height="100%"
+                                   src="{% static 'img/DFF-Greenwash the New Hogwash Mockup.png' %}"></v-img>
+                        </v-col>
+
+                        <v-col cols="8">
 
                             <!-- Download form -->
                             <v-form ref="form" @submit.prevent="submit">
@@ -349,10 +362,6 @@
                             <!-- Download form -->
                         </v-col>
 
-                        <v-col cols="12" md="6">
-                            <v-img height="100%"
-                                   src="{% static 'img/DFF-Greenwash the New Hogwash Mockup.png' %}"></v-img>
-                        </v-col>
                     </v-row>
                 </section>
                 <!-- Download our Free Guide -->
@@ -632,7 +641,7 @@
                     <h3 class="text-brown-7 text-center font-bold text-3xl mb-20">Full Farm CSA Quick Facts</h3>
 
                     <v-row>
-                        <v-col md="6" cols="12">
+                        <v-col md="6" cols="12" class="p0-mobile">
                             <v-expansion-panels flat>
                                 <v-expansion-panel
                                         v-for="(item,i) in quickFacts1"
@@ -649,7 +658,7 @@
                             </v-expansion-panels>
                         </v-col>
 
-                        <v-col md="6" cols="12">
+                        <v-col md="6" cols="12" class="p0-mobile">
                             <v-expansion-panels flat>
                                 <v-expansion-panel
                                         v-for="(item,i) in quickFacts2"
