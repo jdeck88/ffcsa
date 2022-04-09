@@ -130,11 +130,14 @@
                     <v-col cols="2"></v-col>
                     <v-col class="d-flex justify-space-around">
                         <v-toolbar-title class="pt-2">
-                            <template v-if="store.state.is_authenticated">
+                            <template v-if="store.state.is_authenticated && !isMobile()">
                                 Your Cart ( ((store.state.cart.items.length)) )
                                 <span id="countDown" class="text-base text-red-600"></span>
                             </template>
-
+                            <template v-else-if="store.state.is_authenticated && isMobile()">
+                                Your Cart
+                                <span id="countDown" class="text-base text-red-600"></span>
+                            </template>
                             <template v-else>
                                 Coming Soon!
                             </template>
@@ -241,20 +244,24 @@
                     <v-col cols=12 class="text-center">
                         <v-btn plain class="font-weight-bold" href="/">Home</v-btn>
                     </v-col>
+{#                    <v-col cols=12 class="text-center">#}
+{#                        <v-btn plain class="font-weight-bold" href="/csa/">Full Farm CSA</v-btn>#}
+{#                    </v-col>#}
                     <v-col cols=12 class="text-center">
-                        <v-btn plain class="font-weight-bold" href="/csa/">Full Farm CSA</v-btn>
+                        <v-btn plain class="font-weight-bold" href="https://deckfamilyfarm.com" target="_blank">Deck Family Farm</v-btn>
                     </v-col>
                     <v-col cols=12 class="text-center">
                         <v-btn plain class="font-weight-bold" href="/products/">Shop</v-btn>
                     </v-col>
-                    <v-col cols=12 class="text-center">
-                        <v-btn plain class="font-weight-bold" href="/about/">About</v-btn>
-                    </v-col>
+{#                    <v-col cols=12 class="text-center">#}
+{#                        <v-btn plain class="font-weight-bold" href="/about/">About</v-btn>#}
+{#                    </v-col>#}
                     <v-col cols=12 class="text-center">
                         <v-btn plain class="font-weight-bold" href="/faq/">FAQ</v-btn>
                     </v-col>
                     {% if not user.is_authenticated %}
                     <v-col cols=12 class="text-center">
+                        <hr class="border-1 border-swirl mb-7">
                         <v-btn color="primary" href="{% url 'signup' %}{% if not 'account' in request.path %}?next=
                             {{ request.path }}{% else %}?next=/{% endif %}" class="mx-1 font-weight-bold">
                             BECOME A MEMBER
@@ -529,6 +536,9 @@
                 }
             },
             methods: {
+                isMobile() {
+                    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                },
                 async getUser() {
                     fetch('/api/users/')
                         .then(response => response.json())
