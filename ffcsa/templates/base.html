@@ -158,21 +158,23 @@
             <v-virtual-scroll v-if="store.state.is_authenticated" class="mt-2" height="700"
                               :items="store.state.cart.items" :item-height="130">
                 <template v-slot:default="{ item }">
-                    <v-row class="max-w-full">
-                        <v-col sm="4">
-                            <v-img :src="'/media/' + item.image" height="100"></v-img>
+                    <v-row class="mt-6">
+                        <v-col sm="3">
+                            <v-img :src="'/media/' + item.image" height="100%"
+                                   max-height="130px" max-width="130px" class="mx-auto">
+                            </v-img>
                         </v-col>
 
-                        <v-col sm="8">
-                            <div class="flex">
+                        <v-col sm="9">
+                            <div class="flex pl-5 pr-5">
                                 <h4 class="text-base capitalize">(( item.description.slice(0, 29) ))</h4>
                                 <v-spacer></v-spacer>
-                                <v-btn text icon color="red lighten-2" @click.prevent="removeCartItem(item)">
+                                <v-btn text icon color="red lighten-2" @click.prevent="removeCartItem(item)" class="mt-n1">
                                     <v-icon small color="gray lighten-2">mdi-close</v-icon>
                                 </v-btn>
                             </div>
 
-                            <div class="flex mt-5 items-end">
+                            <div class="flex pl-5 pr-5 items-end">
                                 <p class="text-base capitalize">$(( item.unit_price.toFixed(2) ))</p>
 
                                 <div class="ml-auto">
