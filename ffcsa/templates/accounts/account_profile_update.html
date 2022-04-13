@@ -42,7 +42,7 @@
                                 <div v-show="activeSettings == 'personal'">
                                     <h3 class="text-2xl font-bold opacity-40">Personal</h3>
 
-                                    <form id="personal-form" class="grid grid-cols-12 gap-4 mt-10">
+                                    <v-form ref="personalForm" class="grid grid-cols-12 gap-4 mt-10" id="personal-form">
                                         <!-- first name -->
                                         <div class="col-span-6">
                                             <v-text-field label="First name" outlined
@@ -91,7 +91,7 @@
                                         {#                  <div class="col-span-6">#}
                                         {#                    <v-text-field label="Number of adults" outlined v-model="user.profile.num_adults"></v-text-field>#}
                                         {#                  </div>#}
-                                    </form>
+                                    </v-form>
 
                                     <!-- save button -->
                                     <v-btn color="primary" class="font-weight-bold mt-10" :loading="personal.loading"
@@ -676,11 +676,13 @@
                 },
                 // Save user info
                 async saveUser() {
-                    const form = document.getElementById(`${this.activeSettings}-form`);
-                    if (!form.reportValidity()) return
+                    if (!this.$refs.personalForm.validate()) {
+                        return
+                    }
 
                     try {
                         this.personal.loading = true
+                        if (this.user.profile.num_adults === 0) this.user.profile.num_adults = 1
                         const res = await axios.put(`/api/users/` + this.user.id + '/', data = this.user);
                         store.commit('showAlert')
 
