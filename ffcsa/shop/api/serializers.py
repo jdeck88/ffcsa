@@ -3,7 +3,7 @@ from rest_framework import serializers
 from ffcsa.shop.models.Cart import Cart, CartItem
 from ffcsa.shop.models.Product import Product, ProductImage, ProductVariation
 from ffcsa.shop.models.Order import Order
-
+from ffcsa.shop.models.Vendor import Vendor
 
 
 # used for all CRUD operations
@@ -12,6 +12,7 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = '__all__'
 
+
 class ProductVariationSerializer(serializers.ModelSerializer):
     product = ProductSerializer()
     
@@ -19,25 +20,32 @@ class ProductVariationSerializer(serializers.ModelSerializer):
         model = ProductVariation
         fields = '__all__'
 
+
 # used for all CRUD operations
-
-
-
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
         fields = ('id', 'file', 'description')
 
+
+# used to display some data
+class VendorDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Vendor
+        fields = '__all__'
+        # fields = ('id', 'title', )
+
+
 # used to display some data
 class ProductVariationDataSerializer(serializers.ModelSerializer):
     image = ProductImageSerializer()
     addable = serializers.SerializerMethodField()
+    vendors = VendorDataSerializer(many=True)
 
     class Meta:
         model = ProductVariation
         fields = ('id', 'in_inventory', 'is_frozen', 'unit_price', 'sku', 'options', 'unit', 
-                    'number_in_stock', 'live_num_in_stock', 'image', 'addable')
-    
+                    'number_in_stock', 'live_num_in_stock', 'image', 'addable', 'vendors')
 
     def get_addable(self, obj):
         # if number_in_stock is None means that the product amount
@@ -48,9 +56,9 @@ class ProductVariationDataSerializer(serializers.ModelSerializer):
 
 
 class ProductDataSerializer(serializers.ModelSerializer):
-    url         = serializers.CharField(source='get_absolute_url', read_only=True)
-    variations  = ProductVariationDataSerializer(many=True)
-    seasons     = serializers.SerializerMethodField()
+    url = serializers.CharField(source='get_absolute_url', read_only=True)
+    variations = ProductVariationDataSerializer(many=True)
+    seasons = serializers.SerializerMethodField()
     has_in_stock_variations = serializers.SerializerMethodField()
     
     class Meta:
@@ -112,6 +120,7 @@ class CartSerializer(serializers.ModelSerializer):
         model = Cart
         fields = ('id', 'attending_dinner', 'items', 'total_price', 'delivery_fee', 
                     'remaining_budget', 'upsell_products', 'last_updated')
+
 
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
