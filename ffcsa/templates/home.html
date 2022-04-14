@@ -63,7 +63,7 @@
                          style="background-image: var(--products-banner-bg);">
                     <div class="text-white text-center m-auto font-bold max-w-2xl">
                         <p>Full Farm CSA</p>
-                        <p class="text-3xl font-bold">Your Customized Weekly Grocery Box From a Farmer You Can Trust.</p>
+                        <p class="text-3xl font-bold">Your Customized Weekly Grocery Box From Farmer's You Can Trust.</p>
                         <p>Stop wondering where your food comes from. </p>
                         <p>Local Farms are collaborating to bring you your entire list.</p>
                         {% if not user.is_authenticated %}
@@ -332,7 +332,7 @@
 
                         <v-col cols="12">
                             <h4 class="text-3xl text-brown-7 font-bold mb-5 text-center">Download our Free Guide</h4>
-                            <h3 class="text-center">7 Things About Misleading Labels</h3>
+                            <h3 class="text-center">7 Ways You've Been Mislead By Food Labels.</h3>
                         </v-col>
 
                         <v-col md="6" sm="12">
@@ -340,7 +340,7 @@
                                    src="{% static 'img/DFF-Greenwash the New Hogwash Mockup.png' %}"></v-img>
                         </v-col>
 
-                        <v-col cols="8">
+                        <v-col md="6" sm="12">
 
                             <!-- Download form -->
                             <v-form ref="form" @submit.prevent="submit">
@@ -423,7 +423,7 @@
 
                     <div class="row mx-auto">
 
-                        <div class="col-md-4 col-12 p-1">
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
                             <div class="w-40 h-40 m-auto flex items-center">
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/deck logo.jpg' %}"></v-img>
                             </div>
@@ -433,7 +433,7 @@
                             <p class="text-base font-thin">Juntion City, OR</p>
                         </div>
 
-                        <div class="col-md-4 col-12 p-1">
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
                             <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
                                  @click="goToWebSite('https://camasswalefarm.com')">
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/camas swale logo.jpg' %}"></v-img>
@@ -444,7 +444,7 @@
                             <p class="text-base font-thin">Coburg, OR</p>
                         </div>
 
-                        <div class="col-md-4 col-12 p-1">
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
                             <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
                                  @click="goToWebSite('https://www.littlewingsfarm.com')">
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/little wings.jpg' %}"></v-img>
@@ -456,7 +456,7 @@
                             <p class="text-base font-thin">Eugene, OR</p>
                         </div>
 
-                        <div class="col-md-4 col-12 p-1">
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
                             <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
                                  @click="goToWebSite('https://www.letoilefarm.com')">
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/etoile farms.jpeg' %}"></v-img>
@@ -467,7 +467,7 @@
                             <p class="text-base font-thin">Noti, OR</p>
                         </div>
 
-                        <div class="col-md-4 col-12 p-1">
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
                             <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
                                  @click="goToWebSite('https://www.sweetleaforganicfarm.com')">
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/sweet leaf.webp' %}"></v-img>
@@ -478,7 +478,7 @@
                             <p class="text-base font-thin">Eugene, OR</p>
                         </div>
 
-                        <div class="col-md-4 col-12 p-1">
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
                             <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
                                  @click="goToWebSite('https://www.camascountrymill.com')">
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/camas country.png' %}"></v-img>
@@ -489,7 +489,7 @@
                             <p class="text-base font-thin">Eugene, OR</p>
                         </div>
 
-                        <div class="col-md-4 col-12 p-1">
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
                             <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
                                  @click="goToWebSite('https://lonesome-whistle.com')">
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/lonesome whistle.png' %}"></v-img>
@@ -501,7 +501,7 @@
                             <p class="text-base font-thin">Junction City, OR</p>
                         </div>
 
-                        <div class="col-md-4 col-12 p-1">
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
                             <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
                                  @click="goToWebSite('https://www.mybrothersfarm.com')">
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/my brothers farm.png' %}"></v-img>
@@ -512,7 +512,7 @@
                             <p class="text-base font-thin">Creswell, OR</p>
                         </div>
 
-                        <div class="col-md-4 col-12 p-1">
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
                             <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
                                  @click="goToWebSite('https://elegantelephantbaking.com')">
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/elegant elephant.jpg' %}"></v-img>
@@ -523,7 +523,7 @@
                             <p class="text-base font-thin">Eugene, OR</p>
                         </div>
 
-                        <div class="col-md-4 col-12 p-1">
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
                             <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
                                  @click="goToWebSite('https://www.realitykitchen.org')">
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/reality kitchen.png' %}"></v-img>
@@ -534,7 +534,7 @@
                             <p class="text-base font-thin">Eugene, OR</p>
                         </div>
 
-                        <div class="col-md-4 col-12 p-1">
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
                             <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
                                  @click="goToWebSite('https://radiantcoffeeco.com')">
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/radiant coffee.png' %}"></v-img>
@@ -546,7 +546,7 @@
                             <p class="text-base font-thin">Eugene, OR</p>
                         </div>
 
-                        <div class="col-md-4 col-12 p-1">
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
                             <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
                                  @click="goToWebSite('http://sweetcreekfood.net')">
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/sweet creek.png' %}"></v-img>
@@ -691,7 +691,7 @@
                     <v-row>
                         <!-- WEEKLY MEMBERSHIP BOX -->
                         <v-col md="8">
-                            <div class="bg-orange-light text-center p-5">
+                            <div class="bg-orange-light text-center p-5 md:h-28">
                                 <p class="font-bold mb-0">WEEKLY MEMBERSHIP BOX</p>
                                 <p class="text-base font-bold opacity-70 mb-0">You choose what budget works for your
                                     family!</p>
@@ -711,7 +711,7 @@
                                 <li class="text-base font-thin">Access to seasonal farm dinners</li>
                             </ul>
 
-                            <div class="bg-orange-light p-5 px-10">
+                            <div class="bg-orange-light p-5 px-10 md:h-36">
                                 <v-row class="items-center text-center">
                                     <v-col md="3">
                                         <h3 class="font-bold mb-0">
@@ -735,6 +735,7 @@
                       <span class="absolute" style="top: -0.6rem;right: -1rem;">+</span>
                     </span>
                                         </h3>
+                                        <p class="text-sm mb-0">WEEKLY</p>
                                     </v-col>
                                 </v-row>
 
@@ -749,7 +750,7 @@
 
                         <!-- ONE TIME GUEST ORDER -->
                         <v-col md="4">
-                            <div class="bg-green-light text-center p-5 ">
+                            <div class="bg-green-light text-center p-5 md:h-28">
                                 <!-- <p class="font-bold mb-0"></p> -->
                                 <h3 class="text-xl font-bold w-44 mx-auto">ONE TIME GUEST ORDER</h3>
                             </div>
@@ -762,14 +763,15 @@
                                 <li class="text-base font-thin">Trial our CSA without the commitment</li>
                             </ul>
 
-                            <div class="bg-green-light p-5 mt-auto text-center">
+                            <div class="bg-green-light p-5 mt-auto text-center md:h-36">
                                 <h3 class="font-bold relative mb-0">
                 <span class="relative">
-                  <span class="absolute" style="top: -1rem;left: -0.7rem;">$</span>
-                  <span class="text-4xl">40</span>
+{#                  <span class="absolute" style="top: -1rem;left: -0.7rem;">$</span>#}
+                  <span class="text-4xl">Coming Soon!</span>
+{#                  <span class="text-4xl">40</span>#}
                 </span>
                                 </h3>
-                                <p class="text-sm mb-0">MINIMUM</p>
+{#                                <p class="text-sm mb-0">MINIMUM</p>#}
                             </div>
 
                             <div class="text-center mt-10">
@@ -782,7 +784,7 @@
 
                     <!-- FULL DIET CHALLENGE -->
                     <v-row class="mt-10 pt-10">
-                        <v-col sm="7" class="bg-yellow">
+                        <v-col sm="12" md="7" class="bg-yellow">
                             <p class="font-bold text-2xl mb-0 mt-2 p-3">
                                 FULL DIET CHALLENGE
                                 <span class="relative ml-3">
@@ -793,7 +795,7 @@
                             </p>
                         </v-col>
 
-                        <v-col sm="5" class="bg-yellow-extralightest">
+                        <v-col sm="12" md="5" class="bg-yellow-extralightest">
                             <p class="text-base mb-0 p-3">Take the 3-Month Full Diet Challenge and feel great knowing
                                 you’re eating 100% local!</p>
                         </v-col>
@@ -839,15 +841,16 @@
                 ],
                 quickFacts1: [
                     {
-                        header: "How do I place and order?",
+                        header: "What is the Full Farm CSA?",
                         content: `
-          Orders are placed through the <a href="/products/">online member store</a> and by creating a member account. There are two ordering periods in the week, depending on which drop site you choose. For deliveries in Eugene, Springfield, and Junction City the order period is Saturday 10am-Sunday midnight. For deliveries in Portland and Corvallis the ordering period is Tuesday 10 am-Wednesday midnight. The member store is updated at the start of each ordering period with the latest inventory, which changes to reflect all the goodies that are at the peak of ripeness. <b>Members must make their order during the ordering periods, so please make sure all desired items are in your cart before the deadline, or you will not get an order for that week.</b>  Carts will be automatically submitted at midnight, there is no need to hit a “submit button”.
+          Community Supported Agriculture (CSA) is a food system model that builds connections between community members and their farmers, making food production a community event where the benefits and risks are shared.
+          <br />The Full Farm CSA is a personally crafted, full diet CSA program serving Junction City, Eugene/Springfield, Corvallis, and Portland. Members choose how much to contribute as well as which products they get each week to create a well-rounded, seasonal diet all year-round!
           `
                     },
                     {
                         header: "How much is the CSA?",
                         content: `
-          Subscription amounts are sliding scale, based on what the family or individual wants to contribute, with a <b>$172/month minimum contribution</b> for each household. The maximum contribution is endless!  Any amount left over in an account at the end of the month will be “rolled over” into a credit for next month’s ordering.  FFCSA members can also top up their account if running low at the end of the month. During the sign-up process, automatically recurring monthly payments are set up on member’s online accounts. Members can easily view and change their monthly budgets at any time.
+          Subscription amounts are sliding scale, based on what the family or individual wants to contribute, with a <b>$172/month minimum contribution</b> (breaks down to about $40/week) for each household. The maximum contribution is endless! Any amount left over in an account at the end of the month will be “rolled over” into a credit for next month’s ordering. FFCSA members can also top up their account if running low at the end of the month. During the sign-up process, automatically recurring monthly payments are set up on member’s online accounts. Members can easily view and change their monthly budgets at any time.
           `
                     },
                     {
@@ -859,39 +862,21 @@
                 ],
                 quickFacts2: [
                     {
-                        header: "What if I forget to pick up my order?",
+                        header: "Do I have to order every week?",
                         content: `
-          Please contact us as early as possible and we can put you in touch with the drop site host to arrange pick up. We also do our best to reach out to the hosts to be notified of any left over items. After 24 hours, if you have not contacted us/the dropsite host, your order will be considered forfeit with no refund.
+                        If you would like to skip a week or two, no problem. We only deliver when you make an order. We do require that families remain active and maintain a minimum $172/month contribution and weekly average order of $40 throughout the year, so sporadic orders can work within our program, so long as the minimum budget is met!
           `
                     },
                     {
-                        header: "Do I choose what’s in my box?",
+                        header: "What can I get in my box?",
                         content: `
-          <b>YES!</b>  Members choose how much to contribute as well as which products they get each week to create a well-rounded, seasonal diet all year-round! The FFCSA includes staples such as organic vegetables, grains, seasonal fruit, grass fed and pasture-raised meat and animal fats (lard), honey, nuts and various pantry items.
+                        Members get to choose which products they get each week to create a well-rounded, seasonal diet all year-round! The FFCSA includes staples such as organic vegetables, grains, seasonal fruit, grass fed and pasture-raised meat, dairy, animal fats, honey, nuts, and various pantry items. Our members include vegetarians to carnivores and everything in between!
           `
                     },
                     {
-                        header: "Are all products from Deck Family Farm?",
+                        header: "Where does my food come from?",
                         content: `
-          <b>No!</b> The Full Farm CSA’s priority is to sell products grown on farms in the Willamette Valley- as close to home as possible. Throughout the season, we sometimes reach out to other local partners to fill our member store. In the case that it is not possible to grow an ingredient this hyper-locally, we will also support local business which use as local products as possible (i.e., it is virtually impossible to grow coffee in Oregon, so our Organic Coffee is grown in South America, but sourced from a local Roaster). We always put the name of the farmer on the listed product so that members can stay connected to the source of their food. We partner with a wide variety of farms and businesses including:
-          Grazier’s Garden,
-          <a href="https://deckfamilyfarm.com/">Deck Family Farm</a>,
-          <a href="https://www.sweetleaforganicfarm.com/">Sweet Leaf Organic Farm</a>,
-          <a href="https://www.letoilefarm.com/">L’Etoile Farm</a>,
-          <a href="https://www.littlewingsfarm.com/">Little Wings Farm</a>,
-          <a href="https://lonesome-whistle.com/">Lonesome Whistle Farm</a>,
-          <a href="https://www.beetanical-apiary.com/">Beetanical Apiaries</a>,
-          <a href="https://camasswalefarm.com/">Camas Swale Farm</a>,
-          <a href="https://www.mybrothersfarm.com/">My Brother’s Farm</a>,
-          Oregon Permaculture Works, Creamy Cow LLC,
-          <a href="https://www.queenerfarm.com/">Queener Farm</a>,
-          <a href="https://wintergreenfarm.com/">Wintergreen Farm</a>,
-          Gathering Together Farm,
-          Small is Beautiful Farm,
-          Reality Kitchen,
-          Radiant Coffee Roasters and
-          <a href="https://www.camascountrymill.com/">Camas Country Mill</a>.
-          All of the member farms are committed to producing local and nutrient dense foods so that by working together, we can bring you a truly full diet CSA.
+          Full Farm CSA’s priority is to provide products grown on farms in the Willamette Valley- as close to home as possible. We always put the name of the farmer on the listed product so that members can stay connected to the source of their food. All our community farms are committed to producing local and nutrient dense foods. By working together, we can bring you a truly full diet CSA.
           `
                     }
                 ],
