@@ -23,15 +23,15 @@
       <div class="relative">
         <v-progress-linear absolute bottom :active="loading" :indeterminate="loading" color="primary"></v-progress-linear>
       </div>
-      
+
       <!-- filters section -->
       <section class="md:flex justify-center mt-10 text-green md:text-xl font-bold">
-        
+
         <div v-for="category in categories" class="inline-blocks relative hover-trigger text-base">
           <a href="#" @click.prevent="selectedCategory=category.title; page=1" :class="[categorySelected(category.title), 'hover:text-primary block m-3']">
             ((category.display_name))
           </a>
-    
+
           <!-- list of sub gategories -->
           <ul v-if="category.sub_cats.length > 0" class="absolute w-full hidden bg-white text-secondary rounded border shadow-2xl py-3 px-2 hover-target" style="min-width: 16rem !important; z-index: 1000000;">
             <li v-for="sub in category.sub_cats" :class="[categorySelected(sub), 'text-base hover:text-primary']">
@@ -39,17 +39,17 @@
             </li>
           </ul>
         </div>
-        
+
 {#        <a href="#" class="hover:text-primary block m-3 text-base">RECIPIES</a>#}
       </section>
-    
+
       <!-- query and remove filters -->
       <template>
         <v-container>
           <v-row no-gutters>
             <v-col md="4" offset-md="8">
               <v-form @submit.prevent="getProducts">
-                <v-text-field 
+                <v-text-field
                   filled
                   label="search"
                   :loading="loading"
@@ -79,7 +79,7 @@
         </v-container>
       </template>
 
-    
+
       <!-- Products list -->
       <section id="productsListSection" class="min-h-screen">
         <div v-if="products.results.length > 0" class="container my-12 mx-auto min-h-screen">
@@ -89,7 +89,7 @@
               <v-img :src="'/media/' + product.image" height="20rem" @click="showProduct(product)" class="cursor-pointer">
                 <div v-if="product.weight" class="rounded-tr-lg absolute left-0 bottom-0 bg-blue-50 p-2 px-3">(( product.weight ))</div>
               </v-img>
-      
+
               <h3 class="text-center text-lg truncate mt-4">(( product.title ))</h3>
 
               <v-row class="mt-5 items-end">
@@ -142,7 +142,7 @@
               </v-row>
             </v-col>
           </v-row>
-      
+
           <!-- Page pagination -->
           <div class="text-center mt-20">
             <v-pagination v-model="page" :length="products.num_pages"></v-pagination>
@@ -154,7 +154,7 @@
         <div v-if="products.results.length == 0 && loading == false" class="text-center">
           <v-img src="{% static 'img/notfound.svg' %}" width="500" class="mx-auto mb-7"></v-img>
           <h1>
-            Opps, no products found! 
+            Opps, no products found!
             <a href="/products/">Show all products</a>
           </h1>
         </div>
@@ -189,65 +189,67 @@
                   <v-icon color="gray lighten-2">mdi-close</v-icon>
                 </v-btn>
               </v-card-title>
-      
+
               <v-divider></v-divider>
-      
+
               <v-card-text class="py-4">
                 <!-- product details -->
-                <template v-for="variation in currentProduct.variations">
-                  <v-row>
-                    <!-- Variation image -->
-                    <v-col md="4">
-                      <v-img :src="'/media/' + variation.image.file" height="150"></v-img>
-                    </v-col>
-                    
-                    <!-- Variation price -->
-                    <v-col md="4" class="brown_darkest--text">
-                      <template v-if="variation.addable">
-                        <p>
-                          <span class="text-h5">$((variation.unit_price))</span> 
-                          <span class="text-base text-green">AVAILABLE</span>
-                        </p>
-                      </template>
-        
-                      <template v-else-if="!variation.live_num_in_stock">
-                        <p class="text-red-1">NOT AVAILABLE</p>
-                      </template>
-        
-                      <template v-else>
-                        <p>
-                          <span class="text-h5">$((variation.unit_price))</span> 
-                          <span class="text-base text-green">((variation.live_num_in_stock)) AVAILABLE</span>
-                        </p>
-                      </template>
-                    </v-col>
-        
-                    <!-- Variation action -->
-                    <v-col md="4" class="text-right">
-                      <template v-if="store.state.is_authenticated">
-                        <template v-if="variation.addable">
-                          <v-btn color="brown_lightest" elevation="0" x-large @click="App.addToCart(variation)">ADD TO CART</v-btn>
-                        </template>
-          
-                        <template v-else-if="!variation.live_num_in_stock">
-                          <v-btn x-large disabled>OUT OF STOCK</v-btn>
-                        </template>
-          
-                        <template v-else>
-                          <v-btn color="brown_lightest" elevation="0" x-large @click="App.addToCart(variation)">ADD TO CART</v-btn>
-                        </template>
-                      </template>
+                     <v-row>
+                        <!-- Variation image -->
+                        <v-col md="5">
+                          <v-img :src="'/media/' + currentProduct.variations[0].image.file" height="210"></v-img>
+                        </v-col>
+                        <!-- Variation detail -->
+                        <v-col md="7">
+                          <v-row>
+                            <template v-for="variation in currentProduct.variations">
+                                <!-- Variation price -->
+                                <v-col md="6" class="brown_darkest--text">
+                                  <template v-if="variation.addable">
+                                    <p>
+                                      <span class="text-h5">$((variation.unit_price))</span>
+                                      <span class="text-base text-green">AVAILABLE</span>
+                                    </p>
+                                  </template>
 
-                      <template v-else>
-                        <v-btn block x-large disabled>Coming Soon!</v-btn>
-                      </template>
-                    </v-col>
-        
-                  </v-row>
-                </template>
+                                  <template v-else-if="!variation.live_num_in_stock">
+                                    <p class="text-red-1">NOT AVAILABLE</p>
+                                  </template>
 
+                                  <template v-else>
+                                    <p>
+                                      <span class="text-h5">$((variation.unit_price))</span>
+                                      <span class="text-base text-green">((variation.live_num_in_stock)) AVAILABLE</span>
+                                      <span class="text-h2">((variation.live_num_in_stock)) AVAILABLE</span>
+                                    </p>
+                                  </template>
+                                </v-col>
+                                <!-- Variation action -->
+                                <v-col md="6" class="text-right">
+                                  <template v-if="store.state.is_authenticated">
+                                    <template v-if="variation.addable">
+                                      <v-btn color="brown_lightest" elevation="0" x-large @click="App.addToCart(variation)">ADD TO CART</v-btn>
+                                    </template>
+
+                                    <template v-else-if="!variation.live_num_in_stock">
+                                      <v-btn x-large disabled>OUT OF STOCK</v-btn>
+                                    </template>
+
+                                    <template v-else>
+                                      <v-btn color="brown_lightest" elevation="0" x-large @click="App.addToCart(variation)">ADD TO CART</v-btn>
+                                    </template>
+                                  </template>
+
+                                  <template v-else>
+                                    <v-btn block x-large disabled>Coming Soon!</v-btn>
+                                  </template>
+                                </v-col>
+                            </template>
+                         </v-row>
+                        </v-col>
+                     </v-row>
                 <!-- product content -->
-                <div class="text-base p-4 mt-4 bg-gray-100" v-if="currentProduct.content" v-html="currentProduct.content"></div>
+                <div class="text-base p-4 mt-10 mb-10 bg-gray-100" v-if="currentProduct.content" v-html="currentProduct.content"></div>
               </v-card-text>
             </v-card>
           </v-dialog>
@@ -261,7 +263,7 @@
         <v-btn x-large dark outlined color="brown darken-2" class="font-weight-bold" href="/in-season/">WHAT’S IN SEASON?</v-btn>
       </div>
       <!-- WHAT’S IN SEASON? -->
-    
+
 {#      <!-- Beyond the Groceries -->#}
 {#      <section class="text-center bg-orange-lightest p-5">#}
 {#        <div class="container mx-auto">#}
@@ -285,7 +287,7 @@
 {#        </div>#}
 {#      </section>#}
 {#      <!-- Beyond the Groceries -->#}
-    
+
       <!-- Ready for Better Food Choices? -->
       <section class="text-center p-5 py-20 max-w-xl mx-auto">
         <h3 class="text-3xl text-primary font-bold mb-5">Ready for Better Food Choices?</h3>
@@ -310,14 +312,14 @@
     vuetify: new Vuetify(opts),
     data: {
       loading: true,
-      
+
       categories: [],
-      
+
       query: '',
       isTyping: false,
       page: 1,
       selectedCategory: '',
-      
+
       // products
       products: {
         count: 0,
@@ -359,7 +361,7 @@
         this.getProducts()
         this.scrollToProducts()
       },
-      
+
       page: function(val, oldVal) {
         this.getProducts()
         this.scrollToProducts()
@@ -393,13 +395,13 @@
 
           // sync query params with url
           this.syncParamsURL()
-          
+
         } catch (error) {
           console.log(error)
           this.loading = false;
         }
       },
-      
+
       async getCategories() {
         // get categories and clean up the data
         try {
@@ -415,7 +417,7 @@
       },
       scrollToProducts() {
         const id = 'productsListSection';
-        const yOffset = -170; 
+        const yOffset = -170;
         const element = document.getElementById(id);
         const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
         window.scrollTo({top: y, behavior: 'smooth'});
@@ -426,9 +428,10 @@
         product.variations.forEach(v => prices.push(parseFloat(v.unit_price)));
         return Math.min(...prices)
       },
-      
+
       showProduct(product) {
         this.currentProduct = product;
+        console.log(this.currentProduct);
         this.syncParamsURL()
       },
 
@@ -472,10 +475,10 @@
     async mounted() {
       // Sync URL params
       const url = new URL(location.href);
-      
+
       const page = url.searchParams.get("page");
       if (page !== null) this.page = page || 1
-      
+
       const query = url.searchParams.get("query");
       if (query !== null) this.query = query || ''
 
@@ -486,7 +489,7 @@
       this.getProducts()
       this.getCategories()
     }
-  
+
   })
 
 
