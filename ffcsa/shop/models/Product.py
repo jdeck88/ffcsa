@@ -60,6 +60,8 @@ class Product(BaseProduct, Priced, RichText, ContentTyped, AdminThumbMixin):
 
     available = models.BooleanField(_("Available for purchase"),
                                     default=False)
+    short_description = models.CharField(_("Short Description"), max_length=100,
+                                   null=True, blank=True)
     image = CharField(_("Image"), max_length=100, blank=True, null=True)
     categories = models.ManyToManyField("Category", blank=True,
                                         verbose_name=_("Product categories"), related_name='category_products')
@@ -233,6 +235,8 @@ class ProductVariation(with_metaclass(ProductVariationMetaclass, Priced)):
     product = models.ForeignKey("shop.Product", related_name="variations",
                                 on_delete=models.CASCADE)
     _title = models.CharField(_("Title"), max_length=500, blank=True)
+    short_description = models.CharField(_("Short Description"), max_length=100,
+                                         null=True, blank=True)
     default = models.BooleanField(_("Default"), default=False)
     image = models.ForeignKey("ProductImage", verbose_name=_("Image"),
                               null=True, blank=True, on_delete=models.SET_NULL)

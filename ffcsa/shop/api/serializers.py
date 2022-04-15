@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from ffcsa.shop.models.Cart import Cart, CartItem
-from ffcsa.shop.models.Product import Product, ProductImage, ProductVariation
+from ffcsa.shop.models.Product import Product, ProductImage, ProductVariation, ProductVariationUnit
 from ffcsa.shop.models.Order import Order
 from ffcsa.shop.models.Vendor import Vendor
 
@@ -37,15 +37,23 @@ class VendorDataSerializer(serializers.ModelSerializer):
 
 
 # used to display some data
+class ProductVariationUnitDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductVariationUnit
+        fields = '__all__'
+
+
+# used to display some data
 class ProductVariationDataSerializer(serializers.ModelSerializer):
     image = ProductImageSerializer()
     addable = serializers.SerializerMethodField()
     vendors = VendorDataSerializer(many=True)
+    unit = ProductVariationUnitDataSerializer()
 
     class Meta:
         model = ProductVariation
-        fields = ('id', 'in_inventory', 'is_frozen', 'unit_price', 'sku', 'options', 'unit', 
-                    'number_in_stock', 'live_num_in_stock', 'image', 'addable', 'vendors')
+        fields = ('id', 'title', 'short_description', 'in_inventory', 'is_frozen', 'unit_price', 'sku', 'options', 'unit',
+                  'number_in_stock', 'live_num_in_stock', 'image', 'addable', 'vendors')
 
     def get_addable(self, obj):
         # if number_in_stock is None means that the product amount
@@ -63,8 +71,8 @@ class ProductDataSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Product
-        fields = ('id', 'slug', 'title', 'image', 'price', 'is_dairy', 'categories', 'url', 'unit', 'weight',
-                 'vendor', 'variations', 'content', 'seasons', 'has_in_stock_variations')
+        fields = ('id', 'slug', 'title', 'short_description', 'image', 'price', 'is_dairy', 'categories', 'url', 'unit',
+                  'weight', 'vendor', 'variations', 'content', 'seasons', 'has_in_stock_variations')
 
     def get_seasons(self, obj):
         # return list of season names for this Product

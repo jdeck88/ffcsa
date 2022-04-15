@@ -164,7 +164,7 @@
       <!-- Products dialog -->
       <template>
         <div class="text-center">
-          <v-dialog v-model="dialog" width="800" @click:outside="hideProductModal">
+          <v-dialog v-model="dialog" width="950" @click:outside="hideProductModal">
             <v-card v-if="currentProduct" class="brown_darkest--text">
               <!-- header (title, vendor and season) -->
               <v-card-title class="text-h5 relative">
@@ -197,20 +197,26 @@
                      <v-row>
                         <!-- Variation image -->
                         <v-col md="4">
-                          <v-img :src="'/media/' + currentProduct.variations[0].image.file" height="180"></v-img>
+                          <v-img :src="'/media/' + currentProduct.variations[0].image.file" height="265"></v-img>
                         </v-col>
                         <!-- Variation detail -->
                         <v-col md="8">
                           <v-row>
+                            <v-col md="12" class="mb-15">
+                                <span class="text-h5">((currentProduct.short_description))</span>
+                            </v-col>
+                          </v-row>
+                          <v-row>
                             <template v-for="variation in currentProduct.variations">
                                 <!-- Variation price -->
-                                <v-col md="6" class="brown_darkest--text">
+                                <v-col md="8" class="brown_darkest--text">
                                   <template v-if="variation.addable">
                                     <p>
                                       <span class="text-h5">$((variation.unit_price))</span>
-                                      <span v-if="variation.unit">/(( variation.unit )) </span>
-                                      <span class="text-base text-green">((variation.live_num_in_stock)) AVAILABLE</span>
-                                      <span class="text-red-700"><br>(( variation.title ))</span>
+                                      <span v-if="variation.unit">/(( variation.unit.code )) </span>
+                                      <span class="text-base">(( variation.title ))</span>
+                                      <span class="text-base text-red-400">((variation.live_num_in_stock)) AVAILABLE</span>
+                                      <span class="text-green-700"><br>((variation.short_description))</span>
                                     </p>
                                   </template>
 
@@ -221,14 +227,15 @@
                                   <template v-else>
                                     <p>
                                       <span class="text-h5">$((variation.unit_price))</span>
-                                      <span v-if="variation.unit">/(( variation.unit )) </span>
-                                      <span class="text-base text-green">((variation.live_num_in_stock)) AVAILABLE</span>
-                                      <span class="text-red-700"><br>(( variation.title ))</span>
+                                      <span v-if="variation.unit">/(( variation.unit.code )) </span>
+                                      <span class="text-base">(( variation.title ))</span>
+                                      <span class="text-base text-red-400">((variation.live_num_in_stock)) AVAILABLE</span>
+                                      <span class="text-green-700"><br>((variation.short_description))</span>
                                     </p>
                                   </template>
                                 </v-col>
                                 <!-- Variation action -->
-                                <v-col md="6" class="text-right">
+                                <v-col md="4" class="text-right">
                                   <template v-if="store.state.is_authenticated">
                                     <template v-if="variation.addable">
                                       <v-btn color="brown_lightest" elevation="0" x-large @click="App.addToCart(variation)">ADD TO CART</v-btn>
