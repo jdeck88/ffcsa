@@ -233,7 +233,7 @@
                                                 <!-- payment_agreement -->
                                                 <v-checkbox
                                                         v-model="user.profile.payment_agreement"
-                                                        label="I agree to make monthly payments in order to maintain my membership with the FFCSA for 6 months, with a minimium of $172 per month."
+                                                        label="I agree to make monthly payments in order to maintain my membership with the FFCSA for at least 6 months, with a minimum of $172 per month (~$40/week)"
                                                         persistent-hint
                                                         :rules="[store.state.rules.required]"
                                                 ></v-checkbox>
@@ -241,7 +241,7 @@
                                                 <!-- pickup_agreement -->
                                                 <v-checkbox
                                                         v-model="user.profile.pickup_agreement"
-                                                        label="I agree to bring my own bags and coolers as needed to pick up my product. The containers that the product arrives in stay at the dropsite. I intend to maintain my membership with the FFCSA for 6 months, with a minimum payment of $172 per month"
+                                                        label="I agree to bring my own bags and coolers as needed to pick up my product. The containers that the product arrives in stays at the dropsite."
                                                         persistent-hint
                                                         :rules="[store.state.rules.required]"
                                                 ></v-checkbox>
