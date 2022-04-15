@@ -196,11 +196,11 @@
                 <!-- product details -->
                      <v-row>
                         <!-- Variation image -->
-                        <v-col md="5">
-                          <v-img :src="'/media/' + currentProduct.variations[0].image.file" height="210"></v-img>
+                        <v-col md="4">
+                          <v-img :src="'/media/' + currentProduct.variations[0].image.file" height="180"></v-img>
                         </v-col>
                         <!-- Variation detail -->
-                        <v-col md="7">
+                        <v-col md="8">
                           <v-row>
                             <template v-for="variation in currentProduct.variations">
                                 <!-- Variation price -->
@@ -208,7 +208,9 @@
                                   <template v-if="variation.addable">
                                     <p>
                                       <span class="text-h5">$((variation.unit_price))</span>
-                                      <span class="text-base text-green">AVAILABLE</span>
+                                      <span v-if="variation.unit">/(( variation.unit )) </span>
+                                      <span class="text-base text-green">((variation.live_num_in_stock)) AVAILABLE</span>
+                                      <span class="text-red-700"><br>(( variation.title ))</span>
                                     </p>
                                   </template>
 
@@ -219,8 +221,9 @@
                                   <template v-else>
                                     <p>
                                       <span class="text-h5">$((variation.unit_price))</span>
+                                      <span v-if="variation.unit">/(( variation.unit )) </span>
                                       <span class="text-base text-green">((variation.live_num_in_stock)) AVAILABLE</span>
-                                      <span class="text-h2">((variation.live_num_in_stock)) AVAILABLE</span>
+                                      <span class="text-red-700"><br>(( variation.title ))</span>
                                     </p>
                                   </template>
                                 </v-col>
@@ -388,6 +391,7 @@
 
           const res = await axios.get(`/api/products/?query=${query}&page=${this.page}&category=${category}`);
           this.products = {...res.data}
+          console.log(this.products)
           this.loading = false;
 
           // if a product is selected, open product (has to be after loading products)
