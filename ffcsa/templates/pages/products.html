@@ -94,7 +94,7 @@
 
               <v-row class="mt-5 items-end">
                 <!-- price and vendor -->
-                <v-col v-bind:class="BindProductClass(product.has_in_stock_variations)">
+                <v-col v-bind:class="BindProductClass(product.variations)">
                   <template v-if="product.has_in_stock_variations">
                     <!-- at least one variation in stock -->
                     <template v-if="product.variations.length == 1">
@@ -423,9 +423,9 @@
           console.log(error)
         }
       },
-      BindProductClass(InStockVariations) {
-          if(InStockVariations) return "col-sm-5"
-          else return "col-sm-6"
+      BindProductClass(variations) {
+          if(variations.length === 1) return "col-sm-6"
+          else return "col-sm-5"
       },
       scrollToProducts() {
         const id = 'productsListSection';
