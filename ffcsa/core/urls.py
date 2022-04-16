@@ -35,5 +35,9 @@ urlpatterns = i18n_patterns(
     url(r'^signrequest-success/$', TemplateView.as_view(template_name='ffcsa_core/signrequest_success.html'),
         name='signrequest-success'),
     url(r'^signrequest-declined/$', TemplateView.as_view(template_name='ffcsa_core/signrequest_declined.html'),
-        name='signrequest-declined')
+        name='signrequest-declined'),
+
+    # public pages
+    url(r'^faq/$', TemplateView.as_view(template_name='pages/faq.html'), name='faq_page')
+
 )
