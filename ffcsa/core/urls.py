@@ -41,5 +41,6 @@ urlpatterns = i18n_patterns(
     url(r'^faq/$', TemplateView.as_view(template_name='pages/faq.html'), name='faq_page'),
     url(r'^in-season/$', TemplateView.as_view(template_name='pages/in-season.html'), name='in_season_page'),
     url(r'^about/$', TemplateView.as_view(template_name='pages/about.html'), name='about_page'),
+    url(r'^contact-us/$', TemplateView.as_view(template_name='pages/contact-us.html'), name='contact_page'),
 
 )
