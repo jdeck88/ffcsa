@@ -102,12 +102,14 @@
                         <span class="text-3xl font-bold">$(( parseFloat(product.price).toFixed(2) ))</span>
                         <span v-if="product.unit">/(( product.unit ))</span>
                       </p>
+                      <p class="text-brown-7 text-sm font-thin mt-2 mb-0">(( product.variations[0].vendors[0].title ))</p>
                     </template>
                     <template v-else>
-                      <p>
+                      <p class="mb-0">
                         <span class="text-3xl font-bold">$(( getProductStartFrom(product) ))</span>
                         <span v-if="product.unit">/(( product.unit ))</span>
                       </p>
+                      <p class="text-brown-7 text-sm font-thin mt-1 mb-0">(( product.variations[0].vendors[0].title ))</p>
                     </template>
                   </template>
                   <template v-else>
@@ -115,7 +117,6 @@
                     <div class="h-8"></div>
                   </template>
 
-                  <p class="text-brown-7 text-sm font-thin mt-2 mb-0">(( product.vendor ))</p>
                 </v-col>
 
                 <!-- add to cart btn -->
@@ -437,7 +438,7 @@
       getProductStartFrom(product) {
         prices = []
         product.variations.forEach(v => prices.push(parseFloat(v.unit_price)));
-        return Math.min(...prices)
+        return Math.min(...prices).toFixed(2)
       },
 
       showProduct(product) {
