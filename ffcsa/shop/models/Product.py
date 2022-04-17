@@ -206,7 +206,7 @@ class ProductVariationUnit(models.Model):
     code = models.SlugField(max_length=50)
 
     def __str__(self) -> str:
-        return f'{self.name} ({self.code})'
+        return self.code
 
 
 class ProductVariationMetaclass(ModelBase):
@@ -259,7 +259,11 @@ class ProductVariation(with_metaclass(ProductVariationMetaclass, Priced)):
         unique_together = ('product', '_title')
 
     def __str__(self):
-        return "{} - {}".format(self.product.title, self.title) if self._title else self.product.title
+        s = self.unit + ", " if self.unit else ""
+        s += self.title
+        if self.product.weight:
+            s += f" ({self.product.weight})"
+        return s
 
     @property
     def title(self):
