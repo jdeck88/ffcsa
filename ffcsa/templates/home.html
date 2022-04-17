@@ -59,15 +59,21 @@
                 <!-- banner section -->
                 <section class="pr-5 pl-5 min-h-300px lg:min-h-400px bg-cover bg-center bg-overlay-dark flex p-20 p-mobile"
                          style="background-image: var(--banner-bg);">
-                    <div class="text-white text-center m-auto font-bold max-w-2xl">
-                        <p>Full Farm CSA</p>
-                        <p class="text-3xl font-bold">Your Customized Weekly Grocery Box From Farmer's You Can Trust.</p>
-                        <p>Stop wondering where your food comes from. </p>
-                        <p>Local Farms are collaborating to bring you your entire list.</p>
+                    <div class="text-white text-center m-auto font-bold max-w-1xl">
+                        <p class="text-xl">FULL FARM CSA</p>
+                        <p class="text-4xl mb-3 font-bold">
+                            Your Customized Weekly Grocery Box <br>
+                            From Farmer's You Can Trust.
+                        </p>
+                        <p class="text-xl">
+                            Stop wondering where your food comes from.<br>
+                            Local Farms are collaborating to bring you your entire list.
+                        </p>
+{#                        <p class="text-2xl" ></p>#}
                         {% if not user.is_authenticated %}
-                            <p class="text-center">
-                                <v-btn large color="primary" class="font-weight-bold mx-3" href="{% url 'signup' %}">BECOME
-                                    A FULL FARM CSA MEMBER
+                            <p class="text-center mt-10">
+                                <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">
+                                    BECOME A FULL FARM CSA MEMBER
                                 </v-btn>
                             </p>
                         {% endif %}
@@ -79,36 +85,36 @@
                 <!-- 3 features -->
                 <section class="text-center font-weight-bold bg-green-light text-white">
                     <v-row>
-                        <v-col cols="12" md="4" class="pa-6">HIGH QUALITY, <br>NUTRIENT-DENSE FOOD</v-col>
-                        <v-col cols="12" md="4" class="pa-6 bg-green">STRAIGHT FROM THE FARM<br> TO YOUR DOOR</v-col>
-                        <v-col cols="12" md="4" class="pa-6">CONFIDENCE IN<br> YOUR FOOD SOURCE</v-col>
+                        <v-col cols="12" md="4" class="pa-6 text-xl">HIGH QUALITY, <br>NUTRIENT-DENSE FOOD</v-col>
+                        <v-col cols="12" md="4" class="pa-6 bg-green text-xl">STRAIGHT FROM THE FARM<br> TO YOUR DOOR</v-col>
+                        <v-col cols="12" md="4" class="pa-6 text-xl">CONFIDENCE IN<br> YOUR FOOD SOURCE</v-col>
                     </v-row>
                 </section>
                 <!-- 3 features -->
 
                 <!-- Where does your food come from? -->
                 <section class="container mx-auto text-center my-20 text-brown-7">
-                    <h3 class="text-2xl font-bold mb-10">Where does your food come from?</h3>
+                    <h3 class="text-3xl font-bold font-nospacing mb-10">Where does your food come from?</h3>
                     <img alt="kids and chicken" src="{% static 'img/csa-food-come-from.jpg' %}"
                          class="block mx-auto mb-20" style="max-height: 30rem;">
                     <div class="row">
-                        <div class="col-md-3 col-12 px-6 pb-10">Are you <strong class="block">OVERWHELMED</strong> shopping around
+                        <div class="col-md-3 col-12 px-6 pb-10 text-xl">Are you <strong class="block">OVERWHELMED</strong> shopping around
                             and researching better food options?
                         </div>
-                        <div class="col-md-3 col-12 px-6 pb-10">Feeling <strong class="block">POWERLESS</strong> in making a
+                        <div class="col-md-3 col-12 px-6 pb-10 text-xl">Feeling <strong class="block">POWERLESS</strong> in making a
                             positive impact in your community and the world?
                         </div>
-                        <div class="col-md-3 col-12 px-6 pb-10">Getting <strong class="block">FRUSTRATED</strong> over unclear or
+                        <div class="col-md-3 col-12 px-6 pb-10 text-xl">Getting <strong class="block">FRUSTRATED</strong> over unclear or
                             misleading health food claims?
                         </div>
-                        <div class="col-md-3 col-12 px-6">Still <strong class="block">DISCONNECTED</strong> with where your
+                        <div class="col-md-3 col-12 px-6 text-xl">Still <strong class="block">DISCONNECTED</strong> with where your
                             food is coming from?
                         </div>
                     </div>
 
                     {% if not user.is_authenticated %}
-                        <div class="text-center mt-20">
-                            <v-btn large color="primary" class="font-weight-bold mx-3" href="{% url 'signup' %}">BECOME
+                        <div class="text-center mt-5">
+                            <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">BECOME
                                 A MEMBER
                             </v-btn>
                         </div>
@@ -118,7 +124,7 @@
 
                 <!-- There’s a Better Way -->
                 <section class="bg-swirl p-20 p-mobile">
-                    <h3 class="text-2xl text-brown-7 text-center font-bold mb-10">There’s a Better Way</h3>
+                    <h3 class="text-3xl font-nospacing text-brown-7 text-center font-bold mb-10">There’s a Better Way</h3>
 
                     <div class="row mb-16">
                         <article class="col-md-4 col-12 bg-pearlBush">
@@ -129,15 +135,15 @@
                             <hr class="border-8 border-swirl">
                             <!-- content -->
                             <div class="p-10">
-                                <h3 class="text-xl font-bold mb-10">Conquer the chaos of searching for a healthy food
+                                <h3 class="text-xl font-bold font-nospacing mb-10">Conquer the chaos of searching for a healthy food
                                     source.</h3>
-                                <p class="text-xl font-light relative mb-4 pl-5"><i
+                                <p class="font-nospacing text-xl font-light relative mb-4 pl-5"><i
                                         class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Save
                                     time! Get your groceries in one place.</p>
-                                <p class="text-xl font-light relative mb-4 pl-5"><i
+                                <p class="font-nospacing text-xl font-light relative mb-4 pl-5"><i
                                         class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Spend
                                     your time with loved ones instead of researching food.</p>
-                                <p class="text-xl font-light relative pl-5"><i
+                                <p class="font-nospacing text-xl font-light relative pl-5"><i
                                         class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Be
                                     Confident in your food choices.</p>
                             </div>
@@ -150,7 +156,7 @@
                             <hr class="border-8 border-swirl">
                             <!-- content -->
                             <div class="p-10">
-                                <h3 class="text-xl font-bold mb-10">Get savvy with the help of your trusted local
+                                <h3 class="text-xl font-bold mb-10 font-nospacing">Get savvy with the help of your trusted local
                                     farmer.</h3>
                                 <p class="text-xl font-light relative mb-4 pl-5"><i
                                         class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Get
@@ -171,7 +177,7 @@
                             <hr class="border-8 border-swirl">
                             <!-- content -->
                             <div class="p-10">
-                                <h3 class="text-xl font-bold mb-10">Take charge of the footprint your food sources
+                                <h3 class="text-xl font-bold mb-10 font-nospacing">Take charge of the footprint your food sources
                                     make.</h3>
                                 <p class="text-xl font-light relative mb-4 pl-5"><i
                                         class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i>

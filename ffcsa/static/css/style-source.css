@@ -40,7 +40,7 @@
 /* Loading Helvetica font */
 @font-face { font-family: Helvetica; src: url(../fonts/Helvetica-Font/Helvetica.ttf); } 
 @font-face { font-family: Helvetica; font-weight: bold; src: url(../fonts/Helvetica-Font/Helvetica-Bold.ttf); } 
-@font-face { font-family: Helvetica; font-weight: 100; src: url(../fonts/Helvetica-Font/helvetica-light-587ebe5a59211.ttf); } 
+@font-face { font-family: Helvetica; font-weight: 100; src: url(../fonts/Helvetica-Font/helvetica-light-587ebe5a59211.ttf); }
 
 /* Loading Roboto font */
 /* @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,400&display=swap'); */
@@ -51,11 +51,14 @@ body {
   font-family: 'Helvetica', Arial, "Lucida Grande", sans-serif;
   /* font-weight: 300; */
   font-size: 1rem;
-
 }
 
 .font-thin {
   font-weight: 100;
+}
+
+.font-nospacing {
+  letter-spacing: 0 !important;
 }
 
 /* ===================================
@@ -280,6 +283,10 @@ input[type='number']::-webkit-outer-spin-button {
   background-color: #68D391;
 }
 
+.ffcsa--v-btn {
+  letter-spacing: 0;
+  height: 51px !important;
+}
 
 
 
