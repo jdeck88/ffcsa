@@ -13,7 +13,7 @@
     <v-main>
       <!-- banner section -->
 {#      <v-img src="{% static 'img/IMG_0067.JPG' %}" height="400">#}
-          <v-img src="{% static 'img/shop_banner.jpg' %}" :height="bannerHeight">
+          <v-img :src="imgSrc" :height="bannerHeight">
         <v-overlay :absolute="true" :opacity=".5" class="text-center">
           <h3 class="text-h3">Shop the Farm</h3>
           <p>High quality products from farmer's you can trust</p>
@@ -385,6 +385,12 @@
     },
 
     computed: {
+      imgSrc() {
+        switch (this.$vuetify.breakpoint.name) {
+          case 'xs': return "{% static 'img/shop_banner_mobile.jpg' %}"
+          default: return "{% static 'img/shop_banner.jpg' %}"
+        }
+      },
       bannerHeight () {
         switch (this.$vuetify.breakpoint.name) {
           case 'xs': return 250
