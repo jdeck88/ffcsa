@@ -12,10 +12,11 @@
   <v-app>
     <v-main>
       <!-- banner section -->
-      <v-img src="{% static 'img/cows-banner-2.jpg' %}" height="400">
-        <v-overlay :absolute="true" :opacity=".3" class="text-center">
-          <h3 class="text-h3">Welcome to our farm's products</h3>
-          <p>please check our organic products</p>
+{#      <v-img src="{% static 'img/IMG_0067.JPG' %}" height="400">#}
+          <v-img src="{% static 'img/shop_banner.jpg' %}" :height="bannerHeight">
+        <v-overlay :absolute="true" :opacity=".5" class="text-center">
+          <h3 class="text-h3">Shop the Farm</h3>
+          <p>High quality products from farmer's you can trust</p>
         </v-overlay>
       </v-img>
 
@@ -106,6 +107,9 @@
                     </template>
                     <template v-else>
                       <p class="mb-0">
+                        <span class="text-base italic text-gray-500">From </span>
+                      </p>
+                      <p class="mb-0">
                         <span class="text-3xl font-bold">$(( getProductStartFrom(product) ))</span>
                         <span v-if="product.unit">/(( product.unit ))</span>
                       </p>
@@ -127,7 +131,7 @@
                         <v-btn block color="brown_lightest" elevation="0" x-large @click="App.addToCart(product.variations[0]);getProducts()">ADD TO CART</v-btn>
                     </template>
                       <template v-else>
-                        <v-btn block color="brown_lightest" elevation="0" x-large @click="showProduct(product)">CHOOSE VARIATION</v-btn>
+                        <v-btn block color="brown_lightest" elevation="0" x-large @click="showProduct(product)">CHOOSE OPTION</v-btn>
                       </template>
                     </template>
                     <template v-else>
@@ -168,11 +172,11 @@
           <v-dialog v-model="dialog" width="950" @click:outside="hideProductModal">
             <v-card v-if="currentProduct" class="brown_darkest--text">
               <!-- header (title, vendor and season) -->
-              <v-card-title class="text-h5 relative">
+              <v-card-title class="relative">
                 <div class="flex mb-1 pt-5">
                   <div class="grid grid-cols-2">
-                    <h3 class="col-span-2 md:col-span-1 text-2xl font-bold capitalize pr-2">((currentProduct.title))</h3>
-                    <p class="col-span-2 md:col-span-1 text-base font-light italic pt-2 mt-auto">((currentProduct.variations[0].vendors[0].title))</p>
+                    <h3 class="col-span-2 md:col-span-1 text-2xl font-bold capitalize pr-4">((currentProduct.title))</h3>
+                    <p class="mb-0 col-span-2 md:col-span-1 text-base font-light italic pt-2 mt-auto">((currentProduct.variations[0].vendors[0].title))</p>
                   </div>
 
                   <!-- Show products seasons -->
@@ -215,7 +219,7 @@
                                     <p>
                                       <span class="text-h5">$((variation.unit_price))</span>
                                       <span v-if="variation.unit">/(( variation.unit.code )) </span>
-                                      <span class="text-base">(( variation.title ))</span>
+                                      <span class="text-base ml-2">(( variation.title ))</span>
                                       <span class="text-base text-red-400">((variation.live_num_in_stock)) AVAILABLE</span>
                                       <span class="text-green-700"><br>((variation.short_description))</span>
                                     </p>
@@ -229,8 +233,9 @@
                                     <p>
                                       <span class="text-h5">$((variation.unit_price))</span>
                                       <span v-if="variation.unit">/(( variation.unit.code )) </span>
-                                      <span class="text-base">(( variation.title ))</span>
-                                      <span class="text-base text-red-400">((variation.live_num_in_stock)) AVAILABLE</span>
+                                      <span class="text-base ml-2">(( variation.title ))</span>
+                                      <span v-if="variation.live_num_in_stock < 5" class="text-base text-red-400">((variation.live_num_in_stock)) AVAILABLE</span>
+                                      <span v-if="variation.live_num_in_stock >= 5" class="text-base text-green-700">((variation.live_num_in_stock)) AVAILABLE</span>
                                       <span class="text-green-700"><br>((variation.short_description))</span>
                                     </p>
                                   </template>
@@ -379,7 +384,15 @@
       }
     },
 
-    computed: {},
+    computed: {
+      bannerHeight () {
+        switch (this.$vuetify.breakpoint.name) {
+          case 'xs': return 250
+          case 'sm': return 350
+          default: return 400
+        }
+      },
+    },
 
     methods: {
       async getProducts(searchQuery=null) {

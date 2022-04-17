@@ -45,10 +45,16 @@
         <style>
             /* global css */
             :root {
-                --products-banner-bg: url({% static 'img/cows-banner-2.jpg' %});
+                --banner-bg: url({% static 'img/banner_mobile.jpg' %});
                 --hayden: url({% static 'img/hayden.jpg' %});
                 --preston: url({% static 'img/preston.jpg' %});
                 --group: url({% static 'img/group.jpg' %});
+            }
+
+            @media (min-width: 640px) {
+                :root {
+                    --banner-bg: url({% static 'img/banner.JPG' %});
+                }
             }
 
             .v-navigation-drawer {

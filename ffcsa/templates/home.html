@@ -4,8 +4,6 @@
 <!-- Title -->
 {% block meta_title %}Home{% endblock %}
 
-<img alt="Placeholder" src="https://picsum.photos/600/400/?random" class="block h-auto w-full mb-2">
-
 {% block css %}
 
     <style>
@@ -60,7 +58,7 @@
             <v-main>
                 <!-- banner section -->
                 <section class="pr-5 pl-5 min-h-300px lg:min-h-400px bg-cover bg-center bg-overlay-dark flex p-20 p-mobile"
-                         style="background-image: var(--products-banner-bg);">
+                         style="background-image: var(--banner-bg);">
                     <div class="text-white text-center m-auto font-bold max-w-2xl">
                         <p>Full Farm CSA</p>
                         <p class="text-3xl font-bold">Your Customized Weekly Grocery Box From Farmer's You Can Trust.</p>
@@ -587,6 +585,9 @@
                     <!-- <div class="grid grid-cols-12 gap-4 max-w-5xl mx-auto"> -->
                     <div class="row mx-auto">
 
+                        <div class="col-md-6 col-12 float-right">
+                            <v-img src="{% static 'img/why-trust-farmer.jpeg' %}"></v-img>
+                        </div>
                         <div class="col-md-6 col-12">
                             <p class="mb-5 pl-3 pr-3">Looking for a trusted local partner who can make your search for
                                 environmentally responsible and healthy food choices easier? <strong>Search no
@@ -598,20 +599,20 @@
 
                             <v-expand-transition>
                                 <div v-show="trustedLocalPartner.more">
-                                    <p>That’s why Deck Family Farm holds fast to its commitment to transparency,
+                                    <p class="mb-5 pl-3 pr-3">That’s why Deck Family Farm holds fast to its commitment to transparency,
                                         inviting you to take advantage of the farm’s Open Gate policy. In fact, all
                                         members are highly encouraged to pick up their customized box at the farm at
                                         least once so that you can truly see how your food is being grown! It doesn’t
                                         stop there, though. Members become connected with the farm on an even deeper
                                         level through attending farm dinners throughout the summer using the week’s
                                         seasonal CSA ingredients.</p>
-                                    <p>Now you know a farm that can help you get everything on your grocery list. And,
+                                    <p class="mb-5 pl-3 pr-3">Now you know a farm that can help you get everything on your grocery list. And,
                                         by partnering with neighboring farms we are able to bring you the most local and
                                         nutrient-dense food options available. Not only do these partnerships provide
                                         you with a truly full diet CSA, but they also put money back into our local
                                         community, nourish our community with fresh high-quality food, and empower you
                                         to leave a positive footprint in the world.</p>
-                                    <p>There’s no need to run around to multiple stores searching for the best food. Our
+                                    <p class="mb-5 pl-3 pr-3">There’s no need to run around to multiple stores searching for the best food. Our
                                         convenient pick-up locations and home delivery options provide you with a simple
                                         way to get truly straight-from-the-farm groceries. With generations of
                                         experience, our farm is here to help when you’re ready to make a better food
@@ -624,9 +625,6 @@
                                 <template v-if="!trustedLocalPartner.more">READ MORE</template>
                                 <template v-else>READ LESS</template>
                             </v-btn>
-                        </div>
-                        <div class="col-md-6 col-12">
-                            <v-img src="{% static 'img/why-trust-farmer.jpeg' %}"></v-img>
                         </div>
                     </div>
 
