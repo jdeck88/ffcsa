@@ -46,6 +46,10 @@
                 padding-top: 29px !important;
             }
 
+            .p20-mobile {
+                padding: 20px !important;
+            }
+
         }
 
     </style>
@@ -197,7 +201,7 @@
 
                     {% if not user.is_authenticated %}
                         <div class="text-center">
-                            <v-btn large color="primary" class="font-weight-bold mx-3" href="{% url 'signup' %}">BECOME
+                            <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">BECOME
                                 A MEMBER
                             </v-btn>
                         </div>
@@ -208,26 +212,26 @@
 
                 <!-- Why buy direct from the farm? -->
                 <section class="container mx-auto text-center p-20 p-mobile">
-                    <h3 class="text-3xl text-brown-7 font-bold mb-10 mr-3 ml-3">Why buy direct from the farm?</h3>
+                    <h3 class="text-3xl text-brown-7 font-bold font-nospacing mb-10 mr-3 ml-3">Why buy direct from the farm?</h3>
                     <div class="text-xl font-light p-5">
-                        <p>Most food these days has <strong>natural sounding labels.</strong> But labels can be
-                            confusing and misleading. It’s just so hard to find a food source that offers true
+                        <p class="text-black">Most food these days has <strong class="font-bold">natural sounding labels.</strong> But labels can be
+                            confusing and misleading. <br>It’s just so hard to find a food source that offers true
                             straight-from-the-farm options.</p>
-                        <strong class="block my-8">We’ve got you, you can rely on us!</strong>
-                        <p>We are putting our <strong>generations of farming experience</strong> to good use by
-                            collaborating with several other local farms to help you customize your weekly grocery box.
+                        <strong class="block my-8 font-bold">We’ve got you, you can rely on us!</strong>
+                        <p>We are putting our <strong class="font-bold">generations of farming experience</strong> to good use by
+                            collaborating <br>with several other local farms to help you customize your weekly grocery box.
                         </p>
                     </div>
 
 
-                    <div class="row mt-20 mr-2 ml-2">
+                    <div class="row mt-20 mr-2 ml-2 mt-5">
                         <div class="col-md-4 col-6 mb-10">
                             <!-- circle -->
                             <div class="bg-orange text-white text-6xl rounded-full h-36 w-36 flex items-center justify-center mx-auto">
                                 650
                             </div>
                             <!-- description -->
-                            <p class="text-base w-40 mx-auto text-brown-7 pt-3">FAMILIES SERVED</p>
+                            <p class="text-base w-40 mx-auto text-brown-7 pt-3 font-bold">FAMILIES SERVED</p>
                         </div>
 
                         <div class="col-md-4 col-6 mb-10">
@@ -239,7 +243,7 @@
                                 </div>
                             </div>
                             <!-- description -->
-                            <p class="text-base w-40 mx-auto text-brown-7 pt-3">FOOD DOLLARS TO LOCAL FARMS</p>
+                            <p class="text-base w-40 mx-auto text-brown-7 pt-3 font-bold">FOOD DOLLARS TO LOCAL FARMS</p>
                         </div>
 
                         <div class="col-md-4 col-6 mb-10">
@@ -248,7 +252,7 @@
                                 75
                             </div>
                             <!-- description -->
-                            <p class="text-base w-40 mx-auto text-brown-7 pt-3">COMBINED YEARS OF FARMING EXPERIENCE</p>
+                            <p class="text-base w-40 mx-auto text-brown-7 pt-3 font-bold">COMBINED YEARS OF FARMING EXPERIENCE</p>
                         </div>
 
                         <div class="col-md-4 col-6 mb-10">
@@ -257,7 +261,7 @@
                                 365
                             </div>
                             <!-- description -->
-                            <p class="text-base w-40 mx-auto text-brown-7 pt-3">DAYS OPEN PER YEAR</p>
+                            <p class="text-base w-40 mx-auto text-brown-7 pt-3 font-bold">DAYS OPEN PER YEAR</p>
                         </div>
 
                         <div class="col-md-4 col-6 mb-10">
@@ -266,7 +270,7 @@
                                 15
                             </div>
                             <!-- description -->
-                            <p class="text-base w-40 mx-auto text-brown-7 pt-3">LOCAL FARM COLLABORATIONS</p>
+                            <p class="text-base w-40 mx-auto text-brown-7 pt-3 font-bold">LOCAL FARM COLLABORATIONS</p>
                         </div>
 
                         <div class="col-md-4 col-6 mb-10">
@@ -275,14 +279,14 @@
                                 4
                             </div>
                             <!-- description -->
-                            <p class="text-base w-40 mx-auto text-brown-7 pt-3">GENERATIONS FARMING</p>
+                            <p class="text-base w-40 mx-auto text-brown-7 pt-3 font-bold">GENERATIONS FARMING</p>
                         </div>
                     </div>
 
                     {% if not user.is_authenticated %}
                         <div class="row">
                             <div class="col-12">
-                                <v-btn large color="primary" class="font-weight-bold mx-3" href="{% url 'signup' %}">
+                                <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">
                                     BECOME A
                                     MEMBER
                                 </v-btn>
@@ -295,25 +299,25 @@
 
                 <!-- Ready for Better Food Choices? -->
                 <section class="text-center bg-yellow-extralightest p-14 md:p-24">
-                    <h3 class="text-brown-7 font-bold text-3xl mb-20">Ready for Better Food Choices?</h3>
+                    <h3 class="text-brown-7 font-bold text-3xl mb-10 font-nospacing">Ready for Better Food Choices?</h3>
 
                     <div class="row">
-                        <div class="col-md-4 col-12 text-center">
+                        <div class="col-md-4 col-12 text-center text-xl">
                             <img src="{% static 'img/leaf-1.png' %}" alt="leaf" class="w-28 my-10 mx-auto">
-                            <h3 class="text-green font-bold mb-3">BECOME A <br> MEMBER</h3>
-                            <p class="font-thin w-52 mx-auto text-brown-7">Join the family and gain your share of the
+                            <h3 class="text-green font-bold mb-3 text-2xl">BECOME A <br> MEMBER</h3>
+                            <p class="font-thin w-60 mx-auto text-brown-7">Join the family and gain your share of the
                                 farm.</p>
                         </div>
-                        <div class="col-md-4 col-12 text-center">
+                        <div class="col-md-4 col-12 text-center text-xl">
                             <img src="{% static 'img/leaf-2.png' %}" alt="leaf" class="w-28 my-10 mx-auto">
-                            <h3 class="text-green font-bold mb-3">CUSTOMIZE YOUR <br> WEEKLY FOOD BOX</h3>
-                            <p class="font-thin w-52 mx-auto text-brown-7">You choose how much to invest and what items
+                            <h3 class="text-green font-bold mb-3 text-2xl">CUSTOMIZE YOUR <br> WEEKLY FOOD BOX</h3>
+                            <p class="font-thin w-60 mx-auto text-brown-7">You choose how much <br>to invest and what items
                                 you receive.</p>
                         </div>
-                        <div class="col-md-4 col-12 text-center">
+                        <div class="col-md-4 col-12 text-center text-xl">
                             <img src="{% static 'img/leaf-3.png' %}" alt="leaf" class="w-28 my-10 mx-auto">
-                            <h3 class="text-green font-bold mb-3">EAT BETTER <br> EVERY DAY</h3>
-                            <p class="font-thin w-52 mx-auto text-brown-7">Rest easy knowing your high-quality food is
+                            <h3 class="text-green font-bold mb-3 text-2xl">EAT BETTER <br> EVERY DAY</h3>
+                            <p class="font-thin w-60 mx-auto text-brown-7">Rest easy knowing your high-quality food is
                                 from a trusted local source.</p>
                         </div>
                     </div>
@@ -321,7 +325,7 @@
                     {% if not user.is_authenticated %}
                         <div class="row">
                             <div class="col-12">
-                                <v-btn large color="primary" class="font-weight-bold mx-3" href="{% url 'signup' %}">
+                                <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">
                                     BECOME A
                                     MEMBER
                                 </v-btn>
@@ -336,8 +340,8 @@
                     <v-row justify="center" align="center">
 
                         <v-col cols="12">
-                            <h4 class="text-3xl text-brown-7 font-bold mb-5 text-center">Download our Free Guide</h4>
-                            <h3 class="text-center">7 Ways You've Been Mislead By Food Labels.</h3>
+                            <h4 class="text-3xl text-brown-7 font-bold mb-5 text-center font-nospacing">Download our Free Guide</h4>
+                            <h3 class="text-center text-xl">7 Ways You've Been Mislead By Food Labels.</h3>
                         </v-col>
 
                         <v-col md="6" sm="12">
@@ -377,7 +381,7 @@
 
                 <!-- What Members are Saying -->
                 <section class="bg-green-lightest p-24 p-mobile text-center">
-                    <h3 class="text-3xl font-bold text-brown-7">What Members are Saying</h3>
+                    <h3 class="text-3xl font-bold text-brown-7 font-nospacing p20-mobile">What Members are Saying</h3>
 
                     <v-carousel
                             v-model="model"
@@ -388,7 +392,7 @@
                         <v-carousel-item v-for="testimonial in testimonials" :key="testimonial.id">
                             <v-sheet height="100%" tile color="transparent">
                                 <v-row class="fill-height" align="center" justify="center">
-                                    <div class="text-brown-6 mx-auto p-3" style="max-width: 65%;">
+                                    <div class="text-brown-6 mx-auto p-3 text-xl" style="max-width: 65%;">
 
                                         <p class="relative">
                                             <v-icon x-large class="text-h1 opacity-20"
@@ -402,7 +406,7 @@
                                             </v-icon>
                                         </p>
 
-                                        <p class="subtitle-1 text-center mt-5">
+                                        <p class="subtitle-1 text-center mt-5 text-2xl">
                                             <span class="font-weight-bold">- ((testimonial.owner))</span>
                                             ((testimonial.date))
                                         </p>
@@ -414,7 +418,7 @@
 
                     {% if not user.is_authenticated %}
                         <div class="text-center mt-20">
-                            <v-btn large color="primary" class="font-weight-bold mx-3" href="{% url 'signup' %}">BECOME
+                            <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">BECOME
                                 A MEMBER
                             </v-btn>
                         </div>
@@ -423,19 +427,19 @@
                 <!-- What Members are Saying -->
 
                 <!-- Meet Your Trusted Farmers -->
-                <section class="p-24 text-center text-brown-7 p-mobile">
-                    <h3 class="font-bold text-3xl mb-20">Meet Your Trusted Farmers</h3>
+                <section class="p-24 text-center text-brown-7 p-mobile p20-mobile">
+                    <h3 class="font-bold text-3xl mb-10 mt-10 font-nospacing p20-mobile">Meet Your Trusted Farmers</h3>
 
-                    <div class="row mx-auto">
+                    <div class="row mx-auto p20-mobile">
 
                         <div class="col-xl-3 col-md-4 col-6 p-1">
                             <div class="w-40 h-40 m-auto flex items-center">
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/deck logo.jpg' %}"></v-img>
                             </div>
 
-                            <h4 class="font-bold mt-4">Deck Family Farm</h4>
-                            <p class="text-base font-thin mb-0">Pasture Raised Meat and Eggs</p>
-                            <p class="text-base font-thin">Juntion City, OR</p>
+                            <h4 class="font-bold mt-4 text-xl">Deck Family Farm</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Pasture Raised Meat and Eggs</p>
+                            <p class="text-base font-thin mt-n1">Juntion City, OR</p>
                         </div>
 
                         <div class="col-xl-3 col-md-4 col-6 p-1">
@@ -444,9 +448,9 @@
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/camas swale logo.jpg' %}"></v-img>
                             </div>
 
-                            <h4 class="font-bold mt-4">Camas Swale Farm</h4>
-                            <p class="text-base font-thin mb-0">Organically Grown Vegetables, <br>Herbs Flowers</p>
-                            <p class="text-base font-thin">Coburg, OR</p>
+                            <h4 class="font-bold mt-4 text-xl">Camas Swale Farm</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Organically Grown Vegetables, Herbs Flowers</p>
+                            <p class="text-base font-thin mt-n1">Coburg, OR</p>
                         </div>
 
                         <div class="col-xl-3 col-md-4 col-6 p-1">
@@ -455,10 +459,10 @@
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/little wings.jpg' %}"></v-img>
                             </div>
 
-                            <h4 class="font-bold mt-4">Little Wings</h4>
-                            <p class="text-base font-thin mb-0">Hand Harvested Fruits and Berries, Vegetables and
+                            <h4 class="font-bold mt-4 text-xl">Little Wings</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Hand Harvested Fruits and Berries, Vegetables and
                                 Flowers</p>
-                            <p class="text-base font-thin">Eugene, OR</p>
+                            <p class="text-base font-thin mt-n1">Eugene, OR</p>
                         </div>
 
                         <div class="col-xl-3 col-md-4 col-6 p-1">
@@ -467,9 +471,9 @@
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/etoile farms.jpeg' %}"></v-img>
                             </div>
 
-                            <h4 class="font-bold mt-4">L’Etoile Farms</h4>
-                            <p class="text-base font-thin mb-0">Oregon Tilth, Organic Grown<br> Vegetables and Fruit</p>
-                            <p class="text-base font-thin">Noti, OR</p>
+                            <h4 class="font-bold mt-4 text-xl">L’Etoile Farms</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Oregon Tilth, Organic Grown Vegetables and Fruit</p>
+                            <p class="text-base font-thin mt-n1">Noti, OR</p>
                         </div>
 
                         <div class="col-xl-3 col-md-4 col-6 p-1">
@@ -478,9 +482,9 @@
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/sweet leaf.webp' %}"></v-img>
                             </div>
 
-                            <h4 class="font-bold mt-4">Sweet Leaf Organic Farm</h4>
-                            <p class="text-base font-thin mb-0">Organic Vegetables and Fruit</p>
-                            <p class="text-base font-thin">Eugene, OR</p>
+                            <h4 class="font-bold mt-4 text-xl">Sweet Leaf Organic Farm</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Organic Vegetables and Fruit</p>
+                            <p class="text-base font-thin mt-n1">Eugene, OR</p>
                         </div>
 
                         <div class="col-xl-3 col-md-4 col-6 p-1">
@@ -489,9 +493,9 @@
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/camas country.png' %}"></v-img>
                             </div>
 
-                            <h4 class="font-bold mt-4">Camas Country Mill</h4>
-                            <p class="text-base font-thin mb-0">Whole Grains and Artisan Flours</p>
-                            <p class="text-base font-thin">Eugene, OR</p>
+                            <h4 class="font-bold mt-4 text-xl">Camas Country Mill</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Whole Grains and Artisan Flours</p>
+                            <p class="text-base font-thin mt-n1">Eugene, OR</p>
                         </div>
 
                         <div class="col-xl-3 col-md-4 col-6 p-1">
@@ -500,10 +504,10 @@
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/lonesome whistle.png' %}"></v-img>
                             </div>
 
-                            <h4 class="font-bold mt-4">Lonesome Whistle Farm</h4>
-                            <p class="text-base font-thin mb-0">Popcorn, Polenta, Whole Grains,<br> Stone Milled Flour,
+                            <h4 class="font-bold mt-4 text-xl">Lonesome Whistle Farm</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Popcorn, Polenta, Whole Grains, Stone Milled Flour,
                                 Milled Oats and Pasta</p>
-                            <p class="text-base font-thin">Junction City, OR</p>
+                            <p class="text-base font-thin mt-n1">Junction City, OR</p>
                         </div>
 
                         <div class="col-xl-3 col-md-4 col-6 p-1">
@@ -512,9 +516,9 @@
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/my brothers farm.png' %}"></v-img>
                             </div>
 
-                            <h4 class="font-bold mt-4">My Brothers Farm</h4>
-                            <p class="text-base font-thin mb-0">Certified Organic Hazelnuts</p>
-                            <p class="text-base font-thin">Creswell, OR</p>
+                            <h4 class="font-bold mt-4 text-xl">My Brothers Farm</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Certified Organic Hazelnuts</p>
+                            <p class="text-base font-thin mt-n1">Creswell, OR</p>
                         </div>
 
                         <div class="col-xl-3 col-md-4 col-6 p-1">
@@ -523,9 +527,9 @@
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/elegant elephant.jpg' %}"></v-img>
                             </div>
 
-                            <h4 class="font-bold mt-4">Elegant Elephant Baking Co.</h4>
-                            <p class="text-base font-thin mb-0">Gluten Free & Vegan Bakery</p>
-                            <p class="text-base font-thin">Eugene, OR</p>
+                            <h4 class="font-bold mt-4 text-xl">Elegant Elephant Baking Co.</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Gluten Free & Vegan Bakery</p>
+                            <p class="text-base font-thin mt-n1">Eugene, OR</p>
                         </div>
 
                         <div class="col-xl-3 col-md-4 col-6 p-1">
@@ -534,9 +538,9 @@
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/reality kitchen.png' %}"></v-img>
                             </div>
 
-                            <h4 class="font-bold mt-4">Reality Kitchen</h4>
-                            <p class="text-base font-thin mb-0">Community Supported Baking</p>
-                            <p class="text-base font-thin">Eugene, OR</p>
+                            <h4 class="font-bold mt-4 text-xl">Reality Kitchen</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Community Supported Baking</p>
+                            <p class="text-base font-thin mt-n1">Eugene, OR</p>
                         </div>
 
                         <div class="col-xl-3 col-md-4 col-6 p-1">
@@ -545,10 +549,10 @@
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/radiant coffee.png' %}"></v-img>
                             </div>
 
-                            <h4 class="font-bold mt-4">Radiant Coffee Roasters</h4>
-                            <p class="text-base font-thin mb-0">Fresh, artisan, small batch roasted<br> coffee from the
+                            <h4 class="font-bold mt-4 text-xl">Radiant Coffee Roasters</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Fresh, artisan, small batch roasted coffee <br>from the
                                 Pacific Northwest</p>
-                            <p class="text-base font-thin">Eugene, OR</p>
+                            <p class="text-base font-thin mt-n1">Eugene, OR</p>
                         </div>
 
                         <div class="col-xl-3 col-md-4 col-6 p-1">
@@ -557,9 +561,9 @@
                                 <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/sweet creek.png' %}"></v-img>
                             </div>
 
-                            <h4 class="font-bold mt-4">Sweet Creek Foods</h4>
-                            <p class="text-base font-thin mb-0">Locally harvested and small batch<br> co-packing</p>
-                            <p class="text-base font-thin">Elmira, OR</p>
+                            <h4 class="font-bold mt-4 text-xl">Sweet Creek Foods</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Locally harvested and small batch co-packing</p>
+                            <p class="text-base font-thin mt-n1">Elmira, OR</p>
                         </div>
 
                         {#          <div class="col-span-12 md:col-span-4 p-1">#}
@@ -575,8 +579,8 @@
                     </div>
 
                     {% if not user.is_authenticated %}
-                        <div class="text-center mt-20">
-                            <v-btn large color="primary" class="font-weight-bold mx-3" href="{% url 'signup' %}">BECOME
+                        <div class="text-center mt-10">
+                            <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">BECOME
                                 A MEMBER
                             </v-btn>
                         </div>
@@ -586,7 +590,7 @@
 
                 <!-- Why Trust Your Local Farmer? -->
                 <section class="bg-orange-extralightest p-24 p-mobile">
-                    <h3 class="text-brown-7 text-center font-bold text-3xl mb-20">Why Trust Your Local Farmer?</h3>
+                    <h3 class="text-brown-7 text-center font-bold text-3xl mb-20 font-nospacing">Why Trust Your Local Farmer?</h3>
 
                     <!-- <div class="grid grid-cols-12 gap-4 max-w-5xl mx-auto"> -->
                     <div class="row mx-auto">
@@ -594,13 +598,13 @@
                         <div class="col-md-6 col-12 float-right">
                             <v-img src="{% static 'img/why-trust-farmer.jpeg' %}"></v-img>
                         </div>
-                        <div class="col-md-6 col-12">
+                        <div class="col-md-6 col-12 text-xl">
                             <p class="mb-5 pl-3 pr-3">Looking for a trusted local partner who can make your search for
                                 environmentally responsible and healthy food choices easier? <strong>Search no
                                     more!</strong> Just because you’re not the farmer doesn’t mean you can’t be
                                 confident in knowing where your food came from.</p>
                             <p class="mb-5 pl-3 pr-3"><strong>Most food these days has natural sounding claims on their packaging,
-                                but how do you actually know how your food has been grown?</strong>There’s only one way,
+                                but how do you actually know how your food has been grown?</strong> There’s only one way,
                                 and that is to know your farmer.</p>
 
                             <v-expand-transition>
@@ -635,10 +639,10 @@
                     </div>
 
                     <div class="text-center pt-20">
-                        <v-btn large color="primary" class="font-weight-bold mx-3 mb-5" href="{% url 'signup' %}">BECOME
+                        <v-btn x-large color="primary" class="font-weight-bold mx-3 mb-5 ffcsa--v-btn" href="{% url 'signup' %}">BECOME
                             A MEMBER
                         </v-btn>
-                        <v-btn large color="green" dark class="font-weight-bold mx-3 mb-5" href="/products/">BROWSE THE
+                        <v-btn x-large color="green" dark class="font-weight-bold mx-3 mb-5 ffcsa--v-btn" href="/products/">BROWSE THE
                             STORE
                         </v-btn>
                     </div>
@@ -647,7 +651,7 @@
 
                 <!-- Full Farm CSA Quick Facts -->
                 <section class="p-24 p-mobile">
-                    <h3 class="text-brown-7 text-center font-bold text-3xl mb-20">Full Farm CSA Quick Facts</h3>
+                    <h3 class="text-brown-7 text-center font-bold text-3xl mb-20 font-nospacing p20-mobile">Full Farm CSA Quick Facts</h3>
 
                     <v-row>
                         <v-col md="6" cols="12" class="p0-mobile">
@@ -691,29 +695,29 @@
 
                 <!-- Your Customized Weekly Membership Box -->
                 <section class="p-24 p-mobile">
-                    <h3 class="pl-5 pr-5 text-brown-7 text-center font-bold text-3xl mb-20">Your Customized Weekly Membership
+                    <h3 class="pl-5 pr-5 text-brown-7 text-center font-bold text-3xl mb-20 font-nospacing">Your Customized Weekly Membership
                         Box</h3>
                     <v-row>
                         <!-- WEEKLY MEMBERSHIP BOX -->
                         <v-col md="8">
-                            <div class="bg-orange-light text-center p-5 md:h-28">
+                            <div class="bg-orange-light text-center p-5 md:h-28 text-2xl">
                                 <p class="font-bold mb-0">WEEKLY MEMBERSHIP BOX</p>
-                                <p class="text-base font-bold opacity-70 mb-0">You choose what budget works for your
+                                <p class="text-lg font-bold opacity-70 mb-0">You choose what budget works for your
                                     family!</p>
                             </div>
 
                             <ul class="bg-orange-lightest list-disc list-inside p-5 px-10 md:h-56">
-                                <li class="text-base font-thin">Customizable box of seasonal ingredients</li>
-                                <li class="text-base font-thin">5% discount on all items</li>
-                                <li class="text-base font-thin">Monthly member only specials (up to 30% discount)</li>
-                                <li class="text-base font-thin">Access to limited availability items</li>
-                                <li class="text-base font-thin">Home delivery options + access to member only pickup
+                                <li class="text-lg font-thin">Customizable box of seasonal ingredients</li>
+                                <li class="text-lg font-thin">5% discount on all items</li>
+                                <li class="text-lg font-thin">Monthly member only specials (up to 30% discount)</li>
+                                <li class="text-lg font-thin">Access to limited availability items</li>
+                                <li class="text-lg font-thin">Home delivery options + access to member only pickup
                                     sites.
                                 </li>
-                                <li class="text-base font-thin">Free weekly recipes using the week’s seasonal
+                                <li class="text-lg font-thin">Free weekly recipes using the week’s seasonal
                                     ingredients
                                 </li>
-                                <li class="text-base font-thin">Access to seasonal farm dinners</li>
+                                <li class="text-lg font-thin">Access to seasonal farm dinners</li>
                             </ul>
 
                             <div class="bg-orange-light p-5 px-10 md:h-36">
@@ -747,7 +751,7 @@
                             </div>
 
                             <div class="text-center mt-10">
-                                <v-btn large color="primary" class="font-weight-bold mx-3" href="{% url 'signup' %}">
+                                <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">
                                     BECOME A MEMBER
                                 </v-btn>
                             </div>
@@ -761,26 +765,19 @@
                             </div>
 
                             <ul class="bg-green-lightest list-disc list-inside p-5 px-10 md:h-56">
-                                <li class="text-base font-thin">Customizable box of seasonal local ingredients</li>
-                                <li class="text-base font-thin">Home delivery options OR pick up at local farmers
+                                <li class="text-lg font-thin">Customizable box of seasonal local ingredients</li>
+                                <li class="text-lg font-thin">Home delivery options OR pick up at local farmers
                                     market
                                 </li>
-                                <li class="text-base font-thin">Trial our CSA without the commitment</li>
+                                <li class="text-lg font-thin">Trial our CSA without the commitment</li>
                             </ul>
 
                             <div class="bg-green-light p-5 mt-auto text-center md:h-36">
-                                <h3 class="font-bold relative mb-0">
-                <span class="relative">
-{#                  <span class="absolute" style="top: -1rem;left: -0.7rem;">$</span>#}
-                  <span class="text-4xl">Coming Soon!</span>
-{#                  <span class="text-4xl">40</span>#}
-                </span>
-                                </h3>
-{#                                <p class="text-sm mb-0">MINIMUM</p>#}
+                                <h3 class="text-xl font-bold w-44 mx-auto mt-10">COMING SOON!</h3>
                             </div>
 
                             <div class="text-center mt-10">
-                                <v-btn large color="green" dark class="font-weight-bold mx-3" href="/products/">BROWSE
+                                <v-btn x-large color="green" dark class="font-weight-bold mx-3" href="/products/">BROWSE
                                     THE STORE
                                 </v-btn>
                             </div>
