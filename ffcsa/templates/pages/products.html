@@ -15,8 +15,10 @@
 {#      <v-img src="{% static 'img/IMG_0067.JPG' %}" height="400">#}
           <v-img :src="imgSrc" :height="bannerHeight">
         <v-overlay :absolute="true" :opacity=".5" class="text-center">
-          <h3 class="text-h3">Shop the Farm</h3>
-          <p>High quality products from farmer's you can trust</p>
+            <div class="text-white text-center m-auto font-bold max-w-1xl">
+                <p class="text-5xl mb-3 font-bold">Shop the Farm</p>
+                <p class="text-xl">High quality products from farmer's you can trust</p>
+            </div>
         </v-overlay>
       </v-img>
 
@@ -308,9 +310,10 @@
 
       <!-- Ready for Better Food Choices? -->
       <section class="text-center p-5 py-20 max-w-xl mx-auto">
-        <h3 class="text-3xl text-primary font-bold mb-5">Ready for Better Food Choices?</h3>
-        <p class="text-secondary text-xl mb-10">Join the hundreds of households who trust local farmers to provide high quality food for a full diet.</p>
-        <v-btn x-large color="primary" class="font-weight-bold" href="{% url 'signup' %}">BECOME A MEMBER</v-btn>
+        <h3 class="text-3xl text-primary font-bold mb-5 font-nospacing">Ready for Better Food Choices?</h3>
+        <p class="text-secondary text-xl">Join the hundreds of households who trust local farmers</p>
+        <p class="text-secondary text-xl mb-10">to provide high quality food for a full diet.</p>
+        <v-btn x-large color="primary" class="font-weight-bold ffcsa--v-btn" href="{% url 'signup' %}">BECOME A MEMBER</v-btn>
       </section>
       <!-- Ready for Better Food Choices? -->
 
