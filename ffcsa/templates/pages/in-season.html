@@ -6,198 +6,219 @@
 {% block meta_title %}In Season{% endblock %}
 
 {% block main %}
-<!-- <main id="FAQVue" v-cloak> -->
-<main id="FAQVue">
-  <!-- Call block super -->
-  {{ block.super }}
-  
-  <!-- banner section -->
-  <section class="min-h-300px lg:min-h-400px bg-cover bg-center bg-overlay-dark flex" style="background-image: var(--banner-bg);">
-    <div class="text-white text-center text-4xl m-auto font-bold bg-black bg-opacity-25 px-5 py-4">IN SEASON</div>
-  </section>
-  <!-- banner section -->
+    <!-- <main id="FAQVue" v-cloak> -->
+    <main id="InSeasonVue">
+        <!-- Call block super -->
+        {{ block.super }}
 
-  <!-- OFFERING HOME DELIVER! -->
-  <div class="bg-green text-white font-bold text-2xl text-center py-4">
-    NOW OFFERING HOME DELIVERY! SELECT HOME DELIVERY AT CHECKOUT.
-  </div>
-  <!-- OFFERING HOME DELIVER! -->
+        <v-app>
+            <v-main>
+                <!-- banner section -->
+                <section class="min-h-300px lg:min-h-400px bg-cover bg-center bg-overlay-dark flex"
+                         style="background-image: var(--banner-bg);">
+                    <div class="text-white text-center text-4xl m-auto font-bold bg-black bg-opacity-25 px-5 py-4">IN
+                        SEASON
+                    </div>
+                </section>
+                <!-- banner section -->
 
-  <section class="container mx-auto my-12">
-    <!-- PASTURE RAISED -->
-    <article class="grid grid-cols-12 gap-4 mb-10">
-      <div class="col-span-4">
-        <header class="bg-orange-lightest text-xl text-brown-7 text-center py-3">PASTURE RAISED</header>
-        <div class="bg-brown-0 p-3">
-          <p class="mb-4 h-6">100% Grassfed Beef</p>
-          <p class="mb-4 h-6">Pasture Raised Pork</p>
-          <p class="mb-4 h-6">Grassfed Lamb</p>
-          <p class="mb-4 h-6">Pasture Raised Roasting Chicken</p>
-          <p class="mb-4 h-6">Pasture Raised Stewign Hens</p>
-          <p class="mb-4 h-6">Pasture Raised Turkey</p>
-          <p class="mb-4 h-6">Pasture Raised Eggs</p>
-        </div>
-      </div>
-      
-      <div class="col-span-2 text-center">
-        <header class="bg-yellow-lightest text-xl text-brown-7 py-3">SPRING</header>
-        <div class="bg-yellow-lightest bg-opacity-25 p-3">
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-        </div>
-      </div>
-  
-      <div class="col-span-2 text-center">
-        <header class="bg-orange-lighter text-xl text-brown-7 py-3">SUMMER</header>
-        <div class="bg-orange-lighter bg-opacity-25 p-3">
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-        </div>
-      </div>
-  
-      <div class="col-span-2 text-center">
-        <header class="bg-petiteOrchid text-xl text-brown-7 py-3">FALL</header>
-        <div class="bg-petiteOrchid bg-opacity-25 p-3">
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-        </div>
-      </div>
-  
-      <div class="col-span-2 text-center">
-        <header class="bg-green-lighter bg-opacity-75 text-xl text-brown-7 py-3">WINTER</header>
-        <div class="bg-green-lighter bg-opacity-25 p-3">
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-        </div>
-      </div>
+                <!-- OFFERING HOME DELIVER! -->
+                <div class="bg-green text-white font-bold text-2xl text-center py-4">
+                    NOW OFFERING HOME DELIVERY! SELECT HOME DELIVERY AT CHECKOUT.
+                </div>
+                <!-- OFFERING HOME DELIVER! -->
 
-    </article>
+                <section class="container mx-auto my-12">
+                    <!-- PASTURE RAISED -->
+                    <article class="grid grid-cols-12 gap-4 mb-10">
+                        <div class="col-span-4">
+                            <header class="bg-orange-lightest text-xl text-brown-7 text-center py-3">PASTURE RAISED
+                            </header>
+                            <div class="bg-brown-0 p-3">
+                                <p class="mb-4 h-6">100% Grassfed Beef</p>
+                                <p class="mb-4 h-6">Pasture Raised Pork</p>
+                                <p class="mb-4 h-6">Grassfed Lamb</p>
+                                <p class="mb-4 h-6">Pasture Raised Roasting Chicken</p>
+                                <p class="mb-4 h-6">Pasture Raised Stewign Hens</p>
+                                <p class="mb-4 h-6">Pasture Raised Turkey</p>
+                                <p class="mb-4 h-6">Pasture Raised Eggs</p>
+                            </div>
+                        </div>
 
-    <!-- ORGANIC VEGETABLES -->
+                        <div class="col-span-2 text-center">
+                            <header class="bg-yellow-lightest text-xl text-brown-7 py-3">SPRING</header>
+                            <div class="bg-yellow-lightest bg-opacity-25 p-3">
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                            </div>
+                        </div>
 
-    <article class="grid grid-cols-12 gap-4 mb-10">
-      <div class="col-span-4">
-        <header class="bg-orange-lightest text-xl text-brown-7 text-center py-3">PASTURE RAISED</header>
-        <div class="bg-brown-0 p-3">
-          <p class="mb-4 h-6">Salad - Romain</p>
-          <p class="mb-4 h-6">Salad - Spinach</p>
-          <p class="mb-4 h-6">Salad - Radish Greens</p>
-          <p class="mb-4 h-6">Salad - Baby Arugala</p>
-          <p class="mb-4 h-6">Salad - Butterhead</p>
-          <p class="mb-4 h-6">Zucchini</p>
-          <p class="mb-4 h-6">Pumpkin</p>
-          <p class="mb-4 h-6">Potatos - Yukon Gold</p>
-          <p class="mb-4 h-6">Potatos - Red Gold</p>
-          <p class="mb-4 h-6">Sweet Onions</p>
-          <p class="mb-4 h-6">Garlic</p>
-        </div>
-      </div>
-      
-      <div class="col-span-2 text-center">
-        <header class="bg-yellow-lightest text-xl text-brown-7 py-3">SPRING</header>
-        <div class="bg-yellow-lightest bg-opacity-25 p-3">
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-        </div>
-      </div>
-  
-      <div class="col-span-2 text-center">
-        <header class="bg-orange-lighter text-xl text-brown-7 py-3">SUMMER</header>
-        <div class="bg-orange-lighter bg-opacity-25 p-3">
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-        </div>
-      </div>
-  
-      <div class="col-span-2 text-center">
-        <header class="bg-petiteOrchid text-xl text-brown-7 py-3">FALL</header>
-        <div class="bg-petiteOrchid bg-opacity-25 p-3">
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-        </div>
-      </div>
-  
-      <div class="col-span-2 text-center">
-        <header class="bg-green-lighter bg-opacity-75 text-xl text-brown-7 py-3">WINTER</header>
-        <div class="bg-green-lighter bg-opacity-25 p-3">
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-          <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
-        </div>
-      </div>
+                        <div class="col-span-2 text-center">
+                            <header class="bg-orange-lighter text-xl text-brown-7 py-3">SUMMER</header>
+                            <div class="bg-orange-lighter bg-opacity-25 p-3">
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                            </div>
+                        </div>
 
-    </article>
+                        <div class="col-span-2 text-center">
+                            <header class="bg-petiteOrchid text-xl text-brown-7 py-3">FALL</header>
+                            <div class="bg-petiteOrchid bg-opacity-25 p-3">
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                            </div>
+                        </div>
 
-  </section>
+                        <div class="col-span-2 text-center">
+                            <header class="bg-green-lighter bg-opacity-75 text-xl text-brown-7 py-3">WINTER</header>
+                            <div class="bg-green-lighter bg-opacity-25 p-3">
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                            </div>
+                        </div>
 
+                    </article>
 
-  {% if not user %}
-  <!-- Ready for Better Food Choices? -->
-  <div class="max-w-lg text-lg text-center mx-auto mt-10 mb-10">
-    <h2 class="text-2xl font-bold text-primary mb-5">Ready for Better Food Choices?</h2>
-    <p class="leading-10 font-semibold text-brown-7">Join the hundreds of households who trust local farmers to provide high quality food for a full diet.</p>
-  </div>
-  <!-- Ready for Better Food Choices? -->
+                    <!-- ORGANIC VEGETABLES -->
 
-  <div class="text-center">
-    <a href="{% url 'signup' %}" class="btn btn-primary">BECOME A MEMBER</a>
-  </div>
-  {% endif %}
+                    <article class="grid grid-cols-12 gap-4 mb-10">
+                        <div class="col-span-4">
+                            <header class="bg-orange-lightest text-xl text-brown-7 text-center py-3">PASTURE RAISED
+                            </header>
+                            <div class="bg-brown-0 p-3">
+                                <p class="mb-4 h-6">Salad - Romain</p>
+                                <p class="mb-4 h-6">Salad - Spinach</p>
+                                <p class="mb-4 h-6">Salad - Radish Greens</p>
+                                <p class="mb-4 h-6">Salad - Baby Arugala</p>
+                                <p class="mb-4 h-6">Salad - Butterhead</p>
+                                <p class="mb-4 h-6">Zucchini</p>
+                                <p class="mb-4 h-6">Pumpkin</p>
+                                <p class="mb-4 h-6">Potatos - Yukon Gold</p>
+                                <p class="mb-4 h-6">Potatos - Red Gold</p>
+                                <p class="mb-4 h-6">Sweet Onions</p>
+                                <p class="mb-4 h-6">Garlic</p>
+                            </div>
+                        </div>
 
-</main>
+                        <div class="col-span-2 text-center">
+                            <header class="bg-yellow-lightest text-xl text-brown-7 py-3">SPRING</header>
+                            <div class="bg-yellow-lightest bg-opacity-25 p-3">
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                            </div>
+                        </div>
+
+                        <div class="col-span-2 text-center">
+                            <header class="bg-orange-lighter text-xl text-brown-7 py-3">SUMMER</header>
+                            <div class="bg-orange-lighter bg-opacity-25 p-3">
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                            </div>
+                        </div>
+
+                        <div class="col-span-2 text-center">
+                            <header class="bg-petiteOrchid text-xl text-brown-7 py-3">FALL</header>
+                            <div class="bg-petiteOrchid bg-opacity-25 p-3">
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                            </div>
+                        </div>
+
+                        <div class="col-span-2 text-center">
+                            <header class="bg-green-lighter bg-opacity-75 text-xl text-brown-7 py-3">WINTER</header>
+                            <div class="bg-green-lighter bg-opacity-25 p-3">
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>
+                            </div>
+                        </div>
+
+                    </article>
+
+                </section>
+
+                <!-- Ready for Better Food Choices? -->
+                {% if not request.user.is_authenticated %}
+                <section class="text-center p-5 py-20 max-w-xl mx-auto">
+                    <h3 class="text-3xl text-primary font-bold mb-5 font-nospacing">Ready for Better Food
+                        Choices?</h3>
+                    <p class="text-secondary text-xl">Join the hundreds of households who trust local farmers</p>
+                    <p class="text-secondary text-xl mb-10">to provide high quality food for a full diet.</p>
+                    <v-btn x-large color="primary" class="font-weight-bold ffcsa--v-btn" href="{% url 'signup' %}">
+                        BECOME A MEMBER
+                    </v-btn>
+                </section>
+                {% endif %}
+                <!-- Ready for Better Food Choices? -->
+
+            </v-main>
+        </v-app>
+    </main>
 {% endblock main %}
+
+{% block js %}
+    <script>
+        const InSeasonApp = new Vue({
+            el: '#InSeasonVue',
+            delimiters: ['((', '))'],
+            vuetify: new Vuetify(opts),
+            data: {}
+        })
+
+    </script>
+{% endblock %}
