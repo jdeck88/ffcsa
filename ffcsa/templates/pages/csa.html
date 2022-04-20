@@ -113,13 +113,17 @@
                         </div>
                     </div>
 
-                    {% if not user.is_authenticated %}
-                        <div class="text-center mt-5">
-                            <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">BECOME
-                                A MEMBER
-                            </v-btn>
-                        </div>
-                    {% endif %}
+                    <div class="text-center mt-5">
+                        {% if not user.is_authenticated %}
+                        <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">BECOME
+                            A MEMBER
+                        </v-btn>
+                        {% else %}
+                        <v-btn x-large color="green" dark class="font-weight-bold mx-3" href="/products/">BROWSE
+                            THE STORE
+                        </v-btn>
+                        {% endif %}
+                    </div>
                 </section>
                 <!-- Where does your food come from? -->
 
@@ -195,13 +199,17 @@
                         </article>
                     </div>
 
-                    {% if not user.is_authenticated %}
-                        <div class="text-center">
-                            <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">BECOME
-                                A MEMBER
-                            </v-btn>
-                        </div>
-                    {% endif %}
+                    <div class="text-center">
+                        {% if not user.is_authenticated %}
+                        <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">BECOME
+                            A MEMBER
+                        </v-btn>
+                        {% else %}
+                        <v-btn x-large color="green" dark class="font-weight-bold mx-3" href="/products/">BROWSE
+                            THE STORE
+                        </v-btn>
+                        {% endif %}
+                    </div>
 
                 </section>
                 <!-- There’s a Better Way -->
@@ -232,16 +240,19 @@
                         </div>
                     </div>
 
-                    {% if not user.is_authenticated %}
-                        <div class="row">
-                            <div class="col-12">
-                                <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">
-                                    BECOME A
-                                    MEMBER
-                                </v-btn>
-                            </div>
+                    <div class="row">
+                        <div class="col-12">
+                            {% if not user.is_authenticated %}
+                            <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">BECOME
+                                A MEMBER
+                            </v-btn>
+                            {% else %}
+                            <v-btn x-large color="green" dark class="font-weight-bold mx-3" href="/products/">BROWSE
+                                THE STORE
+                            </v-btn>
+                            {% endif %}
                         </div>
-                    {% endif %}
+                    </div>
                 </section>
                 <!-- Ready for Better Food Choices? -->
 
@@ -327,13 +338,17 @@
                         </v-carousel-item>
                     </v-carousel>
 
-                    {% if not user.is_authenticated %}
-                        <div class="text-center mt-20">
-                            <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">BECOME
-                                A MEMBER
-                            </v-btn>
-                        </div>
-                    {% endif %}
+                    <div class="text-center mt-20">
+                        {% if not user.is_authenticated %}
+                        <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">BECOME
+                            A MEMBER
+                        </v-btn>
+                        {% else %}
+                        <v-btn x-large color="green" dark class="font-weight-bold mx-3" href="/products/">BROWSE
+                            THE STORE
+                        </v-btn>
+                        {% endif %}
+                    </div>
                 </section>
                 <!-- What Members are Saying -->
 
@@ -489,13 +504,17 @@
 
                     </div>
 
-                    {% if not user.is_authenticated %}
-                        <div class="text-center mt-10">
-                            <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">BECOME
-                                A MEMBER
-                            </v-btn>
-                        </div>
-                    {% endif %}
+                    <div class="text-center mt-10">
+                        {% if not user.is_authenticated %}
+                        <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">BECOME
+                            A MEMBER
+                        </v-btn>
+                        {% else %}
+                        <v-btn x-large color="green" dark class="font-weight-bold mx-3" href="/products/">BROWSE
+                            THE STORE
+                        </v-btn>
+                        {% endif %}
+                    </div>
                 </section>
                 <!-- Meet Your Trusted Farmers -->
 
@@ -550,12 +569,15 @@
                     </div>
 
                     <div class="text-center pt-20">
+                        {% if not user.is_authenticated %}
                         <v-btn x-large color="primary" class="font-weight-bold mx-3 mb-5 ffcsa--v-btn" href="{% url 'signup' %}">BECOME
                             A MEMBER
                         </v-btn>
-                        <v-btn x-large color="green" dark class="font-weight-bold mx-3 mb-5 ffcsa--v-btn" href="/products/">BROWSE THE
-                            STORE
+                        {% else %}
+                        <v-btn x-large color="green" dark class="font-weight-bold mx-3 mb-5" href="/products/">BROWSE
+                            THE STORE
                         </v-btn>
+                        {% endif %}
                     </div>
                 </section>
                 <!-- Why Trust Your Local Farmer? -->
@@ -662,9 +684,11 @@
                             </div>
 
                             <div class="text-center mt-10">
+                                {% if not user.is_authenticated %}
                                 <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">
                                     BECOME A MEMBER
                                 </v-btn>
+                                {% endif %}
                             </div>
                         </v-col>
 
@@ -688,9 +712,11 @@
                             </div>
 
                             <div class="text-center mt-10">
+                                {% if user.is_authenticated %}
                                 <v-btn x-large color="green" dark class="font-weight-bold mx-3" href="/products/">BROWSE
                                     THE STORE
                                 </v-btn>
+                                {% endif %}
                             </div>
                         </v-col>
                     </v-row>
