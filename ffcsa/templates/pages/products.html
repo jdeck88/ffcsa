@@ -37,7 +37,23 @@
       <!-- filters section -->
       <section class="md:flex justify-center mt-10 text-green md:text-xl font-bold">
 
-        <div v-for="category in categories" class="inline-blocks relative hover-trigger text-base">
+       <template v-if="isMobile()">
+          <v-expansion-panels focusable class="mb-5">
+            <v-expansion-panel v-for="category in categories" >
+
+              <v-expansion-panel-header>
+                  <a href="#" @click.prevent="selectedCategory=category.title; page=1" :class="[categorySelected(category.title), 'hover:text-primary block']">
+                    ((category.display_name))
+                  </a>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content  v-if="category.sub_cats.length > 0" v-for="sub in category.sub_cats">
+                  <a @click.prevent="selectedCategory=sub; page=1" class="py-2 px-4 block text-green" href="#">((sub))</a>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+       </template>
+
+        <div v-if="!isMobile()" v-for="category in categories" class="inline-blocks relative hover-trigger text-base">
           <a href="#" @click.prevent="selectedCategory=category.title; page=1" :class="[categorySelected(category.title), 'hover:text-primary block m-3']">
             ((category.display_name))
           </a>
@@ -415,6 +431,9 @@
     },
 
     methods: {
+      isMobile() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      },
       async getProducts(searchQuery=null) {
         this.loading = true;
         // this.products.results = []
