@@ -48,12 +48,12 @@ class ProductVariationDataSerializer(serializers.ModelSerializer):
     image = ProductImageSerializer()
     addable = serializers.SerializerMethodField()
     vendors = VendorDataSerializer(many=True)
-    unit = ProductVariationUnitDataSerializer()
+    # unit = ProductVariationUnitDataSerializer()
 
     class Meta:
         model = ProductVariation
         fields = ('id', 'title', 'short_description', 'in_inventory', 'is_frozen', 'unit_price', 'sku', 'options', 'unit',
-                  'number_in_stock', 'live_num_in_stock', 'image', 'addable', 'vendors')
+                  'weight', 'number_in_stock', 'live_num_in_stock', 'image', 'addable', 'vendors')
 
     def get_addable(self, obj):
         # if number_in_stock is None means that the product amount

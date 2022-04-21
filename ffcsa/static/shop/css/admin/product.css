@@ -126,7 +126,8 @@ td {
     text-align: center;
 }
 
-.field-sku input,
+.field-box.field-sku input,
+.field-box.field-unit input,
 .field-order_on_invoice input,
 .field-num_in_stock input,
 .field-unit_price input,
@@ -135,6 +136,10 @@ td {
     text-align: center;
 }
 
+.field-box.field-weight input {
+    max-width: 100px;
+    text-align: center;
+}
 .field-cat,
 .field-vendor input {
     min-width: 160px;

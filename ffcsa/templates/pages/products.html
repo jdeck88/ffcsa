@@ -243,13 +243,18 @@
                                 <!-- Variation price -->
                                 <v-col md="8" class="brown_darkest--text">
                                   <template v-if="variation.addable">
-                                    <p>
+                                    <p class="mb-0">
                                       <span class="text-h5">$((variation.unit_price))</span>
-                                      <span v-if="variation.unit">/(( variation.unit.code )) </span>
-                                      <span class="text-base ml-2">(( variation.title ))</span>
-                                      <span class="text-base text-red-400">((variation.live_num_in_stock)) AVAILABLE</span>
-                                      <span class="text-green-700"><br>((variation.short_description))</span>
+                                      <span v-if="variation.unit">/(( variation.unit)) </span>
+                                      <span class="text-lg ml-8">(( variation.title ))</span>
                                     </p>
+                                      <p class="mb-0">
+                                          <span class="text-base float-left">((variation.weight))</span>
+                                          <span class="text-base text-red-400 float-right">((variation.live_num_in_stock)) AVAILABLE</span>
+                                      </p>
+                                      <p class="mb-0">
+                                          <span class="text-green-700"><br>((variation.short_description))</span>
+                                      </p>
                                   </template>
 
                                   <template v-else-if="!variation.live_num_in_stock">
@@ -257,12 +262,17 @@
                                   </template>
 
                                   <template v-else>
-                                    <p>
+                                    <p class="mb-0">
                                       <span class="text-h5">$((variation.unit_price))</span>
-                                      <span v-if="variation.unit">/(( variation.unit.code )) </span>
-                                      <span class="text-base ml-2">(( variation.title ))</span>
-                                      <span v-if="variation.live_num_in_stock < 5" class="text-base text-red-400">((variation.live_num_in_stock)) AVAILABLE</span>
-                                      <span v-if="variation.live_num_in_stock >= 5" class="text-base text-green-700">((variation.live_num_in_stock)) AVAILABLE</span>
+                                      <span v-if="variation.unit">/(( variation.unit )) </span>
+                                      <span class="text-lg ml-8">(( variation.title ))</span>
+                                    </p>
+                                    <p class="mb-0">
+                                      <span class="text-base float-left">((variation.weight))</span>
+                                      <span v-if="variation.live_num_in_stock < 5" class="text-base text-red-400 float-right">((variation.live_num_in_stock)) AVAILABLE</span>
+                                      <span v-if="variation.live_num_in_stock >= 5" class="text-base text-green-700 float-right">((variation.live_num_in_stock)) AVAILABLE</span>
+                                    </p>
+                                    <p class="mb-0">
                                       <span class="text-green-700"><br>((variation.short_description))</span>
                                     </p>
                                   </template>

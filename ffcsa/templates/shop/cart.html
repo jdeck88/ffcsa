@@ -42,8 +42,8 @@
                       <h3>((item.description))</h3>
                       <h3 class="mt-auto">
                         $((item.unit_price))
-                        <span v-if="item.variation.product.unit" class="">/((item.variation.product.unit))</span>
-                        <h3 class="text-gray-500">((item.variation.product.weight))</h3>
+                        <span v-if="item.variation.unit" class="">/((item.variation.unit))</span>
+                        <h3 class="text-gray-500">((item.variation.weight))</h3>
                       </h3>
                     </div>
                   </v-col>

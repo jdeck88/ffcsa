@@ -731,6 +731,9 @@ class ProductChangelistForm(forms.ModelForm):
 
         if self.instance:
             # If there are multiple variations, disallow editing self.single_variation_fields in the changelist view
+            # print(self.fields['title'])
+            # self.fields['title'] = DisplayField(self.instance.descriptive_title)
+            # self.initial['title'] = self.instance.descriptive_title
             if self.instance.variations.count() > 1:
                 # if 'num_in_stock' in self.fields:
                 #     self.fields['num_in_stock']['disabled'] = True

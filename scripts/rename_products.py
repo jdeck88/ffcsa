@@ -1,6 +1,6 @@
 import re
-import time
-import pandas as pd
+# import time
+# import pandas as pd
 from ffcsa.shop.models import Product
 
 
@@ -37,50 +37,55 @@ def clean_unit(str):
 product_list = []
 
 # parse product weight
+weight_expression = re.compile(r'\(.*(#|oz|gal|qt|lbs|lb|pieces|count|bag.*)\)|\(.*\)#|(-|,)\s\d\"|\s\d/\d#\s$|,\s#\d$|\s\d*oz$|(-\s|\.|,\s*\d).*(lb|qt|#$)|^\d+(/\d|\.\d)*\s*(#|bu|qt|oz|pk|gal),*|^#,\s')
 for product in Product.objects.all():
-    
-    # * Weight
-    weight_expression = re.compile(r'\(.*(#|oz|gal|qt|lbs|lb|pieces|count|bag.*)\)|\(.*\)#|(-|,)\s\d\"|\s\d/\d#\s$|,\s#\d$|\s\d*oz$|(-\s|\.|,\s*\d).*(lb|qt|#$)|^\d+(/\d|\.\d)*\s*(#|bu|qt|oz|pk|gal),*|^#,\s')
-    weight_search = weight_expression.search(product.title)
-    
-    weight = weight_search.group() if weight_search else ''
-    
-    
-    # remove the weight from the title
-    new_title = product.title.replace(weight, '').strip()
 
-    # * Unit
-    unit_expression = re.compile(r'^.*(ea|bu|pt|bag|doz|pk|flat|box|qt|oz),|\(.*pt\)')
-    unit_search = unit_expression.search(new_title)
+    for variation in product.variations.all():
+        # * Weight
+        weight_search = weight_expression.search(variation.title)
 
-    unit = unit_search.group() if unit_search else ''
-
-    # remove unit from the title
-    new_title = new_title.replace(unit, '').strip()
-
-    # Clean unit and weight
-    weight = clean_unit(weight)
-    unit = clean_unit(unit)
+        weight = weight_search.group() if weight_search else ''
 
 
-    # Assing ea to lb
-    if '#' in weight or 'lb' in weight:
-        unit = 'ea'
+        # remove the weight from the title
+        new_title = variation.title.replace(weight, '').strip()
 
+        # * Unit
+        unit_expression = re.compile(r'^.*(ea|bu|pt|bag|doz|pk|flat|box|qt|oz),|\(.*pt\)')
+        unit_search = unit_expression.search(new_title)
 
-    # final cleaning for weight
-    weight = re.sub('^-', '', weight).strip()
+        unit = unit_search.group() if unit_search else ''
 
+        # remove unit from the title
+        new_title = new_title.replace(unit, '').strip()
 
-    # only # with no number
-    if weight == '#':
-        unit, weight = 'lb', ''
+        # Clean unit and weight
+        weight = clean_unit(weight)
+        unit = clean_unit(unit)
 
+        # Assing ea to lb
+        if '#' in weight or 'lb' in weight:
+            unit = 'ea'
 
-    product.title = new_title
-    product.weight = weight
-    product.unit = unit
-    product.save()
+        # final cleaning for weight
+        weight = re.sub('^-', '', weight).strip()
+
+        # only # with no number
+        if weight == '#':
+            unit, weight = 'lb', ''
+
+        if variation.default:
+            product.title = new_title
+
+        if variation._title:
+            variation._title = new_title
+        else:
+            product.title = new_title
+        variation.weight = weight
+        variation.unit = unit
+        variation.save()
+        product.copy_default_variation()
+        product.save()
 
 
 

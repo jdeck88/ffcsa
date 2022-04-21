@@ -37,8 +37,8 @@ class Cart(models.Model):
         Increase quantity of existing item if variation matches, otherwise create new.
         """
         # TODO: remove this for one-time orders
-        # if not self.user_id:
-        #     raise Exception("You must be logged in to add products to your cart")
+        if not self.user_id:
+            raise Exception("You must be logged in to add products to your cart")
         if not self.pk:
             self.save()
         item, created = self.items.get_or_create(variation=variation)

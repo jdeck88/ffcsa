@@ -106,6 +106,12 @@ class Product(BaseProduct, Priced, RichText, ContentTyped, AdminThumbMixin):
     def has_stock(self):
         pass
 
+    @property
+    def descriptive_title(self):
+        s = str(self.variations.first())
+        print(s)
+        return s
+
     def save(self, *args, **kwargs):
         self.set_content_model()
         super(Product, self).save(*args, **kwargs)
@@ -133,6 +139,8 @@ class Product(BaseProduct, Priced, RichText, ContentTyped, AdminThumbMixin):
         # TODO I don't think we need this anymore
         # setattr(self, "weekly_inventory", getattr(default, "weekly_inventory"))
         # setattr(self, "in_inventory", getattr(default, "in_inventory"))
+        setattr(self, "unit", getattr(default, "unit"))
+        setattr(self, "weight", getattr(default, "weight"))
         if default.image:
             self.image = default.image.file.name
         self.save()
@@ -251,18 +259,19 @@ class ProductVariation(with_metaclass(ProductVariationMetaclass, Priced)):
     # on_delete=models.SET_NULL, blank=True,
     # null=True)
 
-    unit = models.ForeignKey(ProductVariationUnit, on_delete=models.SET_NULL, blank=True, null=True, related_name='product_variations')
+    unit = models.CharField(max_length=200, blank=True, null=True)
+    weight = models.CharField(max_length=200, blank=True, null=True)
     objects = managers.ProductVariationManager()
 
     class Meta:
         ordering = ("-default",)
-        unique_together = ('product', '_title')
+        # unique_together = ('product', '_title')
 
     def __str__(self):
         s = self.unit + ", " if self.unit else ""
         s += self.title
-        if self.product.weight:
-            s += f" ({self.product.weight})"
+        if self.weight:
+            s += f" {self.weight}"
         return s
 
     @property

@@ -163,3 +163,4 @@ admin.site.register(Recipe, RecipeAdmin)
 # TODO remove all unnecessary admin menus
 admin.site.unregister(ThreadedComment)
 admin.site.unregister(Sale)
+# admin.site.unregister(Token)

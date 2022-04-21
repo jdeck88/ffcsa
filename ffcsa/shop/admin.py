@@ -28,7 +28,7 @@ from ffcsa.shop.models import (Category, DiscountCode, Order, OrderItem,
                                ProductVariation, Sale, Vendor, VendorProductVariation)
 from ffcsa.shop.models.Cart import CartItem
 from ffcsa.shop.models.Vendor import VendorCartItem
-from ffcsa.shop.models.Product import ProductSeason, ProductVariationUnit
+from ffcsa.shop.models.Product import  ProductVariationUnit
 from ffcsa.shop.views import HAS_PDF
 
 """
@@ -117,9 +117,9 @@ class ProductVariationAdmin(nested.NestedStackedInline):
     view_on_site = False
     fieldsets = (
         (None, {
-            "fields": ["_title", "in_inventory", "weekly_inventory", "is_frozen", "extra", "unit",
+            "fields": ["_title", "in_inventory", "weekly_inventory", "is_frozen", "extra",
                        ("vendor_price", "unit_price", "margin"),
-                       "sku",
+                       ("unit", "weight", "sku"),
                        "default",
                        "image"],
         }),
@@ -145,7 +145,7 @@ class ProductImageAdmin(TabularDynamicInlineAdmin):
 product_fieldsets = deepcopy(DisplayableAdmin.fieldsets)
 product_fieldsets[0][1]["fields"].insert(2, "available")
 product_fieldsets[0][1]["fields"].extend(
-    ["content", "categories", "order_on_invoice", "is_dairy", "seasons"])
+    ["content", "categories", "order_on_invoice", "is_dairy"])
 product_fieldsets = list(product_fieldsets)
 
 other_product_fields = []
@@ -158,7 +158,7 @@ if len(other_product_fields) > 0:
         "classes": ("collapse-closed",),
         "fields": tuple(other_product_fields)}))
 
-product_list_display = ["admin_thumb", "title", "available",
+product_list_display = ["admin_thumb", "descriptive_title", "available",
                         "admin_link"]
 product_list_editable = ["available"]
 
@@ -210,7 +210,7 @@ class ProductAdmin(nested.NestedModelAdminMixin, ContentTypedAdmin, DisplayableA
     actions = [product_actions.export_price_list]
 
     list_display = product_list_display
-    list_display_links = ("admin_thumb", "title")
+    list_display_links = ("admin_thumb", "descriptive_title")
     list_editable = product_list_editable
     list_filter = ("status", "available", CategoryListFilter, "variations__vendors")
     filter_horizontal = ("categories",) + tuple(other_product_fields)
@@ -545,5 +545,3 @@ admin.site.register(Order, OrderAdmin)
 admin.site.register(Sale, SaleAdmin)
 admin.site.register(DiscountCode, DiscountCodeAdmin)
 admin.site.register(Vendor, VendorAdmin)
-admin.site.register(ProductSeason)
-admin.site.register(ProductVariationUnit)
