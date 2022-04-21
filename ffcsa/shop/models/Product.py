@@ -109,7 +109,6 @@ class Product(BaseProduct, Priced, RichText, ContentTyped, AdminThumbMixin):
     @property
     def descriptive_title(self):
         s = str(self.variations.first())
-        print(s)
         return s
 
     def save(self, *args, **kwargs):
