@@ -101,7 +101,7 @@
       <template>
         <v-container>
           <v-alert type="warning">
-            Currently we are only accepting online orders for Full Farm CSA members. If you are a member, log in to place your order. If you would like to place an order for Deck Family Farm products, please send give us a call or send us an email.
+            Currently we are only accepting online orders for Full Farm CSA members. If you are a member, log in to place your order. If you would like to place an order for Deck Family Farm products, please give us a call at 541-998-4697 or send us an email at info@deckfamilyfarm.com.
           </v-alert>
         </v-container>
       </template>
@@ -167,7 +167,7 @@
                   </template>
 
                   <template v-else>
-                    <v-btn block x-large disabled>Coming Soon!</v-btn>
+                      <v-btn disabled block color="brown_lightest" elevation="0" x-large @click="App.addToCart(product.variations[0]);getProducts()">ADD TO CART</v-btn>
                   </template>
 
                 </v-col>
@@ -294,7 +294,7 @@
                                   </template>
 
                                   <template v-else>
-                                    <v-btn block x-large disabled>Coming Soon!</v-btn>
+                                    <v-btn disabled color="brown_lightest" elevation="0" x-large @click="App.addToCart(variation)">ADD TO CART</v-btn>
                                   </template>
                                 </v-col>
                             </template>

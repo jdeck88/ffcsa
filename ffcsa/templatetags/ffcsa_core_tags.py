@@ -1,4 +1,5 @@
 import bleach
+import json as py_json
 from django.template.loader import get_template
 from django import forms
 from django.utils import formats
@@ -25,6 +26,9 @@ def pickup_date_text(context):
 def get_item(dictionary, key):
     return dictionary.get(key)
 
+@register.filter
+def json(value):
+    return mark_safe(py_json.dumps(value, default=vars))
 
 @register.filter
 def get_attr(value, arg):

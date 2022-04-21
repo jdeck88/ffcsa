@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="{{ LANGUAGE_CODE }}"{% if LANGUAGE_BIDI %} dir="rtl"{% endif %}>
-{% load pages_tags mezzanine_tags i18n staticfiles static %}
+{% load pages_tags ffcsa_core_tags mezzanine_tags i18n staticfiles static %}
 {% load render_bundle from webpack_loader %}
 
 <head>
@@ -455,10 +455,11 @@
 
     <!-- Vue Main App Setup -->
     <script>
+        const is_authenticated = JSON.parse('{{ user.is_authenticated|json }}').value;
         // Vuex Store
         const store = new Vuex.Store({
             state: {
-                is_authenticated: false,
+                is_authenticated,
                 cart: {
                     shown: false,
                     loading: false,
@@ -545,15 +546,6 @@
             methods: {
                 isMobile() {
                     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-                },
-                async getUser() {
-                    fetch('/api/users/')
-                        .then(response => response.json())
-                        .then(data => {
-                            if (Object.keys(data).length > 0) {
-                                store.state.is_authenticated = true
-                            }
-                        })
                 },
                 async fetchCart() {
                     store.state.cart.loading = true;
@@ -743,7 +735,6 @@
             },
             async mounted() {
                 // get the cart using user session
-                this.getUser()
                 this.fetchCart()
                 this.getDropSites()
 
