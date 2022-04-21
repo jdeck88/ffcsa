@@ -113,10 +113,9 @@
 
 </style>
 
-<h3 style="float: left; margin-top:0">DFF Order Ticket</h3>
+<h3 style="float: left; margin-top:0">Creamy Cow, LLC Order Ticket</h3>
 <p style="float: right; margin-top:0">{{ date }}</p>
 
-<p style="clear: both; font-size: 20px"><b>VERIFY PACKAGE WEIGHTS!</b></p>
 {% regroup items by category as category_list %}
 
 <ul>
@@ -125,7 +124,7 @@
         <h4 class="qty">Qty</h4>
         <h4 class="price">Price</h4>
         <h4 class="total_price">Total Price</h4>
-        <h4 class="checklist">Packed by DFF</h4>
+        <h4 class="checklist">Packed</h4>
         <h4 class="checklist">Received by FFCSA</h4>
     </li>
 
@@ -133,7 +132,7 @@
         <li class="category">{{ category }}</li>
 
         <ul class="items">
-            {% for item in category_items|dictsort:"description" %}
+            {% for item in category_items %}
                 <li>
                     <span class="item">{{ item.description }}</span>
                     <span class="num qty">{{ item.quantity }}</span>
@@ -168,14 +167,5 @@
             <span class="checklist"></span>
             <span class="checklist"></span>
         </li>
-        <li>
-            <span class="item">case, Chicken Eggs (Friday Invoice Only)</span>
-            <span class="num qty"></span>
-            <span class="num price">$94.5</span>
-            <span class="num total_price"></span>
-            <span class="checklist"></span>
-            <span class="checklist"></span>
-        </li>
     </ul>
 </ul>
-

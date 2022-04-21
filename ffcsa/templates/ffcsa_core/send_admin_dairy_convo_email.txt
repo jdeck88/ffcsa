@@ -1,0 +1,14 @@
+{{ user.first_name }} {{ user.last_name }} has just paid the dairy program fee.
+
+You will need to contact them to discuss the Raw Dairy Program and check the box on their account at:
+        {{ user_url }} before they can order dairy products.
+
+Drop Site
+{{ user.profile.drop_site }}
+
+Phone Number
+{{ user.profile.phone_number }}
+{{ user.profile.phone_number_2 }}
+
+Email
+{ user.profile.email }}

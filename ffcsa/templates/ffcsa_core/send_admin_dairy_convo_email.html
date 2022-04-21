@@ -1,0 +1,14 @@
+<p>{{ user.first_name }} {{ user.last_name }} has just paid the dairy program fee.</p>
+
+<p>You will need to contact them to discuss the Raw Dairy Program and check the box on their account at: <a
+        href="{{ user_url }}">{{ user_url }}</a> before they can order dairy products.</p>
+
+<h4>Drop Site</h4>
+<p>{{ user.profile.drop_site }}</p>
+
+<h4>Phone Number</h4>
+<p>{{ user.profile.phone_number }}</p>
+<p>{{ user.profile.phone_number_2 }}</p>
+
+<h4>Email</h4>
+<p>{{ user.profile.email }}</p>

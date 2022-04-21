@@ -8,22 +8,24 @@ from django.utils.translation import ugettext_lazy as _
 ##############################
 # FFCSA-CORE SETTINGS #
 ##############################
+YEARLY_SUBSCRIBER_MINIMUM = 1032  # $172 / month for 6 months
 DAIRY_CATEGORY = 'dairy'
 FROZEN_PRODUCT_CATEGORIES = ['pasture raised meats']
-FROZEN_ITEM_PACKLIST_EXCLUDED_CATEGORIES = ['nuts & honey']
+FROZEN_ITEM_PACKLIST_EXCLUDED_CATEGORIES = ['nuts & honey', 'free']
 GRAIN_BEANS_CATEGORIES = ['grains & beans']
 PRODUCT_ORDER_CATEGORIES = ['vegetables', 'eggs', 'fruit', 'eggs', 'mushroom']
-MARKET_CHECKLISTS = ['LCFM', 'Hollywood', 'PSU', 'St Johns']
+MARKET_CHECKLISTS = ['LCFM', 'Hollywood', 'PSU', 'St Johns', 'Irvington', 'Cully', 'Woodstock']
 MARKET_CHECKLIST_COLUMN_CATEGORIES = OrderedDict([
     # checklist columns -> (category list, additional kwargs, default)
     # if default is None, then we will sum the number of items
-    ('Tote', (['grain', 'vegetables', 'fruit', 'eggs', 'swag', 'bread', 'mushroom', 'nut', 'coffee', 'pantry'],
+    ('Tote', (['grain', 'vegetables', 'fruit', 'eggs', 'swag', 'bread', 'mushroom', 'nut', 'coffee', 'pantry', 'free'],
               {'AND': {'is_frozen': False}}, 1)),
-    ('Meat', (['meat', 'butter'], {'OR': {'is_frozen': True}}, 1)),
-    ('Dairy', (['dairy'], {}, None)),
+    ('Meat', (['meat'], {'OR': {'is_frozen': True}}, 1)),
+    ('Dairy', (['dairy'], {'AND': {'is_frozen': False}}, None)),
     ('Flowers', (['flowers'], {}, None)),
 ])
-DFF_ORDER_TICKET_EXCLUDE_CATEGORIES = ['raw dairy']
+# DFF_ORDER_TICKET_EXCLUDE_CATEGORIES = ['dairy']
+DFF_ORDER_TICKET_EXCLUDE_CATEGORIES = []
 SIGNUP_FEE_IN_CENTS = 5000
 FEED_A_FRIEND_USER = 'feed.a.friend.ffcsa.fund'
 
@@ -34,20 +36,21 @@ HOME_DELIVERY_FEE_BY_ZIP = {
 }
 DEFAULT_HOME_DELIVERY_CHARGE = 5
 
-INVITE_ONLY_PORTLAND_MARKETS = ['Hollywood', 'PSU', 'Cully', 'St Johns', 'Irvington', 'Woodstock']
+# INVITE_ONLY_PORTLAND_MARKETS = ['Hollywood', 'PSU', 'Cully', 'St Johns', 'Irvington', 'Woodstock']
+INVITE_ONLY_PORTLAND_MARKETS = []
 INVITE_CODE = 'PDX_2020'
 
 # A location can either be a zip code or a dropsite name
 DROP_LOCATION_GROUP_LIMITS = [
     # Portland
     {
-        'limit': 115,
+        'limit': 170,
         'locations': ['Hollywood', 'PSU', 'Cully', 'St Johns', 'Zafar', 'Irvington', 'Woodstock']
     },
     # Corvallis
     {
         'limit': 60,
-        'locations': ['97330', '97331', '97333', 'Banzhaf'],
+        'locations': ['97330', '97331', '97333', 'Corvallis'],
     },
     # Eugene - Tue
     {
@@ -94,7 +97,8 @@ DROPSITES = [
         'description': 'Junction City - Deck Family Farm (Friday)',
         'allowOneTimeOrders': True,
         'pickupDay': 5,
-        'members_only': False
+        'members_only': False,
+        'DFFDelivery': False,
     },
     {
         'name': 'Farm - Tuesday',
@@ -103,7 +107,8 @@ DROPSITES = [
         'description': 'Junction City - Deck Family Farm (Tuesday)',
         'allowOneTimeOrders': True,
         'pickupDay': 2,
-        'members_only': True
+        'members_only': True,
+        'DFFDelivery': False,
     },
     {
         'name': 'W 11th',
@@ -112,7 +117,8 @@ DROPSITES = [
         'description': 'Eugene - W 11th & Van Buren (Tuesday)',
         'allowOneTimeOrders': False,
         'pickupDay': 2,
-        'members_only': True
+        'members_only': True,
+        'DFFDelivery': False,
     },
     {
         'name': 'Friendly',
@@ -121,7 +127,8 @@ DROPSITES = [
         'description': 'Eugene - Adams & 26th (Tuesday)',
         'allowOneTimeOrders': False,
         'pickupDay': 2,
-        'members_only': True
+        'members_only': True,
+        'DFFDelivery': False,
     },
     {
         'name': 'LCFM',
@@ -130,7 +137,8 @@ DROPSITES = [
         'description': 'Eugene - Lane County Farmers Market (Saturday)',
         'allowOneTimeOrders': True,
         'pickupDay': 6,
-        'members_only': False
+        'members_only': False,
+        'DFFDelivery': True,
     },
     {
         'name': 'PSU',
@@ -139,16 +147,18 @@ DROPSITES = [
         'description': 'Portland - PSU Farmers Market (Saturday)',
         'allowOneTimeOrders': True,
         'pickupDay': 6,
-        'members_only': False
+        'members_only': False,
+        'DFFDelivery': True,
     },
     {
         'name': 'Hollywood',
-        'memberLimit': 15,
+        'memberLimit': 60,
         'color': 'yellow',
         'description': 'Portland - Hollywood Farmers Market (Saturday)',
         'allowOneTimeOrders': True,
         'pickupDay': 6,
-        'members_only': False
+        'members_only': False,
+        'DFFDelivery': True,
     },
     {
         'name': 'Cully',
@@ -157,16 +167,18 @@ DROPSITES = [
         'description': 'Portland - Killingsworth & NE 60th (Saturday)',
         'allowOneTimeOrders': False,
         'pickupDay': 6,
-        'members_only': True
+        'members_only': True,
+        'DFFDelivery': True,
     },
     {
         'name': 'Irvington',
         'memberLimit': 30,
-        'color': 'purple',
+        'color': 'cyan',
         'description': 'Portland - Irvington Neighborhood (Saturday)',
         'allowOneTimeOrders': False,
         'pickupDay': 6,
-        'members_only': True
+        'members_only': True,
+        'DFFDelivery': True,
     },
     {
         'name': 'Woodstock',
@@ -175,7 +187,8 @@ DROPSITES = [
         'description': 'Portland - Woodstock Neighborhood (Saturday)',
         'allowOneTimeOrders': False,
         'pickupDay': 6,
-        'members_only': True
+        'members_only': True,
+        'DFFDelivery': True,
     },
     # {
     #     'name': 'St Johns',
@@ -184,16 +197,18 @@ DROPSITES = [
     #     'description': 'Portland - St Johns Farmers Market (Saturday)',
     #     'allowOneTimeOrders': False,
     #     'pickupDay': 6,
-    #     'members_only': False
+    #     'members_only': False,
+    #     'DFFDelivery': True,
     # },
     {
-        'name': 'Banzhaf',
+        'name': 'Corvallis',
         'memberLimit': 25,
         'color': 'orange',
-        'description': 'Corvallis - NW Walnut & NW Aspen (Saturday)',
+        'description': 'Corvallis - SW Hawkeye & SW Brooklane (Saturday)',
         'allowOneTimeOrders': False,
         'pickupDay': 6,
-        'members_only': True
+        'members_only': True,
+        'DFFDelivery': False,
     },
     {
         'name': 'Zafar',
@@ -203,7 +218,8 @@ DROPSITES = [
         'allowOneTimeOrders': False,
         'private': True,
         'pickupDay': 6,
-        'members_only': True
+        'members_only': True,
+        'DFFDelivery': True,
     },
     # # ('Woodstock', 'Portland - Woodstock Farmers Market (Sunday)'),
     # DROP_SITE_COLORS = {
@@ -219,7 +235,7 @@ ORDER_WINDOWS = [
         'endTime': '23:59',
         'packDay': 5,
         'memberLimit': 220,
-        'dropsites': ['Farm - Friday', 'LCFM', 'Hollywood', 'PSU', 'Banzhaf', 'Cully', 'Irvington', 'Woodstock',
+        'dropsites': ['Farm - Friday', 'LCFM', 'Hollywood', 'PSU', 'Corvallis', 'Cully', 'Irvington', 'Woodstock',
                       'St Johns', 'Zafar'],
         'homeDeliveryZips': ['97330', '97331', '97333']
     },
@@ -236,7 +252,7 @@ ORDER_WINDOWS = [
 ]
 DROP_SITE_ORDER = ['Home Delivery', 'W 11th', 'Friendly', 'Farm - Friday', 'Farm - Tuesday',
                    'Woodstock', 'Cully', 'St Johns', 'PSU', 'Hollywood', 'Irvington', 'Woodstock', 'Zafar', 'LCFM',
-                   'Banzhaf']
+                   'Corvallis']
 
 DELIVERY_CSVS = {
     1: [
@@ -264,7 +280,7 @@ DELIVERY_CSVS = {
             'zipCodes': ['97330', '97331', '97333'],
             'standingDeliveries': [
                 # ['Address', 'Name', 'Phone', 'Email', 'Notes', 'duration', 'tw start', 'tw end', 'Boxes', 'dairy', 'meat', 'flowers', 'notifications']
-                ['3843 NW Arrowood Circle, Corvallis, OR 97330', 'Banzhaf Dropsite', '', '', '', '8', '7:00', '12:00',
+                ['3355 SW Hawkeye, Corvallis, OR 97333', 'Corvallis Dropsite', '', '', '', '8', '7:00', '12:00',
                  '', '', '', '', 'none'],
                 ['1007 SE 3rd St, Corvallis, OR 97333', '1st Alt South', '', '', '', '10', '', '', '', '', '', '',
                  'none'],
@@ -310,13 +326,17 @@ SENDINBLUE_API_KEY = None
 SENDINBLUE_LISTS = {
     'WEEKLY_NEWSLETTER': 9,
     'WEEKLY_REMINDER': 10,
+    'DAIRY_MEMBERS': 57,
     'MEMBERS': 7,
     'FORMER_MEMBERS': 11,
     'PROSPECTIVE_MEMBERS': 4,
+    'Packout - Friday': 49,
+    'Packout - Tuesday': 50,
 }
 
 SENDINBLUE_TRANSACTIONAL_TEMPLATES = {
-    'Banzhaf': 27,
+    # 'Banzhaf': 27,
+    'Corvallis': 308,
     'Farm - Friday': 31,
     'Farm - Tuesday': 50,
     'LCFM': 28,
@@ -332,6 +352,7 @@ SENDINBLUE_TRANSACTIONAL_TEMPLATES = {
     # 'Woodstock': 10,
     # '19th St.': 1,
     # 'Corner Market': 3,
+    'Non Engaged Member': 356,
 }
 
 SENDINBLUE_DROP_SITE_FOLDER = 'Dropsites'

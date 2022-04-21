@@ -79,8 +79,8 @@ class Product(BaseProduct, Priced, RichText, ContentTyped, AdminThumbMixin):
 
     order_on_invoice = models.FloatField(default=0, null=True, blank=True,
                                          help_text="Order this product will be printed on invoices. If set, this will override the product's category order_on_invoice setting. This is a float number for more fine grained control. (ex. '2.1' will be sorted the same as if the product's parent category order_on_invoice was 2 & the product's category order_on_invoice was 1).")
-    is_dairy = models.BooleanField(default=False,
-                                   help_text="This is used to prevent unauthorized users from ordering dairy products")
+    is_dairy = models.BooleanField(default=False, verbose_name=_("Is Raw Dairy"),
+                                   help_text="This is used to prevent unauthorized users from ordering raw dairy products")
 
     admin_thumb_field = "image"
 

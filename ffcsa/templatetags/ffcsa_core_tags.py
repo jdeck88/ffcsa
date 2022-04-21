@@ -1,5 +1,3 @@
-import datetime
-
 import bleach
 from django.template.loader import get_template
 from django import forms
@@ -15,6 +13,8 @@ register = template.Library()
 @register.simple_tag(takes_context=True)
 def pickup_date_text(context):
     user = context['request'].user
+    if not user.is_authenticated():
+        return ""
     pickup = get_pickup_date(user)
 
     return "{} for pickup or delivery on {}".format("Weekly order" if user.profile.is_subscribing_member else "Order",
@@ -29,6 +29,14 @@ def get_item(dictionary, key):
 @register.filter
 def get_attr(value, arg):
     return getattr(value, arg)
+
+
+@register.filter
+def sum_items(items):
+    total = 0
+    for i in items:
+        total = total + i['total_price']
+    return total
 
 
 @register.filter

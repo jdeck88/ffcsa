@@ -146,8 +146,6 @@ def signup(request, template="accounts/account_signup.html", extra_context=None)
         add_google_contact(new_user)
 
         subject = "New User Signup"
-        if new_user.profile.join_dairy_program:
-            subject = subject + ' - Needs Dairy Conversation'
         send_mail_template(
             subject,
             "ffcsa_core/send_admin_new_user_email",
@@ -220,7 +218,7 @@ def payments_subscribe(request):
     user = request.user
     if user.profile.join_dairy_program and not user.profile.paid_signup_fee and not request.POST.get(
             'signupAcknowledgement') == 'True':
-        errors.append('You must acknowledge the 1 time Raw Dairy program fee')
+        errors.append('You must acknowledge the 1 time Dairy program fee')
 
     if not stripeToken:
         errors.append('Invalid Request')
@@ -404,8 +402,13 @@ def make_payment(request):
 
     user = request.user
     if not user.profile.stripe_customer_id:
-        hasError = True
-        error(request, 'Could not find a valid customer id. Please contact the site administrator.')
+        # create stripe user if not already existing. This should have been created on signup, but we've had an issue in the past where it wasn't for some reason
+        customer = stripe.Customer.create(
+            email=user.email,
+            description=user.get_full_name()
+        )
+        user.profile.stripe_customer_id = customer.id
+        user.profile.save()
 
     if not request.POST.get('chargeAcknowledgement') == 'True':
         hasError = True
@@ -469,33 +472,8 @@ def donate(request):
         feed_a_friend, created = User.objects.get_or_create(
             username=settings.FEED_A_FRIEND_USER)
 
-        # TODO :: Ensure this works for non-subscribing members
-        order_dict = {
-            'user_id': user.id,
-            'time': datetime.datetime.now(),
-            'site': Site.objects.get(id=1),
-            'billing_detail_first_name': user.first_name,
-            'billing_detail_last_name': user.last_name,
-            'billing_detail_email': user.email,
-            'billing_detail_phone': user.profile.phone_number,
-            'billing_detail_phone_2': user.profile.phone_number_2,
-            'total': amount,
-        }
-
-        order = Order.objects.create(**order_dict)
-
-        item_dict = {
-            'sku': 0,
-            'description': 'Feed-A-Friend Donation',
-            'quantity': 1,
-            'unit_price': amount,
-            'total_price': amount,
-            'category': 'Feed-A-Friend',
-            'vendor': 'Feed-A-Friend',
-            'vendor_price': 0,
-        }
-
-        order.items.create(**item_dict)
+        Payment.objects.create(amount=-amount, user=user, is_credit=True,
+                               notes="Feed-A-Friend Donation")
         Payment.objects.create(amount=amount, user=feed_a_friend, is_credit=True,
                                notes="Donation from {}".format(user.get_full_name()))
         success(request, 'Thank you for your donation to the Feed-A-Friend fund!')
@@ -625,6 +603,19 @@ def stripe_webhooks(request):
 
             if user:
                 if charge.description == SIGNUP_DESCRIPTION:
+                    if user.profile.join_dairy_program and not user.profile.can_order_dairy:
+                        c = {
+                            'user': user,
+                            'user_url': request.build_absolute_uri(reverse("admin:auth_user_change", args=(user.id,))),
+                        }
+                        send_mail_template(
+                            'First Payment Received - Needs Dairy Conversation',
+                            "ffcsa_core/send_admin_dairy_convo_email",
+                            settings.DEFAULT_FROM_EMAIL,
+                            settings.ACCOUNTS_APPROVAL_EMAILS,
+                            context=c,
+                            fail_silently=True,
+                        )
                     user.profile.paid_signup_fee = True
                     user.profile.save()
 

@@ -2,7 +2,7 @@ from django.core.mail import send_mail
 from django.db import connection
 from mezzanine.conf import settings
 from django.core.management import BaseCommand
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 
 
 class Command(BaseCommand):
@@ -10,19 +10,30 @@ class Command(BaseCommand):
     """
     help = 'Calculate KPIs for the past month excluding today'
 
-    def handle(self, *args, **options):
-        yesterday = date.today() - timedelta(days=1)
-        last_day_of_previous_month = yesterday.replace(day=1) - timedelta(days=1)
-        one_month_ago = date.today().replace(month=last_day_of_previous_month.month)
-        jan_first = date.today().replace(month=1, day=1)
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--date',
+            action='store',
+            type=lambda s: datetime.strptime(s, '%Y-%m-%d').date(),
+            default=date.today(),
+            help="Send orders to vendors"
+        )
 
-        # excluded users are farmily, ewing, lopez, albarquoni
-        excluded_users = '1, 13, 24, 61'
+    def handle(self, *args, **options):
+        date = options['date']
+
+        yesterday = date - timedelta(days=1)
+        last_day_of_previous_month = yesterday.replace(day=1) - timedelta(days=1)
+        one_month_ago = date.replace(month=last_day_of_previous_month.month, year=last_day_of_previous_month.year)
+        jan_first = date.replace(month=1, day=1, year=last_day_of_previous_month.year)
+
+        # excluded users are farmily, ewing, lopez, feed-a-friend, albarquoni
+        excluded_users = '1, 13, 24, 44, 61'
 
         with connection.cursor() as cursor:
             # average $ / order over the last month
             query = """
-                select avg(total)
+                select avg(total), count(id)
                 from shop_order 
                 where date(time) in ( select * from (
                     select date(time) 
@@ -32,10 +43,14 @@ class Command(BaseCommand):
                  ) as a)  
                 """
             cursor.execute(query.format(one_month_ago, yesterday, excluded_users))
-            avg_order_last_month = cursor.fetchall()[0][0]
+            results = cursor.fetchall()[0]
+            avg_order_last_month = results[0]
+            num_orders_last_month = results[1]
             cursor.execute(
                 query.format(one_month_ago - timedelta(days=365), yesterday - timedelta(days=365), excluded_users))
-            avg_order_last_month_last_year = cursor.fetchall()[0][0]
+            results = cursor.fetchall()[0]
+            avg_order_last_month_last_year = results[0]
+            num_orders_last_month_last_year = results[1]
 
             # average $ / order YTD
             cursor.execute(query.format(jan_first, yesterday, excluded_users))
@@ -65,6 +80,15 @@ class Command(BaseCommand):
             cursor.execute(query)
             number_of_members = cursor.fetchall()[0][0]
 
+            # of active subscriptions
+            query = """
+                select count(user_id) 
+                from ffcsa_core_profile 
+                where stripe_subscription_id is not null and stripe_subscription_id <> '';
+            """
+            cursor.execute(query)
+            number_of_subscriptions = cursor.fetchall()[0][0]
+
         msg = """
         Date: {}
         The following KPIs are for the past month.
@@ -75,10 +99,13 @@ class Command(BaseCommand):
         Avg $ / order YTD last year: ${}
         # of engaged members: {}
         # of engaged members last year: {}
+        # of orders: {}
+        # of orders last year: {}
         # of members: {}
+        # of subscriptions: {}
         """.format(yesterday, avg_order_last_month, avg_order_ytd, avg_order_last_month_last_year,
                    avg_order_ytd_last_year, number_of_engaged_members, number_of_engaged_members_last_year,
-                   number_of_members)
+                   num_orders_last_month, num_orders_last_month_last_year, number_of_members, number_of_subscriptions)
 
         print(msg)
         send_mail(
