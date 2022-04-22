@@ -12,11 +12,11 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='product',
-            name='short_description',
-            field=models.CharField(blank=True, max_length=100, null=True, verbose_name='Short Description'),
-        ),
+        # migrations.AddField(
+        #     model_name='product',
+        #     name='short_description',
+        #     field=models.CharField(blank=True, max_length=100, null=True, verbose_name='Short Description'),
+        # ),
         migrations.AddField(
             model_name='productvariation',
             name='short_description',
