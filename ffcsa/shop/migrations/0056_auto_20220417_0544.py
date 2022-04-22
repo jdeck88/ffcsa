@@ -17,9 +17,9 @@ class Migration(migrations.Migration):
         #     name='short_description',
         #     field=models.CharField(blank=True, max_length=100, null=True, verbose_name='Short Description'),
         # ),
-        migrations.AddField(
-            model_name='productvariation',
-            name='short_description',
-            field=models.CharField(blank=True, max_length=100, null=True, verbose_name='Short Description'),
-        ),
+        # migrations.AddField(
+        #     model_name='productvariation',
+        #     name='short_description',
+        #     field=models.CharField(blank=True, max_length=100, null=True, verbose_name='Short Description'),
+        # ),
     ]
