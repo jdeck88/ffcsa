@@ -39,15 +39,16 @@
 
        <template v-if="isMobile()">
           <v-expansion-panels focusable class="mb-5">
-            <v-expansion-panel v-for="category in categories" >
-
+            <v-expansion-panel v-for="category in categories">
               <v-expansion-panel-header>
-                  <a href="#" @click.prevent="selectedCategory=category.title; page=1" :class="[categorySelected(category.title), 'hover:text-primary block']">
-                    ((category.display_name))
-                  </a>
+                    <v-btn text small color="primary" @click.native.stop="selectedCategory=category.title; page=1" class="text-base font-weight-bold" :class="[categorySelected(category.title), 'hover:text-primary block']">
+                        ((category.display_name))
+                    </v-btn>
               </v-expansion-panel-header>
               <v-expansion-panel-content  v-if="category.sub_cats.length > 0" v-for="sub in category.sub_cats">
-                  <a @click.prevent="selectedCategory=sub; page=1" class="py-2 px-4 block text-green" href="#">((sub))</a>
+                  <v-btn text small color="primary" @click.prevent="selectedCategory=sub; page=1" class="pt-4 text-base font-weight-bold">
+                        ((sub))
+                    </v-btn>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
