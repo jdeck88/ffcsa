@@ -269,14 +269,12 @@
                     {% if not user.is_authenticated %}
                     <v-col cols=12 class="text-center">
                         <hr class="border-1 border-swirl mb-7">
-                        <v-btn color="primary" href="{% url 'signup' %}{% if not 'account' in request.path %}?next=
-                            {{ request.path }}{% else %}?next=/{% endif %}" class="mx-1 font-weight-bold">
+                        <v-btn color="primary" href="{% url 'signup' %}{% if not 'account' in request.path %}?next={{ request.path }}{% else %}?next=/{% endif %}" class="mx-1 font-weight-bold">
                             BECOME A MEMBER
                         </v-btn>
                     </v-col>
                     <v-col cols=12 class="text-center">
-                        <v-btn text href="{% url 'login' %}{% if not 'account' in request.path %}?next=
-                            {{ request.path }}{% else %}?next=/{% endif %}" class="mx-1 font-weight-bold">
+                        <v-btn text href="{% url 'login' %}{% if not 'account' in request.path %}?next={{ request.path }}{% else %}?next=/{% endif %}" class="mx-1 font-weight-bold">
                             LOGIN
                         </v-btn>
                     </v-col>
@@ -337,13 +335,11 @@
             {% else %}
                 <!-- Login and Sing up -->
                 <div class="d-none d-md-block">
-                    <v-btn color="primary" href="{% url 'signup' %}{% if not 'account' in request.path %}?next=
-                        {{ request.path }}{% else %}?next=/{% endif %}" class="mx-1 font-weight-bold">
+                    <v-btn color="primary" href="{% url 'signup' %}{% if not 'account' in request.path %}?next={{ request.path }}{% else %}?next=/{% endif %}" class="mx-1 font-weight-bold">
                         BECOME A MEMBER
                     </v-btn>
 
-                    <v-btn text href="{% url 'login' %}{% if not 'account' in request.path %}?next=
-                        {{ request.path }}{% else %}?next=/{% endif %}" class="mx-1 font-weight-bold">
+                    <v-btn text href="{% url 'login' %}{% if not 'account' in request.path %}?next={{ request.path }}{% else %}?next=/{% endif %}" class="mx-1 font-weight-bold">
                         LOGIN
                     </v-btn>
                 </div>
