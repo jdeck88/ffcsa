@@ -88,8 +88,12 @@
             username: this.email,
             password: this.password
           });
-          
-          location.replace("/")
+          let urlParams = new URLSearchParams(window.location.search);
+          let redirect_url = '/'
+          if (urlParams.has('next')) {
+              redirect_url = urlParams.get('next')
+          }
+          location.replace(redirect_url)
 
         } catch (error) {
           store.commit('showAlert', {type: 'error', content: error.response.data.detail})
