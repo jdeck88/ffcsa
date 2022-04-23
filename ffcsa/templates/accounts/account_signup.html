@@ -5,6 +5,20 @@
 <!-- Title -->
 {% block meta_title %}Register{% endblock %}
 
+{% block css %}
+
+    <style>
+
+        @media (max-width: 767.98px) {
+            .pt40-mobile {
+                margin-top: 40px !important;
+            }
+        }
+
+    </style>
+
+{% endblock %}
+
 {% block main %}
     <main id="signup">
 
@@ -15,9 +29,9 @@
                     {% if request.user.is_authenticated %}
                         <p>{% trans "You're already logged in. If you'd like to create a new account, you'll need to log out first." %}</p>
                     {% else %}
-                        <div class="max-w-screen-lg grid grid-cols-12 gap-10 mx-auto mt-20 p-3">
+                        <div class="max-w-screen-lg grid grid-cols-12 md:gap-10 sm:gap-0 mx-auto mt-20 p-3">
                             <!-- info part -->
-                            <div class="col-span-12 md:col-span-5 text-base pt-20">
+                            <div class="col-span-12 md:col-span-5 text-base md:pt-20 sm:pt-0">
                                 <h3 class="mb-5 mt-0 text-brown-7 font-bold text-lg	">Thanks for choosing the Full
                                     Farm CSA!</h3>
                                 <p class="mb-3">
@@ -28,7 +42,7 @@
                                                                                                    href="/faq/">FAQs</a>
                                     page.
                                 </p>
-                                <p class="mb-3">
+                                <p class="mb-3 sm:mt-3">
                                     We encourage all CSA members to visit the Deck Family Farm (in Junction City) at
                                     least once
                                     during or before their time in the CSA, so come check us out! Our open gate policy
@@ -57,7 +71,7 @@
 
                             <!-- form part -->
                             <div class="col-span-12 md:col-span-7 mb-10">
-                                <div class="text-center mb-10">
+                                <div class="text-center mb-10 pt40-mobile">
                                     <h1 class="font-bold text-3xl text-gray-900">REGISTER</h1>
                                     <p>Enter your information to register</p>
                                 </div>
