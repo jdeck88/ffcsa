@@ -50,6 +50,10 @@
                 padding: 20px !important;
             }
 
+            .w87-mobile {
+                max-width: 87% !important;
+            }
+
         }
 
     </style>
@@ -61,7 +65,7 @@
         <v-app>
             <v-main>
                 <!-- banner section -->
-                <section class="pr-5 pl-5 min-h-300px lg:min-h-400px bg-cover bg-center bg-overlay-dark flex p-20 p-mobile"
+                <section class="min-h-300px lg:min-h-400px bg-cover bg-center bg-overlay-dark flex p-20 p-mobile"
                          style="background-image: var(--banner-bg);">
                     <div class="text-white text-center m-auto font-bold max-w-1xl">
                         <p class="text-xl">FULL FARM CSA</p>
@@ -411,7 +415,7 @@
                         <v-carousel-item v-for="testimonial in testimonials" :key="testimonial.id">
                             <v-sheet height="100%" tile color="transparent">
                                 <v-row class="fill-height" align="center" justify="center">
-                                    <div class="text-brown-6 mx-auto p-3 text-xl" style="max-width: 65%;">
+                                    <div class="text-brown-6 mx-auto p-3 md:text-xl sm:text-lg w87-mobile" style="max-width: 65%;">
 
                                         <p class="relative">
                                             <v-icon x-large class="text-h1 opacity-20"
