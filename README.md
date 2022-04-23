@@ -2,7 +2,7 @@
 
 #### Bootup
 - Clone the project
-- Checkout to `feature/api_with_vue`
+- Checkout to `staging`
 - Docker Startup
     - Development env
         - run command `docker-compose -f docker-compose-dev.yml up`
