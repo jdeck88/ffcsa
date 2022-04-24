@@ -242,7 +242,7 @@
                           <v-row>
                             <template v-for="variation in currentProduct.variations">
                                 <!-- Variation price -->
-                                <v-col md="8" class="brown_darkest--text">
+                                <v-col cols="12" md="8" class="brown_darkest--text">
                                   <template v-if="variation.addable">
                                     <p class="mb-0">
                                       <span class="text-h5">$((variation.unit_price))</span>
@@ -271,7 +271,7 @@
                                     <p class="mb-0">
                                       <span class="text-base float-left">((variation.weight))</span>
                                       <span v-if="variation.live_num_in_stock < 5" class="text-base text-red-400 float-right">((variation.live_num_in_stock)) AVAILABLE</span>
-                                      <span v-if="variation.live_num_in_stock >= 5" class="text-base text-green-700 float-right">((variation.live_num_in_stock)) AVAILABLE</span>
+                                      <span v-if="variation.live_num_in_stock >= 5" class="text-base text-red-400 float-right">((variation.live_num_in_stock)) AVAILABLE</span>
                                     </p>
                                     <p class="mb-0">
                                       <span class="text-green-700"><br>((variation.short_description))</span>
@@ -279,7 +279,7 @@
                                   </template>
                                 </v-col>
                                 <!-- Variation action -->
-                                <v-col md="4" class="text-right">
+                                <v-col cols="12" md="4" class="text-right">
                                   <template v-if="store.state.is_authenticated">
                                     <template v-if="variation.addable">
                                       <v-btn color="brown_lightest" elevation="0" x-large @click="App.addToCart(variation)">ADD TO CART</v-btn>
