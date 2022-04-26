@@ -19,7 +19,7 @@
         }
         .borderless th {
             border: 0 !important;
-            font-weight: 500 !important;
+            font-weight: 600;
         }
         .borderless td {
             border: 0 !important;
@@ -42,7 +42,24 @@
             padding: 15px;
         }
 
+        tr:last-child td:last-child{
+            padding-bottom: 20px !important;
+        }
+
         @media screen and (max-width: 600px) {
+            table th {
+                padding: 5px !important;
+                font-size: 0.75rem !important;
+                font-weight: 800 !important;
+
+            }
+            table td {
+                font-size: 0.85rem !important;
+            }
+
+        }
+
+        /*@media screen and (max-width: 600px) {
             table {
                 border: 0;
             }
@@ -100,7 +117,7 @@
             table td:last-child {
                 border-bottom: 0;
             }
-        }
+        }*/
 
     </style>
 {% endblock %}
@@ -130,7 +147,6 @@
 
                 <section class="container mx-auto my-12">
                     <!-- PASTURE RAISED -->
-
                     <table class="table table-responsive borderless padding-table-columns">
                         <thead>
                             <tr>
@@ -247,7 +263,245 @@
                         </tbody>
                     </table>
 
+                    <br><br>
 
+                    <!-- ORGANIC VEGETABLES -->
+                    <table class="table table-responsive borderless padding-table-columns">
+                        <thead>
+                            <tr>
+                                <th class="bg-orange-lightest text-xl text-brown-7 text-center" scope="col" style="width: 40%">VEGETABLES</th>
+                                <th class="bg-yellow-lightest text-xl text-brown-7 text-center" scope="col">SPRING</th>
+                                <th class="bg-orange-lighter text-xl text-brown-7 text-center" scope="col">SUMMER</th>
+                                <th class="bg-petiteOrchid text-xl text-brown-7 text-center" scope="col">FALL</th>
+                                <th class="bg-green-lighter bg-opacity-75 text-xl text-brown-7 text-center" scope="col">WINTER</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                    <p class="h-6 txt-left">Arugula</p>
+                                </td>
+                                <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                                <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                                <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                                <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                    <p class="h-6 txt-left">Asparagus</p>
+                                </td>
+                                <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                                <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                                <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                                <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                    <p class="h-6 txt-left">Basil</p>
+                                </td>
+                                <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                    <p class="h-6"></p></td>
+                                <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                                <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                                <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                    <p class="h-6 txt-left">Beets</p>
+                                </td>
+                                <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                                <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                                <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                                <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                    <p class="h-6 txt-left">Broccoli</p>
+                                </td>
+                                <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                                <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                                <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                                <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                    <p class="h-6 txt-left">Brussel Sprouts</p>
+                                </td>
+                                <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                                <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                                <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                                <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <br><br>
+
+                    <!-- FRUIT -->
+                    <table class="table table-responsive borderless padding-table-columns">
+                        <thead>
+                            <tr>
+                                <th class="bg-orange-lightest text-xl text-brown-7 text-center" scope="col" style="width: 40%">FRUIT</th>
+                                <th class="bg-yellow-lightest text-xl text-brown-7 text-center" scope="col">SPRING</th>
+                                <th class="bg-orange-lighter text-xl text-brown-7 text-center" scope="col">SUMMER</th>
+                                <th class="bg-petiteOrchid text-xl text-brown-7 text-center" scope="col">FALL</th>
+                                <th class="bg-green-lighter bg-opacity-75 text-xl text-brown-7 text-center" scope="col">WINTER</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                    <p class="h-6 txt-left">Apples</p>
+                                </td>
+                                <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                                <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                                <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                                <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                    <p class="h-6 txt-left">Apricots</p>
+                                </td>
+                                <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                                <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                                <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                                <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                    <p class="h-6 txt-left">Blackberries</p>
+                                </td>
+                                <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                    <p class="h-6"></p></td>
+                                <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                                <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                                <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                    <p class="h-6 txt-left">Blueberries</p>
+                                </td>
+                                <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                                <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                                <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                                <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                    <p class="h-6 txt-left">Boysenberries</p>
+                                </td>
+                                <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                                <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                                <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                                <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                    <p class="h-6 txt-left">Cantaloupe</p>
+                                </td>
+                                <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                                <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                                <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                    <p class="h-6"><i class="fas fa-check"></i></p>
+                                </td>
+                                <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                    <p class="h-6"></p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+
+{#                    <!-- PASTURE RAISED -->#}
 {#                    <article class="grid grid-cols-12 gap-4 mb-10">#}
 {#                        <div class="col-span-4">#}
 {#                            <header class="bg-orange-lightest text-xl text-brown-7 text-center py-3">PASTURE RAISED MEAT#}
@@ -727,6 +981,7 @@
 {##}
 {##}
 {#                    </article>#}
+
 
                 </section>
 
