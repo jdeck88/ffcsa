@@ -268,7 +268,7 @@
                     <td class="left">{{ payment.date|date:"SHORT_DATE_FORMAT" }}</td>
                     <td class="left">{{ payment.notes|default_if_none:"" }}</td>
                     <td class="right">
-                        {% if payment.pending %}
+                        {% if payment.status == 'Pending' %}
                             (pending)
                         {% endif %}
                         {{ payment.amount|currency }}

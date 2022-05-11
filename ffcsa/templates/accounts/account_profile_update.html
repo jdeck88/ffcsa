@@ -336,7 +336,7 @@
                     <td class="px-6 py-4 whitespace-nowrap">$ {payment.amount}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <!-- Payment pending status -->
-                      <span v-if="payment.pending" class="badge bg-red-100 text-red-800">
+                      <span v-if="payment.status==Pending" class="badge bg-red-100 text-red-800">
                         Pending
                       </span>
                       <span v-else class="badge bg-green-100 text-green-800">

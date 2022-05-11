@@ -585,7 +585,7 @@ def stripe_webhooks(request):
                         "Pending Payment Error: That payment already exists: {}".format(existing_payments.first()))
                 else:
                     payment = Payment.objects.create(user=user, amount=amount, date=date, charge_id=charge.id,
-                                                     pending=True)
+                                                     status='Pending')
                     payment.save()
                     payments_url = request.build_absolute_uri(
                         reverse("payments"))
@@ -624,18 +624,19 @@ def stripe_webhooks(request):
                     date = datetime.datetime.fromtimestamp(charge.created)
                     existing_payments = Payment.objects.filter(charge_id=charge.id)
 
-                    if existing_payments.filter(pending=False).exists():
+                    if existing_payments.filter(status__in=['Accepted', 'Failed']).exists():
                         raise AssertionError(
-                            "That payment already exists: {}".format(existing_payments.filter(pending=False).first()))
+                            "That payment already exists: {}".format(
+                                existing_payments.filter(status__in=['Accepted', 'Failed']).first()))
 
                     else:
                         sendFirstPaymentEmail = not Payment.objects.filter(user=user).exists()
-                        payment = existing_payments.filter(pending=True).first()
+                        payment = existing_payments.filter(status='Pending').first()
 
                         if payment is None:
                             payment = Payment.objects.create(user=user, amount=amount, date=date, charge_id=charge.id)
                         else:
-                            payment.pending = False
+                            payment.status = 'Accepted'
 
                         payment.save()
 

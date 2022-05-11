@@ -105,7 +105,7 @@ class UserProfileAdmin(accounts_base.UserProfileAdmin):
 
 class PaymentAdmin(admin.ModelAdmin):
     date_hierarchy = 'date'
-    list_display = ('user', 'date', 'pending', 'amount', 'is_credit')
+    list_display = ('user', 'date', 'status', 'amount', 'is_credit')
     list_filter = ("user", "date", 'is_credit')
     search_fields = ["user__first_name", "user__last_name", "user__username"]
 
