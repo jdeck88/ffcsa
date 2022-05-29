@@ -270,6 +270,8 @@
                     <td class="right">
                         {% if payment.status == 'Pending' %}
                             (pending)
+                        {% elif payment.status == 'Failed' %}
+                            (failed)
                         {% endif %}
                         {{ payment.amount|currency }}
                     </td>

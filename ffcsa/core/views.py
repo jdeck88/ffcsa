@@ -656,8 +656,16 @@ def stripe_webhooks(request):
             payments_url = request.build_absolute_uri(reverse("payments"))
             created = datetime.datetime.fromtimestamp(
                 charge.created).strftime('%d-%m-%Y')
-            send_failed_payment_email(
-                user, err, charge.amount / 100, created, payments_url)
+            amount = charge.amount / 100
+
+            payment = Payment.objects.filter(charge_id=charge.id, status='Pending').first()
+            if payment is None:
+                payment = Payment.objects.create(user=user, amount=amount, date=amount, charge_id=charge.id, status='Failed')
+            else:
+                payment.status = 'Accepted'
+            payment.save()
+
+            send_failed_payment_email(user, err, amount, created, payments_url)
 
         elif event.type == 'customer.source.updated' and event.data.object.object == 'bank_account':
             user = User.objects.filter(

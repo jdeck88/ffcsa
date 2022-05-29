@@ -335,14 +335,17 @@
                     <td class="px-6 py-4 whitespace-nowrap">{payment.date}</td>
                     <td class="px-6 py-4 whitespace-nowrap">$ {payment.amount}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
+                      <!-- Payment failed status -->
+                      <span v-if="payment.status==Failed" class="badge bg-red-100 text-red-800">
+                        Failed
+                      </span>
                       <!-- Payment pending status -->
-                      <span v-if="payment.status==Pending" class="badge bg-red-100 text-red-800">
+                      <span v-if="payment.status==Pending" class="badge bg-yellow-100 text-yellow-800">
                         Pending
                       </span>
                       <span v-else class="badge bg-green-100 text-green-800">
                         Success
                       </span>
-                      <!-- Payment pending status -->
                     </td>
                     <td v-if="!only_payments" class="px-6 py-4 whitespace-nowrap" style="white-space: break-spaces;">{payment.notes}</td>
                   </tr>
