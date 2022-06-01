@@ -184,9 +184,11 @@
                             City:</b> Deck Family Farm <i>(Friday 5-7pm/Saturday 8am-7pm OR Tuesday between 5pm - 7pm/
                             Wednesday - Thursday 8am - 7pm).</i><br><b>Eugene/Springfield:</b> West 11th <i>(Tuesdays
                             4:30pm-8pm)</i> + Adams St. -Friendly Neighborhood- <i>(Tuesdays 4:30pm-8pm)</i> + Lane
-                            County Farmer’s Market <i>(Sat 10am-2pm<!--, closed for winter-->)</i><br><b>Portland:</b> PSU
+                            County Farmer’s Market <i>(Sat 10am-2pm<!--, closed for winter--> )</i><br><b>Portland:</b>
+                            PSU
                             Farmers Market <i>(Saturday 8:30-2pm)</i> + Hollywood Farmers Market <i>(Sat 9am-1 pm)</i> +
-                            St. Johns Farmer’s Market <i>(Sat 9am-2pm<!--, closed for winter-->)</i> + Cully <i>(Saturday from
+                            St. Johns Farmer’s Market <i>(Sat 9am-2pm<!--, closed for winter--> )</i> + Cully <i>(Saturday
+                            from
                             11am-7:30pm and Sunday from 8:30am-12pm)</i> + Woodstock <i>(Saturday 12-8pm)</i> +
                             Irvington <i>(Saturday from 11am-6pm)</i><br><b>Corvallis:</b> SW Hawkeye Ave <i>(Saturday
                             from 12-7pm and Sunday from 11am-7pm)</i>
@@ -250,19 +252,13 @@
                 </section>
                 <!-- FAQ section -->
 
-                <!-- WHAT’S IN SEASON? -->
-                <div class="flex justify-center py-6 mt-20 mb-20">
-                    <a href="/in-season/" class="btn-outline-secondary" style="color: #4d2819">WHAT’S IN SEASON?</a>
-                </div>
-                <!-- WHAT’S IN SEASON? -->
-
                 <!-- Ready for Better Food Choices? -->
                 {% if not request.user.is_authenticated %}
                     <section class="text-center p-5 py-20 max-w-xl mx-auto">
                         <h3 class="text-3xl text-primary font-bold mb-5 font-nospacing">Ready for Better Food
                             Choices?</h3>
-                        <p class="text-secondary text-xl">Join the hundreds of households who trust local farmers</p>
-                        <p class="text-secondary text-xl mb-10">to provide high quality food for a full diet.</p>
+                        <p class="text-secondary text-xl">Join the hundreds of households who trust local farmers to
+                            provide high quality food for a full diet.</p>
                         <v-btn x-large color="primary" class="font-weight-bold ffcsa--v-btn" href="{% url 'signup' %}">
                             BECOME A MEMBER
                         </v-btn>
