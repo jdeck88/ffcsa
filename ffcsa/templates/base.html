@@ -39,6 +39,12 @@
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
 
+
+
+    <!-- •• removed below line •• -->
+    <!-- render_bundle "manifest" "css"  -->
+    {% render_bundle "main" %}
+
     <!-- to add custom css inside the html pages -->
     {% compress css %}
         <!-- Global CSS -->
@@ -98,16 +104,12 @@
                 right: 1rem;
                 z-index: 9999999;
             }
+
         </style>
 
         <!-- Custom CSS per page -->
         {% block css %}{% endblock %}
     {% endcompress %}
-
-    <!-- •• removed below line •• -->
-    <!-- render_bundle "manifest" "css"  -->
-    {% render_bundle "main" %}
-
 
     <noscript>
         <img height="1" width="1" style="display:none"
@@ -258,7 +260,7 @@
                         <v-btn plain class="font-weight-bold" href="https://deckfamilyfarm.com" target="_blank">Deck Family Farm</v-btn>
                     </v-col>
                     <v-col cols=12 class="text-center">
-                        <v-btn plain class="font-weight-bold" href="/products/">Shop</v-btn>
+                        <v-btn plain class="font-weight-bold" href="/products/">Store</v-btn>
                     </v-col>
 {#                    <v-col cols=12 class="text-center">#}
 {#                        <v-btn plain class="font-weight-bold" href="/about/">About</v-btn>#}
@@ -305,7 +307,7 @@
                 <v-btn plain class="text-capitalize font-weight-bold" href="https://deckfamilyfarm.com" target="_blank">
                     Deck Family Farm
                 </v-btn>
-                <v-btn plain class="text-capitalize font-weight-bold" href="/products/">Shop</v-btn>
+                <v-btn plain class="text-capitalize font-weight-bold" href="/products/">Store</v-btn>
                 {#            <v-btn plain class="text-capitalize font-weight-bold" href="/about/">About</v-btn>#}
                 <v-btn plain class="text-capitalize font-weight-bold" href="/faq/">FAQ</v-btn>
             </div>
