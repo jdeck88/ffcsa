@@ -12,13 +12,13 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='payment',
-            name='pending',
-        ),
-        migrations.AddField(
-            model_name='payment',
-            name='status',
-            field=models.CharField(choices=[('Pending', 'Pending'), ('Accepted', 'Accepted'), ('Failed', 'Failed')], default='Accepted', max_length=50),
-        ),
+        # migrations.RemoveField(
+        #     model_name='payment',
+        #     name='pending',
+        # ),
+        # migrations.AddField(
+        #     model_name='payment',
+        #     name='status',
+        #     field=models.CharField(choices=[('Pending', 'Pending'), ('Accepted', 'Accepted'), ('Failed', 'Failed')], default='Accepted', max_length=50),
+        # ),
     ]
