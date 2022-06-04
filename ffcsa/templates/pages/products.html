@@ -12,619 +12,567 @@
 {% endblock %}
 
 {% block main %}
-    <main id="productsVue" v-cloak>
-        <!-- Call block super -->
-        {{ block.super }}
+<main id="productsVue" v-cloak>
+  <!-- Call block super -->
+  {{ block.super }}
 
-        <v-app>
-            <v-main>
-                <!-- banner section -->
-                {#      <v-img src="{% static 'img/IMG_0067.JPG' %}" height="400">#}
-                <v-img :src="imgSrc" :height="bannerHeight">
-                    <v-overlay :absolute="true" :opacity=".5" class="text-center">
-                        <div class="text-white text-center m-auto font-bold max-w-1xl">
-                            <p class="text-5xl mb-3 font-bold">Shop the Farm</p>
-                            <p class="text-xl">High quality products from farmer's you can trust</p>
-                        </div>
-                    </v-overlay>
-                </v-img>
+  <v-app>
+    <v-main>
+      <!-- banner section -->
+{#      <v-img src="{% static 'img/IMG_0067.JPG' %}" height="400">#}
+          <v-img :src="imgSrc" :height="bannerHeight">
+        <v-overlay :absolute="true" :opacity=".5" class="text-center">
+            <div class="text-white text-center m-auto font-bold max-w-1xl">
+                <p class="text-5xl mb-3 font-bold">Shop the Farm</p>
+                <p class="text-xl">High quality products from farmer's you can trust</p>
+            </div>
+        </v-overlay>
+      </v-img>
 
-                <!-- Progress bar -->
-                <div class="relative">
-                    <v-progress-linear absolute bottom :active="loading" :indeterminate="loading"
-                                       color="primary"></v-progress-linear>
+      <!-- Progress bar -->
+      <div class="relative">
+        <v-progress-linear absolute bottom :active="loading" :indeterminate="loading" color="primary"></v-progress-linear>
+      </div>
+
+      <!-- filters section -->
+      <section class="md:flex justify-center mt-10 text-green md:text-xl font-bold">
+
+       <template v-if="isMobile()">
+          <v-expansion-panels focusable class="mb-5">
+            <v-expansion-panel v-for="category in categories">
+              <v-expansion-panel-header>
+                    <v-btn text small color="primary" @click.native.stop="selectedCategory=category.title; page=1" class="text-base font-weight-bold" :class="[categorySelected(category.title), 'hover:text-primary block']">
+                        ((category.display_name))
+                    </v-btn>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content  v-if="category.sub_cats.length > 0" v-for="sub in category.sub_cats">
+                  <v-btn text small color="primary" @click.prevent="selectedCategory=sub; page=1" class="pt-4 text-base font-weight-bold">
+                        ((sub))
+                    </v-btn>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+       </template>
+
+        <div v-if="!isMobile()" v-for="category in categories" class="inline-blocks relative hover-trigger text-base">
+          <a href="#" @click.prevent="selectedCategory=category.title; page=1" :class="[categorySelected(category.title), 'hover:text-primary block m-3']">
+            ((category.display_name))
+          </a>
+
+          <!-- list of sub gategories -->
+          <ul v-if="category.sub_cats.length > 0" class="absolute w-full hidden bg-white text-secondary rounded border shadow-2xl py-3 px-2 hover-target" style="min-width: 16rem !important; z-index: 1000000;">
+            <li v-for="sub in category.sub_cats" :class="[categorySelected(sub), 'text-base hover:text-primary']">
+              <a @click.prevent="selectedCategory=sub; page=1" class="py-2 px-4 block text-green" href="#">((sub))</a>
+            </li>
+          </ul>
+        </div>
+
+{#        <a href="#" class="hover:text-primary block m-3 text-base">RECIPIES</a>#}
+      </section>
+
+      <!-- query and remove filters -->
+      <template>
+        <v-container>
+          <v-row no-gutters>
+            <v-col md="4" offset-md="8">
+              <v-form @submit.prevent="getProducts">
+                <v-text-field
+                  filled
+                  label="search"
+                  :loading="loading"
+                  v-model="query"
+                  append-icon="mdi-magnify"
+                  @click:append="getProducts()"
+                  @input="isTyping = true"
+                >
+                </v-text-field>
+              </v-form>
+            </v-col>
+          </v-row>
+
+          <v-row no-gutters>
+            <v-col md="4" offset-md="10">
+              <v-btn text small color="red" v-if="selectedCategory || query" @click="resetProductsFilter">Show all products</v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
+      </template>
+
+      {% if not user.is_authenticated %}
+      <template>
+        <v-container>
+          <v-alert type="warning">
+            Currently we are only accepting online orders for Full Farm CSA members. If you are a member, log in to place your order. If you would like to place an order for Deck Family Farm products, please give us a call at 541-998-4697 or send us an email at info@deckfamilyfarm.com.
+          </v-alert>
+        </v-container>
+      </template>
+      {% endif %}
+
+
+      <!-- Products list -->
+      <section id="productsListSection" class="min-h-screen">
+        <div v-if="products.results.length > 0" class="container my-12 mx-auto min-h-screen">
+          <v-row>
+            <v-col md="6" lg="4" class="mb-4 relative" v-for="product in products.results">
+              <!-- product image -->
+              <v-img :src="'/media/' + product.image" height="20rem" @click="showProduct(product)" class="cursor-pointer">
+                <div v-if="product.weight" class="rounded-tr-lg absolute left-0 bottom-0 bg-blue-50 p-2 px-3">(( product.weight ))</div>
+              </v-img>
+
+              <h3 class="text-center text-lg truncate mt-4">(( product.title ))</h3>
+
+              <v-row class="mt-5 items-end">
+                <!-- price and vendor -->
+                <v-col v-bind:class="BindProductClass(product.variations)">
+                  <template v-if="product.has_in_stock_variations">
+                    <!-- at least one variation in stock -->
+                    <template v-if="product.variations.length == 1">
+                      <p color="blue-grey darken-4" class="h-8 text-xl mb-0">
+                        <span class="text-3xl font-bold">$(( parseFloat(product.price).toFixed(2) ))</span>
+                        <span v-if="product.unit">/(( product.unit ))</span>
+                      </p>
+                      <p class="text-brown-7 text-sm font-thin mt-2 mb-0">(( product.variations[0].vendors[0].title ))</p>
+                    </template>
+                    <template v-else>
+                      <p class="mb-0">
+                        <span class="text-base italic text-gray-500">From </span>
+                      </p>
+                      <p class="mb-0">
+                        <span class="text-3xl font-bold">$(( getProductStartFrom(product) ))</span>
+                        <span v-if="product.unit">/(( product.unit ))</span>
+                      </p>
+                      <p class="text-brown-7 text-sm font-thin mt-1 mb-0">(( product.variations[0].vendors[0].title ))</p>
+                    </template>
+                  </template>
+                  <template v-else>
+                    <!-- all product variations are out of stock -->
+                    <div class="h-8"></div>
+                  </template>
+
+                </v-col>
+
+                <!-- add to cart btn -->
+                <v-col sm="6">
+                  <template v-if="store.state.is_authenticated">
+                    <template v-if="product.has_in_stock_variations">
+                      <template v-if="product.variations.length == 1">
+                        <v-btn block color="brown_lightest" elevation="0" x-large @click="App.addToCart(product.variations[0]);getProducts()">ADD TO CART</v-btn>
+                    </template>
+                      <template v-else>
+                        <v-btn block color="brown_lightest" elevation="0" x-large @click="showProduct(product)">CHOOSE OPTION</v-btn>
+                      </template>
+                    </template>
+                    <template v-else>
+                      <v-btn block x-large disabled>OUT OF STOCK</v-btn>
+                    </template>
+                  </template>
+
+                  <template v-else>
+                      <v-btn disabled block color="brown_lightest" elevation="0" x-large @click="App.addToCart(product.variations[0]);getProducts()">ADD TO CART</v-btn>
+                  </template>
+
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+
+          <!-- Page pagination -->
+          <div class="text-center mt-20">
+            <v-pagination v-model="page" :length="products.num_pages"></v-pagination>
+          </div>
+          <!-- Page pagination -->
+        </div>
+
+        <!-- no products found -->
+        <div v-if="products.results.length == 0 && loading == false" class="text-center">
+          <v-img src="{% static 'img/notfound.svg' %}" width="500" class="mx-auto mb-7"></v-img>
+          <h1>
+            Opps, no products found!
+            <a href="/products/">Show all products</a>
+          </h1>
+        </div>
+      </section>
+      <!-- Products list -->
+
+      <!-- Products dialog -->
+      <template>
+        <div class="text-center">
+          <v-dialog v-model="dialog" width="950" @click:outside="hideProductModal">
+            <v-card v-if="currentProduct" class="brown_darkest--text">
+              <!-- header (title, vendor and season) -->
+              <v-card-title class="relative">
+                <div class="flex mb-1 pt-5">
+                  <div class="grid grid-cols-2">
+                    <h3 class="col-span-2 md:col-span-1 text-2xl font-bold capitalize pr-4">((currentProduct.title))</h3>
+                    <p class="mb-0 col-span-2 md:col-span-1 text-base font-light italic pt-2 mt-auto">((currentProduct.variations[0].vendors[0].title))</p>
+                  </div>
+
+                  <!-- Show products seasons -->
+                  <template v-if="currentProduct.seasons.length < 4">
+                    <p class="ml-auto mt-2 font-thin italic">(( currentProduct.seasons.join(' - ') ))</p>
+                  </template>
+
+                  <!-- Show all seasons -->
+                  <template v-else>
+                    <p class="ml-auto mt-2 font-thin italic">ALL SEASON</p>
+                  </template>
                 </div>
 
-                <!-- filters section -->
-                <section class="md:flex justify-center mt-10 text-green md:text-xl font-bold">
+                <v-btn text icon color="red lighten-2" absolute top right @click.prevent="hideProductModal">
+                  <v-icon color="gray lighten-2">mdi-close</v-icon>
+                </v-btn>
+              </v-card-title>
 
-                    <template v-if="isMobile()">
-                        <v-expansion-panels focusable class="mb-5">
-                            <v-expansion-panel v-for="category in categories">
-                                <v-expansion-panel-header>
-                                    <v-btn text small color="primary"
-                                           @click.native.stop="selectedCategory=category.title; page=1"
-                                           class="text-base font-weight-bold"
-                                           :class="[categorySelected(category.title), 'hover:text-primary block']">
-                                        ((category.display_name))
-                                    </v-btn>
-                                </v-expansion-panel-header>
-                                <v-expansion-panel-content v-if="category.sub_cats.length > 0"
-                                                           v-for="sub in category.sub_cats">
-                                    <v-btn text small color="primary" @click.prevent="selectedCategory=sub; page=1"
-                                           class="pt-4 text-base font-weight-bold">
-                                        ((sub))
-                                    </v-btn>
-                                </v-expansion-panel-content>
-                            </v-expansion-panel>
-                        </v-expansion-panels>
-                    </template>
+              <v-divider></v-divider>
 
-                    <div v-if="!isMobile()" v-for="category in categories"
-                         class="inline-blocks relative hover-trigger text-base">
-                        <a href="#" @click.prevent="selectedCategory=category.title; page=1"
-                           :class="[categorySelected(category.title), 'hover:text-primary block m-3']">
-                            ((category.display_name))
-                        </a>
-
-                        <!-- list of sub gategories -->
-                        <ul v-if="category.sub_cats.length > 0"
-                            class="absolute w-full hidden bg-white text-secondary rounded border shadow-2xl py-3 px-2 hover-target"
-                            style="min-width: 16rem !important; z-index: 1000000;">
-                            <li v-for="sub in category.sub_cats"
-                                :class="[categorySelected(sub), 'text-base hover:text-primary']">
-                                <a @click.prevent="selectedCategory=sub; page=1" class="py-2 px-4 block text-green"
-                                   href="#">((sub))</a>
-                            </li>
-                        </ul>
-                    </div>
-
-                    {#        <a href="#" class="hover:text-primary block m-3 text-base">RECIPIES</a>#}
-                </section>
-
-                <!-- query and remove filters -->
-                <template>
-                    <v-container>
-                        <v-row no-gutters>
-                            <v-col md="4" offset-md="8">
-                                <v-form @submit.prevent="getProducts">
-                                    <v-text-field
-                                            filled
-                                            label="search"
-                                            :loading="loading"
-                                            v-model="query"
-                                            append-icon="mdi-magnify"
-                                            @click:append="getProducts()"
-                                            @input="isTyping = true"
-                                    >
-                                    </v-text-field>
-                                </v-form>
+              <v-card-text class="py-4">
+                <!-- product details -->
+                     <v-row>
+                        <!-- Variation image -->
+                        <v-col md="4">
+                          <v-img :src="'/media/' + currentProduct.variations[0].image.file" height="265"></v-img>
+                        </v-col>
+                        <!-- Variation detail -->
+                        <v-col md="8">
+                          <v-row>
+                            <v-col md="12" class="mb-15">
+                                <span class="text-h5">((currentProduct.short_description))</span>
                             </v-col>
-                        </v-row>
+                          </v-row>
+                          <v-row>
+                            <template v-for="variation in currentProduct.variations">
+                                <!-- Variation price -->
+                                <v-col cols="12" md="8" class="brown_darkest--text">
+                                  <template v-if="variation.addable">
+                                    <p class="mb-0">
+                                      <span class="text-h5">$((variation.unit_price))</span>
+                                      <span v-if="variation.unit">/(( variation.unit)) </span>
+                                      <span class="text-lg ml-8">(( variation.title ))</span>
+                                    </p>
+                                      <p class="mb-0">
+                                          <span class="text-base float-left">((variation.weight))</span>
+                                          <span class="text-base text-red-400 float-right">((variation.live_num_in_stock)) AVAILABLE</span>
+                                      </p>
+                                      <p class="mb-0">
+                                          <span class="text-green-700"><br>((variation.short_description))</span>
+                                      </p>
+                                  </template>
 
-                        <v-row no-gutters>
-                            <v-col md="4" offset-md="10">
-                                <v-btn text small color="red" v-if="selectedCategory || query"
-                                       @click="resetProductsFilter">Show all products
-                                </v-btn>
-                            </v-col>
-                        </v-row>
-                    </v-container>
-                </template>
+                                  <template v-else-if="!variation.live_num_in_stock">
+                                    <p class="text-red-1">NOT AVAILABLE</p>
+                                  </template>
 
-                {% if not user.is_authenticated %}
-                    <template>
-                        <v-container>
-                            <v-alert type="warning">
-                                Currently we are only accepting online orders for Full Farm CSA members. If you are a
-                                member, log in to place your order. If you would like to place an order for Deck Family
-                                Farm products, please give us a call at 541-998-4697 or send us an email at
-                                info@deckfamilyfarm.com.
-                            </v-alert>
-                        </v-container>
-                    </template>
-                {% endif %}
+                                  <template v-else>
+                                    <p class="mb-0">
+                                      <span class="text-h5">$((variation.unit_price))</span>
+                                      <span v-if="variation.unit">/(( variation.unit )) </span>
+                                      <span class="text-lg ml-8">(( variation.title ))</span>
+                                    </p>
+                                    <p class="mb-0">
+                                      <span class="text-base float-left">((variation.weight))</span>
+                                      <span v-if="variation.live_num_in_stock < 5" class="text-base text-red-400 float-right">((variation.live_num_in_stock)) AVAILABLE</span>
+                                      <span v-if="variation.live_num_in_stock >= 5" class="text-base text-red-400 float-right">((variation.live_num_in_stock)) AVAILABLE</span>
+                                    </p>
+                                    <p class="mb-0">
+                                      <span class="text-green-700"><br>((variation.short_description))</span>
+                                    </p>
+                                  </template>
+                                </v-col>
+                                <!-- Variation action -->
+                                <v-col cols="12" md="4" class="text-right">
+                                  <template v-if="store.state.is_authenticated">
+                                    <template v-if="variation.addable">
+                                      <v-btn color="brown_lightest" elevation="0" x-large @click="App.addToCart(variation)">ADD TO CART</v-btn>
+                                    </template>
 
+                                    <template v-else-if="!variation.live_num_in_stock">
+                                      <v-btn x-large disabled>OUT OF STOCK</v-btn>
+                                    </template>
 
-                <!-- Products list -->
-                <section id="productsListSection" class="min-h-screen">
-                    <div v-if="products.results.length > 0" class="container my-12 mx-auto min-h-screen">
-                        <v-row>
-                            <v-col md="6" lg="4" class="mb-4 relative" v-for="product in products.results">
-                                <!-- product image -->
-                                <v-img :src="'/media/' + product.image" height="20rem" @click="showProduct(product)"
-                                       class="cursor-pointer">
-                                    <div v-if="product.weight"
-                                         class="rounded-tr-lg absolute left-0 bottom-0 bg-blue-50 p-2 px-3">((
-                                        product.weight ))
-                                    </div>
-                                </v-img>
+                                    <template v-else>
+                                      <v-btn color="brown_lightest" elevation="0" x-large @click="App.addToCart(variation)">ADD TO CART</v-btn>
+                                    </template>
+                                  </template>
 
-                                <h3 class="text-center text-lg truncate mt-4">(( product.title ))</h3>
-
-                                <v-row class="mt-5 items-end">
-                                    <!-- price and vendor -->
-                                    <v-col v-bind:class="BindProductClass(product.variations)">
-                                        <template v-if="product.has_in_stock_variations">
-                                            <!-- at least one variation in stock -->
-                                            <template v-if="product.variations.length == 1">
-                                                <p color="blue-grey darken-4" class="h-8 text-xl mb-0">
-                                                    <span class="text-3xl font-bold">$(( parseFloat(product.price).toFixed(2) ))</span>
-                                                    <span v-if="product.unit">/(( product.unit ))</span>
-                                                </p>
-                                                <p class="text-brown-7 text-sm font-thin mt-2 mb-0">((
-                                                    product.variations[0].vendors[0].title ))</p>
-                                            </template>
-                                            <template v-else>
-                                                <p class="mb-0">
-                                                    <span class="text-base italic text-gray-500">From </span>
-                                                </p>
-                                                <p class="mb-0">
-                                                    <span class="text-3xl font-bold">$(( getProductStartFrom(product) ))</span>
-                                                    <span v-if="product.unit">/(( product.unit ))</span>
-                                                </p>
-                                                <p class="text-brown-7 text-sm font-thin mt-1 mb-0">((
-                                                    product.variations[0].vendors[0].title ))</p>
-                                            </template>
-                                        </template>
-                                        <template v-else>
-                                            <!-- all product variations are out of stock -->
-                                            <div class="h-8"></div>
-                                        </template>
-
-                                    </v-col>
-
-                                    <!-- add to cart btn -->
-                                    <v-col sm="6">
-                                        <template v-if="store.state.is_authenticated">
-                                            <template v-if="product.has_in_stock_variations">
-                                                <template v-if="product.variations.length == 1">
-                                                    <v-btn block color="brown_lightest" elevation="0" x-large
-                                                           @click="App.addToCart(product.variations[0]);getProducts()">
-                                                        ADD TO CART
-                                                    </v-btn>
-                                                </template>
-                                                <template v-else>
-                                                    <v-btn block color="brown_lightest" elevation="0" x-large
-                                                           @click="showProduct(product)">CHOOSE OPTION
-                                                    </v-btn>
-                                                </template>
-                                            </template>
-                                            <template v-else>
-                                                <v-btn block x-large disabled>OUT OF STOCK</v-btn>
-                                            </template>
-                                        </template>
-
-                                        <template v-else>
-                                            <v-btn disabled block color="brown_lightest" elevation="0" x-large
-                                                   @click="App.addToCart(product.variations[0]);getProducts()">ADD TO
-                                                CART
-                                            </v-btn>
-                                        </template>
-
-                                    </v-col>
-                                </v-row>
-                            </v-col>
-                        </v-row>
-
-                        <!-- Page pagination -->
-                        <div class="text-center mt-20">
-                            <v-pagination v-model="page" :length="products.num_pages"></v-pagination>
-                        </div>
-                        <!-- Page pagination -->
-                    </div>
-
-                    <!-- no products found -->
-                    <div v-if="products.results.length == 0 && loading == false" class="text-center">
-                        <v-img src="{% static 'img/notfound.svg' %}" width="500" class="mx-auto mb-7"></v-img>
-                        <h1>
-                            Opps, no products found!
-                            <a href="/products/">Show all products</a>
-                        </h1>
-                    </div>
-                </section>
-                <!-- Products list -->
-
-                <!-- Products dialog -->
-                <template>
-                    <div class="text-center">
-                        <v-dialog v-model="dialog" width="950" @click:outside="hideProductModal">
-                            <v-card v-if="currentProduct" class="brown_darkest--text">
-                                <!-- header (title, vendor and season) -->
-                                <v-card-title class="relative">
-                                    <div class="flex mb-1 pt-5">
-                                        <div class="grid grid-cols-2">
-                                            <h3 class="col-span-2 md:col-span-1 text-2xl font-bold capitalize pr-4">
-                                                ((currentProduct.title))</h3>
-                                            <p class="mb-0 col-span-2 md:col-span-1 text-base font-light italic pt-2 mt-auto">
-                                                ((currentProduct.variations[0].vendors[0].title))</p>
-                                        </div>
-
-                                        <!-- Show products seasons -->
-                                        <template v-if="currentProduct.seasons.length < 4">
-                                            <p class="ml-auto mt-2 font-thin italic">(( currentProduct.seasons.join(' -
-                                                ') ))</p>
-                                        </template>
-
-                                        <!-- Show all seasons -->
-                                        <template v-else>
-                                            <p class="ml-auto mt-2 font-thin italic">ALL SEASON</p>
-                                        </template>
-                                    </div>
-
-                                    <v-btn text icon color="red lighten-2" absolute top right
-                                           @click.prevent="hideProductModal">
-                                        <v-icon color="gray lighten-2">mdi-close</v-icon>
-                                    </v-btn>
-                                </v-card-title>
-
-                                <v-divider></v-divider>
-
-                                <v-card-text class="py-4">
-                                    <!-- product details -->
-                                    <v-row>
-                                        <!-- Variation image -->
-                                        <v-col md="4">
-                                            <v-img :src="'/media/' + currentProduct.variations[0].image.file"
-                                                   height="265"></v-img>
-                                        </v-col>
-                                        <!-- Variation detail -->
-                                        <v-col md="8">
-                                            <v-row>
-                                                <v-col md="12" class="mb-15">
-                                                    <span class="text-h5">((currentProduct.short_description))</span>
-                                                </v-col>
-                                            </v-row>
-                                            <v-row>
-                                                <template v-for="variation in currentProduct.variations">
-                                                    <!-- Variation price -->
-                                                    <v-col cols="12" md="8" class="brown_darkest--text">
-                                                        <template v-if="variation.addable">
-                                                            <p class="mb-0">
-                                                                <span class="text-h5">$((variation.unit_price))</span>
-                                                                <span v-if="variation.unit">/(( variation.unit)) </span>
-                                                                <span class="text-lg ml-8">(( variation.title ))</span>
-                                                            </p>
-                                                            <p class="mb-0">
-                                                                <span class="text-base float-left">((variation.weight))</span>
-                                                                <span class="text-base text-red-400 float-right">((variation.live_num_in_stock)) AVAILABLE</span>
-                                                            </p>
-                                                            <p class="mb-0">
-                                                                <span class="text-green-700"><br>((variation.short_description))</span>
-                                                            </p>
-                                                        </template>
-
-                                                        <template v-else-if="!variation.live_num_in_stock">
-                                                            <p class="text-red-1">NOT AVAILABLE</p>
-                                                        </template>
-
-                                                        <template v-else>
-                                                            <p class="mb-0">
-                                                                <span class="text-h5">$((variation.unit_price))</span>
-                                                                <span v-if="variation.unit">/(( variation.unit )) </span>
-                                                                <span class="text-lg ml-8">(( variation.title ))</span>
-                                                            </p>
-                                                            <p class="mb-0">
-                                                                <span class="text-base float-left">((variation.weight))</span>
-                                                                <span v-if="variation.live_num_in_stock < 5"
-                                                                      class="text-base text-red-400 float-right">((variation.live_num_in_stock)) AVAILABLE</span>
-                                                                <span v-if="variation.live_num_in_stock >= 5"
-                                                                      class="text-base text-red-400 float-right">((variation.live_num_in_stock)) AVAILABLE</span>
-                                                            </p>
-                                                            <p class="mb-0">
-                                                                <span class="text-green-700"><br>((variation.short_description))</span>
-                                                            </p>
-                                                        </template>
-                                                    </v-col>
-                                                    <!-- Variation action -->
-                                                    <v-col cols="12" md="4" class="text-right">
-                                                        <template v-if="store.state.is_authenticated">
-                                                            <template v-if="variation.addable">
-                                                                <v-btn color="brown_lightest" elevation="0" x-large
-                                                                       @click="App.addToCart(variation)">ADD TO CART
-                                                                </v-btn>
-                                                            </template>
-
-                                                            <template v-else-if="!variation.live_num_in_stock">
-                                                                <v-btn x-large disabled>OUT OF STOCK</v-btn>
-                                                            </template>
-
-                                                            <template v-else>
-                                                                <v-btn color="brown_lightest" elevation="0" x-large
-                                                                       @click="App.addToCart(variation)">ADD TO CART
-                                                                </v-btn>
-                                                            </template>
-                                                        </template>
-
-                                                        <template v-else>
-                                                            <v-btn disabled color="brown_lightest" elevation="0" x-large
-                                                                   @click="App.addToCart(variation)">ADD TO CART
-                                                            </v-btn>
-                                                        </template>
-                                                    </v-col>
-                                                </template>
-                                            </v-row>
-                                        </v-col>
-                                    </v-row>
-                                    <!-- product content -->
-                                    <div class="text-base p-4 mt-10 mb-10 bg-gray-100" v-if="currentProduct.content"
-                                         v-html="currentProduct.content"></div>
-                                </v-card-text>
-                            </v-card>
-                        </v-dialog>
-                    </div>
-                </template>
-                <!-- Products dialog -->
+                                  <template v-else>
+                                    <v-btn disabled color="brown_lightest" elevation="0" x-large @click="App.addToCart(variation)">ADD TO CART</v-btn>
+                                  </template>
+                                </v-col>
+                            </template>
+                         </v-row>
+                        </v-col>
+                     </v-row>
+                <!-- product content -->
+                <div class="text-base p-4 mt-10 mb-10 bg-gray-100" v-if="currentProduct.content" v-html="currentProduct.content"></div>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
+        </div>
+      </template>
+      <!-- Products dialog -->
 
 
-                <!-- WHAT’S IN SEASON? -->
-{#                <div class="flex justify-center py-6 mb-20">#}
-{#                    <a href="/in-season/" class="btn-outline-secondary" style="color: #4d2819">WHAT’S IN SEASON?</a>#}
-{#                </div>#}
-                <!-- WHAT’S IN SEASON? -->
+{#      <!-- WHAT’S IN SEASON? -->#}
+{#      <div class="flex justify-center py-6 mb-20">#}
+{#        <a href="/in-season/" class="btn-outline-secondary" style="color: #4d2819">WHAT’S IN SEASON?</a>#}
+{#      </div>#}
+{#      <!-- WHAT’S IN SEASON? -->#}
 
-                {#      <!-- Beyond the Groceries -->#}
-                {#      <section class="text-center bg-orange-lightest p-5">#}
-                {#        <div class="container mx-auto">#}
-                {#          <h3 class="text-3xl font-bold text-brown-7 my-5 py-5">Beyond the Groceries</h3>#}
-                {#    #}
-                {#          <div class="grid grid-cols-1 sm:grid-cols-2 gap-12 my-5 py-5">#}
-                {#            <div>#}
-                {#              <a href="#" class="text-3xl font-bold text-brown-7">#}
-                {#                <v-img src="{% static 'img/products-spices-and-herbs-border-on-rustic-wood-kitchen-table-with-recipes.png' %}"></v-img>#}
-                {#                RECIPIES FROM THE FARM#}
-                {#              </a>#}
-                {#            </div>#}
-                {#    #}
-                {#            <div>#}
-                {#              <a href="/products/?query=&category=Products+%26+Swag" class="text-3xl font-bold text-brown-7">#}
-                {#                <v-img src="{% static 'img/products-homemade-pizza-for-dinner.jpg' %}"></v-img>#}
-                {#                PRODUCTS & SWAG#}
-                {#              </a>#}
-                {#            </div>#}
-                {#          </div>#}
-                {#        </div>#}
-                {#      </section>#}
-                {#      <!-- Beyond the Groceries -->#}
+{#      <!-- Beyond the Groceries -->#}
+{#      <section class="text-center bg-orange-lightest p-5">#}
+{#        <div class="container mx-auto">#}
+{#          <h3 class="text-3xl font-bold text-brown-7 my-5 py-5">Beyond the Groceries</h3>#}
+{#    #}
+{#          <div class="grid grid-cols-1 sm:grid-cols-2 gap-12 my-5 py-5">#}
+{#            <div>#}
+{#              <a href="#" class="text-3xl font-bold text-brown-7">#}
+{#                <v-img src="{% static 'img/products-spices-and-herbs-border-on-rustic-wood-kitchen-table-with-recipes.png' %}"></v-img>#}
+{#                RECIPIES FROM THE FARM#}
+{#              </a>#}
+{#            </div>#}
+{#    #}
+{#            <div>#}
+{#              <a href="/products/?query=&category=Products+%26+Swag" class="text-3xl font-bold text-brown-7">#}
+{#                <v-img src="{% static 'img/products-homemade-pizza-for-dinner.jpg' %}"></v-img>#}
+{#                PRODUCTS & SWAG#}
+{#              </a>#}
+{#            </div>#}
+{#          </div>#}
+{#        </div>#}
+{#      </section>#}
+{#      <!-- Beyond the Groceries -->#}
 
-                <!-- Ready for Better Food Choices? -->
-                {% if not request.user.is_authenticated %}
-                    <section class="text-center p-5 pb-20 max-w-xl mx-auto">
-                        <h3 class="text-3xl text-primary font-bold mb-5 font-nospacing">Ready for Better Food
-                            Choices?</h3>
-                        <p class="text-secondary text-xl">Join the hundreds of households who trust local farmers to
-                            provide high quality food for a full diet.</p>
-                        <v-btn x-large color="primary" class="font-weight-bold ffcsa--v-btn" href="{% url 'signup' %}">
-                            BECOME A MEMBER
-                        </v-btn>
-                    </section>
-                {% endif %}
-                <!-- Ready for Better Food Choices? -->
+      <!-- Ready for Better Food Choices? -->
+      {% if not request.user.is_authenticated %}
+      <section class="text-center p-5 pb-20 max-w-xl mx-auto">
+        <h3 class="text-3xl text-primary font-bold mb-5 font-nospacing">Ready for Better Food Choices?</h3>
+        <p class="text-secondary text-xl">Join the hundreds of households who trust local farmers</p>
+        <p class="text-secondary text-xl mb-10">to provide high quality food for a full diet.</p>
+        <v-btn x-large color="primary" class="font-weight-bold ffcsa--v-btn" href="{% url 'signup' %}">BECOME A MEMBER</v-btn>
+      </section>
+      {% endif %}
+      <!-- Ready for Better Food Choices? -->
 
-            </v-main>
-        </v-app>
+    </v-main>
+  </v-app>
 
 
-    </main>
+</main>
 {% endblock main %}
 
 {% block js %}
-    <script src="{% static "js/lodash.js" %}"></script>
-    <script>
-      const ProductsVue = new Vue({
-        el: '#productsVue',
-        delimiters: ['((', '))'],
-        vuetify: new Vuetify(opts),
-        data: {
-          loading: true,
+<script src="{% static "js/lodash.js" %}"></script>
+<script>
+  const ProductsVue = new Vue({
+    el: '#productsVue',
+    delimiters: ['((', '))'],
+    vuetify: new Vuetify(opts),
+    data: {
+      loading: true,
 
-          categories: [],
+      categories: [],
 
-          query: '',
-          isTyping: false,
-          page: 1,
-          selectedCategory: '',
+      query: '',
+      isTyping: false,
+      page: 1,
+      selectedCategory: '',
 
-          // products
-          products: {
-            count: 0,
-            num_pages: 0,
-            next: null,
-            previous: null,
-            results: [],
-          },
+      // products
+      products: {
+        count: 0,
+        num_pages: 0,
+        next: null,
+        previous: null,
+        results: []
+      },
 
-          // product
-          currentProduct: null,
-          dialog: false,
+      // product
+      currentProduct: null,
+      dialog: false,
 
-          // product details
-          modalShown: false,
+      // product details
+      modalShown: false,
 
-        },
+    },
 
-        watch: {
-          currentProduct: function (val, oldVal) {
-            if (val !== null) {
-              this.dialog = true
-            } else {
-              this.dialog = false
-            }
-          },
-
-          query: _.debounce(function () {
-            this.isTyping = false
-          }, 1000),
-
-          isTyping: function (value) {
-            if (!value) {
-              this.getProducts(this.query)
-            }
-          },
-
-          selectedCategory: function (val, oldVal) {
-            this.getProducts()
-            this.scrollToProducts()
-          },
-
-          page: function (val, oldVal) {
-            this.getProducts()
-            this.scrollToProducts()
-          },
-        },
-
-        computed: {
-          imgSrc () {
-            switch (this.$vuetify.breakpoint.name) {
-              case 'xs':
-                return "{% static 'img/shop_banner_mobile.jpg' %}"
-              default:
-                return "{% static 'img/shop_banner.jpg' %}"
-            }
-          },
-          bannerHeight () {
-            switch (this.$vuetify.breakpoint.name) {
-              case 'xs':
-                return 250
-              case 'sm':
-                return 350
-              default:
-                return 400
-            }
-          },
-        },
-
-        methods: {
-          isMobile () {
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-          },
-          async getProducts (searchQuery = null) {
-            this.loading = true
-            // this.products.results = []
-
-            // get products and assign the results
-            try {
-
-              if (searchQuery != null) {
-                var query = encodeURIComponent(searchQuery)
-              } else {
-                var query = encodeURIComponent(this.query)
-              }
-
-              const category = encodeURIComponent(this.selectedCategory)
-
-              const res = await axios.get(`/api/products/?query=${query}&page=${this.page}&category=${category}`)
-              this.products = {...res.data}
-              console.log(this.products)
-              this.loading = false
-
-              // if a product is selected, open product (has to be after loading products)
-              this.parseProductFromURL()
-
-              // sync query params with url
-              this.syncParamsURL()
-
-            } catch (error) {
-              console.log(error)
-              this.loading = false
-            }
-          },
-
-          async getCategories () {
-            // get categories and clean up the data
-            try {
-              const res = await axios.get(`/api/products/get_parent_sub_categories/`)
-              this.categories = res.data
-            } catch (error) {
-              console.log(error)
-            }
-          },
-          BindProductClass (variations) {
-            if (variations.length === 1) return 'col-sm-6'
-            else return 'col-sm-5'
-          },
-          scrollToProducts () {
-            const id = 'productsListSection'
-            const yOffset = -170
-            const element = document.getElementById(id)
-            const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset
-            window.scrollTo({top: y, behavior: 'smooth'})
-          },
-
-          getProductStartFrom (product) {
-            prices = []
-            product.variations.forEach(v => prices.push(parseFloat(v.unit_price)))
-            return Math.min(...prices).toFixed(2)
-          },
-
-          showProduct (product) {
-            this.currentProduct = product
-            console.log(this.currentProduct)
-            this.syncParamsURL()
-          },
-
-          hideProductModal () {
-            this.currentProduct = null
-            this.syncParamsURL()
-          },
-
-          resetProductsFilter () {
-            this.selectedCategory = ''
-            this.query = ''
-            this.getProducts()
-          },
-
-          parseProductFromURL () {
-            // if a product is selected, open product (has to be after loading products)
-            const url = new URL(location.href)
-            const pid = url.searchParams.get('pid')
-            const matched = this.products.results.filter(product => product.id == parseInt(pid))
-            if (matched.length > 0) this.currentProduct = matched[0]
-          },
-
-          syncParamsURL () {
-            // sync query params with url
-            const params = new URLSearchParams(location.search)
-            params.set('query', this.query)
-            params.set('page', this.page)
-            params.set('category', this.selectedCategory)
-            params.set('pid', this.currentProduct ? this.currentProduct.id : null)
-
-            params.toString() // => query=&page=1&category=
-            window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`)
-          },
-
-          categorySelected (category) {
-            // TODO: not working!
-            return this.selectedCategory == category ? 'text-primary' : ''
-          },
-        },
-
-        async mounted () {
-          // Sync URL params
-          const url = new URL(location.href)
-
-          const page = url.searchParams.get('page')
-          if (page !== null) this.page = page || 1
-
-          const query = url.searchParams.get('query')
-          if (query !== null) this.query = query || ''
-
-          const category = url.searchParams.get('category')
-          if (category !== null) this.selectedCategory = category || ''
-
-          // get products and categories
-          this.getProducts()
-          this.getCategories()
-        },
-
-      })
-
-      // close product modal if open
-      document.addEventListener('keyup', e => {
-        if (e.key === 'Escape') {
-          ProductsVue.hideProductModal()
+    watch: {
+      currentProduct: function(val, oldVal) {
+        if (val !== null) {
+          this.dialog = true
+        } else {
+          this.dialog = false
         }
-      })
-    </script>
+      },
+
+      query: _.debounce(function() {
+        this.isTyping = false;
+      }, 1000),
+
+      isTyping: function(value) {
+       if (!value) {
+        this.getProducts(this.query);
+       }
+     },
+
+      selectedCategory: function(val, oldVal) {
+        this.getProducts()
+        this.scrollToProducts()
+      },
+
+      page: function(val, oldVal) {
+        this.getProducts()
+        this.scrollToProducts()
+      }
+    },
+
+    computed: {
+      imgSrc() {
+        switch (this.$vuetify.breakpoint.name) {
+          case 'xs': return "{% static 'img/shop_banner_mobile.jpg' %}"
+          default: return "{% static 'img/shop_banner.jpg' %}"
+        }
+      },
+      bannerHeight () {
+        switch (this.$vuetify.breakpoint.name) {
+          case 'xs': return 250
+          case 'sm': return 350
+          default: return 400
+        }
+      },
+    },
+
+    methods: {
+      isMobile() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      },
+      async getProducts(searchQuery=null) {
+        this.loading = true;
+        // this.products.results = []
+
+        // get products and assign the results
+        try {
+
+          if (searchQuery != null){
+            var query = encodeURIComponent(searchQuery);
+          }else{
+            var query = encodeURIComponent(this.query);
+          }
+
+          const category = encodeURIComponent(this.selectedCategory);
+
+          const res = await axios.get(`/api/products/?query=${query}&page=${this.page}&category=${category}`);
+          this.products = {...res.data}
+          console.log(this.products)
+          this.loading = false;
+
+          // if a product is selected, open product (has to be after loading products)
+          this.parseProductFromURL()
+
+          // sync query params with url
+          this.syncParamsURL()
+
+        } catch (error) {
+          console.log(error)
+          this.loading = false;
+        }
+      },
+
+      async getCategories() {
+        // get categories and clean up the data
+        try {
+          const res = await axios.get(`/api/products/get_parent_sub_categories/`);
+          this.categories = res.data
+        } catch (error) {
+          console.log(error)
+        }
+      },
+      BindProductClass(variations) {
+          if(variations.length === 1) return "col-sm-6"
+          else return "col-sm-5"
+      },
+      scrollToProducts() {
+        const id = 'productsListSection';
+        const yOffset = -170;
+        const element = document.getElementById(id);
+        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({top: y, behavior: 'smooth'});
+      },
+
+      getProductStartFrom(product) {
+        prices = []
+        product.variations.forEach(v => prices.push(parseFloat(v.unit_price)));
+        return Math.min(...prices).toFixed(2)
+      },
+
+      showProduct(product) {
+        this.currentProduct = product;
+        console.log(this.currentProduct);
+        this.syncParamsURL()
+      },
+
+      hideProductModal() {
+        this.currentProduct = null;
+        this.syncParamsURL();
+      },
+
+      resetProductsFilter() {
+        this.selectedCategory = ''
+        this.query = ''
+        this.getProducts()
+      },
+
+      parseProductFromURL() {
+        // if a product is selected, open product (has to be after loading products)
+        const url = new URL(location.href);
+        const pid = url.searchParams.get("pid");
+        const matched = this.products.results.filter(product => product.id == parseInt(pid))
+        if (matched.length > 0) this.currentProduct = matched[0]
+      },
+
+      syncParamsURL() {
+        // sync query params with url
+        const params = new URLSearchParams(location.search);
+        params.set('query', this.query);
+        params.set('page', this.page);
+        params.set('category', this.selectedCategory);
+        params.set('pid', this.currentProduct ? this.currentProduct.id : null);
+
+        params.toString(); // => query=&page=1&category=
+        window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
+      },
+
+      categorySelected(category) {
+        // TODO: not working!
+        return this.selectedCategory == category ? 'text-primary' : ''
+      }
+    },
+
+    async mounted() {
+      // Sync URL params
+      const url = new URL(location.href);
+
+      const page = url.searchParams.get("page");
+      if (page !== null) this.page = page || 1
+
+      const query = url.searchParams.get("query");
+      if (query !== null) this.query = query || ''
+
+      const category = url.searchParams.get("category");
+      if (category !== null) this.selectedCategory = category || ''
+
+      // get products and categories
+      this.getProducts()
+      this.getCategories()
+    }
+
+  })
+
+
+  // close product modal if open
+  document.addEventListener('keyup', e => {
+    if (e.key === "Escape") {
+      ProductsVue.hideProductModal()
+    }
+  })
+</script>
 {% endblock %}
