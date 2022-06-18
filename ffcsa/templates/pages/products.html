@@ -115,7 +115,7 @@
           <v-row>
             <v-col md="6" lg="4" class="mb-4 relative" v-for="product in products.results">
               <!-- product image -->
-              <v-img :src="'/media/' + product.image" height="20rem" @click="showProduct(product)" class="cursor-pointer">
+              <v-img :src="'/static/media/' + product.image" height="20rem" @click="showProduct(product)" class="cursor-pointer">
                 <div v-if="product.weight" class="rounded-tr-lg absolute left-0 bottom-0 bg-blue-50 p-2 px-3">(( product.weight ))</div>
               </v-img>
 
@@ -230,7 +230,7 @@
                      <v-row>
                         <!-- Variation image -->
                         <v-col md="4">
-                          <v-img :src="'/media/' + currentProduct.variations[0].image.file" height="265"></v-img>
+                          <v-img :src="'/static/media/' + currentProduct.variations[0].image.file" height="265"></v-img>
                         </v-col>
                         <!-- Variation detail -->
                         <v-col md="8">
