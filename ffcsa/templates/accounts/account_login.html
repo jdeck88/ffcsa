@@ -93,7 +93,8 @@
           if (urlParams.has('next')) {
               redirect_url = urlParams.get('next')
           }
-          location.replace(redirect_url)
+          console.log('res : ', res);
+          //location.replace(redirect_url)
 
         } catch (error) {
           store.commit('showAlert', {type: 'error', content: error.response.data.detail})
