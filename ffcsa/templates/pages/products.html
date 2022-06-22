@@ -8,6 +8,16 @@
         .btn-outline-secondary:hover {
             color: #fff !important;
         }
+        .hover-trigger .hover-target {
+          transition: all ease-in-out 3s !important;
+          transition-delay: 10s !important;
+        }
+        .hover-trigger:hover .hover-target {
+          display: block !important; ;
+        }
+        .v-application a {
+            color: #e16231 !important;
+        }
     </style>
 {% endblock %}
 
@@ -482,6 +492,7 @@
         try {
           const res = await axios.get(`/api/products/get_parent_sub_categories/`);
           this.categories = res.data
+          console.log('categories : ', res.data);
         } catch (error) {
           console.log(error)
         }
