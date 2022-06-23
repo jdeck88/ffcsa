@@ -33,7 +33,10 @@ def order_period_start(context):
 
 @register.simple_tag(takes_context=True)
 def is_order_cycle(context):
-    return valid_order_period_for_user(context.request.user)
+    if context.request.user.is_authenticated():
+        return valid_order_period_for_user(context.request.user)
+    else:
+        return True
 
 
 @register.filter

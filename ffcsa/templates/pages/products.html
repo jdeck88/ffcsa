@@ -121,6 +121,7 @@
 
       <!-- Products list -->
       <section id="productsListSection" class="min-h-screen">
+        {% is_order_cycle as user_on_order_cycle %}
         <div v-if="products.results.length > 0" class="container my-12 mx-auto min-h-screen">
           <v-row>
             <v-col md="6" lg="4" class="mb-4 relative" v-for="product in products.results">
@@ -166,7 +167,7 @@
                   <template v-if="store.state.is_authenticated">
                     <template v-if="product.has_in_stock_variations">
                       <template v-if="product.variations.length == 1">
-                        <v-btn block color="brown_lightest" elevation="0" x-large @click="App.addToCart(product.variations[0]);getProducts()">ADD TO CART</v-btn>
+                        <v-btn block color="brown_lightest" elevation="0" x-large {% if not user_on_order_cycle %}disabled{% endif %} @click="App.addToCart(product.variations[0]);getProducts()">ADD TO CART</v-btn>
                     </template>
                       <template v-else>
                         <v-btn block color="brown_lightest" elevation="0" x-large @click="showProduct(product)">CHOOSE OPTION</v-btn>
@@ -292,7 +293,7 @@
                                 <v-col cols="12" md="4" class="text-right">
                                   <template v-if="store.state.is_authenticated">
                                     <template v-if="variation.addable">
-                                      <v-btn color="brown_lightest" elevation="0" x-large @click="App.addToCart(variation)">ADD TO CART</v-btn>
+                                      <v-btn color="brown_lightest" elevation="0" x-large {% if not user_on_order_cycle %}disabled{% endif %} @click="App.addToCart(variation)">ADD TO CART</v-btn>
                                     </template>
 
                                     <template v-else-if="!variation.live_num_in_stock">
@@ -300,7 +301,7 @@
                                     </template>
 
                                     <template v-else>
-                                      <v-btn color="brown_lightest" elevation="0" x-large @click="App.addToCart(variation)">ADD TO CART</v-btn>
+                                      <v-btn color="brown_lightest" elevation="0" x-large {% if not user_on_order_cycle %}disabled{% endif %} @click="App.addToCart(variation)">ADD TO CART</v-btn>
                                     </template>
                                   </template>
 
