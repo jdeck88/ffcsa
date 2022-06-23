@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="{{ LANGUAGE_CODE }}"{% if LANGUAGE_BIDI %} dir="rtl"{% endif %}>
-{% load pages_tags ffcsa_core_tags mezzanine_tags i18n staticfiles static %}
+{% load pages_tags ffcsa_core_tags shop_tags mezzanine_tags i18n staticfiles static %}
 {% load render_bundle from webpack_loader %}
 
 <head>
@@ -138,11 +138,11 @@
                     <v-col class="d-flex justify-space-around">
                         <v-toolbar-title class="pt-2">
                             <template v-if="store.state.is_authenticated && !isMobile()">
-                                Your Cart ( ((store.state.cart.items.length)) )
+                                Your {% if user.profile.is_member %}Order{% else %}Cart{% endif %} ( ((store.state.cart.items.length)) )
                                 <span id="countDown" class="text-base text-red-600"></span>
                             </template>
                             <template v-else-if="store.state.is_authenticated && isMobile()">
-                                Your Cart
+                                Your {% if user.profile.is_member %}Order{% else %}Cart{% endif %}
                                 <span id="countDown" class="text-base text-red-600"></span>
                             </template>
                             <template v-else>
@@ -236,10 +236,14 @@
                     </div>
                 {% endif %}
 
-                {% if not user.is_authenticated %}
+                {% if not user.profile.is_member %}
                     <v-btn large block color="primary" class="font-weight-bold mt-4" href="/cart"
                            :disabled="!store.state.cart.items.length">CONTINUE TO CHECKOUT
                     </v-btn>
+                {% elif is_order_cycle %}
+                    <p class="text-sm text-center">Your order will be automatically submitted on {% order_period_end %}</p>
+                {% else %}
+                    <p class="text-sm text-center">Your next order period is from {% order_period_start %} to {% order_period_end %}</p>
                 {% endif %}
             </section>
             <!-- total and checkout -->
@@ -512,9 +516,13 @@
                         brown_lightest: '#efe8e4',
                         brown_darkest: '#502616',
                         green_lightest: '#e8ebe2',
+                        info: '#7c9b65',
+                        warning: '#e67f51',
                     },
                     dark: {
                         primary: '#e16231',
+                        info: '#7c9b65',
+                        warning: '#e67f51',
                     }
                 },
                 // dark: true

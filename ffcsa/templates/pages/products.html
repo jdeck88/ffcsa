@@ -109,13 +109,21 @@
       </template>
 
       {% if not user.is_authenticated %}
-      <template>
-        <v-container>
-          <v-alert type="warning">
-            Currently we are only accepting online orders for Full Farm CSA members. If you are a member, log in to place your order. If you would like to place an order for Deck Family Farm products, please give us a call at 541-998-4697 or send us an email at info@deckfamilyfarm.com.
-          </v-alert>
-        </v-container>
-      </template>
+          <template>
+            <v-container class="py-0">
+              <v-alert class="mb-0" type="warning" dense>
+                Currently we are only accepting online orders for Full Farm CSA members. If you are a member, log in to place your order. If you would like to place an order for Deck Family Farm products, please give us a call at 541-998-4697 or send us an email at info@deckfamilyfarm.com.
+              </v-alert>
+            </v-container>
+          </template>
+      {% elif not is_order_cycle %}
+          <template>
+              <v-container class="py-0">
+                  <v-alert class="mb-0" type="info" dense>
+                      Your next order period is from {% order_period_start %} to {% order_period_end %}
+                  </v-alert>
+              </v-container>
+          </template>
       {% endif %}
 
 
