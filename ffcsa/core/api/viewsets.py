@@ -146,6 +146,8 @@ class SignupViewSet(viewsets.ViewSet):
 
         profile_raw = ProfileSerializer(profile).data
         profile_raw['join_dairy_program'] = join_dairy_program
+        if profile_raw['num_adults'] == 0:
+            profile_raw['num_adults'] = 1
 
         serializer = ProfileSerializer(profile, data=profile_raw)
         serializer.is_valid(raise_exception=True)
