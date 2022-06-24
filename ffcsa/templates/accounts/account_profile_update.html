@@ -140,6 +140,7 @@
                                                     :items="store.state.drop_sites"
                                                     item-text="description"
                                                     item-value="description"
+                                                    @input="onChangeDropSite"
                                                     :return-object="false"
                                                     :rules="[store.state.rules.required]"
                                             >
@@ -672,7 +673,18 @@
                 async getUser() {
                     try {
                         const res = await axios.get(`/api/users/`);
+                        const dropSites = store.state.drop_sites
+                        var dropSiteDescription = undefined
+                        dropSites.forEach(function (item, index) {
+                            if (item.name === res.data.profile.drop_site){
+                                dropSiteDescription = item.description
+                            }
+                        });
+                        if (dropSiteDescription !== undefined) {
+                            res.data.profile.drop_site = dropSiteDescription;
+                        }
                         this.user = res.data
+                        console.log('user : ', this.user);
                     } catch (error) {
                         store.commit('showAlert', {type: 'error', content: error.response.data.detail})
                     }
@@ -686,16 +698,47 @@
                     try {
                         this.personal.loading = true
                         if (this.user.profile.num_adults === 0) this.user.profile.num_adults = 1
-                        const res = await axios.put(`/api/users/` + this.user.id + '/', data = this.user);
+                        const dropSites = store.state.drop_sites
+                        var dataUpdate = this.user
+                        var dropSiteName = undefined
+                        var dropSiteDescription = undefined
+                        dropSites.forEach(function (item, index) {
+                            if (item.description === dataUpdate.profile.drop_site){
+                                dropSiteName = item.name
+                                dropSiteDescription = item.description
+                            }
+                        });
+                        if (dropSiteName !== undefined) {
+                            dataUpdate.profile.drop_site = dropSiteName
+                        }
+                        console.log('saved : ', dataUpdate);
+                        const res = await axios.put(`/api/users/` + this.user.id + '/', data = dataUpdate);
+                        this.user.profile.drop_site = dropSiteDescription
+                        console.log('updated : ', this.user.profile);
                         store.commit('showAlert')
 
                         this.personal.loading = false
                     } catch (error) {
-                        console.log(error.response.data)
+                        console.log(error)
                         store.commit('showAlert', {type: 'error', content: error.response.data})
                         this.personal.loading = false
                     }
                 },
+                onChangeDropSite(value) {
+                    // save name instead of description of drop sites
+                    const dropSites = store.state.drop_sites
+                    var dropSiteDescription = undefined
+                    dropSites.forEach(function (item, index) {
+                        if (item.name === value){
+                            dropSiteDescription = item.description
+                        }
+                    });
+                    if (dropSiteDescription !== undefined) {
+                        this.user.profile.drop_site = dropSiteDescription
+                    }
+                    console.log('changed : ', this.user.profile)
+                },
+
 
                 // get user payments
                 async getUserPayments() {
