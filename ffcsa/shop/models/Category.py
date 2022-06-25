@@ -122,7 +122,7 @@ class Category(Page, RichText):
         target_cats = [
             'Pasture Raised Meats',
             'Organic Vegetables',
-            'Raw Dairy',
+            'Dairy',
             'Organic Fruit',
             'Pantry'
         ]
