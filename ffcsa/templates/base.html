@@ -236,11 +236,12 @@
                     </div>
                 {% endif %}
 
+                {% is_order_cycle as user_on_order_cycle %}
                 {% if not user.profile.is_member %}
                     <v-btn large block color="primary" class="font-weight-bold mt-4" href="/cart"
                            :disabled="!store.state.cart.items.length">CONTINUE TO CHECKOUT
                     </v-btn>
-                {% elif is_order_cycle %}
+                {% elif user_on_order_cycle%}
                     <p class="text-sm text-center">Your order will be automatically submitted on {% order_period_end %}</p>
                 {% else %}
                     <p class="text-sm text-center">Your next order period is from {% order_period_start %} to {% order_period_end %}</p>

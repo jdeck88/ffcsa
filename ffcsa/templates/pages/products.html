@@ -108,6 +108,7 @@
         </v-container>
       </template>
 
+      {% is_order_cycle as user_on_order_cycle %}
       {% if not user.is_authenticated %}
           <template>
             <v-container class="py-0">
@@ -116,7 +117,7 @@
               </v-alert>
             </v-container>
           </template>
-      {% elif not is_order_cycle %}
+      {% elif not user_on_order_cycle %}
           <template>
               <v-container class="py-0">
                   <v-alert class="mb-0" type="info" dense>
@@ -127,9 +128,8 @@
       {% endif %}
 
 
-      <!-- Products list -->
+        <!-- Products list -->
       <section id="productsListSection" class="min-h-screen">
-        {% is_order_cycle as user_on_order_cycle %}
         <div v-if="products.results.length > 0" class="container my-12 mx-auto min-h-screen">
           <v-row>
             <v-col md="6" lg="4" class="mb-4 relative" v-for="product in products.results">
