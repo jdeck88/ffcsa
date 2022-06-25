@@ -123,8 +123,7 @@ class Category(Page, RichText):
             if not cat.published():
                 continue
             # sub_cat( published and have at least one available product)
-            # sub_cats = [cat.title for cat in cat.children.all() if cat.published() and Product.objects.filter(categories__title=cat.title, available=True).count() > 0]
-            sub_cats = [c.title for c in cat.children.all() if c.published() and Product.objects.filter(categories__id=c.id, available=True).count() > 0]
+            sub_cats = [c.title for c in cat.children.all().order_by('_order') if c.published() and Product.objects.filter(categories__id=c.id, available=True).count() > 0]
 
             # no products in the category and no children w/ products, skip it
             if len(sub_cats) is 0 and Product.objects.filter(categories__id=cat.id, available=True).count() is 0:
