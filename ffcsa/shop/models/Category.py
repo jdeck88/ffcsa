@@ -141,8 +141,8 @@ class Category(Page, RichText):
                     'sub_cats': sub_cats
                 })
 
-        for cat in categories:
-            if cat["title"] == "Pantry":
-                cat["sub_cats"].append("Products & Swag")
+        # for cat in categories:
+        #     if cat["title"] == "Pantry":
+        #         cat["sub_cats"].append("Products & Swag")
         
         return categories
