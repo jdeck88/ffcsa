@@ -114,35 +114,25 @@ class Category(Page, RichText):
         return self.slug.lstrip(root).lstrip('/')
     
     @classmethod
-    def parent_sub_categories(self):
+    def shop_menu_categories(self):
         """
         List of categories and it's published sub categories for products to be filtered
         """
-
-        target_cats = [
-            'Pasture Raised Meats',
-            'Organic Vegetables',
-            'Dairy',
-            'Organic Fruit',
-            'Pantry'
-        ]
-
         categories = []
-        for cat_title in target_cats:
-            cat = Category.objects.get(title=cat_title)
+        for cat in Category.objects.filter(parent__isnull=True).order_by('_order'):
+            if not cat.published():
+                continue
             # sub_cat( published and have at least one available product)
             # sub_cats = [cat.title for cat in cat.children.all() if cat.published() and Product.objects.filter(categories__title=cat.title, available=True).count() > 0]
-            sub_cats = [cat.title for cat in cat.children.all() if cat.published() and Product.objects.filter(categories__title=cat.title, available=True).count() > 0]
+            sub_cats = [c.title for c in cat.children.all() if c.published() and Product.objects.filter(categories__id=c.id, available=True).count() > 0]
 
-            if len(sub_cats) > 0 or cat.title == 'Pantry':
-                categories.append({
-                    'title': cat.title,
-                    'display_name': cat.title.upper(),
-                    'sub_cats': sub_cats
-                })
+            # no products in the category and no children w/ products, skip it
+            if len(sub_cats) is 0 and Product.objects.filter(categories__id=cat.id, available=True).count() is 0:
+                continue
 
-        # for cat in categories:
-        #     if cat["title"] == "Pantry":
-        #         cat["sub_cats"].append("Products & Swag")
-        
+            categories.append({
+                'title': cat.title,
+                'display_name': cat.title.upper(),
+                'sub_cats': sub_cats
+            })
         return categories

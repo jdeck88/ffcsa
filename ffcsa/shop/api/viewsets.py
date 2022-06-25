@@ -66,7 +66,7 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     @list_route(methods=['get'])
     def get_parent_sub_categories(self, request):
-        cats = Category.parent_sub_categories()
+        cats = Category.shop_menu_categories()
         return Response(cats)
 
 
