@@ -7,7 +7,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-18.04
+    runs-on: self-hosted
     defaults:
       run:
         working-directory: /home/ffcsa/webapps/ffcsa
@@ -18,15 +18,14 @@ jobs:
         python-version: [3.9]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+    - run: |
+        pwd
+        git pull git@github.com:ewingrj/ffcsa.git prod
 
-    # Pull changes
-    - run: git pull git@github.com:ewingrj/ffcsa.git prod
-    # - run: git pull https://muhamedyoussef:${{ secrets.FFCSA }}@github.com/ewingrj/ffcsa.git feature/api_with_vue
-
-    # Build frontend
-    - name: Build frontend
-      run: npm run prod
+#    # Build frontend
+#    - name: Build frontend
+#      run: npm run prod
 
 
 #    - name: Pull changes
