@@ -38,6 +38,7 @@ urlpatterns = i18n_patterns(
         name='signrequest-declined'),
 
     # public pages
+    url(r'^products/$', TemplateView.as_view(template_name='pages/products.html'), name='store_page'),
     url(r'^faq/$', TemplateView.as_view(template_name='pages/faq.html'), name='faq_page'),
     url(r'^in-season/$', TemplateView.as_view(template_name='pages/in-season.html'), name='in_season_page'),
     url(r'^about/$', TemplateView.as_view(template_name='pages/about.html'), name='about_page'),
