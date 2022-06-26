@@ -499,6 +499,7 @@
       },
 
       async getCategories() {
+        console.log('Test CI on production');
         // get categories and clean up the data
         try {
           const res = await axios.get(`/api/products/get_parent_sub_categories/`);
