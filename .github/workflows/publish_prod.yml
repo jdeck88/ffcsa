@@ -21,7 +21,9 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Pull changes
-    - run: pwd
+      run: |
+        pwd
+        ls
 
 #    - name: Pull changes
 #    - run: git pull git@github.com:ewingrj/ffcsa.git prod
