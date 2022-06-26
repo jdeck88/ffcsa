@@ -20,8 +20,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - name: Pull changes
-      run: git pull git@github.com:ewingrj/ffcsa.git prod
+#    - name: Pull changes
+    - run: git pull git@github.com:ewingrj/ffcsa.git prod
 
     - name: Build frontend
       run: npm run prod
