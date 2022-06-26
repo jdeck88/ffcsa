@@ -19,10 +19,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Pull changes
-      run: |
-        pwd
-        ls
+
+    # Pull changes
+    - run: git pull git@github.com:ewingrj/ffcsa.git prod
+    # - run: git pull https://muhamedyoussef:${{ secrets.FFCSA }}@github.com/ewingrj/ffcsa.git feature/api_with_vue
+
+    # Build frontend
+    - name: Build frontend
+      run: npm run prod
+
 
 #    - name: Pull changes
 #    - run: git pull git@github.com:ewingrj/ffcsa.git prod
