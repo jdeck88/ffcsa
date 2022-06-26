@@ -1,5 +1,6 @@
 import datetime
 import requests
+import logging
 import stripe
 from django.contrib import auth
 from django.contrib.auth import get_user_model
@@ -213,7 +214,8 @@ class ResetPasswordViewSet(viewsets.ViewSet):
                     context=context,
                 )
             except Exception as ex:
-                raise NotAcceptable(str(ex))
+                logging.error(ex)
+                raise NotAcceptable("Something went wrong, try again later!")
             return Response({})
 
         raise NotFound("User not found")
