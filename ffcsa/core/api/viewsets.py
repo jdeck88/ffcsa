@@ -212,8 +212,8 @@ class ResetPasswordViewSet(viewsets.ViewSet):
                     user.email,
                     context=context,
                 )
-            except:
-                raise NotAcceptable("Something went wrong, try again later!")
+            except Exception as ex:
+                raise NotAcceptable(str(ex))
             return Response({})
 
         raise NotFound("User not found")
