@@ -84,7 +84,7 @@
                             grown in the Willamette Valley...delivered!
                         </p>
                         <p class="text-xl mb-16">
-                            Fresh Produce, Organic Pasture Raised Eggs, Dairy, Meats & Organic Pantry Staples
+                            Fresh Organic Produce, Pasture-Raised Eggs, Dairy, Meats & Pantry Staples
                         </p>
                         <p class="text-center mt-10">
                             <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn"
@@ -610,15 +610,10 @@
 
                         <v-col cols="12">
                             <h4 class="text-2xl text-brown-7 mb-5 text-center">Download our Free Guide.</h4>
-                            <h3 class="text-center font-bold text-3xl">Greenwash, the New Hogwash:</h3>
-                            <h3 class="text-center font-bold text-3xl">7 Misleading Food Labels</h3>
+                            <h3 class="text-center font-bold text-3xl">Greenwash, the new Hogwash:</h3>
+                            <h3 class="text-center font-bold text-3xl">7 Ways You Could Be Mislead By Food Labels</h3>
                             <h3 class="text-center font-bold font-italic text-2xl">(and what to look for instead)</h3>
                         </v-col>
-
-                        {#                        <v-col md="6" sm="12">#}
-                        {#                            <v-img height="100%"#}
-                        {#                                   src="{% static 'img/DFF-Greenwash the New Hogwash Mockup.png' %}"></v-img>#}
-                        {#                        </v-col>#}
 
                         <v-col cols="12">
 
@@ -629,10 +624,6 @@
                                         <v-text-field v-model="leadGen.first_name" label="First name"
                                                       outlined></v-text-field>
                                     </v-col>
-                                    {#                                    <v-col cols="6" md="2">#}
-                                    {#                                        <v-text-field v-model="leadGen.last_name" label="Last name"#}
-                                    {#                                                      outlined></v-text-field>#}
-                                    {#                                    </v-col>#}
                                     <v-col cols="12" md="4">
                                         <v-text-field v-model="leadGen.email" label="Email" type="email" outlined
                                                       :rules="[store.state.rules.required, store.state.rules.email]"></v-text-field>
