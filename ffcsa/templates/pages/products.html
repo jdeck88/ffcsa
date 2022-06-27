@@ -467,7 +467,6 @@
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       },
       async getProducts(searchQuery=null) {
-        console.log('Test Ci/CD');
         this.loading = true;
         // this.products.results = []
 
@@ -484,7 +483,6 @@
 
           const res = await axios.get(`/api/products/?query=${query}&page=${this.page}&category=${category}`);
           this.products = {...res.data}
-          console.log(this.products)
           this.loading = false;
 
           // if a product is selected, open product (has to be after loading products)
@@ -500,12 +498,10 @@
       },
 
       async getCategories() {
-        console.log('Test CI on production');
         // get categories and clean up the data
         try {
           const res = await axios.get(`/api/products/get_parent_sub_categories/`);
           this.categories = res.data
-          console.log('categories : ', res.data);
         } catch (error) {
           console.log(error)
         }
@@ -530,7 +526,6 @@
 
       showProduct(product) {
         this.currentProduct = product;
-        console.log(this.currentProduct);
         this.syncParamsURL()
       },
 
