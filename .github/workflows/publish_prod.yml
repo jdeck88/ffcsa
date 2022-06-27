@@ -25,7 +25,7 @@ jobs:
         ls -l
 
     - name: Pull changes
-    - run: git pull git@github.com:ewingrj/ffcsa.git prod
+      run: git pull git@github.com:ewingrj/ffcsa.git prod
 
     - name: Build frontend
       run: npm run prod
