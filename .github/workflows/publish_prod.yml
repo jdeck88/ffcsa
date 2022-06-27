@@ -20,18 +20,16 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Open Web Client Directory
-      run: |
-        ls -l
-
     - name: Pull changes
       run: git pull git@github.com:ewingrj/ffcsa.git prod
 
+    - name: Activate virtualenv
+      run: |
+        source /home/ffcsa/.pyenv/versions/ffcsa_prod/bin/activate
+        ls -l
+
     - name: Build frontend
       run: npm run prod
-
-    - name: Activate virtualenv
-      run: pyenv activate ffcsa_prod
 
     - name: Collect Static
       run: python manage.py collectstatic
