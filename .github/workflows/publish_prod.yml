@@ -31,9 +31,3 @@ jobs:
 
     - name: Collect Static
       run: python manage.py collectstatic --no-input
-
-    - name: Restart Gunicorn
-      run: sudo supervisorctl restart gunicorn_ffcsa_prod
-
-    - name: Restart nginx
-      run: service nginx restart
