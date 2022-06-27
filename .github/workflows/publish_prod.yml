@@ -18,10 +18,12 @@ jobs:
         python-version: [3.9]
 
     steps:
-    - uses: actions/checkout@v3
-    - run: |
-        pwd
-        git pull git@github.com:ewingrj/ffcsa.git prod
+    - uses: actions/checkout@v2
+
+    - name: Open Web Client Directory
+      working-directory: /home/ffcsa/webapps/ffcsa
+      run: |
+        ls -la
 
 #    # Build frontend
 #    - name: Build frontend
