@@ -22,7 +22,7 @@ jobs:
 
     - name: Open Web Client Directory
       run: |
-        cd /home/ffcsa/webapps/ffcsa
+        cd /home/ffcsa/
         ls -la
 
 #    # Build frontend
