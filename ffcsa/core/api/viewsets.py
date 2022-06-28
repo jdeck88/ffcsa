@@ -474,7 +474,7 @@ class LeadGenPDF(viewsets.ViewSet):
             },
         )
 
-        if res.status_code in [200, 204]:
+        if res.status_code in [200, 201, 204]:
             # send back the pdf url
             pdf = "/static/pdf/DFF_Hogwash-or-Greenwash%20V03.pdf"
             return Response({"pdf": pdf})
