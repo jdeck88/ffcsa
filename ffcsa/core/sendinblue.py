@@ -61,6 +61,8 @@ def send_request(endpoint, method='GET', query=None, data=None, headers=None):
     headers.update(_DEFAULT_HEADERS)
 
     response = requests.request(method, endpoint, headers=headers, data=data, params=query)
+    logging.error('-------------- test sendblue send_request method [data] : ' + str(data))
+    logging.error('-------------- test sendblue send_request method [response] : ' + str(response))
 
     if response.status_code >= 400:
         if response.status_code < 500:
