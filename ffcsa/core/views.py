@@ -661,6 +661,10 @@ def stripe_webhooks(request):
             payment = Payment.objects.filter(charge_id=charge.id, status='Pending').first()
             if payment is None:
                 payment = Payment.objects.create(user=user, amount=amount, date=created, charge_id=charge.id, status='Failed')
+                print(type('Failed'))
+                print(type(charge.id))
+                print(type(created))
+                print(type(amount))
             else:
                 payment.status = 'Failed'
             payment.save()
