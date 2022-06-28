@@ -654,7 +654,7 @@ def stripe_webhooks(request):
             charge = event.data.object
             err = charge.failure_message
             payments_url = request.build_absolute_uri(reverse("payments"))
-            created = datetime.datetime.fromtimestamp(charge.created).strftime('%Y-%d-%m')
+            created = datetime.datetime.fromtimestamp(charge.created).strftime('%Y-%m-%d')
             amount = charge.amount / 100
 
             payment = Payment.objects.filter(charge_id=charge.id, status='Pending').first()
