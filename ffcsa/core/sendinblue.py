@@ -61,20 +61,24 @@ def send_request(endpoint, method='GET', query=None, data=None, headers=None):
     headers.update(_DEFAULT_HEADERS)
 
     response = requests.request(method, endpoint, headers=headers, data=data, params=query)
-    logging.error('-------------- test sendblue send_request method [data] : ' + str(data))
-    logging.error('-------------- test sendblue send_request method [response] : ' + str(response))
 
     if response.status_code >= 400:
         if response.status_code < 500:
-            response_json = response.json()
-            response_error = response_json.get('error', response_json)['message']  # SIB error format is not consistent
-            raise Exception('Sendinblue error: HTTP {}: {}'.format(response.status_code, response_error))
+            try:
+                response_json = response.json()
+                response_error = response_json.get('error', response_json)['message']  # SIB error format is not consistent
+                raise Exception('Sendinblue error: HTTP {}: {}'.format(response.status_code, response_error))
+            except json.decoder.JSONDecodeError:
+                return response.text
 
         else:
-            response_json = response.json()
-            response_error = response_json.get('error', response_json)['message']  # SIB error format is not consistent
-            raise Exception(
-                'Sendinblue internal server error: HTTP {}: {}'.format(response.status_code, response_error))
+            try:
+                response_json = response.json()
+                response_error = response_json.get('error', response_json)['message']  # SIB error format is not consistent
+                raise Exception(
+                    'Sendinblue internal server error: HTTP {}: {}'.format(response.status_code, response_error))
+            except json.decoder.JSONDecodeError:
+                return response.text
 
     try:
         return response.json()
@@ -447,7 +451,6 @@ def update_or_add_user(user, lists_to_add=None, lists_to_remove=None, remove_mem
         send_request('contacts/{}'.format(make_url_safe(identifier)), 'PUT', data=body)
 
     except Exception as ex:
-        logger.error(ex)
         if 'Invalid phone number' in str(ex):
             msg = 'Invalid phone number'
             logger.error(msg)
