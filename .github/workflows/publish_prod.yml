@@ -7,10 +7,10 @@ on:
 jobs:
   build:
 
-    runs-on: self-hosted
-#    defaults:
-#      run:
-#        working-directory: /home/ffcsa/webapps/ffcsa
+    runs-on: [self-hosted, prod]
+    defaults:
+      run:
+        working-directory: /home/ffcsa/webapps/ffcsa
         
     strategy:
       max-parallel: 4
@@ -20,30 +20,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Open Web Client Directory
-      run: |
-        cd /home/ffcsa/
-        ls -la
+    - name: Pull changes
+      run: git pull git@github.com:ewingrj/ffcsa.git prod
 
-#    # Build frontend
-#    - name: Build frontend
-#      run: npm run prod
+    - name: Activate virtualenv
+      run: source /home/ffcsa/.pyenv/versions/ffcsa_prod/bin/activate
 
+    - name: Build frontend
+      run: npm run prod
 
-#    - name: Pull changes
-#    - run: git pull git@github.com:ewingrj/ffcsa.git prod
-#
-#    - name: Build frontend
-#      run: npm run prod
-#
-#    - name: Activate virtualenv
-#      run: pyenv activate ffcsa_prod
-#
-#    - name: Collect Static
-#      run: python manage.py collectstatic
-#
-#    - name: Restart Gunicorn
-#      run: sudo supervisorctl restart gunicorn_ffcsa_prod
-#
-#    - name: Restart nginx
-#      run: service nginx restart
+    - name: Collect Static
+      run: python manage.py collectstatic --no-input
