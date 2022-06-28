@@ -447,6 +447,7 @@ def update_or_add_user(user, lists_to_add=None, lists_to_remove=None, remove_mem
         send_request('contacts/{}'.format(make_url_safe(identifier)), 'PUT', data=body)
 
     except Exception as ex:
+        logger.error(ex)
         if 'Invalid phone number' in str(ex):
             msg = 'Invalid phone number'
             logger.error(msg)
