@@ -390,6 +390,7 @@
     vuetify: new Vuetify(opts),
     data: {
       loading: true,
+      hasMounted: false,
 
       categories: [],
 
@@ -436,8 +437,11 @@
      },
 
       selectedCategory: function(val, oldVal) {
-        this.getProducts()
-        this.scrollToProducts()
+        if (this.hasMounted) {
+          this.query = ''
+          this.getProducts()
+          this.scrollToProducts()
+        }
       },
 
       page: function(val, oldVal) {
@@ -468,17 +472,12 @@
       },
       async getProducts(searchQuery=null) {
         this.loading = true;
-        // this.products.results = []
-
         // get products and assign the results
         try {
 
-          if (searchQuery != null){
-            var query = encodeURIComponent(searchQuery);
-          }else{
-            var query = encodeURIComponent(this.query);
-          }
+          const query = encodeURIComponent(searchQuery || this.query);
 
+          if (query) this.selectedCategory = '';
           const category = encodeURIComponent(this.selectedCategory);
 
           const res = await axios.get(`/api/products/?query=${query}&page=${this.page}&category=${category}`);
@@ -582,6 +581,7 @@
       // get products and categories
       this.getProducts()
       this.getCategories()
+      this.hasMounted = true
     }
 
   })
