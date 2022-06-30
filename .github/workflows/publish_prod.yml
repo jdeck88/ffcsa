@@ -1,0 +1,33 @@
+name: Deploy Prod
+
+on:
+  push:
+    branches: [ prod ]
+
+jobs:
+  build:
+
+    runs-on: [self-hosted, prod]
+    defaults:
+      run:
+        working-directory: /home/ffcsa/webapps/ffcsa
+        
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.9]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Pull changes
+      run: git pull git@github.com:ewingrj/ffcsa.git prod
+
+    - name: Activate virtualenv
+      run: source /home/ffcsa/.pyenv/versions/ffcsa_prod/bin/activate
+
+    - name: Build frontend
+      run: npm run prod
+
+    - name: Collect Static
+      run: python manage.py collectstatic --no-input

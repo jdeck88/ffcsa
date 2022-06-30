@@ -64,15 +64,21 @@ def send_request(endpoint, method='GET', query=None, data=None, headers=None):
 
     if response.status_code >= 400:
         if response.status_code < 500:
-            response_json = response.json()
-            response_error = response_json.get('error', response_json)['message']  # SIB error format is not consistent
-            raise Exception('Sendinblue error: HTTP {}: {}'.format(response.status_code, response_error))
+            try:
+                response_json = response.json()
+                response_error = response_json.get('error', response_json)['message']  # SIB error format is not consistent
+                raise Exception('Sendinblue error: HTTP {}: {}'.format(response.status_code, response_error))
+            except json.decoder.JSONDecodeError:
+                return response.text
 
         else:
-            response_json = response.json()
-            response_error = response_json.get('error', response_json)['message']  # SIB error format is not consistent
-            raise Exception(
-                'Sendinblue internal server error: HTTP {}: {}'.format(response.status_code, response_error))
+            try:
+                response_json = response.json()
+                response_error = response_json.get('error', response_json)['message']  # SIB error format is not consistent
+                raise Exception(
+                    'Sendinblue internal server error: HTTP {}: {}'.format(response.status_code, response_error))
+            except json.decoder.JSONDecodeError:
+                return response.text
 
     try:
         return response.json()

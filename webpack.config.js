@@ -11,67 +11,30 @@ const TerserJSPlugin = require('terser-webpack-plugin')
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const packageJson = require(path.resolve(CWD, 'package.json'))
 
-const HOST = process.env.HOST || '127.0.0.1'
+const HOST = process.env.HOST || 'localhost'
 const DEBUG = process.env.NODE_ENV !== 'production'
-const HTTPS = !!process.env.HTTPS
+const HTTPS = eval(process.env.HTTPS)
 
 config = {
   mode: DEBUG ? 'development' : 'production',
+  // bail: DEBUG ? false : true,
   devtool: 'source-map',
   entry: {
-    // main: './main.js',
-    style: './ffcsa/static/css/style.css',
-    cart: './cart/index.js',
-    // absences: './absences/index.js',
+    main: './ffcsa/static/css/style-source.css',
   },
-  // context: path.join(CWD, "app", "static", "app"),
   context: path.join(__dirname),
   output: {
     path: path.resolve('./static/ffcsa/'),
     publicPath: DEBUG
-      ? 'http' + (HTTPS ? 's' : '') + '://' + HOST + ':4000/'
+      ? `http://${HOST}:4000/`
       : (process.env.STATIC_URL || '/static/') + 'ffcsa/',
     filename: DEBUG ? '[name].js' : '[name]-[contenthash].js',
   },
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: 'babel-loader',
-            options: {
-              presets: [
-                [
-                  '@babel/preset-env',
-                  {
-                    modules: false,
-                    // debug: true,
-                    targets: packageJson.browserslist,
-                    useBuiltIns: 'usage',
-                    corejs: '3',
-                  },
-                ],
-                ['@babel/preset-react', {}],
-              ],
-              plugins: [
-                '@babel/plugin-proposal-object-rest-spread',
-                '@babel/plugin-proposal-class-properties',
-              ],
-              cacheDirectory: path.resolve(CWD, 'tmp'),
-              sourceType: 'unambiguous',
-            },
-          },
-        ],
-      },
-      {
         test: /\.css$/,
-        use: [
-          DEBUG ? 'style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader?sourceMap',
-          'postcss-loader',
-        ],
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
       },
       {
         test: /\.(png|woff|woff2|svg|eot|ttf|gif|jpe?g)$/,
@@ -87,30 +50,27 @@ config = {
           },
         ],
       },
-    ],
-  },
-  resolve: {
-    extensions: ['.js', '.jsx'],
-    modules: ['app/static/app/', 'node_modules', '.'],
-    alias: {},
+    ]
   },
   plugins: [
-    DEBUG ? null : new webpack.optimize.SplitChunksPlugin(),
-    DEBUG ? null : new CleanWebpackPlugin(),
-    DEBUG
-      ? null
-      : new MiniCssExtractPlugin({
-        filename: '[name]-[contenthash].css',
-      }),
+    new MiniCssExtractPlugin({filename: '[name]-[contenthash].css'}),
+    // NOTE - below lines are commented out cuz they cuz 'Invalid configuration' for development config
+    // DEBUG ? null : new webpack.optimize.SplitChunksPlugin(),
+    // DEBUG ? null : new CleanWebpackPlugin(),
+    // DEBUG
+    //   ? null
+    //   : new MiniCssExtractPlugin({
+    //     filename: '[name]-[contenthash].css',
+    //   }),
     new BundleTracker({
-      filename: './static/webpack-stats-' + (DEBUG ? 'dev' : 'prod') + '.json',
+      filename: './ffcsa/static/webpack-stats-' + (DEBUG ? 'dev' : 'prod') + '.json',
+
+      // path: path.resolve(__dirname, "static/"),
+      // publicPath: "/",
+      // filename: "webpack-stats-dev.js"
     }),
-    DEBUG
-      ? new webpack.NamedModulesPlugin()
-      : new webpack.HashedModuleIdsPlugin(),
-  ].filter(function (el) {
-    return !!el
-  }),
+    new webpack.HashedModuleIdsPlugin(),
+  ],
   devServer: {
     contentBase: false,
     inline: true,
@@ -119,6 +79,9 @@ config = {
     disableHostCheck: true,
     headers: {'Access-Control-Allow-Origin': '*'},
     host: HOST,
+    historyApiFallback: true,
+    hot: true,
+    stats: "minimal",
     port: 4000,
   },
   performance: {
@@ -140,18 +103,18 @@ config = {
         },
       }),
     ],
-    splitChunks: {
-      cacheGroups: {
-        vendors: {
-          test: /\/node_modules\//,
-          name: 'vendors',
-          chunks: 'all',
-        },
-      },
-    },
-    runtimeChunk: {
-      name: 'manifest',
-    },
+    // splitChunks: {
+    //   cacheGroups: {
+    //     vendors: {
+    //       test: /\/node_modules\//,
+    //       name: 'vendors',
+    //       chunks: 'all',
+    //     },
+    //   },
+    // },
+    // runtimeChunk: {
+    //   name: 'manifest',
+    // },
   },
 }
 

@@ -2,9 +2,9 @@
 
 {% load mezzanine_tags staticfiles %}
 
-{% block extra_css %}
+{% block css %}
 <link rel="stylesheet" href="{% static "mezzanine/css/magnific-popup.css" %}">
-{% endblock extra_css %}
+{% endblock css %}
 {% block left_wrapper %}
 {% endblock %}
 <div class="col-md-{% block main_col_size %}12{% endblock %}">
@@ -49,7 +49,7 @@
 </div>
 {% block right_wrapper %}
 {% endblock %}
-{% block extra_js %}
+{% block js %}
 {{ block.super }}
 
 

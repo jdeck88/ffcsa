@@ -1,0 +1,169 @@
+{% extends "shop/base.html" %}
+{% load mezzanine_tags shop_tags i18n %}
+
+{% nevercache %}
+    {% block meta_title %}
+        {% if request.user.profile.is_subscribing_member %}Weekly Order{% else %}Order{% endif %}
+    {% endblock %}
+{% endnevercache %}
+
+{% block title %}
+    {% nevercache %}
+        {% load ffcsa_core_tags %}
+        {% pickup_date_text %}
+    {% endnevercache %}
+{% endblock %}
+
+{% block body_id %}cart{% endblock %}
+
+{% block breadcrumb_menu %}
+    {{ block.super }}
+    <li>{% nevercache %}
+        {% if request.user.profile.is_subscribing_member %}Weekly Order{% else %}Order{% endif %}
+    {% endnevercache %}</li>
+{% endblock %}
+
+{% block topbar %}
+    {#    {% if request.cart.total_price > request.user.profile.weekly_budget %}#}
+    {#        <div class="alert alert-warning text-center">#}
+    {#            The current value of the items in your weekly order is greater then your weekly membership contribution of#}
+    {#            <strong>${{ request.user.profile.weekly_budget }}</strong>. You may want to consider exchanging some of the#}
+    {#            the higher value items for lower cost alternatives.#}
+    {#        </div>#}
+    {#    {% endif %}#}
+{% endblock %}
+
+{% block main %}
+    {% include 'ffcsa_core/includes/membership_agreement_alert.html' %}
+
+    {% if cart_formset.errors %}
+        {% for error in cart_formset.errors %}
+            {% if error and not error.values.0 %}
+                <div class="alert alert-dismissable alert-danger" data-alert="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {{ error }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% if cart_formset.forms %}
+        <form method="post" class="cart-form">
+            {% csrf_token %}
+            {% if cart_formset.errors %}
+                {% for error in cart_formset.errors %}
+                    {% if error.values.0 %}{{ error.values.0 }}{% endif %}
+                {% endfor %}
+            {% endif %}
+            {{ cart_formset.management_form }}
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th colspan="2" class="left">{% trans "Item" %}</th>
+                    <th class="center">{% trans "Qty" %}</th>
+                    <th class="center">{% trans "Price" %}</th>
+                    <th class="center">{% trans "Remove?" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for form in cart_formset.forms %}
+                    {% with form.instance as item %}
+                        <tr>
+                            <td width="30">
+                                {{ form.id }}
+                                {% if item.image %}
+                                    <a href="{{ item.get_absolute_url }}">
+                                        <img alt="{{ item.description }}"
+                                             src="{{ MEDIA_URL }}{% thumbnail item.image 30 30 %}">
+                                    </a>
+                                {% endif %}
+                            </td>
+                            <td class="left">
+                                <a href="{{ item.get_absolute_url }}">{{ item.description }}</a>
+                            </td>
+                            <td class="quantity">{{ form.quantity }}</td>
+                            <td class="center price">{{ item.total_price|currency }}</td>
+                            <td width="50" class="center">{{ form.DELETE }}</td>
+                        </tr>
+                    {% endwith %}
+                {% endfor %}
+                <tr>
+                    <td colspan="5">{% order_totals %}</td>
+                    <td>&nbsp;</td>
+                </tr>
+                </tbody>
+            </table>
+
+            {#            {% if dinner_week %}#}
+            {#                <div class="form-group">#}
+            {#                    {{ cart_dinner_form.attending_dinner.errors }}#}
+            {#                    <label for="{{ cart_dinner_form.id_for_label }}">Number of people attending Friday Dinner at the#}
+            {#                        Farm 5:30pm (If coming to dinner, we will have your order waiting for you at the farm) </label>#}
+            {#                    {{ cart_dinner_form.attending_dinner }}#}
+            {#                </div>#}
+            {#            {% endif %}#}
+
+            <div class="form-actions">
+                <input type="submit" name="update_cart" class="btn btn-primary btn-lg pull-right"
+                       value="{% if request.user.profile.is_subscribing_member %}Update Weekly Order{% else %}Update Order{% endif %}"/>
+                <input type="button" name="clear_cart" class="btn btn-primary btn-lg"
+                       value="{% trans 'Clear Cart' %}"/>
+            </div>
+        </form>
+
+        {#        {% if discount_form %}#}
+        {#            <form method="post" class="discount-form col-md-12 text-right">#}
+        {#                {% fields_for discount_form %}#}
+        {#                <input type="submit" class="btn btn-default" value="{% trans 'Apply' %}">#}
+        {#            </form>#}
+        {#        {% endif %}#}
+
+        {% if settings.SHOP_USE_UPSELL_PRODUCTS %}
+            {% with request.cart.upsell_products as upsell_products %}
+                {% if upsell_products %}
+                    <h2>{% trans "You may also like:" %}</h2>
+                    <div class="row">
+                        {% for product in upsell_products %}
+                            <div class="col-xs-6 col-sm-4 col-md-3 product-thumb">
+                                <a class="thumbnail" href="{{ product.get_absolute_url }}">
+                                    {% if product.image %}
+                                        <img src="{{ MEDIA_URL }}{% thumbnail product.image 90 90 %}">
+                                    {% endif %}
+                                    <div class="caption">
+                                        <h6>{{ product }}</h6>
+                                        <div class="price-info">
+                                            {% if product.has_price %}
+                                                {% if product.on_sale %}
+                                                    <span class="old-price">{{ product.unit_price|currency }}</span>
+                                                    {% trans "On sale:" %}
+                                                {% endif %}
+                                                <span class="price">{{ product.price|currency }}</span>
+                                            {% else %}
+                                                <span class="coming-soon">{% trans "Coming soon" %}</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+        {% endif %}
+
+    {% else %}
+        <p>{% trans "Your order is empty." %}</p>
+    {% endif %}
+
+
+    <script type="text/javascript">
+      (function () {
+        $('input[name="clear_cart"]').click(function () {
+          $(':checkbox[id$="-DELETE"]').each(function (i, el) {
+            el.checked = true
+          })
+          $('input[name="update_cart"]').click()
+        })
+      })()
+    </script>
+
+{% endblock %}

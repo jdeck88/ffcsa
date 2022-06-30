@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+import json
 
 from django.conf.urls import url
 from django.conf.urls.i18n import i18n_patterns
@@ -8,6 +9,8 @@ from mezzanine.core.views import page_not_found
 from mezzanine.accounts.views import profile_update
 
 from ffcsa.core import views
+from ffcsa.core import dropsites
+
 
 ACCOUNT_URL = getattr(settings, "ACCOUNT_URL", "/accounts/")
 SIGNUP_URL = getattr(
@@ -17,7 +20,8 @@ SIGNUP_URL = getattr(
 _slash = "/" if settings.APPEND_SLASH else ""
 
 urlpatterns = i18n_patterns(
-    url("^$", views.shop_home, name="home"),
+    url("^$", views.home, name="home"),
+    url("^shop%s$" % _slash, views.shop_home, name="shop_home"),
     url("^%s%s$" % (SIGNUP_URL.strip("/"), _slash), views.signup, name="mezzanine_signup"),
     url("^donate%s$" % _slash, views.donate, name="donate"),
     # TODO remove these for one-time orders
@@ -31,5 +35,13 @@ urlpatterns = i18n_patterns(
     url(r'^signrequest-success/$', TemplateView.as_view(template_name='ffcsa_core/signrequest_success.html'),
         name='signrequest-success'),
     url(r'^signrequest-declined/$', TemplateView.as_view(template_name='ffcsa_core/signrequest_declined.html'),
-        name='signrequest-declined')
+        name='signrequest-declined'),
+
+    # public pages
+    url(r'^products/$', TemplateView.as_view(template_name='pages/products.html'), name='store_page'),
+    url(r'^faq/$', TemplateView.as_view(template_name='pages/faq.html'), name='faq_page'),
+    url(r'^in-season/$', TemplateView.as_view(template_name='pages/in-season.html'), name='in_season_page'),
+    url(r'^about/$', TemplateView.as_view(template_name='pages/about.html'), name='about_page'),
+    url(r'^contact-us/$', TemplateView.as_view(template_name='pages/contact-us.html'), name='contact_page'),
+
 )

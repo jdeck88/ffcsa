@@ -33,7 +33,10 @@ def order_period_start(context):
 
 @register.simple_tag(takes_context=True)
 def is_order_cycle(context):
-    return valid_order_period_for_user(context.request.user)
+    if context.request.user.is_authenticated():
+        return valid_order_period_for_user(context.request.user)
+    else:
+        return True
 
 
 @register.filter
@@ -76,7 +79,7 @@ def _order_totals(context):
             template_vars[field] = getattr(context["order"], field)
     else:
         template_vars["item_total"] = context["request"].cart.item_total_price()
-        if context["request"].user.profile.home_delivery:
+        if context["request"].user.is_authenticated and context["request"].user.profile.home_delivery:
             template_vars["shipping_type"] = "Home Delivery"
             template_vars["shipping_total"] = context["request"].cart.delivery_fee()
         if template_vars["item_total"] == 0:

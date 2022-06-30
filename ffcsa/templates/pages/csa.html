@@ -1,0 +1,868 @@
+{% extends "base.html" %}
+{% load staticfiles static %}
+
+<!-- Title -->
+{% block meta_title %}CSA{% endblock %}
+
+<img alt="Placeholder" src="https://picsum.photos/600/400/?random" class="block h-auto w-full mb-2">
+
+{% block css %}
+
+    <style>
+        .-left-20 {
+            left: -5rem;
+        }
+
+        .-top-11 {
+            top: -2.75rem;
+        }
+
+        .left-5 {
+            left: 1.25rem;
+        }
+
+        @media (max-width: 767.98px) {
+            .p-mobile {
+                padding: 3em 0 3em 0 !important;
+            }
+
+            .p0-mobile {
+                padding: 0 !important;
+            }
+
+            .p20-mobile {
+                padding: 20px !important;
+            }
+
+            .section-download-pdf {
+                padding: 2em !important;
+            }
+
+            .v-window {
+                height: 462px !important;
+                margin-top: 30px !important;
+            }
+
+            .v-window__container > .v-application p {
+                margin-bottom: 16px !important;
+                padding-top: 29px !important;
+            }
+
+        }
+
+    </style>
+
+{% endblock %}
+
+{% block main %}
+    <main id="csa" v-cloak>
+        <v-app>
+            <v-main>
+                <!-- banner section -->
+                <section class="min-h-300px lg:min-h-400px bg-cover bg-center bg-overlay-dark flex p-20 p-mobile"
+                         style="background-image: var(--banner-bg);">
+                    <div class="text-white text-center m-auto font-bold max-w-1xl">
+                        <p class="text-xl">FULL FARM CSA</p>
+                        <p class="text-4xl mb-3 font-bold">
+                            Your Customized Weekly Grocery Box <br>
+                            From Farmer's You Can Trust.
+                        </p>
+                        <p class="text-xl">
+                            Stop wondering where your food comes from.<br>
+                            Local Farms are collaborating to bring you your entire list.
+                        </p>
+                        {% if not user.is_authenticated %}
+                            <p class="text-center mt-10">
+                                <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">
+                                    BECOME A FULL FARM CSA MEMBER
+                                </v-btn>
+                            </p>
+                        {% endif %}
+                    </div>
+
+                </section>
+                <!-- banner section -->
+
+                <!-- 3 features -->
+                <section class="text-center font-weight-bold bg-green-light text-white">
+                    <v-row>
+                        <v-col cols="12" md="4" class="pa-6 text-xl">HIGH QUALITY, <br>NUTRIENT-DENSE FOOD</v-col>
+                        <v-col cols="12" md="4" class="pa-6 bg-green text-xl">STRAIGHT FROM THE FARM<br> TO YOUR DOOR</v-col>
+                        <v-col cols="12" md="4" class="pa-6 text-xl">CONFIDENCE IN<br> YOUR FOOD SOURCE</v-col>
+                    </v-row>
+                </section>
+                <!-- 3 features -->
+
+                <!-- Where does your food come from? -->
+                <section class="container mx-auto text-center my-20 text-brown-7">
+                    <h3 class="text-3xl font-bold font-nospacing mb-10">Where does your food come from?</h3>
+                    <img alt="thinking-asian-woman" src="{% static 'img/csa-thinking-asian-woman-question-mark.jpg' %}"
+                         class="block mx-auto mb-20">
+                    <div class="row">
+                        <div class="col-md-3 col-12 px-6 pb-10 text-xl">Are you <strong class="block">OVERWHELMED</strong> shopping around
+                            and researching better food options?
+                        </div>
+                        <div class="col-md-3 col-12 px-6 pb-10 text-xl">Feeling <strong class="block">POWERLESS</strong> in making a
+                            positive impact in your community and the world?
+                        </div>
+                        <div class="col-md-3 col-12 px-6 pb-10 text-xl">Getting <strong class="block">FRUSTRATED</strong> over unclear or
+                            misleading health food claims?
+                        </div>
+                        <div class="col-md-3 col-12 px-6 pb-10 text-xl">Still <strong class="block">DISCONNECTED</strong> with where your
+                            food is coming from?
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-5">
+                        {% if not user.is_authenticated %}
+                        <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">BECOME
+                            A MEMBER
+                        </v-btn>
+                        {% else %}
+                        <v-btn x-large color="green" dark class="font-weight-bold mx-3" href="/products/">BROWSE
+                            THE STORE
+                        </v-btn>
+                        {% endif %}
+                    </div>
+                </section>
+                <!-- Where does your food come from? -->
+
+                <!-- There’s a Better Way -->
+                <section class="bg-swirl p-20 p-mobile">
+                    <h3 class="text-3xl font-nospacing text-brown-7 text-center font-bold mb-10">There’s a Better Way</h3>
+
+                    <div class="row mb-16">
+                        <article class="col-md-4 col-12 bg-pearlBush">
+                            <!-- image -->
+                            <v-img src="{% static 'img/csa-happy-family-in-the-kitchen.jpg' %}"></v-img>
+
+                            <hr class="border-8 border-swirl">
+                            <!-- content -->
+                            <div class="p-10">
+                                <h3 class="text-xl font-bold font-nospacing mb-10">Conquer the chaos of searching for a healthy food
+                                    source.</h3>
+                                <p class="font-nospacing text-xl font-light relative mb-4 pl-5"><i
+                                        class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Save
+                                    time! Get your groceries in one place.</p>
+                                <p class="font-nospacing text-xl font-light relative mb-4 pl-5"><i
+                                        class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Spend
+                                    your time with loved ones instead of researching food.</p>
+                                <p class="font-nospacing text-xl font-light relative pl-5"><i
+                                        class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Be
+                                    Confident in your food choices.</p>
+                            </div>
+                        </article>
+
+                        <article class="col-md-4 col-12 bg-pearlBush">
+                            <!-- image -->
+                            <v-img src="{% static 'img/csa-keeping-a-close-watch-on-his-crops.jpg' %}"></v-img>
+
+                            <hr class="border-8 border-swirl">
+                            <!-- content -->
+                            <div class="p-10">
+                                <h3 class="text-xl font-bold mb-10 font-nospacing">Get savvy with the help of your trusted local
+                                    farmer.</h3>
+                                <p class="text-xl font-light relative mb-4 pl-5"><i
+                                        class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Get
+                                    in touch with where your food comes from.</p>
+                                <p class="text-xl font-light relative mb-4 pl-5"><i
+                                        class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Know
+                                    what’s in season, and cook with quality ingredients.</p>
+                                <p class="text-xl font-light relative pl-5"><i
+                                        class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Say
+                                    goodbye to unclear health food claims.</p>
+                            </div>
+                        </article>
+
+                        <article class="col-md-4 col-12 bg-pearlBush">
+                            <!-- image -->
+                            <v-img src="{% static 'img/csa-zero-waste-lifestyle-plastic-free-eco.jpg' %}"></v-img>
+
+                            <hr class="border-8 border-swirl">
+                            <!-- content -->
+                            <div class="p-10">
+                                <h3 class="text-xl font-bold mb-10 font-nospacing">Take charge of the footprint your food sources
+                                    make.</h3>
+                                <p class="text-xl font-light relative mb-4 pl-5"><i
+                                        class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i>
+                                    Support Local Farms and Farmers.</p>
+                                <p class="text-xl font-light relative mb-4 pl-5"><i
+                                        class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i>
+                                    Contribute to your community with your food dollars.</p>
+                                <p class="text-xl font-light relative pl-5"><i
+                                        class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i>
+                                    Ensure a heritage of sustainable farming.</p>
+                                <p class="text-xl font-light relative pl-5"><i
+                                        class="fas fa-circle absolute left-0 top-3" style="font-size: .6rem;"></i> Leave
+                                    a legacy of healthy choices.</p>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="text-center">
+                        {% if not user.is_authenticated %}
+                        <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">BECOME
+                            A MEMBER
+                        </v-btn>
+                        {% else %}
+                        <v-btn x-large color="green" dark class="font-weight-bold mx-3" href="/products/">BROWSE
+                            THE STORE
+                        </v-btn>
+                        {% endif %}
+                    </div>
+
+                </section>
+                <!-- There’s a Better Way -->
+
+
+                <!-- Ready for Better Food Choices? -->
+                <section class="text-center bg-yellow-extralightest p-14 md:p-24">
+                    <h3 class="text-brown-7 font-bold text-3xl mb-10 font-nospacing">Ready for Better Food Choices?</h3>
+
+                    <div class="row">
+                        <div class="col-md-4 col-12 text-center text-xl">
+                            <img src="{% static 'img/leaf-1.png' %}" alt="leaf" class="w-28 my-10 mx-auto">
+                            <h3 class="text-green font-bold mb-3 text-2xl">BECOME A <br> MEMBER</h3>
+                            <p class="font-thin w-60 mx-auto text-brown-7">Join the family and gain your share of the
+                                farm.</p>
+                        </div>
+                        <div class="col-md-4 col-12 text-center text-xl">
+                            <img src="{% static 'img/leaf-2.png' %}" alt="leaf" class="w-28 my-10 mx-auto">
+                            <h3 class="text-green font-bold mb-3 text-2xl">CUSTOMIZE YOUR <br> WEEKLY FOOD BOX</h3>
+                            <p class="font-thin w-60 mx-auto text-brown-7">You choose how much <br>to invest and what items
+                                you receive.</p>
+                        </div>
+                        <div class="col-md-4 col-12 text-center text-xl">
+                            <img src="{% static 'img/leaf-3.png' %}" alt="leaf" class="w-28 my-10 mx-auto">
+                            <h3 class="text-green font-bold mb-3 text-2xl">EAT BETTER <br> EVERY DAY</h3>
+                            <p class="font-thin w-60 mx-auto text-brown-7">Rest easy knowing your high-quality food is
+                                from a trusted local source.</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            {% if not user.is_authenticated %}
+                            <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">BECOME
+                                A MEMBER
+                            </v-btn>
+                            {% else %}
+                            <v-btn x-large color="green" dark class="font-weight-bold mx-3" href="/products/">BROWSE
+                                THE STORE
+                            </v-btn>
+                            {% endif %}
+                        </div>
+                    </div>
+                </section>
+                <!-- Ready for Better Food Choices? -->
+
+
+                <!-- Download our Free Guide -->
+                <section class="p-24 section-download-pdf">
+                    <v-row justify="center" align="center">
+
+                        <v-col cols="12">
+                            <h4 class="text-3xl text-brown-7 font-bold mb-5 text-center font-nospacing">Download our Free Guide</h4>
+                            <h3 class="text-center text-xl">7 Ways You've Been Mislead By Food Labels.</h3>
+                        </v-col>
+
+                        <v-col md="6" sm="12">
+                            <v-img height="100%"
+                                   src="{% static 'img/DFF-Greenwash the New Hogwash Mockup.png' %}"></v-img>
+                        </v-col>
+
+                        <v-col md="6" sm="12">
+
+                            <!-- Download form -->
+                            <v-form ref="form" @submit.prevent="submit">
+                                <v-row>
+                                    <v-col cols="12" md="6">
+                                        <v-text-field v-model="leadGen.first_name" label="First name"
+                                                      outlined></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" md="6">
+                                        <v-text-field v-model="leadGen.last_name" label="Last name"
+                                                      outlined></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12">
+                                        <v-text-field v-model="leadGen.email" label="Email" type="email" outlined
+                                                      :rules="[store.state.rules.required, store.state.rules.email]"></v-text-field>
+                                    </v-col>
+                                </v-row>
+
+                                <v-btn block x-large dark color="green" type="submit" :loading="loading"
+                                       class="font-weight-bold">Download
+                                </v-btn>
+                            </v-form>
+                            <!-- Download form -->
+                        </v-col>
+
+                    </v-row>
+                </section>
+                <!-- Download our Free Guide -->
+
+                <!-- What Members are Saying -->
+                <section class="bg-green-lightest p-24 p-mobile text-center">
+                    <h3 class="text-3xl font-bold text-brown-7 font-nospacing p20-mobile">What Members are Saying</h3>
+
+                    <v-carousel
+                            v-model="model"
+                            :cycle="false"
+                            height="400"
+                            hide-delimiter-background
+                    >
+                        <v-carousel-item v-for="testimonial in testimonials" :key="testimonial.id">
+                            <v-sheet height="100%" tile color="transparent">
+                                <v-row class="fill-height" align="center" justify="center">
+                                    <div class="text-brown-6 mx-auto p-3 text-xl" style="max-width: 65%;">
+
+                                        <p class="relative">
+                                            <v-icon x-large class="text-h1 opacity-20"
+                                                    style="position: absolute; top: -3rem; left: -3rem;">
+                                                mdi-format-quote-open
+                                            </v-icon>
+                                            ((testimonial.text))
+                                            <v-icon x-large class="text-h1 opacity-20"
+                                                    style="position: absolute; top: 75%; right: 0;">
+                                                mdi-format-quote-close
+                                            </v-icon>
+                                        </p>
+
+                                        <p class="subtitle-1 text-center mt-5 text-2xl">
+                                            <span class="font-weight-bold">- ((testimonial.owner))</span>
+                                            ((testimonial.date))
+                                        </p>
+                                    </div>
+                                </v-row>
+                            </v-sheet>
+                        </v-carousel-item>
+                    </v-carousel>
+
+                    <div class="text-center mt-20">
+                        {% if not user.is_authenticated %}
+                        <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">BECOME
+                            A MEMBER
+                        </v-btn>
+                        {% else %}
+                        <v-btn x-large color="green" dark class="font-weight-bold mx-3" href="/products/">BROWSE
+                            THE STORE
+                        </v-btn>
+                        {% endif %}
+                    </div>
+                </section>
+                <!-- What Members are Saying -->
+
+                <!-- Meet Your Trusted Farmers -->
+                <section class="p-24 text-center text-brown-7 p-mobile p20-mobile">
+                    <h3 class="font-bold text-3xl mb-10 mt-10 font-nospacing p20-mobile">Meet Your Trusted Farmers</h3>
+
+                    <div class="row mx-auto p20-mobile">
+
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
+                            <div class="w-40 h-40 m-auto flex items-center">
+                                <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/deck logo.jpg' %}"></v-img>
+                            </div>
+
+                            <h4 class="font-bold mt-4 text-xl">Deck Family Farm</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Pasture Raised Meat and Eggs</p>
+                            <p class="text-base font-thin mt-n1">Juntion City, OR</p>
+                        </div>
+
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
+                            <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
+                                 @click="goToWebSite('https://camasswalefarm.com')">
+                                <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/camas swale logo.jpg' %}"></v-img>
+                            </div>
+
+                            <h4 class="font-bold mt-4 text-xl">Camas Swale Farm</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Organically Grown Vegetables, Herbs Flowers</p>
+                            <p class="text-base font-thin mt-n1">Coburg, OR</p>
+                        </div>
+
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
+                            <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
+                                 @click="goToWebSite('https://www.littlewingsfarm.com')">
+                                <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/little wings.jpg' %}"></v-img>
+                            </div>
+
+                            <h4 class="font-bold mt-4 text-xl">Little Wings</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Hand Harvested Fruits and Berries, Vegetables and
+                                Flowers</p>
+                            <p class="text-base font-thin mt-n1">Eugene, OR</p>
+                        </div>
+
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
+                            <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
+                                 @click="goToWebSite('https://www.letoilefarm.com')">
+                                <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/etoile farms.jpeg' %}"></v-img>
+                            </div>
+
+                            <h4 class="font-bold mt-4 text-xl">L’Etoile Farms</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Oregon Tilth, Organic Grown Vegetables and Fruit</p>
+                            <p class="text-base font-thin mt-n1">Noti, OR</p>
+                        </div>
+
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
+                            <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
+                                 @click="goToWebSite('https://www.sweetleaforganicfarm.com')">
+                                <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/sweet leaf.webp' %}"></v-img>
+                            </div>
+
+                            <h4 class="font-bold mt-4 text-xl">Sweet Leaf Organic Farm</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Organic Vegetables and Fruit</p>
+                            <p class="text-base font-thin mt-n1">Eugene, OR</p>
+                        </div>
+
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
+                            <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
+                                 @click="goToWebSite('https://www.camascountrymill.com')">
+                                <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/camas country.png' %}"></v-img>
+                            </div>
+
+                            <h4 class="font-bold mt-4 text-xl">Camas Country Mill</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Whole Grains and Artisan Flours</p>
+                            <p class="text-base font-thin mt-n1">Eugene, OR</p>
+                        </div>
+
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
+                            <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
+                                 @click="goToWebSite('https://lonesome-whistle.com')">
+                                <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/lonesome whistle.png' %}"></v-img>
+                            </div>
+
+                            <h4 class="font-bold mt-4 text-xl">Lonesome Whistle Farm</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Popcorn, Polenta, Whole Grains, Stone Milled Flour,
+                                Milled Oats and Pasta</p>
+                            <p class="text-base font-thin mt-n1">Junction City, OR</p>
+                        </div>
+
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
+                            <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
+                                 @click="goToWebSite('https://www.mybrothersfarm.com')">
+                                <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/my brothers farm.png' %}"></v-img>
+                            </div>
+
+                            <h4 class="font-bold mt-4 text-xl">My Brothers Farm</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Certified Organic Hazelnuts</p>
+                            <p class="text-base font-thin mt-n1">Creswell, OR</p>
+                        </div>
+
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
+                            <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
+                                 @click="goToWebSite('https://elegantelephantbaking.com')">
+                                <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/elegant elephant.jpg' %}"></v-img>
+                            </div>
+
+                            <h4 class="font-bold mt-4 text-xl">Elegant Elephant Baking Co.</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Gluten Free & Vegan Bakery</p>
+                            <p class="text-base font-thin mt-n1">Eugene, OR</p>
+                        </div>
+
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
+                            <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
+                                 @click="goToWebSite('https://www.realitykitchen.org')">
+                                <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/reality kitchen.png' %}"></v-img>
+                            </div>
+
+                            <h4 class="font-bold mt-4 text-xl">Reality Kitchen</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Community Supported Baking</p>
+                            <p class="text-base font-thin mt-n1">Eugene, OR</p>
+                        </div>
+
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
+                            <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
+                                 @click="goToWebSite('https://radiantcoffeeco.com')">
+                                <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/radiant coffee.png' %}"></v-img>
+                            </div>
+
+                            <h4 class="font-bold mt-4 text-xl">Radiant Coffee Roasters</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Fresh, artisan, small batch roasted coffee <br>from the
+                                Pacific Northwest</p>
+                            <p class="text-base font-thin mt-n1">Eugene, OR</p>
+                        </div>
+
+                        <div class="col-xl-3 col-md-4 col-6 p-1">
+                            <div class="w-40 h-40 m-auto flex items-center cursor-pointer"
+                                 @click="goToWebSite('http://sweetcreekfood.net')">
+                                <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/sweet creek.png' %}"></v-img>
+                            </div>
+
+                            <h4 class="font-bold mt-4 text-xl">Sweet Creek Foods</h4>
+                            <p class="text-base font-thin mb-0 text-lg">Locally harvested and small batch co-packing</p>
+                            <p class="text-base font-thin mt-n1">Elmira, OR</p>
+                        </div>
+
+                        {#          <div class="col-span-12 md:col-span-4 p-1">#}
+                        {#            <div class="w-40 h-40 m-auto flex items-center">#}
+                        {#              <v-img src="{% static 'img/Meet-your-Trusted-Farmers-logo-images/ogc logo.jpg' %}"></v-img>#}
+                        {#            </div>#}
+                        {##}
+                        {#            <h4 class="font-bold mt-4">OGC</h4>#}
+                        {#            <p class="text-base font-thin mb-0">Fresh organic produce</p>#}
+                        {#            <p class="text-base font-thin">Eugene, OR</p>#}
+                        {#          </div>#}
+
+                    </div>
+
+                    <div class="text-center mt-10">
+                        {% if not user.is_authenticated %}
+                        <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">BECOME
+                            A MEMBER
+                        </v-btn>
+                        {% else %}
+                        <v-btn x-large color="green" dark class="font-weight-bold mx-3" href="/products/">BROWSE
+                            THE STORE
+                        </v-btn>
+                        {% endif %}
+                    </div>
+                </section>
+                <!-- Meet Your Trusted Farmers -->
+
+                <!-- Why Trust Your Local Farmer? -->
+                <section class="bg-orange-extralightest p-24 p-mobile">
+                    <h3 class="text-brown-7 text-center font-bold text-3xl mb-20 font-nospacing">Why Trust Your Local Farmer?</h3>
+
+                    <!-- <div class="grid grid-cols-12 gap-4 max-w-5xl mx-auto"> -->
+                    <div class="row mx-auto">
+
+                        <div class="col-md-6 col-12 text-xl">
+                            <p class="mb-5 pl-3 pr-3">Looking for a trusted local partner who can make your search for
+                                environmentally responsible and healthy food choices easier? <strong>Search no
+                                    more!</strong> Just because you're not the farmer doesn't mean you can't be
+                                confident in knowing where your food came from.</p>
+                            <p class="mb-5 pl-3 pr-3"><strong>Most food these days has natural sounding claims on their packaging,
+                                but how do you actually know how your food has been grown?</strong>There’s only one way,
+                                and that is to know your farmer.</p>
+
+                            <v-expand-transition>
+                                <div v-show="trustedLocalPartner.more">
+                                    <p>That’s why Deck Family Farm holds fast to its commitment to transparency,
+                                        inviting you to take advantage of the farm’s Open Gate policy. In fact, all
+                                        members are highly encouraged to pick up their customized box at the farm at
+                                        least once so that you can truly see how your food is being grown! It doesn’t
+                                        stop there, though. Members become connected with the farm on an even deeper
+                                        level through attending farm dinners throughout the summer using the week’s
+                                        seasonal CSA ingredients.</p>
+                                    <p>Now you know a farm that can help you get everything on your grocery list. And,
+                                        by partnering with neighboring farms we are able to bring you the most local and
+                                        nutrient-dense food options available. Not only do these partnerships provide
+                                        you with a truly full diet CSA, but they also put money back into our local
+                                        community, nourish our community with fresh high-quality food, and empower you
+                                        to leave a positive footprint in the world.</p>
+                                    <p>There’s no need to run around to multiple stores searching for the best food. Our
+                                        convenient pick-up locations and home delivery options provide you with a simple
+                                        way to get truly straight-from-the-farm groceries. With generations of
+                                        experience, our farm is here to help when you’re ready to make a better food
+                                        choice.</p>
+                                </div>
+                            </v-expand-transition>
+
+                            <v-btn text color="red" class="font-weight-bold"
+                                   @click="trustedLocalPartner.more = !trustedLocalPartner.more">
+                                <template v-if="!trustedLocalPartner.more">READ MORE</template>
+                                <template v-else>READ LESS</template>
+                            </v-btn>
+                        </div>
+                        <div class="col-md-6 col-12">
+                            <v-img src="{% static 'img/bags-of-veggies.jpg' %}"></v-img>
+                        </div>
+                    </div>
+
+                    <div class="text-center pt-20">
+                        {% if not user.is_authenticated %}
+                        <v-btn x-large color="primary" class="font-weight-bold mx-3 mb-5 ffcsa--v-btn" href="{% url 'signup' %}">BECOME
+                            A MEMBER
+                        </v-btn>
+                        {% else %}
+                        <v-btn x-large color="green" dark class="font-weight-bold mx-3 mb-5" href="/products/">BROWSE
+                            THE STORE
+                        </v-btn>
+                        {% endif %}
+                    </div>
+                </section>
+                <!-- Why Trust Your Local Farmer? -->
+
+                <!-- Full Farm CSA Quick Facts -->
+                <section class="p-24 p-mobile">
+                    <h3 class="text-brown-7 text-center font-bold text-3xl font-nospacing mb-20">Full Farm CSA Quick Facts</h3>
+
+                    <v-row>
+                        <v-col md="6" cols="12" class="p0-mobile">
+                            <v-expansion-panels flat>
+                                <v-expansion-panel
+                                        v-for="(item,i) in quickFacts1"
+                                        :key="i"
+                                        class="mb-5 green_lightest"
+                                >
+                                    <v-expansion-panel-header>
+                                        <h4 class="text-h6 font-weight-regular">((item.header))</h4>
+                                    </v-expansion-panel-header>
+                                    <v-expansion-panel-content>
+                                        <p class="text-base" v-html="item.content"></p>
+                                    </v-expansion-panel-content>
+                                </v-expansion-panel>
+                            </v-expansion-panels>
+                        </v-col>
+
+                        <v-col md="6" cols="12">
+                            <v-expansion-panels flat>
+                                <v-expansion-panel
+                                        v-for="(item,i) in quickFacts2"
+                                        :key="i"
+                                        class="mb-5 green_lightest"
+                                >
+                                    <v-expansion-panel-header>
+                                        <h4 class="text-h6 font-weight-regular">((item.header))</h4>
+                                    </v-expansion-panel-header>
+                                    <v-expansion-panel-content>
+                                        <p class="text-base" v-html="item.content"></p>
+                                    </v-expansion-panel-content>
+                                </v-expansion-panel>
+                            </v-expansion-panels>
+                        </v-col>
+                    </v-row>
+                </section>
+                <!-- Full Farm CSA Quick Facts -->
+
+                <hr>
+
+                <!-- Your Customized Weekly Membership Box -->
+                <section class="p-24 p-mobile">
+                    <h3 class="pl-5 pr-5 text-brown-7 text-center font-bold text-3xl mb-20 font-nospacing">Your Customized Weekly Membership
+                        Box</h3>
+                    <v-row>
+                        <!-- WEEKLY MEMBERSHIP BOX -->
+                        <v-col md="8">
+                            <div class="bg-orange-light text-center p-5 md:h-28 text-2xl">
+                                <p class="font-bold mb-0">WEEKLY MEMBERSHIP BOX</p>
+                                <p class="text-lg font-bold opacity-70 mb-0">You choose what budget works for your
+                                    family!</p>
+                            </div>
+
+                            <ul class="bg-orange-lightest list-disc list-inside p-5 px-10 md:h-56">
+                                <li class="text-lg font-thin">Customizable box of seasonal ingredients</li>
+                                <li class="text-lg font-thin">5% discount on all items</li>
+                                <li class="text-lg font-thin">Monthly member only specials (up to 30% discount)</li>
+                                <li class="text-lg font-thin">Access to limited availability items</li>
+                                <li class="text-lg font-thin">Home delivery options + access to member only pickup
+                                    sites.
+                                </li>
+                                <li class="text-lg font-thin">Free weekly recipes using the week’s seasonal
+                                    ingredients
+                                </li>
+                                <li class="text-lg font-thin">Access to seasonal farm dinners</li>
+                            </ul>
+
+                            <div class="bg-orange-light p-5 px-10 md:h-36">
+                                <v-row class="items-center text-center">
+                                    <v-col md="3">
+                                        <h3 class="font-bold mb-0">
+                    <span class="relative">
+                      <span class="absolute" style="top: -1rem;left: -0.7rem;">$</span>
+                      <span class="text-4xl">40</span>
+                    </span>
+                                        </h3>
+                                        <p class="text-sm mb-0">WEEKLY MINIMUM</p>
+                                    </v-col>
+
+                                    <v-col md="6">
+                                        <v-img src="{% static 'img/arrow_forward.svg' %}" height="4rem" alt=""></v-img>
+                                    </v-col>
+
+                                    <v-col md="3">
+                                        <h3 class="font-bold mb-0 mt-3">
+                    <span class="relative">
+                      <span class="absolute" style="top: -1rem;left: -0.7rem;">$</span>
+                      <span class="text-4xl">125</span>
+                      <span class="absolute" style="top: -0.6rem;right: -1rem;">+</span>
+                    </span>
+                                        </h3>
+                                        <p class="text-sm mb-0">WEEKLY</p>
+                                    </v-col>
+                                </v-row>
+
+                            </div>
+
+                            <div class="text-center mt-10">
+                                {% if not user.is_authenticated %}
+                                <v-btn x-large color="primary" class="font-weight-bold mx-3 ffcsa--v-btn" href="{% url 'signup' %}">
+                                    BECOME A MEMBER
+                                </v-btn>
+                                {% endif %}
+                            </div>
+                        </v-col>
+
+                        <!-- ONE TIME GUEST ORDER -->
+                        <v-col md="4">
+                            <div class="bg-green-light text-center p-5 md:h-28">
+                                <!-- <p class="font-bold mb-0"></p> -->
+                                <h3 class="text-xl font-bold w-44 mx-auto">ONE TIME GUEST ORDER</h3>
+                            </div>
+
+                            <ul class="bg-green-lightest list-disc list-inside p-5 px-10 md:h-56">
+                                <li class="text-lg font-thin">Customizable box of seasonal local ingredients</li>
+                                <li class="text-lg font-thin">Home delivery options OR pick up at local farmers
+                                    market
+                                </li>
+                                <li class="text-lg font-thin">Trial our CSA without the commitment</li>
+                            </ul>
+
+                            <div class="bg-green-light p-5 mt-auto text-center md:h-36">
+                                <h3 class="text-xl font-bold w-44 mx-auto mt-10">COMING SOON!</h3>
+                            </div>
+
+                            <div class="text-center mt-10">
+                                {% if user.is_authenticated %}
+                                <v-btn x-large color="green" dark class="font-weight-bold mx-3" href="/products/">BROWSE
+                                    THE STORE
+                                </v-btn>
+                                {% endif %}
+                            </div>
+                        </v-col>
+                    </v-row>
+
+                    <!-- FULL DIET CHALLENGE -->
+                    <v-row class="mt-10 pt-10">
+                        <v-col sm="7" class="bg-yellow">
+                            <p class="font-bold text-2xl mb-0 mt-2 p-3">
+                                FULL DIET CHALLENGE
+                                <span class="relative ml-3">
+                <span class="absolute text-sm" style="top: -0.1rem;left: -0.5rem;">$</span>
+                <span>80</span>
+              </span>
+                                /Person/Wk
+                            </p>
+                        </v-col>
+
+                        <v-col sm="5" class="bg-yellow-extralightest">
+                            <p class="text-base mb-0 p-3">Take the 3-Month Full Diet Challenge and feel great knowing
+                                you’re eating 100% local!</p>
+                        </v-col>
+                    </v-row>
+                </section>
+                <!-- Your Customized Weekly Membership BOX -->
+
+            </v-main>
+        </v-app>
+
+    </main>
+{% endblock main %}
+
+{% block js %}
+    <script>
+        const CSAApp = new Vue({
+            el: '#csa',
+            delimiters: ['((', '))'],
+            vuetify: new Vuetify(opts),
+            data: {
+                model: 0,
+                loading: false,
+
+                testimonials: [
+                    {
+                        id: 1,
+                        text: `Everything we’ve had from DFF or associated with DFF has been top shelf...we’ve been members of 7 different CSAs in several different states over the years and the Full Farm CSA is by far the nicest CSA because of all the choice and options…it’s the crème de la creme of all CSAs`,
+                        owner: 'Andrew Taylor, PDX member on phone',
+                        date: '8/6/21'
+                    },
+                    {
+                        id: 2,
+                        text: `Just going to take this chance to say that I absolutely love being a CSA member and I literally tell anyone about you guys who will listen to me! You guys are fantastic. Thank you so much for all the hard work you do and for making good food so accessible to us!`,
+                        owner: 'Cheers, Elise George',
+                        date: ''
+                    },
+                    {
+                        id: 3,
+                        text: `Regrettably I need to cancel our account, we are moving out of state and so won’t be able to use your amazing CSA any longer. Thank you for bringing such an amazing opportunity for farm fresh groceries year round. I have enjoyed it so much, and tell friends often. I hope to find an equivalent situation where we end up.`,
+                        owner: 'Loyally, Kate Brown',
+                        date: ''
+                    }
+                ],
+                quickFacts1: [
+                    {
+                        header: "What is the Full Farm CSA?",
+                        content: `
+          Community Supported Agriculture (CSA) is a food system model that builds connections between community members and their farmers, making food production a community event where the benefits and risks are shared.
+          <br />The Full Farm CSA is a personally crafted, full diet CSA program serving Junction City, Eugene/Springfield, Corvallis, and Portland. Members choose how much to contribute as well as which products they get each week to create a well-rounded, seasonal diet all year-round!
+          `
+                    },
+                    {
+                        header: "How much is the CSA?",
+                        content: `
+          Subscription amounts are sliding scale, based on what the family or individual wants to contribute, with a <b>$172/month minimum contribution</b> (breaks down to about $40/week) for each household. The maximum contribution is endless! Any amount left over in an account at the end of the month will be “rolled over” into a credit for next month’s ordering. FFCSA members can also top up their account if running low at the end of the month. During the sign-up process, automatically recurring monthly payments are set up on member’s online accounts. Members can easily view and change their monthly budgets at any time.
+          `
+                    },
+                    {
+                        header: "Do you deliver?",
+                        content: `
+          <b>YES!</b> We currently offer home delivery in Eugene/Springfield, Junction City, and Corvallis. We are looking at expanding to other cities, so let us know if you would like to be notified when we are in your area! We charge a $5 fee for home delivery. If you order more than $125, we will deliver for free!
+          `
+                    }
+                ],
+                quickFacts2: [
+                    {
+                        header: "Do I have to order every week?",
+                        content: `
+                        If you would like to skip a week or two, no problem. We only deliver when you make an order. We do require that families remain active and maintain a minimum $172/month contribution and weekly average order of $40 throughout the year, so sporadic orders can work within our program, so long as the minimum budget is met!
+          `
+                    },
+                    {
+                        header: "What can I get in my box?",
+                        content: `
+                        Members get to choose which products they get each week to create a well-rounded, seasonal diet all year-round! The FFCSA includes staples such as organic vegetables, grains, seasonal fruit, grass fed and pasture-raised meat, dairy, animal fats, honey, nuts, and various pantry items. Our members include vegetarians to carnivores and everything in between!
+          `
+                    },
+                    {
+                        header: "Where does my food come from?",
+                        content: `
+          Full Farm CSA’s priority is to provide products grown on farms in the Willamette Valley- as close to home as possible. We always put the name of the farmer on the listed product so that members can stay connected to the source of their food. All our community farms are committed to producing local and nutrient dense foods. By working together, we can bring you a truly full diet CSA.
+          `
+                    }
+                ],
+                trustedLocalPartner: {
+                    more: false
+                },
+                leadGen: {
+                    first_name: "",
+                    last_name: "",
+                    email: ""
+                }
+            },
+            methods: {
+                goToWebSite(website) {
+                    window.open(website, '_blank')
+                },
+                async submit() {
+                    if (!this.$refs.form.validate()) {
+                        return
+                    }
+
+                    this.loading = true;
+
+                    try {
+                        const res = await axios.post(`/api/leadgen_pdf/`, {
+                            first_name: this.leadGen.first_name,
+                            last_name: this.leadGen.last_name,
+                            email: this.leadGen.email
+                        });
+
+                        // download the pdf file
+                        const link = document.createElement('a');
+                        link.href = res.data.pdf;
+                        link.download = 'DFF_Hogwash-or-Greenwash V03.pdf';
+                        link.dispatchEvent(new MouseEvent('click'));
+
+                        this.loading = false
+                        console.log(res)
+
+                    } catch (error) {
+                        this.loading = false
+                        console.log(error)
+                    }
+
+
+                }
+            },
+        })
+    </script>
+{% endblock %}

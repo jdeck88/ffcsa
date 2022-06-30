@@ -28,6 +28,7 @@ from ffcsa.shop.models import (Category, DiscountCode, Order, OrderItem,
                                ProductVariation, Sale, Vendor, VendorProductVariation)
 from ffcsa.shop.models.Cart import CartItem
 from ffcsa.shop.models.Vendor import VendorCartItem
+from ffcsa.shop.models.Product import  ProductVariationUnit
 from ffcsa.shop.views import HAS_PDF
 
 """
@@ -118,7 +119,7 @@ class ProductVariationAdmin(nested.NestedStackedInline):
         (None, {
             "fields": ["_title", "in_inventory", "weekly_inventory", "is_frozen", "extra",
                        ("vendor_price", "unit_price", "margin"),
-                       "sku",
+                       ("unit", "weight", "sku"),
                        "default",
                        "image"],
         }),
@@ -157,7 +158,7 @@ if len(other_product_fields) > 0:
         "classes": ("collapse-closed",),
         "fields": tuple(other_product_fields)}))
 
-product_list_display = ["admin_thumb", "title", "available",
+product_list_display = ["admin_thumb", "descriptive_title", "available",
                         "admin_link"]
 product_list_editable = ["available"]
 
@@ -209,12 +210,11 @@ class ProductAdmin(nested.NestedModelAdminMixin, ContentTypedAdmin, DisplayableA
     actions = [product_actions.export_price_list]
 
     list_display = product_list_display
-    list_display_links = ("admin_thumb", "title")
+    list_display_links = ("admin_thumb", "descriptive_title")
     list_editable = product_list_editable
     list_filter = ("status", "available", CategoryListFilter, "variations__vendors")
     filter_horizontal = ("categories",) + tuple(other_product_fields)
-    search_fields = ("title", "content", "categories__title",
-                     "variations__sku")
+    search_fields = ("title", "content", "categories__title", "variations__sku")
     inlines = (ProductImageAdmin, ProductVariationAdmin)
     form = ProductAdminForm
     fieldsets = product_fieldsets

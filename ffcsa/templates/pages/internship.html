@@ -1,0 +1,181 @@
+{% extends "pages/page.html" %}
+
+{% load mezzanine_tags shop_tags i18n static %}
+{% block body_id %}Internship{% endblock %}
+
+{% block css %}
+<style>
+  .hayden {
+    background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), var(--hayden) no-repeat center;
+    background-size: cover;
+  }
+
+  .preston {
+    background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), var(--preston) no-repeat center 35%;
+    background-size: cover;
+  }
+
+  .group {
+    /* background: linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ), var(--group) no-repeat center; */
+    background: var(--group) no-repeat center;
+    background-size: cover;
+  }
+</style>
+{% endblock %}
+
+
+{% block main %}
+<main id="internship">
+  <!-- Call block super -->
+  {{ block.super }}
+
+  <v-app>
+    <v-main>
+      <v-container>
+        <section class="grid grid-cols-12 gap-10 max-w-screen-lg mx-auto my-20 md:py-28">
+          <div class="col-span-12 md:col-span-6 p-3 pt-20">
+            <h2 class="text-7xl font-bold text-primary mb-3">Internship</h2>
+            <p class="text-brown-7 font-bold my-5">Join our best in class training</p>
+            <p class="text-base text-gray-600 mb-4">
+              If you are interested in joining our working farm, we can provide training in animal husbandry 
+              and what it takes to run a successful farming business.
+            </p>
+            
+            <p class="text-base text-gray-600 mb-4">
+              It is our hope that through the years 
+              we can partner with other individuals and families committed to the principles of strong work ethics, 
+              environmental justice and good business practices. Our model is an inclusive, family-based business where 
+              work and learning are a daily practice.
+            </p>
+          </div>
+      
+          <div class="col-span-12 md:col-span-6 block text-right">
+            <v-img class="select-none" src="{% static 'img/internship.png' %}"></v-img>
+          </div>
+        </section>
+      </v-container>
+
+
+      <!-- Hayden feeding the laying hens in 2018 -->
+      <section class="grid grid-cols-12 max-w-screen-2xl mx-auto mt-10 md:mt-20">
+        <div class="col-span-12 md:col-span-6 text-justify p-10 text-gray-700">
+          <h3 class="text-4xl font-bold text-primary mb-3">Our Work</h3>
+          <p class="mb-4">
+            <strong>We have a very strong work ethic.</strong> The work is not glamorous or easy, 
+            while most work is animal husbandry; feeding, grazing and milking, there will be a lot of 
+            cleaning up, mucking out and hauling off. You must be able to lift 50lbs. We are looking 
+            for folks interested in all aspects of what it takes to keep a family farm running and this 
+            will sometimes mean pitching in well after the work day is done.
+          </p>
+          <p class="mb-10">
+            The work day generally consists of chores, lunch in the afternoon and then back out on 
+            the farm for evening chores. We work a 8.5 hr/day 5 day work week.  We appreciate 
+            flexibility depending on seasonal work load.
+          </p>
+        </div>
+    
+        <div class="col-span-12 md:col-span-6 w-full h-96 md:h-full hayden flex">
+          <p class="text-4xl text-white font-bold p-3 w-96 mt-auto ml-auto text-right">Hayden feeding the laying hens in 2018</p>
+        </div>
+      </section>
+    
+      <!-- Preston feeding the bottle calves in 2017 -->
+      <section class="grid grid-cols-12 max-w-screen-2xl mx-auto mt-10 md:mt-0">
+        <div class="col-span-12 md:col-span-6 w-full h-96 md:h-full preston flex">
+          <p class="text-4xl text-white font-bold p-3 w-96 mt-auto ml-auto text-right">Preston feeding the bottle calves in 2017</p>
+        </div>
+    
+        <div class="col-span-12 md:col-span-6 text-justify p-10 text-gray-700">
+          <h3 class="text-4xl font-bold text-green mb-3">Accommodations</h3>
+          <p class="mb-5">
+            Accommodations are rustic for short term interns (1-3 months) we offer campsites under trees and in barns, a tent is 
+            recommended. For 9-12 month interns we offer inside housing in a shared intern room or in a small cabin on a space 
+            available basis.
+          </p>
+          <p class="mb-5">
+            Home & Family Life We often have a full house of visiting family and friends. Being open to the challenges and joys of 
+            a busy home is a must. We share most meals and interns participate with family members in meal prep and clean up. 
+            Interns have full access to the bathroom, shower and laundry. We ask that folks bathe regularly, change into clean 
+            clothes while in the house, and in general to practice good hygiene in respect of all household members.
+          </p>
+          <p class="mb-5">
+            We love vegetables and try to have them at every meal, however we believe that animals are an intrinsic part of a 
+            balanced healthy food system and for this reason we prefer NOT to accommodate strict vegetarian or vegan diets.
+          </p>
+        </div>
+      </section>
+    
+      <section class="max-w-screen-lg mx-auto py-20 my-20 p-3">
+        <h3 class="text-5xl text-primary font-bold">Our farm members</h3>
+        <p class="py-5">
+          Farm Family #1 Live on Farm <br>
+          The Deck Family Owners and operators since 2004. <br>
+          Christine Deck Overall operations, Marketing, Farmers Markets, Intern program, Hiring, Scheduling. <br>
+          John Deck Overall operations, Beef herd, forage management, intensive grazing, milling, composting, and financials. <br>
+          Alex Deck Projects/Seasonal <br>
+          Maria Deck Currently off farm <br>
+          Brigid Deck Currently off farm <br>
+          Shanti Deck On Farm High School, Horses, Eggs, household. <br>
+          <br>
+          Farm Family #2 Live on Farm <br>
+          Raul Lopez and Karina Rodriquez <br>
+          Raul– Pastured Pork, Milling, Grazing, Animal moving and rotation, construction and maintenance. <br>
+          Karina– Book-keeper, layers, eggs and marketing assist, markets <br>
+          Raulito & David– students Monroe Middle and High School <br>
+          <br>
+          Farm Family #3 Live on Farm <br>
+          Ella & RJ Ewing- Full Farm CSA, Orchard, garden, preserving, marketing <br>
+        </p>
+      </section>
+    
+      <!-- “Farmily” consisting of interns, employees and family. 2018 -->
+      <section class="group w-full h-screen">
+        <p class="text-6xl text-white font-bold p-5 w-3/6 ml-auto text-right">
+          <span class="text-yellow">Farmily</span> consisting of interns, employees and family. 2018
+        </p>
+      </section>
+    
+      <!-- We offer two types of internships -->
+      <section class="max-w-screen-lg mx-auto my-20 p-3">
+        <h3 class="text-4xl text-center font-bold w-96 mx-auto leading-10 mb-10">We offer two types of internships</h3>
+        
+        <div class="grid grid-cols-12 gap-10 text-center">
+          <div class="col-span-12 md:col-span-6 p-3">
+            <h4 class="text-primary font-bold mb-4">1-3 month commitment</h4>
+            <p class="w-96 mx-auto text-gray-600">In this position the first month will be mostly helping out where needed. Expect physically demanding work involving clean up, and assisting with chores. The next few months will be training in animal feeding and care and potentially training in the diary. Accommodations are mostly tent and barn camping. There is NO STIPEND associated with this position but it does include room and board.</p>
+          </div>
+    
+          <div class="col-span-12 md:col-span-6 p-3">
+            <h4 class="text-primary font-bold mb-4">9 Month Internship with stipend</h4>
+            <p class="w-96 mx-auto text-gray-600">We begin all internships with a one month unpaid trial. For folks wanting to gain more in depth experience in different areas of the farm we offer a 9 month apprenticeship tour of the farm. Apprentices will have an opportunity to experience the following enterprises: Pastured Pork, Beef Herd management intensive grazing, Lamb, Pastured Poultry, and Marketing. We ask for flexibility and patience as personal interest, aptitude, and availability of farm management plays a heavy role in placement.</p>
+          </div>
+        </div>
+    
+        <p class="mt-10">Stipend for the 9 month internship is $400/month including room and board. $200/month will be paid at the end of months 2, 3, 4, 5, 6, 7, 8 & 9 and an additional payment of $1000 at the end of 9 months for a total of $3,200 for the 9 month period.</p>
+    
+        <p class="mt-10">Stipend for the 1 year apprenticeship will be $6,000 for the year.  $300/month paid at the end of months 2-6, $500/month in months 7-12 and an additional $1000 in the final month for a total of $7000 for the year. You must be offered formal placement for this position in month 4-5.</p>
+    
+        <p class="mt-10">Important to note: The purpose of stipends is to defray living expenses while the intern participates in an educational program. Stipends are NOT payment for services rendered, rather a way to help support the learning process.</p>
+    
+      </section>
+
+    </v-main>
+  </v-app>
+
+
+  <section class="mb-20 mb-20 h-screen"></section>
+
+</main>
+{% endblock main %}
+
+{% block js %}
+<script>
+  const InternshipApp = new Vue({
+    el: '#internship',
+    delimiters: ['((', '))'],
+    vuetify: new Vuetify(opts),
+    data: {}
+  })
+
+</script>
+{% endblock %}

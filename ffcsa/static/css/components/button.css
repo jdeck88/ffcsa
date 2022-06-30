@@ -1,0 +1,63 @@
+a.btn {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+  text-decoration: none;
+}
+
+.btn {
+  @apply text-white text-center text-2xl font-bold py-2 px-4 rounded-md shadow-xl;
+}
+
+/* .btn:hover {
+  background-color: #d95320;
+} */
+
+.btn-sm {
+  @apply text-lg self-center w-auto;
+  padding: 15px 20px;
+  max-height: 57px;
+}
+
+.btn-light-orange {
+  /* background-color: theme('colors.orange.2'); */
+}
+
+.btn-light-orange:hover {
+  /* background-color: theme('colors.orange.1'); TODO */
+}
+
+.btn-green:hover {
+  background-color: theme('colors.green.light'); /* TODO */
+}
+
+
+/* @Joe start here */
+
+/* primary button */
+.btn-primary {
+  @apply text-white bg-orange hover:bg-orange-light focus:outline-none;
+  @apply shadow rounded font-bold text-lg py-3 px-6 transition duration-300 ease-in-out;
+}
+
+.btn-primary-sm {
+  @apply text-white bg-orange hover:bg-orange-light focus:outline-none;
+  @apply shadow rounded font-bold text-base py-2 px-4 transition duration-300 ease-in-out;
+}
+
+.btn-green {
+  @apply text-white bg-green hover:bg-green-light focus:outline-none;
+  @apply shadow rounded font-bold text-lg py-3 px-6 transition duration-300 ease-in-out;
+}
+
+/* white button */
+.btn-white {
+  @apply bg-gray-50 text-orange hover:bg-gray-100 focus:outline-none;
+  @apply shadow rounded font-bold text-lg py-3 px-6 transition duration-300 ease-in-out;
+}
+
+/* secondary button */
+.btn-outline-secondary {
+  @apply text-brown-7 border border-brown-7 tracking-wide hover:border-brown-7 hover:bg-brown-7 hover:text-white;
+  @apply rounded text-lg px-6 py-5 transition duration-300 ease-in-out;
+}

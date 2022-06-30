@@ -1,0 +1,69 @@
+version: '3.7'
+services:
+  django_gunicorn:
+    container_name: ffcsa_web
+    build:
+      context: .
+      dockerfile: ./docker/gunicorn.staging.Dockerfile
+    restart: always
+    command: gunicorn --workers=4 ffcsa.wsgi:application --bind 0.0.0.0:8000 --timeout 100 --reload
+    env_file: .env
+    volumes:
+      - .:/app
+      - ./static:/app/static
+      - ./media:/app/media
+    ports:
+      - 8000:8000
+    depends_on:
+      - mysql
+
+  django_celery_worker:
+    container_name: ffcsa_celery_worker
+    build:
+      context: .
+      dockerfile: ./docker/gunicorn.staging.Dockerfile
+    restart: always
+    command: celery -A ffcsa.core worker -l INFO
+    env_file: .env
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+  
+  django_celery_beat:
+    container_name: ffcsa_celery_beat
+    build:
+      context: .
+      dockerfile: ./docker/gunicorn.staging.Dockerfile
+    restart: always
+    command: celery -A ffcsa.core beat -l INFO
+    env_file: .env
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+
+  mysql:
+    container_name: ffcsa_db
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: U7srFFgcmtzE
+      MYSQL_DATABASE: ffcsa
+      # MYSQL_USER: ffcsa
+      # MYSQL_PASSWORD:
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - 3306
+
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/usr/local/etc/redis
+
+volumes:
+  db_data:
+  redis_data:

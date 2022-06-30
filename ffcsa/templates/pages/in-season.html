@@ -1,0 +1,1043 @@
+{% extends "base.html" %}
+
+{% load shop_tags i18n static %}
+{% block body_id %}In Season{% endblock %}
+
+{% block meta_title %}In Season{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        .padding-table-columns td {
+            padding: 0 5px 0 0;
+        }
+
+        .borderless table {
+            border-top-style: none !important;
+            border-left-style: none !important;
+            border-right-style: none !important;
+            border-bottom-style: none !important;
+        }
+
+        .borderless th {
+            border: 0 !important;
+            font-weight: 600;
+        }
+
+        .borderless td {
+            border: 0 !important;
+            font-weight: 500 !important;
+        }
+
+        .text-primary {
+            color: rgba(225, 98, 49, 1) !important;
+        }
+
+        .text-secondary {
+            color: rgba(80, 38, 22, 1) !important;
+        }
+
+        .txt-left {
+            text-align: left;
+        }
+
+        table td p {
+            text-align: center;
+            padding: 15px;
+        }
+
+        tr:last-child td:last-child {
+            padding-bottom: 20px !important;
+        }
+
+        @media screen and (max-width: 600px) {
+            table th {
+                padding: 5px !important;
+                font-size: 0.75rem !important;
+                font-weight: 800 !important;
+
+            }
+
+            table td {
+                font-size: 0.85rem !important;
+            }
+
+        }
+
+        /*@media screen and (max-width: 600px) {
+            table {
+                border: 0;
+            }
+
+            table caption {
+                font-size: 1.3em;
+            }
+
+            table thead {
+                border: none;
+                clip: rect(0 0 0 0);
+                height: 1px;
+                margin: -1px;
+                overflow: hidden;
+                padding: 0;
+                position: absolute;
+                width: 1px;
+            }
+
+            table tr {
+                border-bottom: 3px solid #ddd;
+                display: block;
+                margin-bottom: .625em;
+            }
+
+            table td {
+                border-bottom: 1px solid #ddd;
+                display: block;
+                font-size: .8em;
+                text-align: right;
+                padding: 0 !important;
+            }
+
+            table td p {
+                padding: 15px !important;
+                text-align: right !important;
+                margin: 0 !important;
+                height: unset !important;
+                color: black;
+                font-size: 0.9rem;
+                font-weight: 500;
+            }
+
+            table td::before {
+                content: attr(data-label);
+                float: left;
+                text-transform: uppercase;
+                padding-top: 15px;
+                padding-left: 15px;
+                font-weight: 600;
+                color: rgba(80,38,22, 1);
+                font-size: 0.9rem;
+            }
+
+            table td:last-child {
+                border-bottom: 0;
+            }
+        }*/
+
+    </style>
+{% endblock %}
+
+{% block main %}
+    <!-- <main id="FAQVue" v-cloak> -->
+    <main id="InSeasonVue">
+        <!-- Call block super -->
+        {{ block.super }}
+
+        <v-app>
+            <v-main>
+                <!-- banner section -->
+                <section class="min-h-300px lg:min-h-400px bg-cover bg-center bg-overlay-dark flex"
+                         style="background-image: var(--banner-bg);">
+                    <div class="text-white text-center text-4xl m-auto font-bold px-5 py-4">WHAT'S IN
+                        SEASON
+                    </div>
+                </section>
+                <!-- banner section -->
+
+                <!-- OFFERING HOME DELIVER! -->
+                {#                <div class="bg-green text-white font-bold text-2xl text-center py-4">#}
+                {#                    NOW OFFERING HOME DELIVERY! SELECT HOME DELIVERY AT CHECKOUT.#}
+                {#                </div>#}
+                <!-- OFFERING HOME DELIVER! -->
+
+                <section class="container mx-auto my-12">
+                    <!-- PASTURE RAISED -->
+                    <table class="table table-responsive borderless padding-table-columns">
+                        <thead>
+                        <tr>
+                            <th class="bg-orange-lightest text-xl text-brown-7 text-center" scope="col">PASTURE RAISED
+                                MEAT
+                            </th>
+                            <th class="bg-yellow-lightest text-xl text-brown-7 text-center" scope="col">SPRING</th>
+                            <th class="bg-orange-lighter text-xl text-brown-7 text-center" scope="col">SUMMER</th>
+                            <th class="bg-petiteOrchid text-xl text-brown-7 text-center" scope="col">FALL</th>
+                            <th class="bg-green-lighter bg-opacity-75 text-xl text-brown-7 text-center" scope="col">
+                                WINTER
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                <p class="h-6 txt-left">100% Grass-Fed Beef</p>
+                            </td>
+                            <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                <p class="h-6 txt-left">Pasture Raised Pork</p>
+                            </td>
+                            <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                <p class="h-6 txt-left">Grass-Fed Lamb</p>
+                            </td>
+                            <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i>
+                                </p></td>
+                            <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                <p class="h-6 txt-left">Pasture Raised Poultry</p>
+                            </td>
+                            <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                <p class="h-6 txt-left">Pasture Raised Turkey</p>
+                            </td>
+                            <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                <p class="h-6 txt-left">Organic Pasture Raised Eggs</p>
+                            </td>
+                            <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <br><br>
+
+                    <!-- ORGANIC VEGETABLES -->
+                    <table class="table table-responsive borderless padding-table-columns">
+                        <thead>
+                        <tr>
+                            <th class="bg-orange-lightest text-xl text-brown-7 text-center" scope="col"
+                                style="width: 40%">VEGETABLES
+                            </th>
+                            <th class="bg-yellow-lightest text-xl text-brown-7 text-center" scope="col">SPRING</th>
+                            <th class="bg-orange-lighter text-xl text-brown-7 text-center" scope="col">SUMMER</th>
+                            <th class="bg-petiteOrchid text-xl text-brown-7 text-center" scope="col">FALL</th>
+                            <th class="bg-green-lighter bg-opacity-75 text-xl text-brown-7 text-center" scope="col">
+                                WINTER
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                <p class="h-6 txt-left">Arugula</p>
+                            </td>
+                            <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                <p class="h-6 txt-left">Asparagus</p>
+                            </td>
+                            <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                            <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                <p class="h-6 txt-left">Basil</p>
+                            </td>
+                            <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                <p class="h-6"></p></td>
+                            <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                <p class="h-6 txt-left">Beets</p>
+                            </td>
+                            <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                            <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                <p class="h-6 txt-left">Broccoli</p>
+                            </td>
+                            <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                            <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                            <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                <p class="h-6 txt-left">Brussel Sprouts</p>
+                            </td>
+                            <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                            <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <br><br>
+
+                    <!-- FRUIT -->
+                    <table class="table table-responsive borderless padding-table-columns">
+                        <thead>
+                        <tr>
+                            <th class="bg-orange-lightest text-xl text-brown-7 text-center" scope="col"
+                                style="width: 40%">FRUIT
+                            </th>
+                            <th class="bg-yellow-lightest text-xl text-brown-7 text-center" scope="col">SPRING</th>
+                            <th class="bg-orange-lighter text-xl text-brown-7 text-center" scope="col">SUMMER</th>
+                            <th class="bg-petiteOrchid text-xl text-brown-7 text-center" scope="col">FALL</th>
+                            <th class="bg-green-lighter bg-opacity-75 text-xl text-brown-7 text-center" scope="col">
+                                WINTER
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                <p class="h-6 txt-left">Apples</p>
+                            </td>
+                            <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                            <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                <p class="h-6 txt-left">Apricots</p>
+                            </td>
+                            <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                            <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                            <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                <p class="h-6 txt-left">Blackberries</p>
+                            </td>
+                            <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                <p class="h-6"></p></td>
+                            <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                            <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                <p class="h-6 txt-left">Blueberries</p>
+                            </td>
+                            <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                            <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                            <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                <p class="h-6 txt-left">Boysenberries</p>
+                            </td>
+                            <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                            <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                            <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td data-label="PASTURE RAISED MEAT" class="bg-brown-0">
+                                <p class="h-6 txt-left">Cantaloupe</p>
+                            </td>
+                            <td data-label="SPRING" class="bg-yellow-lightest bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                            <td data-label="SUMMER" class="bg-orange-lighter bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="FALL" class="bg-petiteOrchid bg-opacity-25">
+                                <p class="h-6"><i class="fas fa-check"></i></p>
+                            </td>
+                            <td data-label="WINTER" class="bg-green-lighter bg-opacity-25">
+                                <p class="h-6"></p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+
+                    {#                    <!-- PASTURE RAISED -->#}
+                    {#                    <article class="grid grid-cols-12 gap-4 mb-10">#}
+                    {#                        <div class="col-span-4">#}
+                    {#                            <header class="bg-orange-lightest text-xl text-brown-7 text-center py-3">PASTURE RAISED MEAT#}
+                    {#                            </header>#}
+                    {#                            <div class="bg-brown-0-0 p-3">#}
+                    {#                                <p class="mb-4 h-6">100% Grass-Fed Beef</p>#}
+                    {#                                <p class="mb-4 h-6">Pasture Raised Pork</p>#}
+                    {#                                <p class="mb-4 h-6">Grass-Fed Lamb</p>#}
+                    {#                                <p class="mb-4 h-6">Pasture Raised Poultry</p>#}
+                    {#                                <p class="mb-4 h-6">Pasture Raised Turkey</p>#}
+                    {#                                <p class="mb-4 h-6">Organic Pasture Raised Eggs</p>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {##}
+                    {#                        <div class="col-span-2 text-center">#}
+                    {#                            <header class="bg-yellow-lightest text-xl text-brown-7 py-3">SPRING</header>#}
+                    {#                            <div class="bg-yellow-lightest bg-opacity-25 p-3">#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {##}
+                    {#                        <div class="col-span-2 text-center">#}
+                    {#                            <header class="bg-orange-lighter text-xl text-brown-7 py-3">SUMMER</header>#}
+                    {#                            <div class="bg-orange-lighter bg-opacity-25 p-3">#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {##}
+                    {#                        <div class="col-span-2 text-center">#}
+                    {#                            <header class="bg-petiteOrchid text-xl text-brown-7 py-3">FALL</header>#}
+                    {#                            <div class="bg-petiteOrchid bg-opacity-25 p-3">#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {##}
+                    {#                        <div class="col-span-2 text-center">#}
+                    {#                            <header class="bg-green-lighter bg-opacity-75 text-xl text-brown-7 py-3">WINTER</header>#}
+                    {#                            <div class="bg-green-lighter bg-opacity-25 p-3">#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {##}
+                    {#                    </article>#}
+
+                    <!-- ORGANIC VEGETABLES -->
+
+                    {#                    <article class="grid grid-cols-12 gap-4 mb-10">#}
+                    {#                        <div class="col-span-4">#}
+                    {#                            <header class="bg-orange-lightest text-xl text-brown-7 text-center py-3">VEGETABLES#}
+                    {#                            </header>#}
+                    {#                            <div class="bg-brown-0-0 p-3">#}
+                    {#                                <p class="mb-4 h-6">Arugula</p>#}
+                    {#                                <p class="mb-4 h-6">Asparagus</p>#}
+                    {#                                <p class="mb-4 h-6">Basil</p>#}
+                    {#                                <p class="mb-4 h-6">Beets</p>#}
+                    {#                                <p class="mb-4 h-6">Broccoli </p>#}
+                    {#                                <p class="mb-4 h-6">Brussel Sprouts</p>#}
+                    {#                                <p class="mb-4 h-6">Cabbage </p>#}
+                    {#                                <p class="mb-4 h-6">Carrots</p>#}
+                    {#                                <p class="mb-4 h-6">Cauliflower</p>#}
+                    {#                                <p class="mb-4 h-6">Celeriac </p>#}
+                    {#                                <p class="mb-4 h-6">Chard</p>#}
+                    {#                                <p class="mb-4 h-6">Chiles</p>#}
+                    {#                                <p class="mb-4 h-6">Collard Greens</p>#}
+                    {#                                <p class="mb-4 h-6">Corn</p>#}
+                    {#                                <p class="mb-4 h-6">Cucumber</p>#}
+                    {#                                <p class="mb-4 h-6">Edible Flowers</p>#}
+                    {#                                <p class="mb-4 h-6">Fava Beans</p>#}
+                    {#                                <p class="mb-4 h-6">Fennel</p>#}
+                    {#                                <p class="mb-4 h-6">Garlic</p>#}
+                    {#                                <p class="mb-4 h-6">Green Beans</p>#}
+                    {#                                <p class="mb-4 h-6">Green Garlic</p>#}
+                    {#                                <p class="mb-4 h-6">Green Onions</p>#}
+                    {#                                <p class="mb-4 h-6">Kale</p>#}
+                    {#                                <p class="mb-4 h-6">Kohlrabi</p>#}
+                    {#                                <p class="mb-4 h-6">Leeks</p>#}
+                    {#                                <p class="mb-4 h-6">Lettuce</p>#}
+                    {#                                <p class="mb-4 h-6">Mint</p>#}
+                    {#                                <p class="mb-4 h-6">Mushrooms</p>#}
+                    {#                                <p class="mb-4 h-6">Onions</p>#}
+                    {#                                <p class="mb-4 h-6">Oregano</p>#}
+                    {#                                <p class="mb-4 h-6">Parsley</p>#}
+                    {#                                <p class="mb-4 h-6">Parsnips</p>#}
+                    {#                                <p class="mb-4 h-6">Peas</p>#}
+                    {#                                <p class="mb-4 h-6">Peppers</p>#}
+                    {#                                <p class="mb-4 h-6">Potatoes</p>#}
+                    {#                                <p class="mb-4 h-6">Pumpkin</p>#}
+                    {#                                <p class="mb-4 h-6">Radish</p>#}
+                    {#                                <p class="mb-4 h-6">Rosemary</p>#}
+                    {#                                <p class="mb-4 h-6">Rutabaga</p>#}
+                    {#                                <p class="mb-4 h-6">Sage</p>#}
+                    {#                                <p class="mb-4 h-6">Shallots</p>#}
+                    {#                                <p class="mb-4 h-6">Snap/Snow Peas</p>#}
+                    {#                                <p class="mb-4 h-6">Spinach</p>#}
+                    {#                                <p class="mb-4 h-6">Salad Greens</p>#}
+                    {#                                <p class="mb-4 h-6">Squash (Winter)</p>#}
+                    {#                                <p class="mb-4 h-6">Squash (Summer)</p>#}
+                    {#                                <p class="mb-4 h-6">Thyme</p>#}
+                    {#                                <p class="mb-4 h-6">Tomatoes</p>#}
+                    {#                                <p class="mb-4 h-6">Turnips</p>#}
+                    {#                                <p class="mb-4 h-6">Zucchini </p>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {##}
+                    {#                        <div class="col-span-2 text-center">#}
+                    {#                            <header class="bg-yellow-lightest text-xl text-brown-7 py-3">SPRING</header>#}
+                    {#                            <div class="bg-yellow-lightest bg-opacity-25 p-3">#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {##}
+                    {#                        <div class="col-span-2 text-center">#}
+                    {#                            <header class="bg-orange-lighter text-xl text-brown-7 py-3">SUMMER</header>#}
+                    {#                            <div class="bg-orange-lighter bg-opacity-25 p-3">#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {##}
+                    {#                        <div class="col-span-2 text-center">#}
+                    {#                            <header class="bg-petiteOrchid text-xl text-brown-7 py-3">FALL</header>#}
+                    {#                            <div class="bg-petiteOrchid bg-opacity-25 p-3">#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {##}
+                    {#                        <div class="col-span-2 text-center">#}
+                    {#                            <header class="bg-green-lighter bg-opacity-75 text-xl text-brown-7 py-3">WINTER</header>#}
+                    {#                            <div class="bg-green-lighter bg-opacity-25 p-3">#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {#                    </article>#}
+
+                    <!-- FRUIT -->
+                    {#                    <article class="grid grid-cols-12 gap-4 mb-10">#}
+                    {#                        <div class="col-span-4">#}
+                    {#                            <header class="bg-orange-lightest text-xl text-brown-7 text-center py-3">FRUIT#}
+                    {#                            </header>#}
+                    {#                            <div class="bg-brown-0-0 p-3">#}
+                    {#                                <p class="mb-4 h-6">Apples</p>#}
+                    {#                                <p class="mb-4 h-6">Apricots</p>#}
+                    {#                                <p class="mb-4 h-6">Blackberries </p>#}
+                    {#                                <p class="mb-4 h-6">Blueberries</p>#}
+                    {#                                <p class="mb-4 h-6">Boysenberries </p>#}
+                    {#                                <p class="mb-4 h-6">Cantaloupe</p>#}
+                    {#                                <p class="mb-4 h-6">Cherries</p>#}
+                    {#                                <p class="mb-4 h-6">Figs</p>#}
+                    {#                                <p class="mb-4 h-6">Grapes</p>#}
+                    {#                                <p class="mb-4 h-6">Huckleberries</p>#}
+                    {#                                <p class="mb-4 h-6">Kiwi</p>#}
+                    {#                                <p class="mb-4 h-6">Melons</p>#}
+                    {#                                <p class="mb-4 h-6">Nectarines</p>#}
+                    {#                                <p class="mb-4 h-6">Pears</p>#}
+                    {#                                <p class="mb-4 h-6">Persimmons</p>#}
+                    {#                                <p class="mb-4 h-6">Plums & Pluots</p>#}
+                    {#                                <p class="mb-4 h-6">Raspberries</p>#}
+                    {#                                <p class="mb-4 h-6">Strawberries</p>#}
+                    {#                                <p class="mb-4 h-6">Watermelon</p>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {##}
+                    {#                        <div class="col-span-2 text-center">#}
+                    {#                            <header class="bg-yellow-lightest text-xl text-brown-7 py-3">SPRING</header>#}
+                    {#                            <div class="bg-yellow-lightest bg-opacity-25 p-3">#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {##}
+                    {#                        <div class="col-span-2 text-center">#}
+                    {#                            <header class="bg-orange-lighter text-xl text-brown-7 py-3">SUMMER</header>#}
+                    {#                            <div class="bg-orange-lighter bg-opacity-25 p-3">#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {##}
+                    {#                        <div class="col-span-2 text-center">#}
+                    {#                            <header class="bg-petiteOrchid text-xl text-brown-7 py-3">FALL</header>#}
+                    {#                            <div class="bg-petiteOrchid bg-opacity-25 p-3">#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {##}
+                    {#                        <div class="col-span-2 text-center">#}
+                    {#                            <header class="bg-green-lighter bg-opacity-75 text-xl text-brown-7 py-3">WINTER</header>#}
+                    {#                            <div class="bg-green-lighter bg-opacity-25 p-3">#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                                <p class="h-6 mb-4"><i class="fas fa-check hidden"></i></p>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {##}
+                    {##}
+                    {#                    </article>#}
+
+
+                </section>
+
+                <!-- Ready for Better Food Choices? -->
+                {% if not request.user.is_authenticated %}
+                    <section class="text-center p-5 py-20 max-w-xl mx-auto" style="max-width: 46rem">
+                        <h3 class="text-3xl text-primary font-bold mb-5 font-nospacing">Ready for Better Food
+                            Choices?</h3>
+                        <p class="text-secondary text-xl">Join the hundreds of households who trust local farmers to
+                            provide high quality food for a full diet.</p>
+                        <v-btn x-large color="primary" class="font-weight-bold ffcsa--v-btn" href="{% url 'signup' %}">
+                            BECOME A MEMBER
+                        </v-btn>
+                    </section>
+                {% endif %}
+                <!-- Ready for Better Food Choices? -->
+
+            </v-main>
+        </v-app>
+    </main>
+{% endblock main %}
+
+{% block js %}
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script>
+      const InSeasonApp = new Vue({
+        el: '#InSeasonVue',
+        delimiters: ['((', '))'],
+        vuetify: new Vuetify(opts),
+        data: {},
+      })
+
+    </script>
+{% endblock %}

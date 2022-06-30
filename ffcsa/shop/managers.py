@@ -411,7 +411,8 @@ class PersistentCartManager(CartManager):
 
         last_updated = now()
         # Update timestamp and clear out old carts and put the cart_id in the session
-        if cart and cart_query.update(last_updated=last_updated):
+        # if cart and cart_query.update(last_updated=last_updated):
+        if cart:
             self.expired().delete()
             cart_id = cart.id
             request.session["cart"] = cart_id

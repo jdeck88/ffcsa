@@ -15,12 +15,12 @@
     {{ product.description }}
 {% endmetablock %}{% endblock %}
 
-{% block extra_css %}
+{% block css %}
     {{ block.super }}
     <link rel="stylesheet" href="{% static "mezzanine/css/magnific-popup.css" %}">
 {% endblock %}
 
-{% block extra_js %}
+{% block js %}
     {{ block.super }}
     <script src="{% static "mezzanine/js/magnific-popup.js" %}"></script>
     <script>

@@ -97,6 +97,7 @@ DROPSITES = [
         'description': 'Junction City - Deck Family Farm (Friday)',
         'allowOneTimeOrders': True,
         'pickupDay': 5,
+        'members_only': False,
         'DFFDelivery': False,
     },
     {
@@ -106,6 +107,7 @@ DROPSITES = [
         'description': 'Junction City - Deck Family Farm (Tuesday)',
         'allowOneTimeOrders': True,
         'pickupDay': 2,
+        'members_only': True,
         'DFFDelivery': False,
     },
     {
@@ -115,6 +117,7 @@ DROPSITES = [
         'description': 'Eugene - W 11th & Van Buren (Tuesday)',
         'allowOneTimeOrders': False,
         'pickupDay': 2,
+        'members_only': True,
         'DFFDelivery': False,
     },
     {
@@ -124,6 +127,7 @@ DROPSITES = [
         'description': 'Eugene - Adams & 26th (Tuesday)',
         'allowOneTimeOrders': False,
         'pickupDay': 2,
+        'members_only': True,
         'DFFDelivery': False,
     },
     {
@@ -133,6 +137,7 @@ DROPSITES = [
         'description': 'Eugene - Lane County Farmers Market (Saturday)',
         'allowOneTimeOrders': True,
         'pickupDay': 6,
+        'members_only': False,
         'DFFDelivery': True,
     },
     {
@@ -142,6 +147,7 @@ DROPSITES = [
         'description': 'Portland - PSU Farmers Market (Saturday)',
         'allowOneTimeOrders': True,
         'pickupDay': 6,
+        'members_only': False,
         'DFFDelivery': True,
     },
     {
@@ -151,6 +157,7 @@ DROPSITES = [
         'description': 'Portland - Hollywood Farmers Market (Saturday)',
         'allowOneTimeOrders': True,
         'pickupDay': 6,
+        'members_only': False,
         'DFFDelivery': True,
     },
     {
@@ -160,6 +167,7 @@ DROPSITES = [
         'description': 'Portland - Killingsworth & NE 60th (Saturday)',
         'allowOneTimeOrders': False,
         'pickupDay': 6,
+        'members_only': True,
         'DFFDelivery': True,
     },
     {
@@ -169,6 +177,7 @@ DROPSITES = [
         'description': 'Portland - Irvington Neighborhood (Saturday)',
         'allowOneTimeOrders': False,
         'pickupDay': 6,
+        'members_only': True,
         'DFFDelivery': True,
     },
     {
@@ -178,6 +187,7 @@ DROPSITES = [
         'description': 'Portland - Woodstock Neighborhood (Saturday)',
         'allowOneTimeOrders': False,
         'pickupDay': 6,
+        'members_only': True,
         'DFFDelivery': True,
     },
     {
@@ -187,6 +197,7 @@ DROPSITES = [
         'description': 'Portland - St Johns Farmers Market (Saturday)',
         'allowOneTimeOrders': False,
         'pickupDay': 6,
+        'members_only': False,
         'DFFDelivery': True,
     },
     {
@@ -196,6 +207,7 @@ DROPSITES = [
         'description': 'Corvallis - SW Hawkeye & SW Brooklane (Saturday)',
         'allowOneTimeOrders': False,
         'pickupDay': 6,
+        'members_only': True,
         'DFFDelivery': False,
     },
     {
@@ -206,6 +218,7 @@ DROPSITES = [
         'allowOneTimeOrders': False,
         'private': True,
         'pickupDay': 6,
+        'members_only': True,
         'DFFDelivery': True,
     },
     # # ('Woodstock', 'Portland - Woodstock Farmers Market (Sunday)'),
@@ -279,6 +292,9 @@ DELIVERY_CSVS = {
         },
     ]
 }
+
+# SETTINGS FOR NON-MEMBERS
+NON_MEMBERS_MIN_PURCHACE = 50
 
 # SETTINGS FOR ONE-TIME ORDERS
 # TODO make this 5% when we enable one-time orders
@@ -642,6 +658,32 @@ DATABASES = {
     }
 }
 
+
+#############
+# CELERY #
+#############
+# Celery application definition
+# http://docs.celeryproject.org/en/v4.0.2/userguide/configuration.html
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'America/Los_Angeles'
+
+from celery.schedules import crontab
+
+# Other Celery settings
+CELERY_BEAT_SCHEDULE = {
+    'task-anonymous-carts': {
+        'task': 'ffcsa.core.tasks.clean_anonymous_carts',
+        # 'schedule': crontab(minute="*", hour="*"),
+        'schedule': crontab(),
+        # 'args': (*args)
+    }
+}
+
+
 #########
 # PATHS #
 #########
@@ -757,10 +799,26 @@ INSTALLED_APPS = (
     "ffcsa.core",
     'nested_admin',
     'anymail',
+    'rest_framework',
+    'rest_framework.authtoken',
     # "mezzanine.mobile",
 
     'webpack_loader'
 )
+
+
+# django rest framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 21
+}
+
 
 # List of middleware classes to use. Order is important; in the request phase,
 # these middleware classes will be applied in the order given, and in the

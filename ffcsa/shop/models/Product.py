@@ -6,6 +6,7 @@ from django.db.models import CharField
 from django.db.models.base import ModelBase
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+from django.utils.text import slugify
 from future.builtins import super
 from future.utils import with_metaclass
 from mezzanine.conf import settings
@@ -33,6 +34,24 @@ class BaseProduct(Displayable):
         abstract = True
 
 
+class ProductSeason(models.Model):
+    # Seasons for products
+    class Meta:
+        verbose_name = 'Season'
+        verbose_name_plural = 'Seasons'
+    slug = models.SlugField(max_length=200, blank=True)
+    name = models.SlugField(max_length=200)
+
+    def __str__(self) -> str:
+        return self.name
+
+    def save(self, *args, **kwargs):
+        # create slug if not exists
+        if not self.slug:
+            self.slug = slugify(self.name, allow_unicode=True)
+        super().save(*args, **kwargs)
+
+
 class Product(BaseProduct, Priced, RichText, ContentTyped, AdminThumbMixin):
     """
     Container model for a product that stores information common to
@@ -41,9 +60,11 @@ class Product(BaseProduct, Priced, RichText, ContentTyped, AdminThumbMixin):
 
     available = models.BooleanField(_("Available for purchase"),
                                     default=False)
+    short_description = models.CharField(_("Short Description"), max_length=100,
+                                   null=True, blank=True)
     image = CharField(_("Image"), max_length=100, blank=True, null=True)
     categories = models.ManyToManyField("Category", blank=True,
-                                        verbose_name=_("Product categories"))
+                                        verbose_name=_("Product categories"), related_name='category_products')
     date_added = models.DateTimeField(_("Date added"), auto_now_add=True,
                                       null=True)
     related_products = models.ManyToManyField("self",
@@ -51,6 +72,10 @@ class Product(BaseProduct, Priced, RichText, ContentTyped, AdminThumbMixin):
     upsell_products = models.ManyToManyField("self",
                                              verbose_name=_("Upsell products"), blank=True)
     rating = RatingField(verbose_name=_("Rating"))
+    seasons = models.ManyToManyField(ProductSeason, blank=True, null=True, related_name='seasons')
+
+    unit = models.CharField(max_length=200, blank=True, null=True)
+    weight = models.CharField(max_length=200, blank=True, null=True)
 
     order_on_invoice = models.FloatField(default=0, null=True, blank=True,
                                          help_text="Order this product will be printed on invoices. If set, this will override the product's category order_on_invoice setting. This is a float number for more fine grained control. (ex. '2.1' will be sorted the same as if the product's parent category order_on_invoice was 2 & the product's category order_on_invoice was 1).")
@@ -81,6 +106,11 @@ class Product(BaseProduct, Priced, RichText, ContentTyped, AdminThumbMixin):
     def has_stock(self):
         pass
 
+    @property
+    def descriptive_title(self):
+        s = str(self.variations.first())
+        return s
+
     def save(self, *args, **kwargs):
         self.set_content_model()
         super(Product, self).save(*args, **kwargs)
@@ -108,6 +138,8 @@ class Product(BaseProduct, Priced, RichText, ContentTyped, AdminThumbMixin):
         # TODO I don't think we need this anymore
         # setattr(self, "weekly_inventory", getattr(default, "weekly_inventory"))
         # setattr(self, "in_inventory", getattr(default, "in_inventory"))
+        setattr(self, "unit", getattr(default, "unit"))
+        setattr(self, "weight", getattr(default, "weight"))
         if default.image:
             self.image = default.image.file.name
         self.save()
@@ -171,6 +203,19 @@ class ProductOption(models.Model):
         verbose_name_plural = _("Product options")
 
 
+class ProductVariationUnit(models.Model):
+    # Unit of Measurement (UOM) with for products its Code
+    class Meta:
+        verbose_name = 'Unit'
+        verbose_name_plural = 'Units'
+
+    name = models.SlugField(max_length=50)
+    code = models.SlugField(max_length=50)
+
+    def __str__(self) -> str:
+        return self.code
+
+
 class ProductVariationMetaclass(ModelBase):
     """
     Metaclass for the ``ProductVariation`` model that dynamcally
@@ -197,6 +242,8 @@ class ProductVariation(with_metaclass(ProductVariationMetaclass, Priced)):
     product = models.ForeignKey("shop.Product", related_name="variations",
                                 on_delete=models.CASCADE)
     _title = models.CharField(_("Title"), max_length=500, blank=True)
+    short_description = models.CharField(_("Short Description"), max_length=100,
+                                         null=True, blank=True)
     default = models.BooleanField(_("Default"), default=False)
     image = models.ForeignKey("ProductImage", verbose_name=_("Image"),
                               null=True, blank=True, on_delete=models.SET_NULL)
@@ -211,14 +258,20 @@ class ProductVariation(with_metaclass(ProductVariationMetaclass, Priced)):
     # on_delete=models.SET_NULL, blank=True,
     # null=True)
 
+    unit = models.CharField(max_length=200, blank=True, null=True)
+    weight = models.CharField(max_length=200, blank=True, null=True)
     objects = managers.ProductVariationManager()
 
     class Meta:
         ordering = ("-default",)
-        unique_together = ('product', '_title')
+        # unique_together = ('product', '_title')
 
     def __str__(self):
-        return "{} - {}".format(self.product.title, self.title) if self._title else self.product.title
+        s = self.unit + ", " if self.unit else ""
+        s += self.title
+        if self.weight:
+            s += f" {self.weight}"
+        return s
 
     @property
     def title(self):

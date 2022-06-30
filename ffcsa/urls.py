@@ -4,10 +4,22 @@ from django.conf.urls import include, url
 from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.views.i18n import set_language
+from django.views.generic import TemplateView
 from mezzanine.conf import settings
+from mezzanine.accounts.urls import PASSWORD_RESET_VERIFY_URL, _verify_pattern, _slash
 
 import ffcsa.core.views as ffcsa_core
 import ffcsa.shop.views as shop_ciews
+
+# API router
+from rest_framework import routers
+from ffcsa.core.api.urls import router as core_router
+from ffcsa.shop.api.urls import router as shop_router
+
+router = routers.SimpleRouter()
+router.registry.extend(core_router.registry)
+router.registry.extend(shop_router.registry)
+
 
 admin.autodiscover()
 
@@ -37,6 +49,10 @@ urlpatterns += [
 
     # Shop URLs.
     url("^", include("ffcsa.shop.urls")),
+
+    # api endpoint
+    url("^api/", include(router.urls)),
+
     url("^account/orders/$", shop_ciews.order_history, name="shop_order_history"),
     url("^account/payments/$", ffcsa_core.payments, name="payments"),
     url("^account/payments/subscribe$", ffcsa_core.payments_subscribe, name="payments_subscribe"),
@@ -44,6 +60,15 @@ urlpatterns += [
     url("^account/payments/update$", ffcsa_core.payments_update, name="payments_update"),
     url("^account/payments/update/amount$", ffcsa_core.payments_update_amount, name="payments_update_amount"),
     url("^account/payments/new$", ffcsa_core.make_payment, name="make_payment"),
+    url("^account/dairy/program/$", ffcsa_core.dairy_program, name="dairy_program"),
+
+    url(
+        r"^{}{}{}$".format(
+            PASSWORD_RESET_VERIFY_URL.strip("/"), _verify_pattern, _slash
+        ),
+        ffcsa_core.password_reset_verify,
+        name="password_reset_verify",
+    ),
 
     # We don't want to presume how your homepage works, so here are a
     # few patterns you can use to set it up.

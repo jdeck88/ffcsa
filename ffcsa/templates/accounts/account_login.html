@@ -1,16 +1,108 @@
-{% extends "accounts/account_form.html" %}
+{% extends "base.html" %}
 {% load i18n %}
 
+{% load staticfiles static %}
+{% block meta_title %}Login{% endblock %}
+
 {% block main %}
+<main id="login" v-cloak>
+  <v-app>
+    <v-main class="grey lighten-5">
+      <v-row align="center" justify="center" class="h-screen">
+        {% if request.user.is_authenticated %}
+          <p>{% trans "You're already logged in. If you'd like to log in as a different user, you'll need to log out first." %}</p>
+        {% else %}
+        <v-card class="mx-auto pa-5" width="400">
+          <v-card-text>
+            <div class="text-center mb-10">
+              <h1 class="font-bold text-3xl text-gray-900">LOGIN</h1>
+              <p class="subtitle-1">Welcome back</p>
+            </div>
 
-{% if request.user.is_authenticated %}
-    <p>{% trans "You're already logged in. If you'd like to log in as a different user, you'll need to log out first." %}</p>
-{% else %}
-    {{ block.super }}
-    {% url "mezzanine_password_reset" as password_reset_url %}
-    {% url "profile_update" as profile_update_url %}
-    {% blocktrans %}<p>You can also <a href="{{ password_reset_url }}?next={{ profile_update_url }}">reset your password</a> if you've forgotten it.</p>{% endblocktrans %}</p>
-    <p>{% blocktrans %}If you don't have an account you can learn more about becoming a <a href="http://deckfamilyfarm.com/full-farm-csa/">member</a>.{% endblocktrans %}</p>
-{% endif %}
+            <v-form @submit.prevent="submit" ref="form">
+              {% csrf_token %}
+              <!-- email -->
+              <v-col cols="12">
+                <v-text-field
+                  prepend-inner-icon="mdi-email"
+                  outlined
+                  label="Email *"
+                  v-model="email"
+                  :rules="[store.state.rules.required, store.state.rules.email]"
+                >
+                </v-text-field>
+              </v-col>
 
-{% endblock %}
+              <!-- password -->
+              <v-col cols="12">
+                <v-text-field 
+                  prepend-inner-icon="mdi-key-variant"
+                  outlined
+                  label="Password *"
+                  type="password"
+                  v-model="password"
+                  :rules="[store.state.rules.required, store.state.rules.password]"
+                >
+                </v-text-field>
+              </v-col>
+
+              <v-btn large block color="primary" class="font-weight-bold" type="submit">Login</v-btn>
+            </v-form>
+
+            <p class="mt-4">
+              Don't have an account?
+              <v-btn text color="primary" href="{% url 'signup' %}{% if not 'account' in request.path %}?next={{ request.path }}{% else %}?next=/{% endif %}">Register now!</v-btn>
+            </p>
+
+            <p>
+              Click here to <a href="/accounts/password/reset/">reset your password</a>
+            </p>
+          </v-card-text>
+        </v-card>
+        {% endif %}
+      </v-row>
+    </v-main>
+  </v-app>
+</main>
+{% endblock main %}
+
+{% block js %}
+<script>
+  const LoginApp = new Vue({
+    el: '#login',
+    delimiters: ['((', '))'],
+    store,
+    vuetify: new Vuetify(opts),
+    data: {
+      email: "",
+      password: ""
+    },
+    methods: {
+      async submit() {
+        if (!this.$refs.form.validate()) {
+          return
+        }
+
+        try {
+          const res = await axios.post('/api/login/', data={
+            username: this.email,
+            password: this.password
+          });
+          let urlParams = new URLSearchParams(window.location.search);
+          let redirect_url = '/'
+          if (urlParams.has('next')) {
+              redirect_url = urlParams.get('next')
+          }
+          location.replace(redirect_url)
+
+        } catch (error) {
+          store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+          console.log(error.response.data)
+        }
+      }
+      
+    },
+    // async mounted () {}
+  })
+</script>
+{% endblock js %}

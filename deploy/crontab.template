@@ -4,32 +4,32 @@
 
 # Convert cart to orders & restart the server to clear the cached budgets
 # Monday at 00:01
-1 0 * * 1 %(user)s %(manage)s cart > /home/ffcsa/logs/cron_orders.log 2>&1 && %(manage)s send_weekly_orders --send-orders >> /home/ffcsa/logs/cron_orders.log 2>&1
+#1 0 * * 1 %(user)s %(manage)s cart > /home/ffcsa/logs/cron_orders.log 2>&1 && %(manage)s send_weekly_orders --send-orders >> /home/ffcsa/logs/cron_orders.log 2>&1
 # Thursday at 00:01
-1 0 * * 4 %(user)s %(manage)s cart > /home/ffcsa/logs/cron_orders.log 2>&1 && %(manage)s send_weekly_orders --send-orders >> /home/ffcsa/logs/cron_orders.log 2>&1
+#1 0 * * 4 %(user)s %(manage)s cart > /home/ffcsa/logs/cron_orders.log 2>&1 && %(manage)s send_weekly_orders --send-orders >> /home/ffcsa/logs/cron_orders.log 2>&1
 
 # send weekly reminder email
 # 0 17 * * 4 %(user)s %(manage)s reminder
 
 # notify non engaged members
-0 3 * * 3 %(user)s %(manage)s notify_non_engaged_users
+#0 3 * * 3 %(user)s %(manage)s notify_non_engaged_users
 
 # De-activate non active users
-0 3 * * 1 %(user)s %(manage)s deactivate_non_engaged_users
+#0 3 * * 1 %(user)s %(manage)s deactivate_non_engaged_users
 
 # Send monthly KPI email
- 0 2 1 * * %(user)s %(manage)s kpis
+#0 2 1 * * %(user)s %(manage)s kpis
 
 # Send weekly KPI email Monday at 3am
-0 3 * * 1 %(user)s %(manage)s weekly_kpis
+#0 3 * * 1 %(user)s %(manage)s weekly_kpis
 
 # Send outstanding balance email
- 0 1 9 * * %(user)s %(manage)s outstanding_member_credits
- 0 1 24 * * %(user)s %(manage)s outstanding_member_credits
- 0 1 1 1 * %(user)s %(manage)s outstanding_member_credits
+# 0 1 9 * * %(user)s %(manage)s outstanding_member_credits
+# 0 1 24 * * %(user)s %(manage)s outstanding_member_credits
+# 0 1 1 1 * %(user)s %(manage)s outstanding_member_credits
 
 # Send DFF Delivery email
- 0 2 25 * * %(user)s %(manage)s delivered_totes
+# 0 2 25 * * %(user)s %(manage)s delivered_totes
 
 # Send Employee Payment Email
- 0 2 1 * * %(user)s %(manage)s dff_employee_payments
+# 0 2 1 * * %(user)s %(manage)s dff_employee_payments

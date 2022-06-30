@@ -1,0 +1,84 @@
+version: '3.7'
+services:
+  nginx:
+    container_name: ffcsa_nginx
+    build: ./nginx/development
+    volumes:
+      - static_volume:/app/static
+      - media_volume:/app/media
+      - ./nginx/development:/etc/nginx/conf.d
+    ports:
+      - 80:80
+    depends_on:
+      - django_gunicorn
+
+  django_gunicorn:
+    container_name: ffcsa_web
+    build:
+      context: .
+      dockerfile: ./docker/gunicorn.dev.Dockerfile
+    restart: always
+    command: gunicorn --workers=4 ffcsa.wsgi:application --bind 0.0.0.0:8000 --timeout 100 --reload
+    env_file: .env
+    volumes:
+      - .:/app
+      - static_volume:/app/static
+      - media_volume:/app/media
+    ports:
+      - 8000
+    depends_on:
+      - mysql
+      - redis
+  
+  django_celery_worker:
+    container_name: ffcsa_celery_worker
+    build:
+      context: .
+      dockerfile: ./docker/gunicorn.dev.Dockerfile
+    restart: always
+    command: celery -A ffcsa.core worker -l INFO
+    env_file: .env
+    # volumes:
+    #   - .:/app
+    depends_on:
+      - redis
+  
+  django_celery_beat:
+    container_name: ffcsa_celery_beat
+    build:
+      context: .
+      dockerfile: ./docker/gunicorn.dev.Dockerfile
+    restart: always
+    command: celery -A ffcsa.core beat -l INFO
+    env_file: .env
+    # volumes:
+    #   - .:/app
+    depends_on:
+      - redis
+
+  mysql:
+    container_name: ffcsa_db
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: U7srFFgcmtzE
+      MYSQL_DATABASE: ffcsa
+      # MYSQL_USER: ffcsa
+      # MYSQL_PASSWORD:
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - 3306
+
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/usr/local/etc/redis
+
+volumes:
+  db_data:
+  static_volume:
+  media_volume:
+  redis_data:

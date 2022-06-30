@@ -1,5 +1,7 @@
+from datetime import timedelta
 from functools import reduce
 from operator import iand, ior
+from collections import defaultdict
 
 from django.db import models
 from django.db.models import Q
@@ -110,3 +112,26 @@ class Category(Page, RichText):
         if not root:
             return self.slug
         return self.slug.lstrip(root).lstrip('/')
+    
+    @classmethod
+    def shop_menu_categories(self):
+        """
+        List of categories and it's published sub categories for products to be filtered
+        """
+        categories = []
+        for cat in Category.objects.filter(parent__isnull=True).order_by('_order'):
+            if not cat.published():
+                continue
+            # sub_cat( published and have at least one available product)
+            sub_cats = [c.title for c in cat.children.all().order_by('_order') if c.published() and Product.objects.filter(categories__id=c.id, available=True).count() > 0]
+
+            # no products in the category and no children w/ products, skip it
+            if len(sub_cats) is 0 and Product.objects.filter(categories__id=cat.id, available=True).count() is 0:
+                continue
+
+            categories.append({
+                'title': cat.title,
+                'display_name': cat.title.upper(),
+                'sub_cats': sub_cats
+            })
+        return categories

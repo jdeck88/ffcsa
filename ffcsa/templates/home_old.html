@@ -1,0 +1,566 @@
+{% extends "base.html" %}
+{% load staticfiles static %}
+
+<!-- Title -->
+{% block meta_title %}Home{% endblock %}
+
+{% block main %} 
+<main id="home" v-cloak>
+  <v-app>
+    <v-main class="grey lighten-5">
+      <!-- banner section -->
+      <section class="min-h-300px lg:min-h-400px bg-cover bg-center bg-overlay-dark flex" style="background-image: var(--banner-bg);">
+        <div class="text-white text-center m-auto px-5 py-4">
+          <h2 class="text-5xl mb-4">Organic-Pasture Raised Meats & Eggs</h2>
+          <p class="text-2xl mb-8">Bringing you nutrient-dense meat, milk, and eggs<br/>while building healthier soil</p>
+          <section class="text-center max-w-xl mx-auto">
+            <v-btn x-large color="primary" class="font-weight-bold" href="/products">SHOP THE FARM</v-btn>
+          </section>
+        </div>
+      </section>
+      <!-- banner section -->
+      
+      <section class="flex flex-col md:flex-row">
+        <div class="checked-pin-block bg-orange-light">
+          <div>
+            <div class="bg-orange"></div>
+            <img src="{% static 'img/pin-with-checkmark.svg' %}" draggable="false">
+          </div>
+          <h4>Nutrient-Dense</h4>
+        </div>
+        
+        <div class="checked-pin-block bg-orange">
+          <div>
+            <div class="bg-orange-light"></div>
+            <img src="{% static 'img/pin-with-checkmark.svg' %}" draggable="false">
+          </div>
+          <h4>Delicious</h4>
+        </div>
+        
+        <div class="checked-pin-block bg-orange-light">
+          <div>
+            <div class="bg-orange"></div>
+            <img src="{% static 'img/pin-with-checkmark.svg' %}" draggable="false">
+          </div>
+          <h4>Local</h4>
+        </div>
+      </section>
+
+      <!-- How your meat and eggs are produced -->
+      <section>
+        <v-img src="{% static 'img/cows-banner-2.jpg' %}" height="500">
+          <v-overlay :value="true" :absolute="true" color="#fff" opacity=".9">
+            <v-row align="center" justify="center">
+              <div class="max-w-2xl mx-auto text-center text-brown-6">
+                <h4 class="text-3xl font-weight-bold mb-4">How your meat and eggs are produced is too important to leave to chance.</h4>
+                <p>How do you know your food was raised responsibly? <br> Meat and egg production standards are lacking. <br> Are you craving a better option?</p>
+
+                <v-btn x-large color="primary" class="font-weight-bold mt-10" href="/products">SHOP THE FARM</v-btn>
+              </div>
+            </v-row>
+          </v-overlay>
+        </v-img>
+      </section>
+      
+      <!-- Fresh Locally Sourced Meat and Eggs -->
+      <section class="flex flex-col justify-center px-4 py-20 bg-tan-1">
+        <h2 class="text-brown-6 text-center font-bold text-3xl mb-20">Fresh Locally Sourced Meat and Eggs</h2>
+        
+        <div class="flex flex-col self-center mb-12 sm:flex-row">
+          <img src="{% static 'img/placeholders/cows.jpg' %}" class="w-300px mb-4 self-center sm:mr-10 sm:mb-0" alt="Cows in one of our fields">
+          <h3 class="text-center text-2xl leading-snug self-center sm:text-left sm:w-500px">Farmers focused on providing <br
+            class="hidden sm:inline">nutrient-dense meat, milk, and eggs.</h3>
+          </div>
+          
+          <div class="flex flex-col self-center mb-12 sm:flex-row">
+            <img src="{% static 'img/placeholders/dog.jpg' %}" class="w-300px mb-4 self-center sm:mr-10 sm:mb-0" alt="Dog with chicken supplies">
+            <h3 class="text-center text-2xl leading-snug self-center sm:text-left sm:w-500px">Raising the bar for farm <br
+              class="hidden sm:inline">production standards.</h3>
+            </div>
+            
+            <div class="flex flex-col self-center sm:flex-row">
+              <img src="{% static 'img/placeholders/dog-2.jpg' %}" class="w-300px mb-4 self-center sm:mr-10 sm:mb-0" alt="Dog with wine">
+              <h3 class="text-center text-2xl leading-snug self-center sm:text-left sm:w-500px">Treating animals humanely,
+                sustainably, <br class="hidden sm:inline">and in harmony with nature.</h3>
+              </div>
+              
+              <section class="text-center max-w-xl mx-auto mt-20">
+                <v-btn x-large color="primary" class="font-weight-bold" href="/products">SHOP THE FARM</v-btn>
+              </section>
+      </section>
+      
+      <!-- Our Livestock -->
+      <section class="px-4 py-20 max-w-screen-xl mx-auto">
+        <h2 class="text-brown-6 text-center font-bold text-3xl mb-20">Our Livestock</h2>
+        
+        <div class="grid grid-cols-5 gap-5 text-center mb-5">
+          <img class="col-span-5 md:col-span-1 rounded" src="{% static 'img/grassfed-cattle.jpg' %}" alt="Cows in one of our fields">
+          <img class="col-span-5 md:col-span-1 rounded" src="{% static 'img/pasture-raised-pigs.jpg' %}" alt="Pigs in one of our fields">
+          <img class="col-span-5 md:col-span-1 rounded" src="{% static 'img/spring-lamb.jpg' %}" alt="A full-grown sheep with two lambs in one of our fields">
+          <img class="col-span-5 md:col-span-1 rounded" src="{% static 'img/pastured-chickens-and-turkeys.jpg' %}" alt="A group of chickens">
+          <img class="col-span-5 md:col-span-1 rounded" src="{% static 'img/laying-hens.jpg' %}" alt="A large flock of chickens">
+        </div>
+
+
+        <div style="min-height: 50vh;">
+          <article class="bg-brown-0 p-3 mb-2">
+            <h3 class="cursor-pointer select-none flex" onclick="handleevent(this.parentElement)">
+              <strong>Grassfed Cattle</strong>
+              <i class="fas fa-plus ml-auto text-xs p-1"></i>
+              <i class="fas fa-times ml-auto text-xs text-red-2 p-1 hidden"></i>
+            </h3>
+            
+            <p id="content" class="mt-4 hidden">
+              Our cows are raised and finished the way nature intended – on 100% grass, herbs, and clover.   During the winter months, our cattle are fed balage, a method for fermenting sprint-time forage which provides a high quality diet and consistent rates of gain throughout the year. This results in a beef product that has more beneficial fatty acids (from the 100% forage based diet), is higher in flavor, and maintains tenderness.
+            </p>
+          </article>
+          
+          <article class="bg-brown-0 p-3 mb-2">
+            <h3 class="cursor-pointer select-none flex" onclick="handleevent(this.parentElement)">
+              <strong>Pasture-Raised Pigs</strong>
+              <i class="fas fa-plus ml-auto text-xs p-1"></i>
+              <i class="fas fa-times ml-auto text-xs text-red-2 p-1 hidden"></i>
+            </h3>
+            
+            <p id="content" class="mt-4 hidden">
+              We allow our hogs to root around in open pastures and oak woodlands during the Spring, Summer, and Fall and feed them a diet of our custom-milled dairdadgrains and hazelnuts.  Their well-rounded diet, exercise, and access to pasture results in a high quality, flavorful meat that consistently draws praise from people up and down the Willamette Valley.
+            </p>
+          </article>
+          
+          <article class="bg-brown-0 p-3 mb-2">
+            <h3 class="cursor-pointer select-none flex" onclick="handleevent(this.parentElement)">
+              <strong>Spring Lamb</strong>
+              <i class="fas fa-plus ml-auto text-xs p-1"></i>
+              <i class="fas fa-times ml-auto text-xs text-red-2 p-1 hidden"></i>
+            </h3>
+            
+            <p id="content" class="mt-4 hidden">
+              Our lambs are raised and rotated on pastures throughout the year. We will occasionally graze our lambs on other organic land. These are either dedicated pastures or cover crops on other organic farms.
+            </p>
+          </article>
+          
+          <article class="bg-brown-0 p-3 mb-2">
+            <h3 class="cursor-pointer select-none flex" onclick="handleevent(this.parentElement)">
+              <strong>Pastured Chickens & Turkeys</strong>
+              <i class="fas fa-plus ml-auto text-xs p-1"></i>
+              <i class="fas fa-times ml-auto text-xs text-red-2 p-1 hidden"></i>
+            </h3>
+            
+            <p id="content" class="mt-4 hidden">
+              Our pasture-raised broilers are raised on pasture where they consume up to 20% of their diet on grass, herbs, and clover.  The birds are moved daily to fresh forage, keeping them well-fed and happy.  We also raise Bourban, Bronze, and White Turkeys. All birds are raised on pasture and housed at night to prevent predation.
+            </p>
+          </article>
+          
+          <article class="bg-brown-0 p-3 mb-2">
+            <h3 class="cursor-pointer select-none flex" onclick="handleevent(this.parentElement)">
+              <strong>Laying Hens</strong>
+              <i class="fas fa-plus ml-auto text-xs p-1"></i>
+              <i class="fas fa-times ml-auto text-xs text-red-2 p-1 hidden"></i>
+            </h3>
+            
+            <p id="content" class="mt-4 hidden">
+              Our Certified Organic by Oregon Tilth laying hens are housed in our custom-built mobile hen houses.  They are moved twice/ week 10 months out of the year on pasture.   As our layers are allowed the freedom to roam outside and forage on grass and eat bugs, the eggs are high in Omega-3’s.  Laying hens also play a vital role in our pasture management as they contribute to the fertility of our soils through their manure, as well as help break up parasite life cycles for our other livestock species like cattle, sheep, and pigs.
+            </p>
+          </article>
+        </div>
+        
+        <section class="text-center max-w-xl mx-auto mb-10">
+          <v-btn x-large color="primary" class="font-weight-bold" href="/products">SHOP THE FARM</v-btn>
+        </section>
+      </section>
+      
+      <!-- We care about the environment -->
+      <section class="flex flex-col justify-center px-4 py-20" style="background-color: #f8daC7;">
+        <h2 class="text-brown-6 text-center font-bold text-3xl mt-10" style="line-height: 1.25em;">We care about the environment AND about you!</h2>
+        
+        <p class="text-center text-2xl leading-snug mt-20 mb-16">Your health matters to us. That’s why our meat comes from humanely treated animals <br class="hidden lg:inline">that were raised sustainably on organic-pastures without growth hormones or confined spaces. <br class="hidden lg:inline">Food that’s good for you and tastes good, too.</p>
+        
+        <div id="organic-certifications" class="flex flex-wrap w-full mx-auto mb-20 text-center" style="max-width: 1150px;">
+          <div class="cursor-pointer" @click="goToWebSite('https://www.americangrassfed.org')">
+            <v-img max-width="250" max-height="200" contain class="rounded-lg m-3" src="{% static 'img/Certification Images/American Grassfed Association Certified.png' %}"></v-img>
+          </div>
+          <div class="cursor-pointer" @click="goToWebSite('https://globalanimalpartnership.org')">
+            <v-img max-width="250" max-height="200" contain class="rounded-lg m-3" src="{% static 'img/Certification Images/Global Animal Partnership (GAP) Animal Welfare Certified.png' %}"></v-img>
+          </div>
+          <div class="cursor-pointer" @click="goToWebSite('https://www.oregon.gov')">
+            <v-img max-width="250" max-height="200" contain class="rounded-lg m-3" src="{% static 'img/Certification Images/Oregon Department of Agriculture (ODA) Inspected.png' %}"></v-img>
+          </div>
+          <div class="cursor-pointer" @click="goToWebSite('https://oregonpasturenetwork.org')">
+            <v-img max-width="250" max-height="200" contain class="rounded-lg m-3" src="{% static 'img/Certification Images/Oregon Pasture Network (OPN) member.png' %}"></v-img>
+          </div>
+          <div class="cursor-pointer" @click="goToWebSite('https://tilth.org')">
+            <v-img max-width="250" max-height="200" contain class="rounded-lg m-3" src="{% static 'img/Certification Images/Oregon Tilth Organic Certified.png' %}"></v-img>
+          </div>
+          <div class="cursor-pointer" @click="goToWebSite('https://salmonsafe.org')">
+            <v-img max-width="250" max-height="200" contain class="rounded-lg m-3" src="{% static 'img/Certification Images/Salmon Safe Certified.png' %}"></v-img>
+          </div>
+          <div class="cursor-pointer" @click="goToWebSite('https://www.usda.gov')">
+            <v-img max-width="250" max-height="200" contain class="rounded-lg m-3" src="{% static 'img/Certification Images/USDA United States Department of Agriculture Certified.png' %}"></v-img>
+          </div>
+        </div>
+
+        <v-carousel 
+          v-model="model"
+          :cycle="false"
+          hide-delimiter-background
+          >
+          <v-carousel-item v-for="testimonial in testimonials" :key="testimonial.id">
+            <v-sheet height="100%" tile color="transparent">
+              <v-row class="fill-height" align="center" justify="center">
+                <div class="text-brown-6 mx-auto p-3" style="max-width: 65%;">
+
+                  <p class="relative">
+                    <v-icon x-large class="text-h1 opacity-20" style="position: absolute; top: -3rem; left: -3rem;">mdi-format-quote-open</v-icon>
+                    ((testimonial.text))
+                    <v-icon x-large class="text-h1 opacity-20" style="position: absolute; top: 75%; right: 0;">mdi-format-quote-close</v-icon>
+                  </p>
+                  
+                  <p class="subtitle-1 text-center mt-5">
+                    <span class="font-weight-bold">- ((testimonial.owner))</span>
+                  </p>
+                </div>
+              </v-row>
+            </v-sheet>
+          </v-carousel-item>
+        </v-carousel>
+        <template>
+        </template>
+
+        <section class="text-center max-w-xl mx-auto mt-10">
+          <v-btn x-large color="primary" class="font-weight-bold" href="/products">SHOP THE FARM</v-btn>
+        </section>
+      </section>
+      
+      <!-- Ready to Shop the Farm? -->
+      <section class="py-10 bg-white">
+        <v-container>
+          <h2 class="text-brown-6 text-center font-bold text-4xl my-20">Ready to Shop the Farm?</h2>
+  
+          <v-row>
+            <v-col cols="12" md=3 class="pa-3">
+              <a href="/products/?query=beef">
+                <v-img src="{% static 'img/beef.jpg' %}" width="150" class="mx-auto"></v-img>
+                <h3 class="text-brown-7 text-center font-bold text-3xl mt-12">SHOP BEEF</h3>
+              </a>
+            </v-col>
+            <v-col cols="12" md=3 class="pa-3">
+              <a href="/products/?query=pork">
+                <v-img src="{% static 'img/pork.jpg' %}" width="150" class="mx-auto"></v-img>
+                <h3 class="text-brown-7 text-center font-bold text-3xl mt-12">SHOP PORK</h3>
+              </a>
+            </v-col>
+            <v-col cols="12" md=3 class="pa-3">
+              <a href="/products/?query=chicken">
+                <v-img src="{% static 'img/chicken.jpg' %}" width="150" class="mx-auto"></v-img>
+                <h3 class="text-brown-7 text-center font-bold text-3xl mt-12">SHOP CHICKEN</h3>
+              </a>
+            </v-col>
+            <v-col cols="12" md=3 class="pa-3">
+              <a href="/products/?query=lamb">
+                <v-img src="{% static 'img/lamb.jpg' %}" width="150" class="mx-auto"></v-img>
+                <h3 class="text-brown-7 text-center font-bold text-3xl mt-12">SHOP LAMB</h3>
+              </a>
+            </v-col>
+          </v-row>
+          
+          <section class="text-center max-w-xl mx-auto mt-32 sm:mt-40">
+            <v-btn x-large color="primary" class="font-weight-bold" href="/products">SHOP THE FARM</v-btn>
+          </section>
+        </v-container>
+      </section>
+      
+      <!-- Raising Animals Simply -->
+      <section class="flex flex-col justify-center px-4 py-20" style="background-color: #f5d66a;">
+        <h2 class="text-brown-7 text-center font-bold text-3xl my-20" style="line-height: 1.25em;">Raising Animals Simply, to Simply Raise the Bar</h2>
+        
+        <div class="flex flex-wrap justify-center">
+          <div class="flex flex-col items-center">
+            <div class="our-practices-card">
+              <i class="fas fa-check"></i>
+              <p>We aspire to create a regenerative model that improves the planet and does not deplete resources like other industrial mono cropped agriculture systems.</p>
+            </div>
+            
+            <div class="our-practices-card">
+              <i class="fas fa-check"></i>
+              <p>We are a resource to the aspiring generations of young farmers.</p>
+            </div>
+            
+            <div class="our-practices-card">
+              <i class="fas fa-check"></i>
+              <p>We make no compromises in practicing what we believe to be the necessary future of farming.</p>
+            </div>
+            
+            <div class="our-practices-card">
+              <i class="fas fa-check"></i>
+              <p>We actively engage in conservation initiatives on the land.</p>
+            </div>
+            
+            <div class="our-practices-card">
+              <i class="fas fa-check"></i>
+              <p>We support our local food community.</p>
+            </div>
+            
+            <div class="our-practices-card">
+              <i class="fas fa-check"></i>
+              <p>We take a long-term approach with our sustainable livestock operation.</p>
+            </div>
+          </div>
+          
+          <div class="flex flex-col items-center">
+            <div class="our-practices-card">
+              <i class="fas fa-check"></i>
+              <p>We pursue ongoing improvement to the health of the land on and around our farm.</p>
+            </div>
+            
+            <div class="our-practices-card">
+              <i class="fas fa-check"></i>
+              <p>We do not use herbicides, pesticides, growth hormones, sub-therapeutic antibiotics or synthetic nitrogen fertilizers.</p>
+            </div>
+            
+            <div class="our-practices-card">
+              <i class="fas fa-check"></i>
+              <p>We generate soil fertility through the natural cycles of composting, grazing management, and seeding a variety of forages.</p>
+            </div>
+            
+            <div class="our-practices-card">
+              <i class="fas fa-check"></i>
+              <p>We are 100% transparent with what our animals eat.</p>
+            </div>
+            
+            <div class="our-practices-card">
+              <i class="fas fa-check"></i>
+              <p>We regenerate the soil with composted manure and minerals which replenishes the nutrients needed to grow lush forage.</p>
+            </div>
+          </div>
+        </div>
+        
+        <section class="text-center max-w-xl mx-auto mt-24">
+          <v-btn x-large color="primary" class="font-weight-bold mr-2" href="/products">SHOP THE FARM</v-btn>
+          <v-btn x-large dark color="green" class="font-weight-bold" href="/faq">FAQ</v-btn>
+        </section>
+      </section>
+      
+      <section class="flex flex-col justify-center px-4 py-20" style="background-color: #d7ddcd;">
+        <h2 class="text-brown-6 text-center font-bold text-3xl my-20" style="line-height: 1.25em;">Take charge of the impact your meat choices make.</h2>
+        
+        <div class="flex flex-col self-center justify-center w-full mb-16 lg:justify-start lg:flex-row lg:mb-0" style="max-width: 700px; min-height: 207px;">
+          <img src="{% static 'img/eggs.png' %}" class="w-auto self-center mb-4 lg:mr-24 lg:mb-0" style="width: 150px;">
+          <div class="flex flex-col justify-center text-center lg:text-left">
+            <h3 class="text-green text-2xl font-bold mb-4">Shop the Farm</h3>
+            <p class="text-brown-6 text-lg">Explore our organic-pasture raised products <br class="hidden lg:inline">and discover our CSA options.</p>
+          </div>
+        </div>
+        
+        <div class="flex flex-col self-center justify-center w-full mb-16 lg:justify-start lg:flex-row lg:mb-0" style="max-width: 700px; min-height: 207px;">
+          <img src="{% static 'img/chick.png' %}" class="w-auto self-center mb-4 lg:mr-24 lg:mb-0" style="width: 150px;">
+          <div class="flex flex-col justify-center text-center lg:text-left">
+            <h3 class="text-green text-2xl font-bold mb-4">Select a Delivery Method</h3>
+            <p class="text-brown-6 text-lg">Choose from a variety of pickup locations <br class="hidden lg:inline">or home delivery.</p>
+          </div>
+        </div>
+        
+        <div class="flex flex-col self-center justify-center w-full lg:justify-start lg:flex-row" style="max-width: 700px; min-height: 207px;">
+          <img src="{% static 'img/chicken.png' %}" class="w-auto self-center mb-4 lg:mr-24 lg:mb-0" style="width: 150px;">
+          <div class="flex flex-col justify-center text-center lg:text-left">
+            <h3 class="text-green text-2xl font-bold mb-4" style="line-height: 1.25;">Enjoy Delicious Pasture Raised Meats</h3>
+            <p class="text-brown-6 text-lg">Be intentional with your food's impact on <br class="hidden lg:inline">your health and the environment.</p>
+          </div>
+        </div>
+        
+        <section class="text-center max-w-xl mx-auto my-20">
+          <v-btn x-large color="primary" class="font-weight-bold mr-2" href="/products">SHOP THE FARM</v-btn>
+        </section>
+      </section>
+      
+      <!-- Download Our Free Tips -->
+      <section class="flex flex-col justify-center text-center my-20">
+        <v-container>
+          <h2 class="text-lg font-bold">Download Our Free Tips:</h2>
+          <v-img class="mx-auto text-center my-5 mb-10" width="400" src="{% static 'img/DFF-Greenwash the New Hogwash Mockup.png' %}"></v-img>
+          
+          <v-form class="max-w-3xl mx-auto" ref="form" @submit.prevent="submit">
+            <v-row>
+              <v-col cols="12" md="3">
+                <v-text-field outlined label="First name" v-model="leadGen.first_name"></v-text-field>
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-text-field outlined label="Last name" v-model="leadGen.last_name"></v-text-field>
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-text-field outlined label="Email" type="email" v-model="leadGen.email" :rules="[store.state.rules.required, store.state.rules.email]" required></v-text-field>
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-btn block x-large dark color="green" class="font-weight-bold" :loading="loading" elevation="0" type="submit">Download</v-btn>
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-container>
+      </section>
+      
+      <!-- Benefit From Our Long-Term -->
+      <section class="flex flex-col justify-center px-4 py-20" style="background-color: #eadcd2;">
+        <h2 class="text-brown-6 text-center font-bold text-3xl mb-12" style="line-height: 1.25em;">Benefit From Our Long-Term Approach</h2>
+        
+        <div class="ml-auto mr-auto" style="max-width: 1130px;">
+          <img style="max-height: 850px;" src="{% static 'img/deck-family-spring-2012.jpg' %}">
+          
+          <p class="text-lg mt-8 mb-4">At Deck Family Farm, we know you want to feed your household delicious food that was responsibly and locally sourced. So you need a farm focused on bringing you nutrient-dense meat, milk, and eggs while making our planet healthier.</p>
+          <p class="text-lg mb-5">The problem is that meat and egg production standards are lacking, leaving you craving a better option. You deserve to know that your food was raised a better way.</p>
+
+          <v-expand-transition>
+            <div class="text-lg" v-show="longTermBenefits.more">
+              <p>Like you, we want meat from sustainably raised and humanely treated animals, raised in harmony with nature. That’s why our multigenerational farm is deeply committed to raising the bar for production standards and holds the highest certification.</p>
+              <p>
+                <strong class="bl">You can Help Raise the Bar</strong> <br>
+                By shopping at Deck Family Farm you support your local food community and enable us to be a resource to aspiring generations for young farmers. You can be confident that our goal is to make no compromises in practicing and teaching what we believe to be necessary to reclaim a farming economy.
+              </p>
+              <p>At Deck Family Farm, you’ll benefit from our long-term approach in developing a sustainable livestock operation. By seeking to improve the health of the land, we pass on to you a greater nutrient-dense bounty working in closer tandem with nature.</p>
+              <p>With your health in mind, the farm does not use herbicides, pesticides, growth hormones, sub-therapeutic antibiotics, or synthetic nitrogen fertilizers. Instead, we generate soil fertility through the natural cycles of composting, grazing management, and seeding a variety of grasses. We know you want a farm that is creating a regenerative model that doesn’t harm the planet in ways that are associated with industrial, mono-cropped systems of agriculture.</p>
+              <p>So stop questioning if your meat and eggs were produced responsibly, and feel confident your farmer is putting the health of both you and the planet first.</p>
+              <p>
+                Read our <a href="/faq/">FAQ</a> to learn more about our operations and conservation initiatives. <br>
+                Interested in working on the farm? Read more about our <a href="/internship/">Internship Program</a>.
+              </p>
+            </div>
+          </v-expand-transition>
+          
+          <v-btn text color="red" class="font-weight-bold" @click="longTermBenefits.more = !longTermBenefits.more">
+            <template v-if="!longTermBenefits.more">READ MORE</template> <template v-else>READ LESS</template>
+          </v-btn>
+        </div>
+        
+        <section class="text-center max-w-xl mx-auto mt-10">
+          <v-btn x-large color="primary" class="font-weight-bold" href="/products">SHOP THE FARM</v-btn>
+        </section>
+      </section>
+      
+      <!-- Need Some Fruits and Veggies Too? -->
+      <section class="flex flex-col justify-center px-4 py-20">
+        <v-container>
+          <h2 class="text-brown-6 text-center font-bold text-3xl mb-12" style="line-height: 1.25em;">Need Some Fruits and Veggies Too?</h2>
+
+          <v-row class="mx-w-3xl mx-auto">
+            <v-col cols="12" md="6">
+              <p class="mb-6">Have you been hunting for a trusted local partner that enables you to make environmentally responsible and healthy food choices for your entire grocery list?</p>
+              <p class="mb-6"><span class="font-bold">Search no more!</span> Just because you’re not the farmer, doesn’t mean you can’t be confident in where your food came from.</p>
+              <p class="font-bold mb-6">Now you have a hyper-local place to find everything on your grocery list.</p>
+              <v-btn text color="red" class="font-weight-bold" href="/csa/">Learn More</v-btn>
+            </v-col>
+
+            <v-col cols="12" md="6">
+              <v-img src="{% static 'img/bags-of-veggies.jpg' %}" height="320" position="center 20%"></v-img>
+            </v-col>
+          </v-row>
+          
+          <section class="text-center max-w-xl mx-auto mt-24">
+            <v-btn x-large color="primary" class="font-weight-bold mr-4" href="{% url 'signup' %}">BECOME A MEMBER</v-btn>
+            <v-btn x-large dark color="green" class="font-weight-bold" href="/products">BROWSE THE STORE</v-btn>
+          </section>
+        </v-container>
+      </section>
+    </v-main>
+  </v-app>
+
+</main>
+    
+{% endblock %}
+          
+          
+{% block js %}
+<script>
+  const HomeVue = new Vue({
+    el: '#home',
+    delimiters: ['((', '))'],
+    store,
+    vuetify: new Vuetify(opts),
+    data: {
+      model: 0,
+      loading: false,
+
+      testimonials: [
+        {
+          id: 1,
+          text: `We've been members for almost 3 years now and it's been wonderful -- you have allowed us to eat seasonally, support our local farmer community, learn about unusual and different vegetables, and try out your delicious recipes. For that we are extremely grateful! Your gift of the FFCSA to our community is worth so much more than the money we spend in the member store each week. Being a member has changed how I eat and the awareness I have of the seasonality of our food.`,
+          owner: 'Hanna D',
+        },
+        {
+          id: 2,
+          text: `I believe very deeply that food is the primary pillar of wellness. I had always been a conscious eater, but after the birth of my son I set out to find the most nutrient dense and nourishing food I could possibly source from my community. The caveat was that we rely on food assistance programs to access the food we need. I reached out to Deck to see if there was any way they could accept EBT, and I was overjoyed to learn about the feed a friend program. 6 months in, and I am grateful every day for the privilege to feed my child some of the most incredible food in the area. He is healthy and strong, in no small part due to Deck's raw milk and pastured meat. Thank you Deck community, for making this possible for our family!"`,
+          owner: 'Feed-a-Friend Recipient',
+        },
+        {
+          id: 3,
+          text: `We'd like to mention that the produce we've received so far are the most beautiful and tasty either of us have had while the meat, eggs and dairy also set the bar in food quality. Thank you for all your hard work. We both feel so fortunate to be able to have access to clean and unaltered, local organic foods. We really can't thank you enough for all the hard work you are all doing.`,
+          owner: 'A Happy CSA Customer',
+        },
+        {
+          id: 4,
+          text: `Everything we’ve had from Deck Family Farms or associated with Deck Family Farms has been top shelf...we’ve been members of 7 different CSAs in several different states over the years and the Full Farm CSA is by far the nicest CSA because of all the choice and options…it’s the crème de la cre me of all CSAs`,
+          owner: 'Andrew T',
+        },
+        {
+          id: 5,
+          text: `Just going to take this chance to say that I absolutely love being a CSA member and I literally tell anyone about you guys who will listen to me! You guys are fantastic. Thank you so much for all the hard work you do and for making good food so accessible to us! Cheers,`,
+          owner: 'Elise G',
+        },
+        {
+          id: 6,
+          text: `Regrettably I need to cancel our account, we are moving out of state and so won’t be able to use your amazing CSA any longer. Thank you for bringing such an amazing opportunity for farm fresh groceries year round. I have enjoyed it so much, and tell friends often. I hope to find an equivalent situation where we end up. Loyally,`,
+          owner: 'Kate B',
+        }
+      ],
+      longTermBenefits: {
+        more: false
+      },
+      leadGen: {
+        first_name: "",
+        last_name: "",
+        email: ""
+      }
+    },
+    methods: {
+      goToWebSite(website) {
+        window.open(website, '_blank')
+      },
+      async submit() {
+        if (!this.$refs.form.validate()) {
+          return
+        }
+
+        this.loading = true;
+
+        try {
+          const res = await axios.post(`/api/leadgen_pdf/`, {
+            first_name: this.leadGen.first_name,
+            last_name: this.leadGen.last_name,
+            email: this.leadGen.email
+          });
+
+          // download the pdf file
+          const link = document.createElement('a');
+          link.href = res.data.pdf;
+          link.download = 'DFF_Hogwash-or-Greenwash V03.pdf';
+          link.dispatchEvent(new MouseEvent('click'));
+
+          this.loading = false
+          console.log(res)
+
+        } catch (error) {
+          this.loading = false
+          console.log(error)
+        }
+
+
+      }
+    }
+  })
+  
+  // livestock section
+  function handleevent(article) {
+    // Show/Hide content
+    article.querySelector('#content').classList.toggle('hidden');
+    article.querySelector('.fa-plus').classList.toggle('hidden');
+    article.querySelector('.fa-times').classList.toggle('hidden');
+  }
+</script>
+{% endblock %}

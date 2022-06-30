@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load i18n mezzanine_tags ffcsa_core_tags %}
+
+{% block meta_title %}{{ title }}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
+{% block body_id %}account{% endblock %}
+
+{% block breadcrumb_menu %}
+    {{ block.super }}
+    <li>{{ title }}</li>
+{% endblock %}
+
+{% block extra_head %}
+    {{ block.super }}
+
+    {#    TODO: figure out why including form.media.js in the js block breaks compressor w/ key not found in manifest #}
+    {{ form.media.js }}
+    <script type="text/javascript"
+            src="https://maps.google.com/maps/api/js?libraries=geometry,places&key={{ settings.GOOGLE_API_KEY }}"></script>
+    <script type="text/javascript"
+            src="https://cdn.jsdelivr.net/gh/geocodezip/geoxml3@master/polys/geoxml3.js"></script>
+{% endblock %}
+
+{% block main %}
+
+    {% if request.user.is_authenticated %}
+        <p>{% trans "You're already logged in. If you'd like to create a new account, you'll need to log out first." %}</p>
+    {% else %}
+        <h3 class="h3 text-center mb-5 mt-0 text-black">Thanks for choosing the Full Farm CSA!</h3>
+        <p class="mb-3">If you haven't done so already, you can check out our current selection of products <a href="/">here</a>
+            and find out more information about our CSA by visiting <a target="_blank"
+                                                                       href="https://deckfamilyfarm.com/full-farm-csa/">our
+                FAQs page</a>.</p>
+        <p class="mb-3">We encourage all CSA members to visit the Deck Family Farm (in Junction City) at least once
+            during or before their time in the CSA, so come check us out! Our open gate policy is Monday - Saturday
+            during business hours. Let us know when you may be coming and we can arrange a mini tour.</p>
+
+        <div class="border-b-2 my-8"></div>
+
+        <p class="mb-8">Our Portland dropsites are currently full. <a target="_blank"
+                                                                      href="https://26403a96.sibforms.com/serve/MUIEAEe-Lhh9Ij9OVpUCDzojW-Mdekxfy3xZjo7tka8o97OAN5FCESzSdtZnYvRkQkahzra5SB0It2X_txOn8Osv64fHf6t3Cv15W_S8yXTczZbBQfQ7Z_voZO4w2Q48UtGXYMgQaelSC0ni3_GivthfTK9FvMchpVPz-q7Y2JscpW2VjQjQSGgfNoJ56dxcF6ASqRwLc5Qkpa2S">Join
+            our waitlist</a> to be notified when a spot opens up. Thank you for understanding and supporting local
+            farms!
+        </p>
+        {#        <iframe width="540" height="450"#}
+        {#                src="https://26403a96.sibforms.com/serve/MUIEAEe-Lhh9Ij9OVpUCDzojW-Mdekxfy3xZjo7tka8o97OAN5FCESzSdtZnYvRkQkahzra5SB0It2X_txOn8Osv64fHf6t3Cv15W_S8yXTczZbBQfQ7Z_voZO4w2Q48UtGXYMgQaelSC0ni3_GivthfTK9FvMchpVPz-q7Y2JscpW2VjQjQSGgfNoJ56dxcF6ASqRwLc5Qkpa2S"#}
+        {#                frameborder="0" scrolling="auto" allowfullscreen#}
+        {#                style="display: block;margin-left: auto;margin-right: auto;max-width: 100%;"></iframe>#}
+        {#                {% errors_for form %}#}
+
+        <form method="post"{% if form.is_multipart %} enctype="multipart/form-data"{% endif %} id="signup_form"
+              novalidate>
+            {% csrf_token %}
+            {% errors_for form %}
+            <fieldset>
+                {% render_field form.first_name group_class="col-xs-12 col-md-6" %}
+                {% render_field form.last_name group_class="col-xs-12 col-md-6" %}
+                {% render_field form.email group_class="col-xs-12" %}
+                {% render_field form.password1 group_class="col-xs-12 col-md-6" %}
+                {% render_field form.password2 group_class="col-xs-12 col-md-6" %}
+            </fieldset>
+
+            <fieldset>
+                {% if settings.HOME_DELIVERY_ENABLED %}
+                    {% with form.home_delivery as widget %}
+                        <div class="col-xs-12 mb-5">
+                            <div class="form-switch inline-block align-middle">
+                                <input type="checkbox" name="{{ widget.name }}" id="{{ widget.id_for_label }}"
+                                       class="form-switch-checkbox"
+                                       {% if widget.value %}checked{% endif %}/>
+                                <label class="form-switch-label" for="{{ widget.id_for_label }}"></label>
+                            </div>
+                            <label class=""
+                                   for="{{ widget.id_for_label }}">{{ widget.label }}</label>
+                            <span class="block text-gray-600">{{ widget.help_text }}</span>
+                        </div>
+                    {% endwith %}
+                    <div id="delivery_information" class="col-xs-12" style="display: none">
+                        {% with form.delivery_address as field %}
+                            <div class="form-group input_{{ field.id_for_label }} {% if field.errors %} has-error {% endif %}">
+                                <label class="control-label block"
+                                       for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}
+                                    <p class="help-block">
+                                        {% for e in field.errors %}
+                                            {% if not forloop.first %} / {% endif %}{{ e }}
+                                        {% endfor %}
+                                    </p>
+                                {% endif %}
+                                <button id="change_address" class="btn btn-default btn-medium mb-3">Change</button>
+                            </div>
+                        {% endwith %}
+                        {% render_field form.delivery_notes %}
+                    </div>
+                {% endif %}
+                {% render_field form.drop_site show_required=False group_class="col-xs-12" %}
+                {% render_field form.invite_code show_required=False group_class="col-xs-12" %}
+            </fieldset>
+
+                <fieldset>
+                    {% render_field form.phone_number group_class="col-xs-12 col-md-6" %}
+                    {% render_field form.phone_number_2 group_class="col-xs-12 col-md-6" %}
+                    {% render_field form.num_adults group_class="col-xs-12 col-md-6" %}
+                    {% render_field form.num_children group_class="col-xs-12 col-md-6" %}
+                    {% render_field form.communication_method group_class="col-xs-12" %}
+                    {% render_field form.best_time_to_reach group_class="col-xs-12" %}
+                    {% render_field form.hear_about_us group_class="col-xs-12" %}
+                </fieldset>
+            <fieldset>
+                {% render_field form.join_dairy_program group_class="col-xs-12" %}
+                {% render_field form.payment_agreement show_required=False group_class="col-xs-12" %}
+                {% render_field form.pickup_agreement show_required=False group_class="col-xs-12 mb-5" %}
+            </fieldset>
+            <fieldset>
+                <p class="mb-4"><strong>After signing up, you will receive a welcome email and a Membership Agreement
+                    that you will need to sign.</strong> Once you have signed the agreement and set up your payments,
+                    you will be ready to make your first order!</p>
+                <p class="mb-3">If you do not see these 2 emails after signing up, check your spam folder and let us
+                    know if it isn't there.</p>
+                <div class="form-actions">
+                    {% block account_form_actions %}
+                        <input class="btn btn-primary btn-lg pull-right" type="submit" value="Submit!">
+                    {% endblock %}
+                </div>
+            </fieldset>
+        </form>
+        {% include "ffcsa_core/includes/address-check_modal.html" %}
+    {% endif %}
+
+{% endblock %}

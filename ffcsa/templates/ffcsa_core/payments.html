@@ -1,16 +1,13 @@
 {% extends "shop/base.html" %}
 {% load mezzanine_tags shop_tags static i18n %}
 
-{% block extra_css %}
+{% block css %}
     <link rel="stylesheet" href="{% static "css/ffcsa_core/payments.css" %}">
 {% endblock %}
 
-{% block extra_js %}
+{% block js %}
     <script src="{% static "js/lodash.js" %}"></script>
     <script src="{% static "js/ffcsa_core/payments.js" %}"></script>
-{% endblock %}
-{% block extra_head %}
-    <script src="https://js.stripe.com/v3/"></script>
 {% endblock %}
 
 {% block meta_title %}{% trans "Payments" %}{% endblock %}
@@ -28,6 +25,7 @@
 
             <!-- Onetime Payment -->
             {% if user.profile.non_subscribing_member or user.profile.stripe_subscription_id or user.profile.stripe_customer_id and user.profile.ach_status in 'NEW,VERIFYING' %}
+            <section>
                 <!-- Payment modal trigger -->
                 <p>
                     <button type="button" class="btn btn-info" id="make-payment">
@@ -106,10 +104,12 @@
                         </div>
                     </div>
                 </div>
+            </section>
             {% endif %}
 
             <!-- ACH Bank Verification-->
             {% if user.profile.payment_method == 'ACH' and user.profile.ach_status == 'NEW' or user.profile.payment_method == 'ACH' and user.profile.ach_status == 'VERIFYING' %}
+            <section>
                 <p class="alert alert-warning">It looks like your ACH bank account has not been verified. Once you
                     receive the 2 small deposits with the descriptions "<strong>AMNTS:</strong>", enter them below to
                     verify your bank account. The deposits should show on your statement withing 1-2 business days.</p>
@@ -135,8 +135,10 @@
                         </div>
                     </div>
                 </form>
+            </section>
                 <!-- New Subscription Signup -->
             {% elif not user.profile.non_subscribing_member and not user.profile.stripe_subscription_id %}
+            <section>
                 {% if user.profile.ach_status == 'FAILED' %}
                     <p class="alert alert-danger">We had trouble sending funds to your provided bank account for
                         verification purposes. Your information may have been entered incorrectly. Please try again.</p>
@@ -178,7 +180,10 @@
 
                     <button class="btn btn-default btn-info" type="submit">Subscribe</button>
                 </form>
+
+            </section>
             {% elif not user.profile.non_subscribing_member %}
+            <section>
                 <p>Your monthly contribution is ${{ user.profile.monthly_contribution }} via
                     {% if user.profile.payment_method == 'CC' %}
                         Credit Card
@@ -231,6 +236,8 @@
                     </div>
 
                 </div>
+
+            </section>
             {% endif %}
             <div id="payment-container"></div>
 
@@ -239,12 +246,7 @@
 
 
     <h3>Payment History</h3>
-    {% if user.profile.joined_before_dec_2017 %}
-        <div class="alert alert-warning non-field-error"><strong>Note:</strong> Only payments made for Dec. 2017 onwards
-            are
-            shown here.
-        </div>
-    {% endif %}
+
     {% if payments %}
 
         <table class="table table-striped order-history">
@@ -261,8 +263,10 @@
                     <td class="left">{{ payment.date|date:"SHORT_DATE_FORMAT" }}</td>
                     <td class="left">{{ payment.notes|default_if_none:"" }}</td>
                     <td class="right">
-                        {% if payment.pending %}
+                        {% if payment.status == 'Pending' %}
                             (pending)
+                        {% elif payment.status == 'Failed' %}
+                            (failed)
                         {% endif %}
                         {{ payment.amount|currency }}
                     </td>
@@ -276,5 +280,5 @@
         <p>{% trans "You have not yet made any payments." %}</p>
     {% endif %}
 
-    <input type="hidden" id="stripeApiKey" value="{{ STRIPE_API_KEY }}"/>
+    <input type="hidden" id="stripeApiKey" value="{{ request.STRIPE_API_KEY }}"/>
 {% endblock %}

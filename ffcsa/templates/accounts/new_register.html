@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load staticfiles static %}
+{% load i18n mezzanine_tags ffcsa_core_tags %}
+
+
+{% block main %}
+<main>
+
+  <!-- for logged in users -->
+  {% if request.user.is_authenticated %}
+    <p>{% trans "You're already logged in. If you'd like to create a new account, you'll need to log out first." %}</p>
+  {% else %}
+  <div class="min-w-screen flex items-center justify-center px-5 py-5 mt-32">
+    <div class="bg-gray-100 text-gray-500 rounded-3xl shadow-xl overflow-hidden" style="width: 60rem">
+      <div class="grid grid-cols-1 md:grid-cols-2 w-full">
+        
+        <!-- info part -->
+        <div class="w-full py-10 px-5">
+
+          <h3 class="h3 text-center mb-5 mt-0 text-black">Thanks for choosing the Full Farm CSA!</h3>
+          <p class="mb-3">
+            If you haven't done so already, you can check out our current selection of products <a href="/">here</a>
+            and find out more information about our CSA by visiting <a target="_blank" href="https://deckfamilyfarm.com/full-farm-csa/">ourFAQs page</a>.
+          </p>
+          <p class="mb-3">
+            We encourage all CSA members to visit the Deck Family Farm (in Junction City) at least once
+            during or before their time in the CSA, so come check us out! Our open gate policy is Monday - Saturday
+            during business hours. Let us know when you may be coming and we can arrange a mini tour.
+          </p>
+          
+          <div class="border-b-2 my-8"></div>
+          
+          <p class="mb-8">
+            Our Portland dropsites are currently full. <a target="_blank" href="https://26403a96.sibforms.com/serve/MUIEAEe-Lhh9Ij9OVpUCDzojW-Mdekxfy3xZjo7tka8o97OAN5FCESzSdtZnYvRkQkahzra5SB0It2X_txOn8Osv64fHf6t3Cv15W_S8yXTczZbBQfQ7Z_voZO4w2Q48UtGXYMgQaelSC0ni3_GivthfTK9FvMchpVPz-q7Y2JscpW2VjQjQSGgfNoJ56dxcF6ASqRwLc5Qkpa2S">Join our waitlist</a> 
+            to be notified when a spot opens up. Thank you for understanding and supporting local farms!
+          </p>
+
+          <!-- commented iframe -->
+          {#  <iframe width="540" height="450"#}
+          {#  src="https://26403a96.sibforms.com/serve/MUIEAEe-Lhh9Ij9OVpUCDzojW-Mdekxfy3xZjo7tka8o97OAN5FCESzSdtZnYvRkQkahzra5SB0It2X_txOn8Osv64fHf6t3Cv15W_S8yXTczZbBQfQ7Z_voZO4w2Q48UtGXYMgQaelSC0ni3_GivthfTK9FvMchpVPz-q7Y2JscpW2VjQjQSGgfNoJ56dxcF6ASqRwLc5Qkpa2S"#}
+          {#  frameborder="0" scrolling="auto" allowfullscreen#}
+          {#  style="display: block;margin-left: auto;margin-right: auto;max-width: 100%;"></iframe>#}
+          {#  {% errors_for form %}#}
+          <!-- commented iframe -->
+        </div>
+        <!-- info part -->
+
+
+        <!-- form part -->
+        <div class="w-full py-10 px-5 h-auto overflow-auto" style="height: 35rem;">
+          <div class="text-center mb-10">
+            <h1 class="font-bold text-3xl text-gray-900">REGISTER</h1>
+            <p>Enter your information to register</p>
+          </div>
+          <form action="" method="POST">
+            {% csrf_token %}
+            <fieldset>
+              <div class="flex -mx-3">
+                <div class="w-1/2 px-3 mb-5">
+                  <label for="" class="text-xs font-semibold px-1">First name</label>
+                  <div class="flex">
+                    <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-account-outline text-gray-400 text-lg"></i></div>
+                    <input type="text" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-primary" placeholder="John">
+                  </div>
+                </div>
+                <div class="w-1/2 px-3 mb-5">
+                  <label for="" class="text-xs font-semibold px-1">Last name</label>
+                  <div class="flex">
+                    <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-account-outline text-gray-400 text-lg"></i></div>
+                    <input type="text" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-primary" placeholder="Smith">
+                  </div>
+                </div>
+              </div>
+              <div class="flex -mx-3">
+                <div class="w-full px-3 mb-5">
+                  <label for="" class="text-xs font-semibold px-1">Email</label>
+                  <div class="flex">
+                    <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-email-outline text-gray-400 text-lg"></i></div>
+                    <input type="email" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-primary" placeholder="johnsmith@example.com">
+                  </div>
+                </div>
+              </div>
+              <div class="flex -mx-3">
+                <div class="w-full px-3 mb-5">
+                  <label for="" class="text-xs font-semibold px-1">Password</label>
+                  <div class="flex">
+                    <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-lock-outline text-gray-400 text-lg"></i></div>
+                    <input type="password" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-primary" placeholder="************">
+                  </div>
+                </div>
+              </div>
+              <div class="flex -mx-3">
+                <div class="w-full px-3 mb-5">
+                  <label for="" class="text-xs font-semibold px-1">Confirm password</label>
+                  <div class="flex">
+                    <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-lock-outline text-gray-400 text-lg"></i></div>
+                    <input type="password" class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-primary" placeholder="************">
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <div class="border-b-2 my-8"></div>
+
+            <fieldset>
+              <input type="checkbox" class="appearance-none checked:bg-blue-600 checked:border-transparent ...">
+
+            </fieldset>
+
+
+
+            <div class="flex -mx-3">
+              <div class="w-full px-3 mb-5">
+                <button class="block w-full max-w-xs mx-auto btn-primary text-white rounded-lg px-3 py-3 font-semibold">REGISTER NOW</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!-- form part -->
+        
+
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</main>
+{% endblock main %}
+
+

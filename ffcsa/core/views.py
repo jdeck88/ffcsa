@@ -7,7 +7,7 @@ import stripe
 from dal import autocomplete
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages import error, info, success
@@ -25,6 +25,7 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.decorators.http import require_POST
 from django.views import View
 from django_common import http
+from django.http import JsonResponse
 from mezzanine.conf import settings
 from mezzanine.core.models import CONTENT_STATUS_PUBLISHED
 from mezzanine.utils.email import send_mail_template
@@ -53,6 +54,43 @@ from .utils import (ORDER_CUTOFF_DAY, next_weekday)
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 logger = logging.getLogger(__name__)
+
+
+def home(request, template="home.html"):
+    context = {
+        'settings': settings
+    }
+
+    return TemplateResponse(request, template, context)
+
+
+def password_reset_verify(request, uidb36=None, token=None):
+
+    user = authenticate(uidb36=uidb36, token=token, is_active=True)
+
+    if request.method == "POST":
+        if not user:
+            return JsonResponse({"detail": "Not allowed"}, status=400)
+
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+
+        if not body["password"] == body["password2"]:
+            return JsonResponse({"detail": "Passwords does not match"}, status=400)
+
+        # update user password and ask user to login
+        user.set_password(body["password"])
+        user.save()
+        return JsonResponse({"detail": "Password updated please login"})
+
+
+    if request.user.is_authenticated():
+        return redirect("/")
+
+    template = "accounts/account_password_verify.html"
+    valid_link = True if user else False
+
+    return TemplateResponse(request, template, context={"valid_link": valid_link})
 
 
 def shop_home(request, template="shop_home.html"):
@@ -547,7 +585,7 @@ def stripe_webhooks(request):
                         "Pending Payment Error: That payment already exists: {}".format(existing_payments.first()))
                 else:
                     payment = Payment.objects.create(user=user, amount=amount, date=date, charge_id=charge.id,
-                                                     pending=True)
+                                                     status='Pending')
                     payment.save()
                     payments_url = request.build_absolute_uri(
                         reverse("payments"))
@@ -586,18 +624,19 @@ def stripe_webhooks(request):
                     date = datetime.datetime.fromtimestamp(charge.created)
                     existing_payments = Payment.objects.filter(charge_id=charge.id)
 
-                    if existing_payments.filter(pending=False).exists():
+                    if existing_payments.filter(status__in=['Accepted', 'Failed']).exists():
                         raise AssertionError(
-                            "That payment already exists: {}".format(existing_payments.filter(pending=False).first()))
+                            "That payment already exists: {}".format(
+                                existing_payments.filter(status__in=['Accepted', 'Failed']).first()))
 
                     else:
                         sendFirstPaymentEmail = not Payment.objects.filter(user=user).exists()
-                        payment = existing_payments.filter(pending=True).first()
+                        payment = existing_payments.filter(status='Pending').first()
 
                         if payment is None:
                             payment = Payment.objects.create(user=user, amount=amount, date=date, charge_id=charge.id)
                         else:
-                            payment.pending = False
+                            payment.status = 'Accepted'
 
                         payment.save()
 
@@ -615,10 +654,17 @@ def stripe_webhooks(request):
             charge = event.data.object
             err = charge.failure_message
             payments_url = request.build_absolute_uri(reverse("payments"))
-            created = datetime.datetime.fromtimestamp(
-                charge.created).strftime('%d-%m-%Y')
-            send_failed_payment_email(
-                user, err, charge.amount / 100, created, payments_url)
+            created = datetime.datetime.fromtimestamp(charge.created).strftime('%Y-%m-%d')
+            amount = charge.amount / 100
+
+            payment = Payment.objects.filter(charge_id=charge.id, status='Pending').first()
+            if payment is None:
+                payment = Payment.objects.create(user=user, amount=amount, date=created, charge_id=charge.id, status='Failed')
+            else:
+                payment.status = 'Failed'
+            payment.save()
+
+            send_failed_payment_email(user, err, amount, created, payments_url)
 
         elif event.type == 'customer.source.updated' and event.data.object.object == 'bank_account':
             user = User.objects.filter(
@@ -975,3 +1021,10 @@ class SignRequest(View):
 
     def post(self, request):
         return signrequest.handle_webhook(json.loads(request.body.decode()))
+
+
+@login_required
+def dairy_program(request, template="ffcsa_core/dairy_program.html", extra_context=None):
+    context = {}
+    context.update(extra_context or {})
+    return TemplateResponse(request, template, context)

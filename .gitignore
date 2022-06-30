@@ -4,12 +4,20 @@ static/*
 *.iml
 *.ipynb
 
+media
+
 node_modules
 tmp
+_auto
 
 credentials.json
 token.pickle
 
+webpack-stats-prod.json
+webpack-stats-dev.json
+
+.vscode
+.DS_Store
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -93,6 +101,9 @@ celerybeat-schedule
 
 # dotenv
 .env
+.env.dev
+.env.staging
+.env.production
 
 # virtualenv
 .venv

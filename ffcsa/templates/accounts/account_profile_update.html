@@ -1,142 +1,1069 @@
 {% extends "base.html" %}
-{% load i18n mezzanine_tags ffcsa_core_tags shop_tags %}
+{% load mezzanine_tags shop_tags i18n static %}
 
-{% block meta_title %}{{ title }}{% endblock %}
-{% block title %}{{ title }}{% endblock %}
-{% block body_id %}account{% endblock %}
+<!-- Title -->
+{% block meta_title %}Profile{% endblock %}
 
-{% block breadcrumb_menu %}
-    {{ block.super }}
-    <li>{{ title }}</li>
-{% endblock %}
+<!-- Main Content -->
+{% block main %}
+    <main id="accountSettings" v-cloak>
+        <!-- Call block super -->
+        {{ block.super }}
+        <v-app>
+            <v-main class="grey lighten-5">
+                <v-container class="mb-10">
+                    <v-row no-gutters>
 
-{% block extra_head %}
-    {{ block.super }}
+                        <!-- left side card -->
+                        <v-col cols="12" md="3" class="pa-2">
+                            <v-card>
+                                <v-list>
+                                    <v-subheader>Settings</v-subheader>
+                                    <v-list-item-group v-model="selectedItem" color="primary">
+                                        <v-list-item v-for="(item, i) in items" :key="i"
+                                                     @click="activeSettings=item.key">
+                                            <v-list-item-icon>
+                                                <v-icon v-text="item.icon"></v-icon>
+                                            </v-list-item-icon>
+                                            <v-list-item-content>
+                                                <v-list-item-title v-text="item.text"></v-list-item-title>
+                                            </v-list-item-content>
+                                        </v-list-item>
+                                    </v-list-item-group>
+                                </v-list>
 
-    {#    TODO: figure out why including form.media.js in the extra_js block breaks compressor w/ key not found in manifest #}
-    {{ form.media.js }}
+                            </v-card>
+                        </v-col>
+
+                        <!-- right side card -->
+                        <v-col cols="12" md="9" class="pa-2">
+                            <v-card class="pa-5">
+                                <!-- personal settings -->
+                                <div v-show="activeSettings == 'personal'">
+                                    <h3 class="text-2xl font-bold opacity-40">Personal</h3>
+
+                                    <v-form ref="personalForm" class="grid grid-cols-12 gap-4 mt-10" id="personal-form">
+                                        <!-- first name -->
+                                        <div class="col-span-6">
+                                            <v-text-field label="First name" outlined
+                                                          v-model="user.first_name"></v-text-field>
+                                        </div>
+
+                                        <!-- last name -->
+                                        <div class="col-span-6">
+                                            <v-text-field label="Last name" outlined
+                                                          v-model="user.last_name"></v-text-field>
+                                        </div>
+
+                                        <!-- email -->
+                                        <div class="col-span-12">
+                                            <v-text-field label="Email" outlined v-model="user.email"
+                                                          :rules="[store.state.rules.required, store.state.rules.email]"></v-text-field>
+                                        </div>
+
+                                        <!-- Contact Number -->
+                                        <div class="col-span-6">
+                                            <v-text-field
+                                                    outlined
+                                                    label="Contact Number"
+                                                    v-model="user.profile.phone_number"
+                                                    @input="acceptPhoneNumber"
+                                                    maxlength=12
+                                                    :rules="[store.state.rules.required, store.state.rules.phone]"
+                                            ></v-text-field>
+                                        </div>
+
+                                        <!-- Alternate Contact Number -->
+                                        <div class="col-span-6">
+                                            <v-text-field
+                                                    outlined
+                                                    label="Alternate Contact Number"
+                                                    v-model="user.profile.phone_number_2"
+                                                    @input="acceptPhoneNumber2"
+                                                    maxlength=12
+                                                    :rules="[store.state.rules.phone]"
+                                            ></v-text-field>
+                                        </div>
+
+                                        {#                  <hr class="col-span-12 my-5">#}
+                                        {#        #}
+                                        {#                  <!-- num_adults -->#}
+                                        {#                  <div class="col-span-6">#}
+                                        {#                    <v-text-field label="Number of adults" outlined v-model="user.profile.num_adults"></v-text-field>#}
+                                        {#                  </div>#}
+                                    </v-form>
+
+                                    <!-- save button -->
+                                    <v-btn color="primary" class="font-weight-bold mt-10" :loading="personal.loading"
+                                           @click="saveUser">Update Info
+                                    </v-btn>
+                                </div>
+
+                                <!-- payment -->
+                                <div v-show="activeSettings == 'payment'">
+                                    <h3 class="text-2xl font-bold opacity-40">Payment</h3>
+                                    {% include 'accounts/account_payments.html' %}
+                                </div>
+
+                                <!-- delivery settings -->
+                                <div v-show="activeSettings == 'delivery'">
+                                    <h3 class="text-2xl font-bold opacity-40">Delivery Options</h3>
+
+                                    <form id="delivery-form" class="grid grid-cols-12 gap-4 my-10">
+                                        <!-- Delivery Options -->
+                                        {% if settings.HOME_DELIVERY_ENABLED %}
+                                            <div class="col-span-12">
+                                                <v-switch
+                                                        v-model="user.profile.home_delivery"
+                                                        inset
+                                                        label="Home Delivery"
+                                                        hint="Available in Eugene, Corvallis, and Springfield for a $5 fee. This fee is waived for all orders over $125."
+                                                        persistent-hint
+                                                ></v-switch>
+                                            </div>
+
+                                            <div class="col-span-12" v-if="user.profile.home_delivery"
+                                                 v-observe-visibility="initAutoCompelete()">
+                                                <v-text-field id="address" label="Address" outlined
+                                                              v-model="user.profile.delivery_address"
+                                                              required></v-text-field>
+                                            </div>
+                                        {% endif %}
+
+                                        <!-- Drop Sites -->
+                                        <div class="col-span-12 mt-4">
+                                            <v-combobox
+                                                    outlined
+                                                    v-if="!user.profile.home_delivery"
+                                                    label="Drop Site Location"
+                                                    v-model="user.profile.drop_site"
+                                                    :items="store.state.drop_sites"
+                                                    item-text="description"
+                                                    item-value="description"
+                                                    @input="onChangeDropSite"
+                                                    :return-object="false"
+                                                    :rules="[store.state.rules.required]"
+                                            >
+                                            </v-combobox>
+                                        </div>
+
+                                        <!-- Preferences -->
+                                        <h3 class="col-span-12 text-lg mt-6 mb-3">Preferences</h3>
+
+                                        <div class="col-span-6">
+                                            <v-checkbox
+                                                    v-model="user.profile.plastic_bags"
+                                                    label="Plastic bags"
+                                                    hint="Please pack small items in a plastic bag"
+                                                    persistent-hint
+                                            ></v-checkbox>
+                                        </div>
+
+                                        <div class="col-span-6">
+                                            <v-checkbox
+                                                    v-model="user.profile.weekly_emails"
+                                                    label="Receive Weekly Emails"
+                                                    hint="Receive weekly newsletter and reminder emails"
+                                                    persistent-hint
+                                            ></v-checkbox>
+                                        </div>
+
+                                        <div class="col-span-6">
+                                            <v-checkbox
+                                                    v-model="user.profile.allow_substitutions"
+                                                    label="Allow substitutions"
+                                                    hint="I am okay with substitutions when an item I ordered is no longer available. We do our best to pack what you have ordered, however on occasion crops will not be ready to harvest, etc. We can provide a substitution, or we can credit your account"
+                                                    persistent-hint
+                                            ></v-checkbox>
+                                        </div>
+                                    </form>
+
+                                    <!-- save button -->
+                                    <v-btn color="primary" class="font-weight-bold mt-10" :loading="personal.loading"
+                                           @click="saveUser">Update Info
+                                    </v-btn>
+                                </div>
+
+                                <!-- order history -->
+                                <div v-show="activeSettings == 'orders'">
+                                    <h3 class="text-2xl font-bold opacity-40">Order history</h3>
+
+                                    <orders endpoint="/api/orders" class="mt-5"></orders>
+                                </div>
+
+                                <!-- feed friend -->
+                                <div v-show="activeSettings == 'feed'">
+                                    <h3 class="text-2xl font-bold opacity-40">Feed A Friend</h3>
+
+                                    <form id="feed-form" class="grid grid-cols-12 gap-4 my-10">
+
+                                        <!-- Preferences -->
+                                        <p class="col-span-12 text-sm mt-6 mb-3">
+                                            If you have extra budget in you account this month, you can consider donating to the
+                                            Feed-A-Friend FFCSA fund, <br>which makes it possible for families in need to be able to afford
+                                            membership in the FFCSA.
+                                        </p>
+
+                                        <div class="col-span-6">
+                                            <v-text-field outlined v-model="user.profile.donation_amount"
+                                                          label="Donation Amount" prefix="$" type="number"
+                                                           max="999" required >
+                                            </v-text-field>
+                                        </div>
+                                    </form>
+
+                                    <!-- save button -->
+                                    <v-btn color="primary" class="font-weight-bold mt-10" :loading="personal.loading"
+                                           @click="feedFriend">Donate
+                                    </v-btn>
+                                </div>
+
+                                <!-- change password -->
+                                <div v-show="activeSettings == 'password'">
+                                    <h3 class="text-2xl font-bold opacity-40">Change Password</h3>
+
+                                    <form id="password-form" class="my-10">
+                                        <v-text-field label="Current password" outlined name="cpassword" minlength=6
+                                                      required></v-text-field>
+                                        <v-text-field label="New password" outlined name="password" minlength=6
+                                                      required></v-text-field>
+                                        <v-text-field label="Confirm New password" outlined name="password2" minlength=6
+                                                      required></v-text-field>
+                                    </form>
+
+                                    <!-- save button -->
+                                    <v-btn color="primary" class="font-weight-bold mt-10" :loading="personal.loading"
+                                           @click="changePassword">Change password
+                                    </v-btn>
+                                </div>
+
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                </v-container>
+            </v-main>
+        </v-app>
+
+    </main>
+{% endblock main %}
+
+{% block js %}
     <script type="text/javascript"
             src="https://maps.google.com/maps/api/js?libraries=geometry,places&key={{ settings.GOOGLE_API_KEY }}"></script>
     <script type="text/javascript"
             src="https://cdn.jsdelivr.net/gh/geocodezip/geoxml3@master/polys/geoxml3.js"></script>
+    <script src="{% static 'js/lodash.js' %}"></script>
+    <script src="{% static 'js/ffcsa_core/payments.js' %}"></script>
+
+    <script defer>
+
+        // Stripe
+        const stripe = Stripe('{{ request.STRIPE_API_KEY }}')
+        const elements = stripe.elements({
+            fonts: [
+                {
+                    cssSrc: "https://rsms.me/inter/inter.css"
+                }
+            ],
+            // Stripe's examples are localized to specific languages, but if
+            // you wish to have Elements automatically detect your user's locale,
+            // use `locale: 'auto'` instead.
+            locale: window.__exampleLocale
+        });
+
+        /**
+         * Card Element
+         */
+        const card = elements.create("card", {
+            style: {
+                base: {
+                    color: "#32325D",
+                    fontWeight: 500,
+                    fontFamily: "Inter, Open Sans, Segoe UI, sans-serif",
+                    fontSize: "20px",
+                    fontSmoothing: "antialiased",
+
+                    "::placeholder": {
+                        color: "#CFD7DF"
+                    }
+                },
+                invalid: {
+                    color: "#E25950"
+                }
+            }
+        });
+
+
+        // Payment history component
+        const PaymentComponent = Vue.component('payments', {
+
+            data: function () {
+                return {
+                    payments: [],
+                    count: 0,
+                    next: null,
+                    previous: null,
+                    limit: 5
+                }
+            },
+            props: ['endpoint'],
+            delimiters: ['{', '}'],
+            template: `
+    <div style="min-height: 30rem;">
+      <div class="flex flex-col" style="min-height: 23rem;">
+        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Date
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Amount
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th v-if="!only_payments" scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      notes
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr v-for="payment in payments">
+                    <td class="px-6 py-4 whitespace-nowrap">{payment.date}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">$ {payment.amount}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <!-- Payment failed status -->
+                      <span v-if="payment.status==Failed" class="badge bg-red-100 text-red-800">
+                        Failed
+                      </span>
+                      <!-- Payment pending status -->
+                      <span v-if="payment.status==Pending" class="badge bg-yellow-100 text-yellow-800">
+                        Pending
+                      </span>
+                      <span v-else class="badge bg-green-100 text-green-800">
+                        Success
+                      </span>
+                    </td>
+                    <td v-if="!only_payments" class="px-6 py-4 whitespace-nowrap" style="white-space: break-spaces;">{payment.notes}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page pagination -->
+      <div v-if="next || previous" class="flex justify-center my-3">
+        <a :class="[(previous == null) ? 'pointer-events-none' : '', 'next-prev p-1 pt-2 mr-2']" href="#" @click.prevent="goBack">
+          <i class="fas fa-chevron-left"></i>
+        </a>
+
+        <template v-for="i in pageRange">
+          <p class="mt-1 p-1 mx-1" v-if="i == currentPage">{i}</p>
+          <p v-else class="pagination-page mt-1 p-1 mx-1 font-thin">{i}</p>
+        </template>
+
+        <a :class="[(next == null) ? 'pointer-events-none' : '', 'next-prev p-1 pt-2 mr-2']" href="#" @click.prevent="goNext">
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+      <!-- Page pagination -->
+    </div>
+    `,
+            methods: {
+                async getPaginatedData(url = `${this.endpoint}?limit=${this.limit}`) {
+                    // make sure we are not overpassing the count
+                    if (this.count > 0 && this.offset > this.count) this.offset = this.count - this.limit;
+
+                    try {
+                        const res = await axios.get(url);
+                        this.count = res.data.count;
+                        this.next = res.data.next;
+                        this.previous = res.data.previous;
+                        this.payments = res.data.results;
+                    } catch (error) {
+                        console.log(error.response.data)
+                    }
+                },
+                goBack() {
+                    if (!this.previous) return;
+                    const url = new URL(this.previous)
+                    this.getPaginatedData(url.pathname + url.search)
+                },
+                goNext() {
+                    if (!this.next) return;
+                    const url = new URL(this.next)
+                    this.getPaginatedData(url.pathname + url.search)
+                }
+            },
+            computed: {
+                pages: function () {
+                    return Math.ceil(parseInt(this.count) / parseInt(this.limit))
+                },
+                currentPage: function () {
+                    return Math.ceil((parseInt(this.offset) + parseInt(this.limit)) / parseInt(this.limit))
+                },
+                pageRange: function () {
+                    const pages = Array.from({length: this.pages}, (_, i) => i + 1)
+                    const index = pages.indexOf(this.currentPage);
+
+                    const prev = []
+                    for (i = index; i > 0; i--) {
+                        prev.unshift(i)
+                    }
+
+                    const next = []
+                    for (i = index + 1; i <= pages.length; i++) {
+                        next.push(i)
+                    }
+
+
+                    let total = prev.slice(Math.max(prev.length - 3, 0))
+
+                    for (item in next) {
+                        if (total.length < 6) total.push(next[item])
+                    }
+
+                    // console.log('total', total)
+                    return total
+                },
+                offset: function () {
+                    if (!this.next) return 0;
+                    const url = new URL(this.next);
+                    const offset = parseInt(url.searchParams.get('offset')) - this.limit;
+                    return offset
+                },
+                only_payments: function () {
+                    return this.endpoint.includes('only_payments')
+                }
+
+            },
+            mounted() {
+                this.getPaginatedData()
+            }
+        })
+
+        // Order history component
+        const OrderComponent = Vue.component('orders', {
+
+            data: function () {
+                return {
+                    orders: [],
+                    count: 0,
+                    next: null,
+                    previous: null,
+                    limit: 10
+                }
+            },
+            props: ['endpoint'],
+            delimiters: ['{', '}'],
+            template: `
+    <div style="min-height: 30rem;">
+      <div class="flex flex-col" style="min-height: 23rem;">
+        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+            <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+              <table class="min-w-full divide-y divide-gray-200">
+
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Date
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Order total
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      View invoice
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody class="bg-white divide-y divide-gray-200">
+                  <tr v-for="order in orders">
+                    <td class="px-6 py-4 whitespace-nowrap">{new Date(order.time).toLocaleDateString()}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">$ {order.total}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <span class="btn-white font-normal text-xs" v-html="order.invoice"></span>
+                    </td>
+                  </tr>
+                </tbody>
+
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page pagination -->
+      <div v-if="next || previous" class="flex justify-center my-3">
+        <a :class="[(previous == null) ? 'pointer-events-none' : '', 'next-prev p-1 pt-2 mr-2']" href="#" @click.prevent="goBack">
+          <i class="fas fa-chevron-left"></i>
+        </a>
+
+        <template v-for="i in pageRange">
+          <p class="mt-1 p-1 mx-1" v-if="i == currentPage">{i}</p>
+          <p v-else class="pagination-page mt-1 p-1 mx-1 font-thin">{i}</p>
+        </template>
+
+        <a :class="[(next == null) ? 'pointer-events-none' : '', 'next-prev p-1 pt-2 mr-2']" href="#" @click.prevent="goNext">
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </div>
+      <!-- Page pagination -->
+    </div>
+    `,
+            methods: {
+                async getPaginatedData(url = this.endpoint + `?limit=${this.limit}`) {
+                    // make sure we are not overpassing the count
+                    if (this.count > 0 && this.offset > this.count) this.offset = this.count - this.limit;
+
+                    try {
+                        const res = await axios.get(url);
+                        console.log(res)
+                        this.count = res.data.count;
+                        this.next = res.data.next;
+                        this.previous = res.data.previous;
+                        this.orders = res.data.results;
+                    } catch (error) {
+                        console.log(error.response.data)
+                    }
+                },
+                goBack() {
+                    if (!this.previous) return;
+                    const url = new URL(this.previous)
+                    this.getPaginatedData(url.pathname + url.search)
+                },
+                goNext() {
+                    if (!this.next) return;
+                    const url = new URL(this.next)
+                    this.getPaginatedData(url.pathname + url.search)
+                }
+            },
+            computed: {
+                pages: function () {
+                    return Math.ceil(parseInt(this.count) / parseInt(this.limit))
+                },
+                currentPage: function () {
+                    return Math.ceil((parseInt(this.offset) + parseInt(this.limit)) / parseInt(this.limit))
+                },
+                pageRange: function () {
+                    const pages = Array.from({length: this.pages}, (_, i) => i + 1)
+                    const index = pages.indexOf(this.currentPage);
+
+                    const prev = []
+                    for (i = index; i > 0; i--) {
+                        prev.unshift(i)
+                    }
+
+                    const next = []
+                    for (i = index + 1; i <= pages.length; i++) {
+                        next.push(i)
+                    }
+
+
+                    let total = prev.slice(Math.max(prev.length - 3, 0))
+
+                    for (item in next) {
+                        if (total.length < 6) total.push(next[item])
+                    }
+
+                    // console.log('total', total)
+                    return total
+                },
+                offset: function () {
+                    if (!this.next) return 0;
+                    const url = new URL(this.next);
+                    const offset = parseInt(url.searchParams.get('offset')) - this.limit;
+                    return offset
+                },
+            },
+            mounted() {
+                this.getPaginatedData()
+            }
+        })
+
+
+        const AccountVue = new Vue({
+            el: '#accountSettings',
+            delimiters: ['((', '))'],
+            store,
+            vuetify: new Vuetify(opts),
+            data: {
+                // Current active tab
+                selectedItem: 0,
+                activeSettings: 'personal',
+                items: [
+                    {key: 'personal', text: 'My info', icon: 'mdi-account'},
+                    {key: 'payment', text: 'Payment', icon: 'mdi-credit-card-outline'},
+                    {key: 'delivery', text: 'Delivery Options', icon: 'mdi-truck-delivery-outline'},
+                    {key: 'orders', text: 'Order history', icon: 'mdi-history'},
+                    {key: 'feed', text: 'Feed A Friend', icon: 'mdi-account-multiple-plus'},
+                    {key: 'password', text: 'Change Password', icon: 'mdi-lock-outline'},
+                ],
+
+                // Personal
+                // TODO - might need to update this
+                personal: {
+                    loading: false
+                },
+
+                user: {
+                    id: '',
+                    first_name: '',
+                    last_name: '',
+                    email: '',
+                    profile: {
+                        phone_number: '',
+                        phone_number_2: '',
+                        home_delivery: false,
+                        delivery_notes: '',
+                        drop_site: 'Farm',
+                        plastic_bags: false,
+                        weekly_emails: false,
+                        allow_substitutions: false,
+                        donation_amount: ''
+                    }
+                },
+
+                // Payments
+                // oneTimePayment
+                //
+                {% if user.profile.non_subscribing_member or user.profile.stripe_subscription_id or user.profile.stripe_customer_id and user.profile.ach_status in 'NEW,VERIFYING' %}
+                    oneTimePayment: {
+                        dialog: false,
+                        paymentMethod: 'ACH',
+                        amount: null,
+                        stripeError: null,
+                        success: false,
+                        loading: false
+                    },
+                    // {% endif %}
+
+
+                // VerifyACH
+                //
+                {% if user.profile.payment_method == 'ACH' and user.profile.ach_status == 'NEW' or user.profile.payment_method == 'ACH' and user.profile.ach_status == 'VERIFYING' %}
+                    VerifyACH: {
+                        loading: false
+                    },
+
+                    // newSubscription
+                    // {% elif not user.profile.non_subscribing_member and not user.profile.stripe_subscription_id %}
+                    newSubscription: {
+                        paymentMethod: 'ACH', // ACH || CC
+                        achAccountTypes: [{value: 'individual', text: 'Individual'}, {
+                            value: 'company',
+                            text: 'Company'
+                        }],
+                        achAccountType: 'individual',   // individual || company
+                        stripeError: null,
+                        loading: false
+                    },
+                    // {% endif %}
+
+            },
+            methods: {
+                // get user info
+                async getUser() {
+                    try {
+                        const res = await axios.get(`/api/users/`);
+                        const dropSites = store.state.drop_sites
+                        var dropSiteDescription = undefined
+                        dropSites.forEach(function (item, index) {
+                            if (item.name === res.data.profile.drop_site){
+                                dropSiteDescription = item.description
+                            }
+                        });
+                        if (dropSiteDescription !== undefined) {
+                            res.data.profile.drop_site = dropSiteDescription;
+                        }
+                        this.user = res.data
+                        console.log('user : ', this.user);
+                    } catch (error) {
+                        store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+                    }
+                },
+                // Save user info
+                async saveUser() {
+                    if (!this.$refs.personalForm.validate()) {
+                        return
+                    }
+
+                    try {
+                        this.personal.loading = true
+                        if (this.user.profile.num_adults === 0) this.user.profile.num_adults = 1
+                        const dropSites = store.state.drop_sites
+                        var dataUpdate = this.user
+                        var dropSiteName = undefined
+                        var dropSiteDescription = undefined
+                        dropSites.forEach(function (item, index) {
+                            if (item.description === dataUpdate.profile.drop_site){
+                                dropSiteName = item.name
+                                dropSiteDescription = item.description
+                            }
+                        });
+                        if (dropSiteName !== undefined) {
+                            dataUpdate.profile.drop_site = dropSiteName
+                        }
+                        console.log('saved : ', dataUpdate);
+                        const res = await axios.put(`/api/users/` + this.user.id + '/', data = dataUpdate);
+                        this.user.profile.drop_site = dropSiteDescription
+                        console.log('updated : ', this.user.profile);
+                        store.commit('showAlert')
+
+                        this.personal.loading = false
+                    } catch (error) {
+                        console.log(error)
+                        store.commit('showAlert', {type: 'error', content: error.response.data})
+                        this.personal.loading = false
+                    }
+                },
+                onChangeDropSite(value) {
+                    // save name instead of description of drop sites
+                    const dropSites = store.state.drop_sites
+                    var dropSiteDescription = undefined
+                    dropSites.forEach(function (item, index) {
+                        if (item.name === value){
+                            dropSiteDescription = item.description
+                        }
+                    });
+                    if (dropSiteDescription !== undefined) {
+                        this.user.profile.drop_site = dropSiteDescription
+                    }
+                    console.log('changed : ', this.user.profile)
+                },
+
+
+                // get user payments
+                async getUserPayments() {
+                    try {
+                        // get only_payments
+                        const only_payments_res = await axios.get(`/api/payments/only_payments`);
+                        this.payments.only_payments = only_payments_res.data.results
+                        console.log('payment', only_payments_res.data)
+                    } catch (error) {
+                        console.log(error.response.data)
+
+                    }
+                },
+                // get user credits
+                async getUserCredits() {
+                    try {
+                        // get only_credits
+                        const only_credits_res = await axios.get(`/api/payments/only_credits`);
+                        this.payments.only_credits = only_credits_res.data.results
+
+                    } catch (error) {
+                        console.log(error.response.data)
+
+                    }
+                },
+
+
+                // oneTimePayment
+                //
+                {% if user.profile.non_subscribing_member or user.profile.stripe_subscription_id or user.profile.stripe_customer_id and user.profile.ach_status in 'NEW,VERIFYING' %}
+                    async OPT_Pay() {
+                        // One time payment pay function
+                        const oneTimePayment = document.getElementById('oneTimePayment')
+                        if (oneTimePayment.reportValidity()) {
+                            this.oneTimePayment.loading = true
+
+                            // Get stripe card token if user using a card
+                            if (this.oneTimePayment.paymentMethod == 'CC') {
+                                stripe.createToken(card).then(async (result) => {
+                                    if (result.error) {
+                                        // Inform the customer that there was an error.
+                                        console.log(result.error.message)
+                                        this.oneTimePayment.stripeError = result.error.message;
+                                        this.oneTimePayment.loading = false
+                                    } else {
+                                        // Send the token to your server.
+                                        this.oneTimePayment.stripeError = null;
+
+                                        try {
+                                            const res = await axios.post('/api/pay/one_time_payment/', {
+                                                stripeToken: result.token.id,
+                                                amount: parseFloat(this.oneTimePayment.amount)
+                                            });
+
+                                            // Show success message
+                                            // store.commit('showAlert', {type: 'success', content: res.data.detail})
+                                            this.oneTimePayment.success = true
+
+                                        } catch (error) {
+                                            // store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+                                            this.oneTimePayment.stripeError = error.response.data.detail;
+
+                                        }
+
+                                        this.oneTimePayment.loading = false
+                                    }
+                                });
+                            } else {
+                                try {
+                                    const res = await axios.post('/api/pay/one_time_payment/', {amount: parseFloat(this.oneTimePayment.amount)});
+                                    store.commit('showAlert', {type: 'error', content: res.data.detail})
+                                    this.oneTimePayment.dialog = false
+                                } catch (error) {
+                                    // store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+                                    this.oneTimePayment.stripeError = error.response.data.detail;
+                                }
+                                this.oneTimePayment.loading = false
+                            }
+                        }
+                    },
+                    // {% endif %}
+
+                // VerifyACH
+                //
+                {% if user.profile.payment_method == 'ACH' and user.profile.ach_status == 'NEW' or user.profile.payment_method == 'ACH' and user.profile.ach_status == 'VERIFYING' %}
+                    async Verify_ACH() {
+                        const VerifyACH = document.getElementById('VerifyACH');
+                        if (VerifyACH.reportValidity()) {
+                            this.VerifyACH.loading = true
+
+                            try {
+                                const res = await axios.post('/api/pay/verify_ach_deposits/', {
+                                    amount1: VerifyACH.amount1.value,
+                                    amount2: VerifyACH.amount2.value
+                                })
+
+                                store.commit('showAlert', {type: 'error', content: res.data.detail})
+                                setTimeout(() => location.reload(), 20000)
+
+                            } catch (error) {
+                                store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+                            }
+                            this.VerifyACH.loading = false
+                        }
+                    },
+
+                    // newSubscription
+                    // {% elif not user.profile.non_subscribing_member and not user.profile.stripe_subscription_id %}
+                    async subscribe() {
+                        const newSubscription = document.getElementById('newSubscription');
+                        if (newSubscription.reportValidity()) {
+                            this.newSubscription.loading = true;
+                            fd = new FormData(newSubscription)
+                            var data = {
+                                country: 'us',
+                                currency: 'usd',
+                                routing_number: fd.get('achRoutingNumber'),
+                                account_number: fd.get('achAccountNumber'),
+                                account_holder_name: fd.get('achAccountName'),
+                                account_holder_type: this.newSubscription.achAccountType
+                            }
+                            promise = stripe.createToken('bank_account', data).then(async (result) => {
+                                if (result.error) {
+                                    console.log(result.error.message)
+                                    this.newSubscription.stripeError = result.error.message;
+                                } else {
+                                    this.newSubscription.stripeError = null;
+                                    try {
+                                        const res = await axios.post('/api/pay/subscribe/', {
+                                            stripeToken: result.token.id,
+                                            amount: parseFloat(fd.get('amount')),
+                                            paymentType: fd.get('paymentType')
+                                        });
+                                        // NavVue.show_msg(res.data.detail)
+                                        // setTimeout(() => location.reload(), 10000)
+                                        location.reload()
+                                        // TODO -> store the message in browser and show it after reload
+                                    } catch (error) {
+                                        store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+                                    }
+                                }
+
+                                this.newSubscription.loading = false;
+                            })
+
+                        }
+                    },
+                    // {% endif %}
+
+                // Update password
+                async changePassword() {
+                    const form = document.getElementById(`${this.activeSettings}-form`);
+                    if (!form.reportValidity()) return
+
+                    const formData = new FormData(form);
+
+                    try {
+                        this.personal.loading = true
+                        const res = await axios.post(`/api/users//change_password/`, formData);
+                        store.commit('showAlert')
+                        this.personal.loading = false
+                        location.reload()
+                    } catch (error) {
+                        console.log(error.response.data)
+                        store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+                        this.personal.loading = false
+                    }
+                },
+
+
+                acceptPhoneNumber(e) {
+                    // accept only numbers and format them like 999-999-9999
+                    const x = this.user.profile.phone_number.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+                    this.user.profile.phone_number = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
+                },
+                acceptPhoneNumber2(e) {
+                    // accept only numbers and format them like 999-999-9999
+                    const x = this.user.profile.phone_number_2.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+                    this.user.profile.phone_number_2 = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
+                },
+                async feedFriend() {
+                    const form = document.getElementById(`${this.activeSettings}-form`);
+                    if (!form.reportValidity()) return
+                    console.log("Feed a Friend Function");
+
+                    const formData = new FormData(form);
+                    console.log('form : ', form);
+
+                    try {
+                        this.personal.loading = true
+                        const res = await axios.post(`/api/donate/`,data={amount: this.user.profile.donation_amount});
+                        store.commit('showAlert')
+                        this.personal.loading = false
+                        location.reload()
+                    } catch (error) {
+                        console.log(error.response.data)
+                        store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+                        this.personal.loading = false
+                    }
+                },
+
+            },
+
+            watch: {
+                // activeSettings
+                'activeSettings': function (val) {
+                    console.log(val)
+                    // sync query params with url
+                    const params = new URLSearchParams(location.search);
+                    params.set('section', val);
+                    window.history.replaceState({}, '', `${location.pathname}?${params.toString()}`);
+
+
+                },
+                // Onetime Payment
+                'oneTimePayment.dialog': function (val) {
+                    // mount the card ui elements when method is CC
+                    console.info(val)
+                    if (val == false) {
+                        card.unmount()
+                        this.oneTimePayment.success = false
+                        this.oneTimePayment.stripeError = null
+                        this.oneTimePayment.amount = null
+
+                    }
+                },
+                'oneTimePayment.paymentMethod': function (val) {
+                    // mount the card ui elements when method is CC
+                    if (val == 'CC') {
+                        card.unmount()
+                        card.mount('#one-time-payment-card')
+                    }
+                },
+                // new subscription
+                'newSubscription.paymentMethod': function (val) {
+                    // mount the card ui elements when method is CC
+                    if (val == 'CC') {
+                        card.unmount()
+                        card.mount('#new-subscription-payment-card')
+                    }
+                },
+            },
+
+            mounted() {
+                this.getUser()
+                // this.getUserPayments()
+                // this.getUserCredits()
+
+                // Sync URL params
+                const url = new URL(location.href);
+                const section = url.searchParams.get("section");
+                const sectionList = this.items.map(item => item.key)
+                if (section !== null && sectionList.includes(section)) {
+                    this.selectedItem = sectionList.indexOf(section) || 0
+                    this.activeSettings = section || 'personal'
+                }
+
+            }
+        })
+    </script>
+
+    <script id="initAddressAutoCompelete">
+        function initAutoCompelete() {
+            // Init address auto compelete
+
+            // container IS finished rendering to the DOM
+            const geoXml = new geoXML3.parser()
+            geoXml.parse(static_url + 'docs/delivery_area.kml')
+
+            // default bounds
+            const defaultBounds = new google.maps.LatLngBounds(new google.maps.LatLng(44.222193, -123.207548))
+
+            const options = {
+                bounds: defaultBounds,
+                types: ['address'],
+            }
+
+            const addressInput = document.getElementById('address')
+            const autocomplete = new google.maps.places.Autocomplete(addressInput, options)
+            autocomplete.addListener('place_changed', function () {
+                const place = autocomplete.getPlace();
+                if (!place) {
+                    // return error message
+                }
+
+                // Set delivery_address value
+                AccountVue.user.profile.delivery_address = place.formatted_address
+
+                let success = false
+
+                for (var i = 0; i < geoXml.docs[0].gpolygons.length; i++) {
+                    if (google.maps.geometry.poly.containsLocation(place.geometry.location, geoXml.docs[0].gpolygons[i])) {
+                        success = true
+
+                        // Check if we are maxed out for the zip code
+                        zip = null
+                        place.address_components.forEach(function (c) {
+                            if (c.types.includes('postal_code')) {
+                                zip = c.long_name
+                                return
+                            }
+                        })
+
+                        $.ajax('/zip-check/' + zip)
+                            .done(function (data) {
+                                if (data.is_full) {
+                                    success = false
+                                    var errMsg = 'Unfortunately, our delivery route is full and we can not offer home delivery to your zip code at this time. Please check again at a later date as members change drop sites from time-to-time. You can also contact us to be notified when a spot opens up!'
+                                    store.commit('showAlert', {type: 'error', content: errMsg})
+                                }
+                            })
+                            .fail(function () {
+                                success = false
+                                var errMsg = 'An error occurred. Please try again later. Please contact us if this problem persists.'
+                                store.commit('showAlert', {type: 'error', content: errMsg})
+                            })
+                    }
+                }
+
+                // we don't deliver to this address
+                if (!success) {
+                    var errMsg = 'We do not currently offer delivery service to this address. Please contact us to be notified when our delivery options expand.'
+                    store.commit('showAlert', {type: 'error', content: errMsg})
+                }
+            })
+        }
+    </script>
 {% endblock %}
-
-
-{% block main %}
-
-    {% errors_for form %}
-
-    {% include 'ffcsa_core/includes/membership_agreement_alert.html' %}
-
-    <form class="update-profile-form" method="post"{% if form.is_multipart %} enctype="multipart/form-data"{% endif %}>
-        {% nevercache %}
-            {% csrf_token %}
-        {% endnevercache %}
-
-        <div class="panel panel-default">
-            <div class="panel-body">
-                {% is_order_cycle as is_order_cycle %}
-                {% if valid_dropsite and not is_order_cycle %}
-                    <p class="alert alert-warning">Any changes you make will not take affect until the next order
-                        cycle.
-                        If you have an urgent drop site change, send us an email to <a
-                                href="mailto:fullfarmcsa@deckfamilyfarm.com">fullfarmcsa@deckfamilyfarm.com</a>
-                        and we will see if we can accommodate your request. However, we greatly appreciate if you
-                        are able to pickup at your selected drop site this week.
-                    </p>
-                {% endif %}
-                {% if not request.user.profile.join_dairy_program %}
-                    <p class="alert alert-warning">If you would like to start ordering dairy products and join the Raw
-                        Dairy Program, send us an email to <a href="mailto:fullfarmcsa@deckfamilyfarm.com">fullfarmcsa@deckfamilyfarm.com</a>
-                        and we will get you setup.
-                    </p>
-                {% endif %}
-
-                <fieldset>
-                    <legend>Delivery Options</legend>
-                    {% if settings.HOME_DELIVERY_ENABLED %}
-                        {% with form.home_delivery as widget %}
-                            <div class="mb-2">
-                                <div class="form-switch inline-block align-middle">
-                                    <input type="checkbox" name="{{ widget.name }}" id="{{ widget.id_for_label }}"
-                                           class="form-switch-checkbox"
-                                           {% if widget.value %}checked{% endif %}/>
-                                    <label class="form-switch-label" for="{{ widget.id_for_label }}"></label>
-                                </div>
-                                <label class=""
-                                       for="{{ widget.id_for_label }}">{{ widget.label }}</label>
-                                <span class="block text-gray-600">{{ widget.help_text }}</span>
-                            </div>
-                        {% endwith %}
-                        <div id="delivery_information" style="display: none">
-                            {% with form.delivery_address as field %}
-                                <div class="form-group input_{{ field.id_for_label }} {% if field.errors %} has-error {% endif %}">
-                                    <label class="control-label block"
-                                           for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                    {{ field }}
-                                    {% if field.errors %}
-                                        <p class="help-block">
-                                            {% for e in field.errors %}
-                                                {% if not forloop.first %} / {% endif %}{{ e }}
-                                            {% endfor %}
-                                        </p>
-                                    {% endif %}
-                                    <button type="button" id="change_address" class="btn btn-default btn-medium mb-3">Change</button>
-                                </div>
-                            {% endwith %}
-                            <div class="alert alert-warning hidden" id="save-alert">Click "Save" at the bottom of the
-                                page to save your changes.
-                            </div>
-                            {% render_field form.delivery_notes %}
-                        </div>
-                    {% endif %}
-                    {% render_field form.drop_site %}
-                </fieldset>
-                <fieldset>
-                    <legend>Preferences</legend>
-                    {% render_field form.plastic_bags %}
-                    {% render_field form.allow_substitutions %}
-                    {% render_field form.weekly_emails %}
-                </fieldset>
-            </div>
-        </div>
-
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <fieldset>
-                    <legend>Contact Information</legend>
-                    {% render_field form.first_name %}
-                    {% render_field form.last_name %}
-                    {% render_field form.email %}
-                    {% render_field form.phone_number %}
-                    {% render_field form.phone_number_2 %}
-                </fieldset>
-            </div>
-        </div>
-
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <fieldset>
-                    <legend>Change Password</legend>
-                    {% render_field form.password1 %}
-                    {% render_field form.password2 %}
-                </fieldset>
-            </div>
-        </div>
-
-
-        {# These are hidden fields that must be rendered so the field isn't reset upon save #}
-        {% render_field form.join_dairy_program %}
-        {% render_field form.payment_agreement %}
-        {% render_field form.num_adults %}
-
-        <div class="form-actions">
-            {% block account_form_actions %}
-                <input class="btn btn-primary btn-lg pull-right" type="submit" value="Save">
-            {% endblock %}
-        </div>
-    </form>
-
-    {% include "ffcsa_core/includes/address-check_modal.html" %}
-{% endblock %}
-

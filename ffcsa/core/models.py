@@ -227,7 +227,8 @@ class Payment(models.Model):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
     date = models.DateField('Payment Date', default=datetime.date.today)
     amount = models.DecimalField('Amount', max_digits=10, decimal_places=2)
-    pending = models.BooleanField('Pending', default=False)
+    status = models.CharField(default='Accepted', max_length=50,
+                              choices=(("Pending", "Pending"), ("Accepted", "Accepted"), ("Failed", "Failed")))
     notes = models.TextField('Notes', null=True, blank=True)
     charge_id = models.CharField(max_length=255, null=True, blank=True)
     is_credit = models.BooleanField(default=False)

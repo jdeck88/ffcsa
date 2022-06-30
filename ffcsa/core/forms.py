@@ -114,9 +114,9 @@ class ProfileForm(accounts_forms.ProfileForm):
 
         self.fields['phone_number'].widget.attrs['placeholder'] = '123-456-7890'
         self.fields['phone_number_2'].widget.attrs['placeholder'] = '123-456-7890'
-        self.fields['drop_site'] = forms.ChoiceField(widget=DropsiteSelectWidget(),
-                                                     choices=dropsites.DROPSITE_CHOICES, label="Drop Site Location")
-                                                     # help_text="Our Portland dropsites are currently full. <a target='_blank' href='https://26403a96.sibforms.com/serve/MUIEAEe-Lhh9Ij9OVpUCDzojW-Mdekxfy3xZjo7tka8o97OAN5FCESzSdtZnYvRkQkahzra5SB0It2X_txOn8Osv64fHf6t3Cv15W_S8yXTczZbBQfQ7Z_voZO4w2Q48UtGXYMgQaelSC0ni3_GivthfTK9FvMchpVPz-q7Y2JscpW2VjQjQSGgfNoJ56dxcF6ASqRwLc5Qkpa2S'>Join our waitlist</a> to be notified when a spot opens up.")
+        # self.fields['drop_site'] = forms.ChoiceField(widget=DropsiteSelectWidget(),
+        #                                              choices=dropsites.DROPSITE_CHOICES, label="Drop Site Location",
+        #                                              help_text="Our Portland dropsites are currently full. <a target='_blank' href='https://26403a96.sibforms.com/serve/MUIEAEe-Lhh9Ij9OVpUCDzojW-Mdekxfy3xZjo7tka8o97OAN5FCESzSdtZnYvRkQkahzra5SB0It2X_txOn8Osv64fHf6t3Cv15W_S8yXTczZbBQfQ7Z_voZO4w2Q48UtGXYMgQaelSC0ni3_GivthfTK9FvMchpVPz-q7Y2JscpW2VjQjQSGgfNoJ56dxcF6ASqRwLc5Qkpa2S'>Join our waitlist</a> to be notified when a spot opens up.")
 
         if self.instance.id is not None:
             self.initial['drop_site'] = self.instance.profile.drop_site
@@ -128,8 +128,8 @@ class ProfileForm(accounts_forms.ProfileForm):
                       "for 6 months, with a minimum payment of $172 per month.")
 
             # self.fields[''] = forms.FileField(label="Signed Member Product Liability Agreement",
-            self.fields['invite_code'] = forms.CharField(label="Invite Code (Portland dropsites only)",
-                                                         required=False)
+            # self.fields['invite_code'] = forms.CharField(label="Invite Code (Portland dropsites only)",
+            #                                              required=False)
             self.fields['best_time_to_reach'] = forms.CharField(label="What is the best time to reach you?",
                                                                 required=True)
             self.fields['communication_method'] = forms.ChoiceField(
