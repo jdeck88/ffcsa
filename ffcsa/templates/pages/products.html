@@ -20,6 +20,9 @@
         .hover-trigger a {
             color: #e16231 !important;
         }
+        .mobile-shop-menu .v-expansion-panel-header__icon {
+            padding-left: 32px !important;
+        }
     </style>
 {% endblock %}
 
@@ -50,7 +53,7 @@
       <section class="md:flex justify-center mt-10 text-green md:text-xl font-bold">
 
        <template v-if="isMobile()">
-          <v-expansion-panels focusable class="mb-5">
+          <v-expansion-panels focusable class="mb-5 mobile-shop-menu">
             <v-expansion-panel v-for="category in categories">
               <v-expansion-panel-header>
                     <v-btn text small color="primary" @click.native.stop="selectedCategory=category.title; page=1" class="text-base font-weight-bold" :class="[categorySelected(category.title), 'hover:text-primary block']">
