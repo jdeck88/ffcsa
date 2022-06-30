@@ -163,7 +163,7 @@
 
             <!-- content -->
             <v-virtual-scroll v-if="store.state.is_authenticated" class="mt-2"
-                              :items="store.state.cart.items" :item-height="130">
+                              :items="store.state.cart.items" :item-height="130" style="height: calc(100% - 15em)">
                 <template v-slot:default="{ item }">
                     <v-row class="mt-1">
                         <v-col sm="3" class="p-0 pl-3">
