@@ -258,8 +258,8 @@ class ProductVariation(with_metaclass(ProductVariationMetaclass, Priced)):
     # on_delete=models.SET_NULL, blank=True,
     # null=True)
 
-    unit = models.CharField(max_length=200, blank=True, null=True)
-    weight = models.CharField(max_length=200, blank=True, null=True)
+    unit = models.CharField(max_length=200, blank=True, null=True, help_text="Displays after the prices. Ex. $20 / {unit}")
+    weight = models.CharField("Amount/Weight", max_length=200, blank=True, null=True, help_text="Displays on the bottom corner of the product image")
     objects = managers.ProductVariationManager()
 
     class Meta:

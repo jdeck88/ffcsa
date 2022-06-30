@@ -58,9 +58,7 @@ class ProductVariationDataSerializer(serializers.ModelSerializer):
     def get_addable(self, obj):
         # if number_in_stock is None means that the product amount
         # is unlimited
-        if (is_unlimited := obj.number_in_stock is None):
-            return True
-        ...
+        return obj.number_in_stock is None or obj.number_in_stock > 0
 
 
 class ProductDataSerializer(serializers.ModelSerializer):

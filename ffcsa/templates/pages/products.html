@@ -119,14 +119,51 @@
               </v-alert>
             </v-container>
           </template>
-      {% elif not user_on_order_cycle %}
+      {% elif not user.profile.signed_membership_agreement %}
           <template>
               <v-container class="py-0">
-                  <v-alert class="mb-0" type="info" dense>
-                      Your next order period is from {% order_period_start %} to {% order_period_end %}
+                  <v-alert class="mb-0" type="warning" dense>
+                      You will need to sign our Membership Agreement before you can order. You should
+                      have received an email with this document upon signup.
+                      <v-btn small color="green" dark class="font-weight-bold ml-3" href="{% url "signrequest" %}">
+                          Re-Send
+                      </v-btn>
                   </v-alert>
               </v-container>
           </template>
+      {% else %}
+          {% if not valid_dropsite %}
+              <template>
+                  <v-container class="py-0">
+                      <v-alert class="mb-0" type="error" dense>
+                          Your dropsite is no longer available.
+                          <v-btn small color="primary" dark class="font-weight-bold mx-3" href="{% url "profile_update" %}?section=delivery">
+                              Change It!
+                          </v-btn>
+                      </v-alert>
+                  </v-container>
+              </template>
+          {% endif %}
+          {% if user.profile.join_dairy_program and not user.profile.can_order_dairy %}
+              <template>
+                  <v-container class="py-0">
+                      <v-alert class="mb-0" type="warning" dense>
+                          <strong>You are not yet able to order RAW dairy products.</strong>
+                          <br/> Our Dairy Manager will be reaching out soon to go over a few points about our Raw Dairy Program. After
+                          that conversation, you will be add dairy products to your order.
+                      </v-alert>
+                  </v-container>
+              </template>
+          {% endif %}
+          {% if not user_on_order_cycle %}
+              <template>
+                  <v-container class="py-0">
+                      <v-alert class="mb-0" type="info" dense>
+                          Your next order period is from {% order_period_start %} to {% order_period_end %}
+                      </v-alert>
+                  </v-container>
+              </template>
+          {% endif %}
       {% endif %}
 
 
@@ -174,13 +211,20 @@
 
                 <!-- add to cart btn -->
                 <v-col sm="6">
-                  <template v-if="store.state.is_authenticated">
-                    <template v-if="product.has_in_stock_variations">
-                      <template v-if="product.variations.length == 1">
-                        <v-btn block color="brown_lightest" elevation="0" x-large {% if not user_on_order_cycle %}disabled{% endif %} @click="App.addToCart(product.variations[0]);getProducts()">ADD TO CART</v-btn>
+                  <template v-if="store.state.can_order">
+                    <template v-if="product.is_dairy && !store.state.can_order_dairy">
+                        {% if not request.user.profile.join_dairy_program %}
+                            <p class="text-center text-red-700 mb-0">Ask us about our Raw Dairy program to order.</p>
+                        {% else %}
+                            <v-btn block color="bg-orange-lighter" elevation="0" x-large disabled >ADD TO CART</v-btn>
+                        {% endif %}
                     </template>
+                    <template v-else-if="product.has_in_stock_variations">
+                      <template v-if="product.variations.length == 1">
+                        <v-btn block color="bg-orange-lighter" elevation="0" x-large @click="App.addToCart(product.variations[0]);getProducts()">ADD TO CART</v-btn>
+                      </template>
                       <template v-else>
-                        <v-btn block color="brown_lightest" elevation="0" x-large @click="showProduct(product)">CHOOSE OPTION</v-btn>
+                        <v-btn block color="bg-orange-lighter" elevation="0" x-large @click="showProduct(product)">CHOOSE OPTION</v-btn>
                       </template>
                     </template>
                     <template v-else>
@@ -189,7 +233,7 @@
                   </template>
 
                   <template v-else>
-                      <v-btn disabled block color="brown_lightest" elevation="0" x-large @click="App.addToCart(product.variations[0]);getProducts()">ADD TO CART</v-btn>
+                      <v-btn disabled block color="bg-orange-lighter" elevation="0" x-large @click="App.addToCart(product.variations[0]);getProducts()">ADD TO CART</v-btn>
                   </template>
 
                 </v-col>
@@ -264,26 +308,6 @@
                             <template v-for="variation in currentProduct.variations">
                                 <!-- Variation price -->
                                 <v-col cols="12" md="8" class="brown_darkest--text">
-                                  <template v-if="variation.addable">
-                                    <p class="mb-0">
-                                      <span class="text-h5">$((variation.unit_price))</span>
-                                      <span v-if="variation.unit">/(( variation.unit)) </span>
-                                      <span class="text-lg ml-8">(( variation.title ))</span>
-                                    </p>
-                                      <p class="mb-0">
-                                          <span class="text-base float-left">((variation.weight))</span>
-                                          <span class="text-base text-red-400 float-right">((variation.live_num_in_stock)) AVAILABLE</span>
-                                      </p>
-                                      <p class="mb-0">
-                                          <span class="text-green-700"><br>((variation.short_description))</span>
-                                      </p>
-                                  </template>
-
-                                  <template v-else-if="!variation.live_num_in_stock">
-                                    <p class="text-red-1">NOT AVAILABLE</p>
-                                  </template>
-
-                                  <template v-else>
                                     <p class="mb-0">
                                       <span class="text-h5">$((variation.unit_price))</span>
                                       <span v-if="variation.unit">/(( variation.unit )) </span>
@@ -291,33 +315,37 @@
                                     </p>
                                     <p class="mb-0">
                                       <span class="text-base float-left">((variation.weight))</span>
-                                      <span v-if="variation.live_num_in_stock < 5" class="text-base text-red-400 float-right">((variation.live_num_in_stock)) AVAILABLE</span>
-                                      <span v-if="variation.live_num_in_stock >= 5" class="text-base text-red-400 float-right">((variation.live_num_in_stock)) AVAILABLE</span>
+
+                                      <span v-if="variation.live_num_in_stock == 0" class="text-base text-red-600 float-right">NOT AVAILABLE</span>
+                                      <span v-else-if="variation.live_num_in_stock == null" class="text-base text-green-600 float-right"></span>
+                                      <span v-else-if="variation.live_num_in_stock < 5" class="text-base text-red-600 float-right">((variation.live_num_in_stock)) AVAILABLE</span>
+                                      <span v-else-if="variation.live_num_in_stock >= 5" class="text-base text-green-600 float-right">((variation.live_num_in_stock)) AVAILABLE</span>
                                     </p>
                                     <p class="mb-0">
                                       <span class="text-green-700"><br>((variation.short_description))</span>
                                     </p>
-                                  </template>
                                 </v-col>
                                 <!-- Variation action -->
                                 <v-col cols="12" md="4" class="text-right">
-                                  <template v-if="store.state.is_authenticated">
-                                    <template v-if="variation.addable">
-                                      <v-btn color="brown_lightest" elevation="0" x-large {% if not user_on_order_cycle %}disabled{% endif %} @click="App.addToCart(variation)">ADD TO CART</v-btn>
-                                    </template>
-
-                                    <template v-else-if="!variation.live_num_in_stock">
-                                      <v-btn x-large disabled>OUT OF STOCK</v-btn>
+                                    <template v-if="store.state.can_order">
+                                        <template v-if="currentProduct.is_dairy && !store.state.can_order_dairy">
+                                            {% if not request.user.profile.join_dairy_program %}
+                                                <p class="text-center text-red-700 mb-0">Ask us about our Raw Dairy program to order.</p>
+                                            {% else %}
+                                                <v-btn block color="bg-orange-lighter" elevation="0" x-large disabled >ADD TO CART</v-btn>
+                                            {% endif %}
+                                        </template>
+                                        <template v-else-if="variation.addable">
+                                            <v-btn block color="bg-orange-lighter" elevation="0" x-large @click="App.addToCart(product.variations[0]);getProducts()">ADD TO CART</v-btn>
+                                        </template>
+                                        <template v-else>
+                                            <v-btn block x-large disabled>OUT OF STOCK</v-btn>
+                                        </template>
                                     </template>
 
                                     <template v-else>
-                                      <v-btn color="brown_lightest" elevation="0" x-large {% if not user_on_order_cycle %}disabled{% endif %} @click="App.addToCart(variation)">ADD TO CART</v-btn>
+                                        <v-btn disabled block color="bg-orange-lighter" elevation="0" x-large @click="App.addToCart(product.variations[0]);getProducts()">ADD TO CART</v-btn>
                                     </template>
-                                  </template>
-
-                                  <template v-else>
-                                    <v-btn disabled color="brown_lightest" elevation="0" x-large @click="App.addToCart(variation)">ADD TO CART</v-btn>
-                                  </template>
                                 </v-col>
                             </template>
                          </v-row>

@@ -463,9 +463,13 @@
     <!-- Vue Main App Setup -->
     <script>
         const is_authenticated = JSON.parse('{{ user.is_authenticated|json }}').value;
+        const can_order = JSON.parse('{{ can_order|json }}');
+        const can_order_dairy = JSON.parse('{{ can_order_dairy|json }}');
         // Vuex Store
         const store = new Vuex.Store({
             state: {
+                can_order,
+                can_order_dairy,
                 is_authenticated,
                 cart: {
                     shown: false,
