@@ -450,11 +450,7 @@
 
     watch: {
       currentProduct: function(val, oldVal) {
-        if (val !== null) {
-          this.dialog = true
-        } else {
-          this.dialog = false
-        }
+        this.dialog = val !== null;
       },
 
       query: _.debounce(function() {
@@ -468,7 +464,7 @@
      },
 
       selectedCategory: function(val, oldVal) {
-        if (this.hasMounted) {
+        if (this.hasMounted && val !== '') {
           this.query = ''
           this.getProducts()
           this.scrollToProducts()
