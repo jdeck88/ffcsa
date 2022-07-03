@@ -643,7 +643,7 @@
                         success: false,
                         loading: false
                     },
-                    // {% endif %}
+                // {% endif %}
 
 
                 // VerifyACH
@@ -653,19 +653,34 @@
                         loading: false
                     },
 
-                    // newSubscription
-                    // {% elif not user.profile.non_subscribing_member and not user.profile.stripe_subscription_id %}
-                    newSubscription: {
-                        paymentMethod: 'ACH', // ACH || CC
-                        achAccountTypes: [{value: 'individual', text: 'Individual'}, {
-                            value: 'company',
-                            text: 'Company'
-                        }],
-                        achAccountType: 'individual',   // individual || company
-                        stripeError: null,
-                        loading: false
-                    },
-                    // {% endif %}
+                // newSubscription
+                // {% elif not user.profile.non_subscribing_member and not user.profile.stripe_subscription_id %}
+                newSubscription: {
+                    paymentMethod: 'ACH', // ACH || CC
+                    achAccountTypes: [{value: 'individual', text: 'Individual'}, {
+                        value: 'company',
+                        text: 'Company'
+                    }],
+                    achAccountType: 'individual',   // individual || company
+                    stripeError: null,
+                    loading: false
+                },
+                // newSubscription
+                // {% elif not user.profile.non_subscribing_member %}
+                updatePaymentMethod: {
+                    paymentMethod: 'ACH', // ACH || CC
+                    achAccountTypes: [{value: 'individual', text: 'Individual'}, {
+                        value: 'company',
+                        text: 'Company'
+                    }],
+                    achAccountType: 'individual',   // individual || company
+                    stripeError: null,
+                    loading: false
+                },
+                updatePaymentAmount: {
+                    loading: false
+                },
+                // {% endif %}
 
             },
             methods: {
@@ -724,6 +739,7 @@
                         this.personal.loading = false
                     }
                 },
+                // change DropSite Select
                 onChangeDropSite(value) {
                     // save name instead of description of drop sites
                     const dropSites = store.state.drop_sites
@@ -738,8 +754,6 @@
                     }
                     console.log('changed : ', this.user.profile)
                 },
-
-
                 // get user payments
                 async getUserPayments() {
                     try {
@@ -764,10 +778,7 @@
 
                     }
                 },
-
-
                 // oneTimePayment
-                //
                 {% if user.profile.non_subscribing_member or user.profile.stripe_subscription_id or user.profile.stripe_customer_id and user.profile.ach_status in 'NEW,VERIFYING' %}
                     async OPT_Pay() {
                         // One time payment pay function
@@ -776,7 +787,7 @@
                             this.oneTimePayment.loading = true
 
                             // Get stripe card token if user using a card
-                            if (this.oneTimePayment.paymentMethod == 'CC') {
+                            if (this.oneTimePayment.paymentMethod === 'CC') {
                                 stripe.createToken(card).then(async (result) => {
                                     if (result.error) {
                                         // Inform the customer that there was an error.
@@ -845,13 +856,40 @@
                         }
                     },
 
-                    // newSubscription
-                    // {% elif not user.profile.non_subscribing_member and not user.profile.stripe_subscription_id %}
+                // newSubscription
+                // {% elif not user.profile.non_subscribing_member and not user.profile.stripe_subscription_id %}
                     async subscribe() {
-                        const newSubscription = document.getElementById('newSubscription');
-                        if (newSubscription.reportValidity()) {
-                            this.newSubscription.loading = true;
-                            fd = new FormData(newSubscription)
+                    const newSubscription = document.getElementById('newSubscription');
+                    if (newSubscription.reportValidity()) {
+                        this.newSubscription.loading = true;
+                        fd = new FormData(newSubscription)
+                        if (this.newSubscription.paymentMethod === 'CC') {
+                            stripe.createToken(card).then(async (result) => {
+                                if (result.error) {
+                                    // Inform the customer that there was an error.
+                                    console.log(result.error.message)
+                                    this.newSubscription.stripeError = result.error.message;
+                                    this.newSubscription.loading = false
+                                } else {
+                                    // Send the token to your server.
+                                    this.newSubscription.stripeError = null;
+                                    try {
+                                        const res = await axios.post('/api/pay/subscribe/', {
+                                            stripeToken: result.token.id,
+                                            amount: parseFloat(fd.get('amount')),
+                                            paymentType: this.newSubscription.paymentMethod,
+                                        });
+                                        store.commit('showAlert', {type: 'success', content: res.data.detail})
+                                        location.reload()
+                                    } catch (error) {
+                                        // store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+                                        console.log(error)
+                                        this.newSubscription.stripeError = error.response.data.detail;
+                                    }
+                                    this.newSubscription.loading = false
+                                }
+                            });
+                        }else{
                             var data = {
                                 country: 'us',
                                 currency: 'usd',
@@ -872,21 +910,100 @@
                                             amount: parseFloat(fd.get('amount')),
                                             paymentType: fd.get('paymentType')
                                         });
-                                        // NavVue.show_msg(res.data.detail)
-                                        // setTimeout(() => location.reload(), 10000)
+                                        store.commit('showAlert', {type: 'success', content: res.data.detail})
                                         location.reload()
-                                        // TODO -> store the message in browser and show it after reload
                                     } catch (error) {
                                         store.commit('showAlert', {type: 'error', content: error.response.data.detail})
                                     }
                                 }
-
                                 this.newSubscription.loading = false;
                             })
-
                         }
-                    },
-                    // {% endif %}
+                    }
+                },
+                // {% elif not user.profile.non_subscribing_member %}
+                    async updatePayment() {
+                    const updatePaymentMethod = document.getElementById('updatePaymentMethod');
+                    if (updatePaymentMethod.reportValidity()) {
+                        this.updatePaymentMethod.loading = true;
+                        fd = new FormData(updatePaymentMethod)
+                        if (this.updatePaymentMethod.paymentMethod === 'CC') {
+                            stripe.createToken(card).then(async (result) => {
+                                if (result.error) {
+                                    // Inform the customer that there was an error.
+                                    console.log(result.error.message)
+                                    this.updatePaymentMethod.stripeError = result.error.message;
+                                    this.updatePaymentMethod.loading = false
+                                } else {
+                                    // Send the token to your server.
+                                    this.updatePaymentMethod.stripeError = null;
+                                    try {
+                                        const res = await axios.post('/api/payments/update_payment_method/', {
+                                            stripeToken: result.token.id,
+                                            amount: parseFloat(fd.get('amount')),
+                                            paymentType: this.updatePaymentMethod.paymentMethod,
+                                        });
+                                        store.commit('showAlert', {type: 'success', content: res.data.detail})
+                                        location.reload()
+                                    } catch (error) {
+                                        // store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+                                        console.log(error)
+                                        this.updatePaymentMethod.stripeError = error.response.data.detail;
+                                    }
+                                    this.updatePaymentMethod.loading = false
+                                }
+                            });
+                        }else{
+                            var data = {
+                                country: 'us',
+                                currency: 'usd',
+                                routing_number: fd.get('achRoutingNumber'),
+                                account_number: fd.get('achAccountNumber'),
+                                account_holder_name: fd.get('achAccountName'),
+                                account_holder_type: this.updatePaymentMethod.achAccountType
+                            }
+                            promise = stripe.createToken('bank_account', data).then(async (result) => {
+                                if (result.error) {
+                                    console.log(result.error.message)
+                                    this.updatePaymentMethod.stripeError = result.error.message;
+                                } else {
+                                    this.updatePaymentMethod.stripeError = null;
+                                    try {
+                                        const res = await axios.post('/api/payments/update_payment_method/', {
+                                            stripeToken: result.token.id,
+                                            amount: parseFloat(fd.get('amount')),
+                                            paymentType: fd.get('paymentType')
+                                        });
+                                        store.commit('showAlert', {type: 'success', content: res.data.detail})
+                                        location.reload()
+                                    } catch (error) {
+                                        store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+                                    }
+                                }
+                                this.updatePaymentMethod.loading = false;
+                            })
+                        }
+                    }
+                },
+                    async updateAmountPayment() {
+                    const updatePaymentAmount = document.getElementById('updatePaymentAmount');
+                    if (updatePaymentAmount.reportValidity()) {
+                        this.updatePaymentAmount.loading = true;
+                        fd = new FormData(updatePaymentAmount)
+                        try {
+                            const res = await axios.post('/api/payments/update_monthly_contribution/', {
+                                amount: parseFloat(fd.get('amount')),
+                            });
+                            store.commit('showAlert', {type: 'success', content: res.data.detail})
+                            location.reload()
+                        } catch (error) {
+                            store.commit('showAlert', {type: 'error', content: error.response.data.detail})
+                            console.log(error)
+                        }
+                        this.updatePaymentAmount.loading = false
+                    }
+                },
+                // {% endif %}
 
                 // Update password
                 async changePassword() {
@@ -978,6 +1095,14 @@
                     if (val == 'CC') {
                         card.unmount()
                         card.mount('#new-subscription-payment-card')
+                    }
+                },
+                // update payment method
+                'updatePaymentMethod.paymentMethod': function (val) {
+                    // mount the card ui elements when method is CC
+                    if (val == 'CC') {
+                        card.unmount()
+                        card.mount('#update-payment-method-payment-card')
                     }
                 },
             },

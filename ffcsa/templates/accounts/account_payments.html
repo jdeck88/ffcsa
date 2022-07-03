@@ -53,16 +53,16 @@
             </div>
             <p class="alert-info">This is a one time payment that will be credited to your account.</p>
             {% endif %}
-  
+
             <form v-if="!oneTimePayment.success" action="{% url 'make_payment' %}" method="POST" id="oneTimePayment" class="mt-8">
-              <!-- Amount -->              
+              <!-- Amount -->
               <v-text-field outlined v-model="oneTimePayment.amount" label="Payment Amount" v-model="oneTimePayment.amount" prefix="$" type="number" min="20" max="999" required></v-text-field>
-              
+
               <!-- ACH & non_subscribing_member user -->
               {% if user.profile.payment_method == 'ACH' or user.profile.non_subscribing_member %}
               <template>
                 <h3 class="text-black mt-4">Choose payment method</h3>
-                
+
                 <!-- Payment options Bank/CC -->
                 <v-radio-group v-model="oneTimePayment.paymentMethod">
                   <!-- 1. ACH bank -->
@@ -72,12 +72,12 @@
                   <!-- 2. CreditCard bank -->
                   <v-radio key="2" label="Credit Card" value="CC"></v-radio>
                 </v-radio-group>
-  
+
                 <!-- Credit Card details -->
                 {% with False as isSubscription %}
                 <div v-show="oneTimePayment.paymentMethod == 'CC'" id="one-time-payment-card" class="w-11/12 my-5 mx-auto"></div>
                 {% endwith %}
-  
+
                 <v-checkbox
                   name="chargeAcknowledgement"
                   label="I acknowledge that the above amount will be debited from my Card or Bank Account"
@@ -86,7 +86,7 @@
                 ></v-checkbox>
               </template>
               {% endif %}
-  
+
               <!-- Stripe errors -->
               <div id="OTP-StripeErrors" v-if="oneTimePayment.stripeError" class="alert-danger my-3">((oneTimePayment.stripeError))</div>
             </form>
@@ -138,7 +138,7 @@
           <v-text-field outlined label="Deposit 2" name="amount2" required></v-text-field>
         </v-col>
       </v-row>
-      
+
       <v-btn large color="primary" class="font-weight-bold mt-15" :loading="VerifyACH.loading" @click="Verify_ACH">Verify and Make Payment</v-btn>
     </form>
   </div>
@@ -163,7 +163,7 @@
     <strong>Otherwise,</strong> please complete the following form to setup your subscription.</p>
   {% endif %}
 
-  
+
   <form action="{% url 'payments_subscribe' %}" method="POST" id="newSubscription">
     <!-- Monthly Contribution Amount (minimum $172) >>>>>> payment_amount.html -->
     <div class="mt-2">
@@ -194,7 +194,7 @@
         <!-- 2. CreditCard bank -->
         <v-radio key="2" label="Credit Card" value="CC"></v-radio>
       </v-radio-group>
-      
+
       <!-- ACH details -->
       <div v-show="newSubscription.paymentMethod == 'ACH'" class="mt-10  my-10" id="ach-details">
         <v-row>
@@ -227,7 +227,7 @@
           To validate your bank account, we will make 2 small deposits. Once received, you will need to come back to this page and enter the amount to complete the verification
         </v-alert>
       </div>
-    
+
       <!-- Credit Card details -->
       <div v-show="newSubscription.paymentMethod == 'CC'" class="mt-10">
         {% with True as isSubscription %}
@@ -237,7 +237,7 @@
 
       <div id="OTP-StripeErrors" v-if="newSubscription.stripeError" class="alert-danger mt-5">((newSubscription.stripeError))</div>
     </div>
-    
+
     {% if not user.profile.paid_signup_fee and user.profile.join_dairy_program %}
       <v-checkbox
         name="signupAcknowledgement"
@@ -252,7 +252,7 @@
     {% for error in subscribe_errors %}
       <div class="alert alert-danger">{{ error }}</div>
     {% endfor %}
-    
+
     <v-btn color="primary" class="font-weight-bold mt-15" :loading="newSubscription.loading" @click="subscribe">Subscribe</v-btn>
   </form>
 
@@ -288,31 +288,96 @@
   <!-- update payment method -->
 
   <div class="hidden" id="edit-payment">
-    <form action="{% url 'payments_update' %}" method="POST" id="edit-payment-form" class="form">
-      {% csrf_token %}
-      <input type="hidden" name="amount" value="{{ user.profile.monthly_contribution }}"/>
+    <form action="{% url 'payments_update' %}" method="POST" id="updatePaymentMethod">
+        <!-- Payment method ACH Bank/CC >>>>>> payment_details.html -->
+        <div>
+          <h3 class="text-lg mt-4">Payment method</h3>
 
-      <br/>
-      {% include "ffcsa_core/payment_details.html" %}
+          <v-radio-group v-model="updatePaymentMethod.paymentMethod">
+            <!-- 1. ACH bank -->
+            <v-radio key="1" label="ACH Bank Transfer" value="ACH"></v-radio>
+            <!-- 2. CreditCard bank -->
+            <v-radio key="2" label="Credit Card" value="CC"></v-radio>
+          </v-radio-group>
 
-      <div id="stripeErrors"></div>
+          <!-- ACH details -->
+          <div v-show="updatePaymentMethod.paymentMethod == 'ACH'" class="mt-10  my-10" id="ach-details">
+            <v-row>
+              <v-col cols="12" md="6">
+                <v-text-field label="Name on Bank Account" outlined name="achAccountName" value="{{user.get_full_name}}" required></v-text-field>
+              </v-col>
 
-      <button class="btn btn-info" type="submit">Save</button>
-      <br/>
+              <v-col cols="12" md="6">
+                <v-combobox
+                  v-model="updatePaymentMethod.achAccountType"
+                  label="Bank Account Type"
+                  outlined
+                  :items="updatePaymentMethod.achAccountTypes"
+                  item-text="text"
+                  item-value="value"
+                  :return-object="false"
+                ></v-combobox>
+              </v-col>
+
+              <v-col cols="12" md="6">
+                <v-text-field label="Routing Number" type="number" outlined name="achRoutingNumber" placeholder="123456789" min="9" :required="updatePaymentMethod.paymentMethod == 'ACH'"></v-text-field>
+              </v-col>
+
+              <v-col cols="12" md="6">
+                <v-text-field label="Account Number" type="number" outlined name="achAccountNumber" placeholder="0000987654321" :required="updatePaymentMethod.paymentMethod == 'ACH'"></v-text-field>
+              </v-col>
+            </v-row>
+
+            <v-alert dense border="left" type="info">
+              To validate your bank account, we will make 2 small deposits. Once received, you will need to come back to this page and enter the amount to complete the verification
+            </v-alert>
+          </div>
+
+          <!-- Credit Card details -->
+          <div v-show="updatePaymentMethod.paymentMethod == 'CC'" class="mt-10">
+            {% with True as isSubscription %}
+            <div id="update-payment-method-payment-card"></div>
+            {% endwith %}
+          </div>
+
+          <div id="OTP-StripeErrors" v-if="updatePaymentMethod.stripeError" class="alert-danger mt-5">((updatePaymentMethod.stripeError))</div>
+        </div>
+
+        <div id="stripeErrors"></div>
+        {% for error in subscribe_errors %}
+          <div class="alert alert-danger">{{ error }}</div>
+        {% endfor %}
+
+        <v-btn color="primary" class="font-weight-bold mt-15" :loading="updatePaymentMethod.loading" @click="updatePayment">Update</v-btn>
     </form>
 
-    <!-- update payment amount -->
     <div class="hidden" id="edit-payment-amount">
-      <form action="{% url 'payments_update_amount' %}" method="POST" id="edit-payment-amount-form" class="form">
-        {% csrf_token %}
-        <br/>
-        {% include "ffcsa_core/payment_amount.html" %}
-        <button class="btn btn-info" type="submit">Save</button>
-        <br/>
-      </form>
+     <form action="{% url 'payments_update_amount' %}" method="POST" id="updatePaymentAmount">
+
+      <!-- Monthly Contribution Amount (minimum $172) >>>>>> payment_amount.html -->
+      <br/>
+      {% if user.profile.monthly_contribution %}
+        <v-text-field label="Monthly Contribution Amount (minimum $172)" outlined type="number" name="amount" min="172" value="{{ user.profile.monthly_contribution }}" required></v-text-field>
+      {% else %}
+        <v-text-field label="Monthly Contribution Amount (minimum $172)" outlined type="number" name="amount" min="172" required></v-text-field>
+      {% endif %}
+
+      <!-- <small class="italic px-2">minimum $172</small> -->
+      <div class="mt-3 mb-4">
+        How much should I pay? This amount will be your monthly
+        budget for each month throughout the year, which may include either 4 weeks
+        or 5 weeks of ordering. Although we recommend multiplying your weekly
+        ordering amount by 4.33 (the average number of weeks in a month), you may
+        want to give yourself some extra buffer room for those longer, 5 week
+        months, but you can also top up your account if needed periodically.
+      </div>
+
+      <v-btn color="primary" class="font-weight-bold mt-15" :loading="updatePaymentAmount.loading" @click="updateAmountPayment">Update Amount</v-btn>
+      <br/>
+     </form>
     </div>
   </div>
-  
+
 </section>
 {% endif %}
 

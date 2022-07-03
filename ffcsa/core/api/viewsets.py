@@ -246,11 +246,64 @@ class PaymentViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
+    @list_route(methods=["post"])
+    def update_payment_method(self, request):
+        serializer = UpdatePaymentMethodSerializer(data=request.data, context={"request": request})
+        serializer.is_valid(raise_exception=True)
+
+        user = request.user
+        if not user.profile.stripe_customer_id or not user.profile.stripe_subscription_id:
+            raise NotAcceptable('Could not find your subscription id to update. Please contact the site administrator.')
+
+        try:
+            payment_type = serializer.data.get("paymentType")
+            stripe_token = serializer.data.get("stripeToken")
+            if payment_type == 'CC':
+                customer = stripe.Customer.retrieve(user.profile.stripe_customer_id)
+                customer.source = stripe_token
+                customer.save()
+                # reset this so they don't receive error msg for failed ach verification
+                user.profile.payment_method = 'CC'
+                user.profile.ach_status = None
+                user.profile.save()
+                return Response({"detail": "Your payment method has been updated."})
+            elif payment_type == 'ACH':
+                customer = stripe.Customer.retrieve(user.profile.stripe_customer_id)
+                customer.source = stripe_token
+                customer.save()
+                user.profile.payment_method = 'ACH'
+                user.profile.ach_status = 'VERIFIED' if customer.sources.data[0].status == 'verified' else 'NEW'
+                user.profile.save()
+                return Response({"detail": "Your payment method has been updated."})
+            else:
+                raise NotAcceptable('Unknown Payment Type')
+
+        except Exception as e:
+            raise NotAcceptable(e)
+
+    @list_route(methods=["post"])
+    def update_monthly_contribution(self, request):
+        serializer = UpdatePaymentAmountSerializer(data=request.data, context={"request": request})
+        serializer.is_valid(raise_exception=True)
+
+        user = request.user
+        if not user.profile.stripe_customer_id or not user.profile.stripe_subscription_id:
+            raise NotAcceptable('Could not find your subscription id to update. Please contact the site administrator.')
+        try:
+            amount = serializer.data.get("amount")
+            user.profile.monthly_contribution = Decimal(amount)
+            update_stripe_subscription(user)
+            user.profile.save()
+            return Response({"detail": "Your monthly contribution has been updated."})
+
+        except Exception as e:
+            raise NotAcceptable(e)
+
 
 class PayViewSet(viewsets.ViewSet):
     """Handels all types of user payments"""
 
-    permission_classes = [CanPay]
+    permission_classes = [IsAuthenticated]
 
     # TODO: handle permission classes here
 
@@ -354,6 +407,7 @@ class PayViewSet(viewsets.ViewSet):
     def subscribe(self, request):
         serializer = SubscribeSerializer(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
+        print('data : ', serializer.data)
 
         user = request.user
         amount, stripeToken, paymentType = serializer.data.values()
@@ -380,7 +434,7 @@ class PayViewSet(viewsets.ViewSet):
 
             # Update user profile
             user.profile.payment_method = paymentType
-            user.profile.monthly_contribution = amount
+            user.profile.monthly_contribution = Decimal(amount)
 
             if paymentType == "ACH":
                 user.profile.ach_status = "VERIFIED" if customer.sources.data[0].status == "verified" else "NEW"
@@ -400,7 +454,7 @@ class PayViewSet(viewsets.ViewSet):
                 )
 
         except Exception as e:
-            raise NotAcceptable(e.user_message)
+            raise NotAcceptable(e)
 
 
 class ContacUs(viewsets.ViewSet):

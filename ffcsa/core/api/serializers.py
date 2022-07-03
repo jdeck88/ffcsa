@@ -130,6 +130,15 @@ class NonMemberSerializer(serializers.Serializer):
     stripeToken = serializers.CharField(required=False)
 
 
+class UpdatePaymentMethodSerializer(serializers.Serializer):
+    paymentType = serializers.ChoiceField(choices=("CC", "ACH"))
+    stripeToken = serializers.CharField(required=False)
+
+
+class UpdatePaymentAmountSerializer(serializers.Serializer):
+    amount = serializers.FloatField(min_value=172)
+
+
 # OneTimePayment Serializer
 class OneTimePaymentSerializer(serializers.Serializer):
     amount = serializers.FloatField(min_value=20)
