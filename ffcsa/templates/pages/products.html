@@ -339,7 +339,7 @@
                                             {% endif %}
                                         </template>
                                         <template v-else-if="variation.addable">
-                                            <v-btn block color="bg-orange-lighter" elevation="0" x-large @click="App.addToCart(product.variations[0]);getProducts()">ADD TO CART</v-btn>
+                                            <v-btn block color="bg-orange-lighter" elevation="0" x-large @click="App.addToCart(variation);getProducts()">ADD TO CART</v-btn>
                                         </template>
                                         <template v-else>
                                             <v-btn block x-large disabled>OUT OF STOCK</v-btn>
@@ -347,7 +347,7 @@
                                     </template>
 
                                     <template v-else>
-                                        <v-btn disabled block color="bg-orange-lighter" elevation="0" x-large @click="App.addToCart(product.variations[0]);getProducts()">ADD TO CART</v-btn>
+                                        <v-btn disabled block color="bg-orange-lighter" elevation="0" x-large @click="App.addToCart(variation);getProducts()">ADD TO CART</v-btn>
                                     </template>
                                 </v-col>
                             </template>
