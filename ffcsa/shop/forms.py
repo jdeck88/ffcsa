@@ -581,6 +581,10 @@ class ProductAdminForm(with_metaclass(ProductAdminFormMetaclass,
             if settings.SHOP_USE_UPSELL_PRODUCTS:
                 self.fields["upsell_products"].queryset = queryset
 
+    def clean(self):
+        if 'categories' in self.changed_data and not self.data.get('categories'):
+            error = _("Product does not have a category selected.")
+            raise forms.ValidationError(error)
 
 class ProductVariationAdminForm(forms.ModelForm):
     """

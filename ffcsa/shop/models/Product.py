@@ -63,8 +63,7 @@ class Product(BaseProduct, Priced, RichText, ContentTyped, AdminThumbMixin):
     short_description = models.CharField(_("Short Description"), max_length=100,
                                    null=True, blank=True)
     image = CharField(_("Image"), max_length=100, blank=True, null=True)
-    categories = models.ManyToManyField("Category", blank=True,
-                                        verbose_name=_("Product categories"), related_name='category_products')
+    categories = models.ManyToManyField("Category", verbose_name=_("Product categories"), related_name='category_products')
     date_added = models.DateTimeField(_("Date added"), auto_now_add=True,
                                       null=True)
     related_products = models.ManyToManyField("self",

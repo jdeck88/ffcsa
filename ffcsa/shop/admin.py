@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from copy import deepcopy
 
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.db import transaction
 from django.db.models import ImageField, Q
 from django.utils.encoding import force_text
@@ -28,7 +28,7 @@ from ffcsa.shop.models import (Category, DiscountCode, Order, OrderItem,
                                ProductVariation, Sale, Vendor, VendorProductVariation)
 from ffcsa.shop.models.Cart import CartItem
 from ffcsa.shop.models.Vendor import VendorCartItem
-from ffcsa.shop.models.Product import  ProductVariationUnit
+from ffcsa.shop.models.Product import ProductVariationUnit
 from ffcsa.shop.views import HAS_PDF
 
 """
@@ -249,6 +249,14 @@ class ProductAdmin(nested.NestedModelAdminMixin, ContentTypedAdmin, DisplayableA
             if 'available' in form.changed_data and not obj.available:
                 CartItem.objects.handle_unavailable_variations(obj.variations.all())
 
+        # check that at least 1 published category exists for the product
+        for c in obj.categories.all():
+            if c.published():
+                return
+        self.message_user(request,
+                          'The Product "{}" is not part of a published category. It will not be visible in the shop store.'.format(
+                              obj), messages.WARNING)
+
     def save_formset(self, request, form, formset, change):
         """
 
@@ -347,6 +355,12 @@ class ProductAdmin(nested.NestedModelAdminMixin, ContentTypedAdmin, DisplayableA
 
     @transaction.atomic()
     def changelist_view(self, request, extra_context=None):
+        non_cat_products = Product.objects.filter(categories=None, available=True)
+        if non_cat_products.count() > 0:
+            messages.add_message(request, messages.WARNING,
+                                 'The following products are available, but do not have a category assigned: {}'.format(
+                                     [p.title for p in non_cat_products.all()]))
+
         return super(ProductAdmin, self).changelist_view(request, extra_context=None)
 
     def get_changelist_form(self, request, **kwargs):
