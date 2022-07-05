@@ -311,7 +311,6 @@ class PaymentViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         serializer = self.get_serializer(queryset, many=True)
-        print('data : ', serializer.data)
         return Response(serializer.data)
 
     @list_route(methods=["get"])
@@ -485,7 +484,6 @@ class PayViewSet(viewsets.ViewSet):
     def subscribe(self, request):
         serializer = SubscribeSerializer(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
-        print('data : ', serializer.data)
 
         user = request.user
         amount, stripeToken, paymentType = serializer.data.values()
