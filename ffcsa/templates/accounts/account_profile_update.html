@@ -337,11 +337,11 @@
                     <td class="px-6 py-4 whitespace-nowrap">$ {payment.amount}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <!-- Payment failed status -->
-                      <span v-if="payment.status==Failed" class="badge bg-red-100 text-red-800">
+                      <span v-if="payment.status=='Failed'" class="badge bg-red-100 text-red-800">
                         Failed
                       </span>
                       <!-- Payment pending status -->
-                      <span v-if="payment.status==Pending" class="badge bg-yellow-100 text-yellow-800">
+                      <span v-if="payment.status=='Pending'" class="badge bg-yellow-100 text-yellow-800">
                         Pending
                       </span>
                       <span v-else class="badge bg-green-100 text-green-800">
@@ -429,7 +429,6 @@
                         if (total.length < 6) total.push(next[item])
                     }
 
-                    // console.log('total', total)
                     return total
                 },
                 offset: function () {
@@ -525,7 +524,6 @@
 
                     try {
                         const res = await axios.get(url);
-                        console.log(res)
                         this.count = res.data.count;
                         this.next = res.data.next;
                         this.previous = res.data.previous;
@@ -573,7 +571,6 @@
                         if (total.length < 6) total.push(next[item])
                     }
 
-                    // console.log('total', total)
                     return total
                 },
                 offset: function () {
@@ -699,7 +696,6 @@
                             res.data.profile.drop_site = dropSiteDescription;
                         }
                         this.user = res.data
-                        console.log('user : ', this.user);
                     } catch (error) {
                         store.commit('showAlert', {type: 'error', content: error.response.data.detail})
                     }
@@ -726,10 +722,8 @@
                         if (dropSiteName !== undefined) {
                             dataUpdate.profile.drop_site = dropSiteName
                         }
-                        console.log('saved : ', dataUpdate);
                         const res = await axios.put(`/api/users/` + this.user.id + '/', data = dataUpdate);
                         this.user.profile.drop_site = dropSiteDescription
-                        console.log('updated : ', this.user.profile);
                         store.commit('showAlert')
 
                         this.personal.loading = false
@@ -752,7 +746,6 @@
                     if (dropSiteDescription !== undefined) {
                         this.user.profile.drop_site = dropSiteDescription
                     }
-                    console.log('changed : ', this.user.profile)
                 },
                 // get user payments
                 async getUserPayments() {
@@ -760,10 +753,8 @@
                         // get only_payments
                         const only_payments_res = await axios.get(`/api/payments/only_payments`);
                         this.payments.only_payments = only_payments_res.data.results
-                        console.log('payment', only_payments_res.data)
                     } catch (error) {
                         console.log(error.response.data)
-
                     }
                 },
                 // get user credits
@@ -1042,7 +1033,6 @@
                     console.log("Feed a Friend Function");
 
                     const formData = new FormData(form);
-                    console.log('form : ', form);
 
                     try {
                         this.personal.loading = true
@@ -1109,7 +1099,7 @@
 
             mounted() {
                 this.getUser()
-                // this.getUserPayments()
+                //this.getUserPayments()
                 // this.getUserCredits()
 
                 // Sync URL params
