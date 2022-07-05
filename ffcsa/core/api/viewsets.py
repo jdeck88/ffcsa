@@ -1,14 +1,10 @@
-import datetime
 import requests
 import logging
-import stripe
 from django.contrib import auth
-from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.shortcuts import get_object_or_404
-from django.conf import settings
 from django.urls import reverse
-from django.utils.http import int_to_base36
+from django.utils.http import int_to_base36, urlencode
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.models import Site
 from decimal import Decimal
@@ -17,18 +13,18 @@ from rest_framework import mixins, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.decorators import detail_route, list_route, permission_classes
-from rest_framework.exceptions import NotAcceptable, NotFound
+from rest_framework.decorators import detail_route, list_route
+from rest_framework.exceptions import NotFound
 from mezzanine.utils.urls import next_url
 from mezzanine.utils.email import subject_template
 from signrequest_client.rest import ApiException
 
-from ffcsa.core import sendinblue, signrequest
-from ffcsa.core.api.permissions import IsOwner, CanPay
+from ffcsa.core import signrequest
+from ffcsa.core.api.permissions import IsOwner
 from ffcsa.core.api.serializers import *
 from ffcsa.core.google import add_contact as add_google_contact
 from ffcsa.shop.models import Order
-from ffcsa.core.models import Payment, Address, DropSiteInfo
+from ffcsa.core.models import Payment, DropSiteInfo
 from ffcsa.core.subscriptions import *
 from ffcsa.utils import DictClass
 
@@ -188,7 +184,8 @@ class SignupViewSet(viewsets.ViewSet):
             'num_adults': request.data["profile"]['num_adults'],
             'num_children': request.data["profile"]['num_children'],
             'hear_about_us': request.data["profile"]['hear_about_us'],
-            'payments_url': request.build_absolute_uri(reverse("payments")),
+            'payments_url': '{}?{}'.format(request.build_absolute_uri(reverse("profile_update")),
+                                           urlencode({'section': 'payment'})),
         }
 
         try:
@@ -251,7 +248,7 @@ class LoginViewSet(viewsets.ViewSet):
             token, created = Token.objects.get_or_create(user=user)
             user_serializer = UserSerializer(user)
             return Response({"token": token.key, "user": user_serializer.data})
-        
+
         raise NotAcceptable("Invalid email or password")
 
 
@@ -268,15 +265,15 @@ class ResetPasswordViewSet(viewsets.ViewSet):
                 verification_type = "password_reset_verify"
 
                 verify_url = (
-                    reverse(
-                        verification_type,
-                        kwargs={
-                            "uidb36": int_to_base36(user.id),
-                            "token": default_token_generator.make_token(user),
-                        },
-                    )
-                    + "?next="
-                    + (next_url(request) or "/")
+                        reverse(
+                            verification_type,
+                            kwargs={
+                                "uidb36": int_to_base36(user.id),
+                                "token": default_token_generator.make_token(user),
+                            },
+                        )
+                        + "?next="
+                        + (next_url(request) or "/")
                 )
                 context = {
                     "request": request,
@@ -460,9 +457,9 @@ class PayViewSet(viewsets.ViewSet):
                     return Response(
                         {
                             "detail": "Your account has been verified and your first payment is processing. "
-                            "When your payment has been received, you will receive an email letting "
-                            "you know when your first ordering and pickup dates are. If you do not "
-                            "see this email in the next 5 - 7 business days, please check your spam"
+                                      "When your payment has been received, you will receive an email letting "
+                                      "you know when your first ordering and pickup dates are. If you do not "
+                                      "see this email in the next 5 - 7 business days, please check your spam"
                         }
                     )
                 else:
@@ -472,8 +469,8 @@ class PayViewSet(viewsets.ViewSet):
                     return Response(
                         {
                             "detail": "Congratulations, your account has been verified and your first payment is processing. "
-                            "You will be seeing this amount show up in your member store account in 5 - 7 business "
-                            "days. Your next scheduled payment will be " + next_payment_date
+                                      "You will be seeing this amount show up in your member store account in 5 - 7 business "
+                                      "days. Your next scheduled payment will be " + next_payment_date
                         }
                     )
             else:

@@ -234,7 +234,7 @@
                                                               v-model="user.profile.best_time_to_reach"></v-text-field>
 
                                                 <!-- hear_about_us -->
-                                                <v-textarea outlined label="How did you hear about us? *"></v-textarea>
+                                                <v-textarea outlined label="How did you hear about us? *" v-model="user.profile.hear_about_us"></v-textarea>
 
                                                 {#                    <!-- join_dairy_program -->#}
                                                 {#                    <v-checkbox#}
@@ -368,7 +368,7 @@
                     } catch (error) {
                       console.log(error.response.data)
                       // store.commit('showAlert', {type: 'error', content: error.response.data.detail})
-                      store.commit('showAlert', {type: 'error', content: 'Can not signup user'})
+                      store.commit('showAlert', {type: 'error', content: 'Error occurred during signup.'})
                       this.loading = false
                     }
                 },
