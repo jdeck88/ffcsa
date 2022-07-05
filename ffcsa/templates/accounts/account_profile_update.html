@@ -323,7 +323,7 @@
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Amount
                     </th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th v-if='only_payments' scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
                     </th>
                     <th v-if="!only_payments" scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -335,7 +335,7 @@
                   <tr v-for="payment in payments">
                     <td class="px-6 py-4 whitespace-nowrap">{payment.date}</td>
                     <td class="px-6 py-4 whitespace-nowrap">$ {payment.amount}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">
+                    <td class="px-6 py-4 whitespace-nowrap" v-if='only_payments'>
                       <!-- Payment failed status -->
                       <span v-if="payment.status=='Failed'" class="badge bg-red-100 text-red-800">
                         Failed

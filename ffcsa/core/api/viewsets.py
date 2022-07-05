@@ -300,7 +300,7 @@ class ResetPasswordViewSet(viewsets.ViewSet):
 
 class PaymentViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     serializer_class = PaymentSerializer
-    queryset = Payment.objects.all()
+    queryset = Payment.objects.order_by('-date')
     permission_classes = [IsAuthenticated]
 
     @list_route(methods=["get"])
@@ -311,6 +311,7 @@ class PaymentViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         serializer = self.get_serializer(queryset, many=True)
+        print('data : ', serializer.data)
         return Response(serializer.data)
 
     @list_route(methods=["get"])
