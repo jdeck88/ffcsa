@@ -111,21 +111,23 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         old_order_period_start = get_order_period_for_user(instance.user)
+        home_delivery_changed = instance.home_delivery != validated_data['home_delivery']
+        dropsite_changed = instance.drop_site != validated_data['drop_site']
+        delivery_address_changed = validated_data['home_delivery'] and instance.delivery_address != validated_data.get(
+            'delivery_address', None)
+
         updated_profile = super(ProfileSerializer, self).update(instance, validated_data)
         request = current_request()
 
         # clear cart if order period changed
-        if instance.home_delivery != validated_data['home_delivery'] or \
-                instance.delivery_address != validated_data['delivery_address'] or \
-                instance.drop_site != validated_data['drop_site']:
+        if home_delivery_changed or dropsite_changed or delivery_address_changed:
             new_order_period_start = get_order_period_for_user(updated_profile.user)
             if old_order_period_start != new_order_period_start:
                 request.cart.clear()
                 recalculate_remaining_budget(request)
 
         # we can't set this on signup b/c the cart.user_id has not been set yet
-        if instance.home_delivery != validated_data["home_delivery"] or \
-                instance.delivery_address != validated_data["delivery_address"]:
+        if home_delivery_changed or delivery_address_changed:
             if updated_profile.home_delivery:
                 set_home_delivery(request)
                 sib_template_name = 'Home Delivery'
@@ -138,7 +140,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         else:
             sib_template_name = updated_profile.drop_site
 
-        update_google_contact(instance.user)
+        update_google_contact(updated_profile.user)
 
         # The following NOPs if settings.SENDINBLUE_ENABLED == False
         weekly_email_lists = ['WEEKLY_NEWSLETTER']
@@ -146,12 +148,9 @@ class ProfileSerializer(serializers.ModelSerializer):
         lists_to_remove = weekly_email_lists if not updated_profile.weekly_emails else None
         sendinblue.update_or_add_user(updated_profile.user, lists_to_add, lists_to_remove)
 
-        if settings.SENDINBLUE_ENABLED and \
-                (instance.drop_site != validated_data['drop_site'] or
-                 instance.home_delivery != validated_data['home_delivery'] or
-                 instance.delivery_address != validated_data['delivery_address']):
-
-            user_dropsite_info = list(updated_profile.dropsiteinfo_set.filter(drop_site_template_name=sib_template_name))
+        if settings.SENDINBLUE_ENABLED and (dropsite_changed or home_delivery_changed or delivery_address_changed):
+            user_dropsite_info = list(
+                updated_profile.dropsiteinfo_set.filter(drop_site_template_name=sib_template_name))
             params = {'FIRSTNAME': updated_profile.user.first_name}
 
             # User has not received the notification before
@@ -181,6 +180,7 @@ class ProfileSerializer(serializers.ModelSerializer):
                         user_dropsite_entry.save()
 
             updated_profile.save()
+        return updated_profile
 
 
 # Payment Serializer
