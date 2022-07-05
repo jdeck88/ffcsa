@@ -348,12 +348,16 @@
                     }
 
                     // validate address
-                    if (this.homeDelivery.errorMessages.length > 0) {
+                    if (this.user.profile.home_delivery) {
+                      if (this.homeDelivery.errorMessages.length > 0) {
                         store.commit('showAlert', {type: 'error', content: 'Can not deliver to provided address'})
                         return
+                      }
+                    } else {
+                      this.user.profile.delivery_address = ''
                     }
 
-                    try {
+                  try {
                       this.loading = true
                       const res = await axios.post(`/api/signup/`, {...this.user});
                       const profile_id = res.data.profile
@@ -418,7 +422,8 @@
             autocomplete.addListener('place_changed', function () {
                 const place = autocomplete.getPlace();
                 if (!place) {
-                    // return error message
+                  AccountVue.homeDelivery.errorMessages.push('Please enter a valid address.')
+                  return
                 }
 
                 // Set delivery_address value
