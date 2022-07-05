@@ -23,6 +23,9 @@
         .mobile-shop-menu .v-expansion-panel-header__icon {
             padding-left: 32px !important;
         }
+        .v-expansion-panel-content__wrap {
+            padding-left: 0px !important;
+        }
     </style>
 {% endblock %}
 
@@ -55,7 +58,7 @@
        <template v-if="isMobile()">
           <v-expansion-panels focusable class="mb-5 mobile-shop-menu">
             <v-expansion-panel v-for="category in categories">
-              <v-expansion-panel-header>
+              <v-expansion-panel-header v-bind:hide-actions="category.sub_cats.length == 0">
                     <v-btn text small color="primary" @click.native.stop="selectedCategory=category.title; page=1" class="text-base font-weight-bold" :class="[categorySelected(category.title), 'hover:text-primary block']">
                         ((category.display_name))
                     </v-btn>
