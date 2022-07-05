@@ -4,11 +4,15 @@ from django.utils import formats
 
 from django.contrib.auth import get_user_model
 from django.conf import settings
-from googleapiclient import model
+from mezzanine.core.request import current_request
 from rest_framework import serializers
 from rest_framework.exceptions import NotAcceptable
 
-from ffcsa.core.models import Profile, Payment, Address
+from ffcsa.core import sendinblue
+from ffcsa.core.google import update_contact as update_google_contact
+from ffcsa.core.models import Profile, Payment, Address, DropSiteInfo
+from ffcsa.shop.orders import get_order_period_for_user
+from ffcsa.shop.utils import recalculate_remaining_budget, set_home_delivery, clear_shipping
 
 User = get_user_model()
 
@@ -104,6 +108,79 @@ class ProfileSerializer(serializers.ModelSerializer):
             next_payment_date = formats.date_format(next_payment_date, "D, F d")
 
         return next_payment_date
+
+    def update(self, instance, validated_data):
+        old_order_period_start = get_order_period_for_user(instance.user)
+        updated_profile = super(ProfileSerializer, self).update(instance, validated_data)
+        request = current_request()
+
+        # clear cart if order period changed
+        if instance.home_delivery != validated_data['home_delivery'] or \
+                instance.delivery_address != validated_data['delivery_address'] or \
+                instance.drop_site != validated_data['drop_site']:
+            new_order_period_start = get_order_period_for_user(updated_profile.user)
+            if old_order_period_start != new_order_period_start:
+                request.cart.clear()
+                recalculate_remaining_budget(request)
+
+        # we can't set this on signup b/c the cart.user_id has not been set yet
+        if instance.home_delivery != validated_data["home_delivery"] or \
+                instance.delivery_address != validated_data["delivery_address"]:
+            if updated_profile.home_delivery:
+                set_home_delivery(request)
+                sib_template_name = 'Home Delivery'
+            else:
+                clear_shipping(request)
+                sib_template_name = updated_profile.drop_site
+
+            recalculate_remaining_budget(request)
+
+        else:
+            sib_template_name = updated_profile.drop_site
+
+        update_google_contact(instance.user)
+
+        # The following NOPs if settings.SENDINBLUE_ENABLED == False
+        weekly_email_lists = ['WEEKLY_NEWSLETTER']
+        lists_to_add = weekly_email_lists if updated_profile.weekly_emails else None
+        lists_to_remove = weekly_email_lists if not updated_profile.weekly_emails else None
+        sendinblue.update_or_add_user(updated_profile.user, lists_to_add, lists_to_remove)
+
+        if settings.SENDINBLUE_ENABLED and \
+                (instance.drop_site != validated_data['drop_site'] or
+                 instance.home_delivery != validated_data['home_delivery'] or
+                 instance.delivery_address != validated_data['delivery_address']):
+
+            user_dropsite_info = list(updated_profile.dropsiteinfo_set.filter(drop_site_template_name=sib_template_name))
+            params = {'FIRSTNAME': updated_profile.user.first_name}
+
+            # User has not received the notification before
+            if len(user_dropsite_info) == 0:
+                date_last_modified = sendinblue.send_transactional_email(sib_template_name, updated_profile.user.email,
+                                                                         params)
+
+                # If the email is successfully sent add an appropriate DropSiteInfo to the user
+                if date_last_modified is not False:
+                    _dropsite_info_obj = DropSiteInfo.objects.create(profile=updated_profile,
+                                                                     drop_site_template_name=sib_template_name,
+                                                                     last_version_received=date_last_modified)
+                    _dropsite_info_obj.save()
+
+            # Check if user has received the latest version of the notification message
+            else:
+                date_last_modified = sendinblue.get_template_last_modified_date(sib_template_name)
+
+                user_dropsite_entry = user_dropsite_info[0]
+                if user_dropsite_entry.last_version_received != date_last_modified:
+                    email_result = sendinblue.send_transactional_email(sib_template_name, updated_profile.user.email,
+                                                                       params)
+
+                    # Don't update entry if email fails to send
+                    if email_result is not False:
+                        user_dropsite_entry.last_version_received = email_result
+                        user_dropsite_entry.save()
+
+            updated_profile.save()
 
 
 # Payment Serializer

@@ -21,15 +21,18 @@ from rest_framework.decorators import detail_route, list_route, permission_class
 from rest_framework.exceptions import NotAcceptable, NotFound
 from mezzanine.utils.urls import next_url
 from mezzanine.utils.email import subject_template
+from signrequest_client.rest import ApiException
 
-from ffcsa.core import sendinblue
+from ffcsa.core import sendinblue, signrequest
 from ffcsa.core.api.permissions import IsOwner, CanPay
 from ffcsa.core.api.serializers import *
+from ffcsa.core.google import add_contact as add_google_contact
 from ffcsa.shop.models import Order
-from ffcsa.core.models import Payment, Address
+from ffcsa.core.models import Payment, Address, DropSiteInfo
 from ffcsa.core.subscriptions import *
 from ffcsa.utils import DictClass
 
+logger = logging.getLogger(__name__)
 
 User = get_user_model()
 
@@ -102,7 +105,7 @@ class SignupViewSet(viewsets.ViewSet):
     ignored_fields = ["num_children", "pickup_agreement", "communication_method", "best_time_to_reach"]
 
     def create(self, request):
-        # extract user and profle info
+        # extract user and profile info
         user_raw = request.data
         profile_raw = {k: v for (k, v) in request.data["profile"].items() if k not in self.ignored_fields and v != ""}
 
@@ -130,16 +133,93 @@ class SignupViewSet(viewsets.ViewSet):
             user = User.objects.create(**user_data)
             user.profile.__dict__.update(profile_data)
 
+            # drop_site = self.cleaned_data['drop_site']
+            # user.profile.drop_site = drop_site
+
+            user.profile.notes = "<b>Best time to reach:</b>  {}<br/>" \
+                                 "<b>Preferred communication method:</b>  {}<br/>" \
+                                 "<b>Adults in family:</b>  {}<br/>" \
+                                 "<b>Children in family:</b>  {}<br/>" \
+                                 "<b>How did you hear about us:</b>  {}<br/>" \
+                .format(request.data["profile"]['best_time_to_reach'],
+                        request.data["profile"]['communication_method'],
+                        request.data["profile"]['num_adults'],
+                        request.data["profile"]['num_children'],
+                        request.data["profile"]['hear_about_us'])
+
+            # defaults
+            user.profile.allow_substitutions = True
+            user.profile.weekly_emails = True
+            user.profile.plastic_bags = False
+
+            sendinblue.update_or_add_user(user, sendinblue.NEW_USER_LISTS, sendinblue.NEW_USER_LISTS_TO_REMOVE)
             user.profile.delivery_address = profile_data.get("delivery_address")
             user.profile.save()
 
             # login user
             auth.login(request, user)
-            token, created = Token.objects.get_or_create(user=user)
-            user_serializer = UserSerializer(user)
-            return Response({"token": token.key, "user": user_serializer.data, "profile": user.profile.id})
 
-        return Response({})
+        # Send drop site information (or home delivery instructions)
+        if settings.SENDINBLUE_ENABLED:
+            params = {'FIRSTNAME': user.first_name}
+            sib_template_name = 'Home Delivery' if user.profile.home_delivery else user.profile.drop_site
+
+            date_last_modified = sendinblue.send_transactional_email(sib_template_name, user.email,
+                                                                     params)
+
+            # If the email is successfully sent add an appropriate DropSiteInfo to the user
+            if date_last_modified is not False:
+                _dropsite_info_obj = DropSiteInfo.objects.create(profile=user.profile,
+                                                                 drop_site_template_name=sib_template_name,
+                                                                 last_version_received=date_last_modified)
+                _dropsite_info_obj.save()
+
+            user.profile.save()
+
+        c = {
+            'user': "{} {}".format(user.first_name, user.last_name),
+            'user_url': request.build_absolute_uri(reverse("admin:auth_user_change", args=(user.id,))),
+            'drop_site': 'Home Delivery' if user.profile.home_delivery else user.profile.drop_site,
+            'phone_number': user.profile.phone_number,
+            'phone_number_2': user.profile.phone_number_2,
+            'email': user.email,
+            'best_time_to_reach': request.data["profile"]['best_time_to_reach'],
+            'communication_method': request.data["profile"]['communication_method'],
+            'num_adults': request.data["profile"]['num_adults'],
+            'num_children': request.data["profile"]['num_children'],
+            'hear_about_us': request.data["profile"]['hear_about_us'],
+            'payments_url': request.build_absolute_uri(reverse("payments")),
+        }
+
+        try:
+            signrequest.send_sign_request(user, True)
+        except ApiException as e:
+            # don't prevent the user from signing up. They can re-send the sign request document later
+            logger.error(e)
+        add_google_contact(user)
+
+        subject = "New User Signup"
+        send_mail_template(
+            subject,
+            "ffcsa_core/send_admin_new_user_email",
+            settings.DEFAULT_FROM_EMAIL,
+            settings.ACCOUNTS_APPROVAL_EMAILS,
+            context=c,
+            fail_silently=True,
+        )
+        send_mail_template(
+            "Congratulations on your new Full Farm CSA account!",
+            "ffcsa_core/send_new_user_email",
+            settings.DEFAULT_FROM_EMAIL,
+            user.email,
+            context=c,
+            fail_silently=False,
+            addr_bcc=[settings.EMAIL_HOST_USER]
+        )
+        token, created = Token.objects.get_or_create(user=user)
+        user_serializer = UserSerializer(user)
+
+        return Response({"token": token.key, "user": user_serializer.data, "profile": user.profile.id})
 
     def update(self, request, *args, **kwargs):
         profile = get_object_or_404(Profile, pk=kwargs["pk"])
@@ -147,8 +227,8 @@ class SignupViewSet(viewsets.ViewSet):
 
         profile_raw = ProfileSerializer(profile).data
         profile_raw['join_dairy_program'] = join_dairy_program
-        if profile_raw['num_adults'] == 0:
-            profile_raw['num_adults'] = 1
+        # if profile_raw['num_adults'] == 0:
+        #     profile_raw['num_adults'] = 1
 
         serializer = ProfileSerializer(profile, data=profile_raw)
         serializer.is_valid(raise_exception=True)
