@@ -367,8 +367,7 @@
                       this.loading = false
                     } catch (error) {
                       console.log(error.response.data)
-                      // store.commit('showAlert', {type: 'error', content: error.response.data.detail})
-                      store.commit('showAlert', {type: 'error', content: 'Error occurred during signup.'})
+                      store.commit('showAlert', {type: 'error', content: error.response.data.detail})
                       this.loading = false
                     }
                 },
