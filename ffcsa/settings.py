@@ -13,7 +13,7 @@ DAIRY_CATEGORY = 'dairy'
 FROZEN_PRODUCT_CATEGORIES = ['pasture raised meats']
 FROZEN_ITEM_PACKLIST_EXCLUDED_CATEGORIES = ['nuts & honey', 'free']
 GRAIN_BEANS_CATEGORIES = ['grains & beans']
-PRODUCT_ORDER_CATEGORIES = ['vegetables', 'eggs', 'fruit', 'eggs', 'mushroom']
+PRODUCT_ORDER_CATEGORIES = ['vegetables', 'eggs', 'fruit', 'bread']
 MARKET_CHECKLISTS = ['LCFM', 'Hollywood', 'PSU', 'St Johns', 'Irvington', 'Cully', 'Woodstock']
 MARKET_CHECKLIST_COLUMN_CATEGORIES = OrderedDict([
     # checklist columns -> (category list, additional kwargs, default)

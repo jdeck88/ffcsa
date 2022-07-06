@@ -217,14 +217,14 @@ def create_labels(modeladmin, request, queryset):
 
 create_labels.short_description = "Create Box Labels"
 
-DEFAULT_GROUP_KEY = 5
+DEFAULT_GROUP_KEY = 50
 
 
 def keySort(categories):
     """ If updating, make sure to update product_keysort function in views.py"""
     def func(item):
         try:
-            product = Product.objects.get(title=item.description, sku=item.sku)
+            product = Product.objects.get(sku=item.sku)
             if product and product.order_on_invoice:
                 return (product.order_on_invoice, item.description)
         except Product.DoesNotExist:
@@ -233,19 +233,11 @@ def keySort(categories):
         try:
             cat = categories.get(titles=item.category)
 
-            if not cat.parent:
+            if cat.order_on_invoice > 0:
                 return (cat.order_on_invoice, item.description)
 
-            if cat.parent and cat.parent.category:
-                parent_order = cat.parent.category.order_on_invoice
-                order = cat.order_on_invoice
-                if order == 0:
-                    order = DEFAULT_GROUP_KEY
-
-                return (
-                    float("{}.{}".format(parent_order, order)),
-                    item.description
-                )
+            if cat.parent and cat.parent.category and cat.parent.category.order_on_invoice > 0:
+                return (cat.parent.category.order_on_invoice, item.description)
 
         except Category.DoesNotExist:
             pass

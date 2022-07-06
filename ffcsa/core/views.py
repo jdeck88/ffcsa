@@ -65,7 +65,6 @@ def home(request, template="home.html"):
 
 
 def password_reset_verify(request, uidb36=None, token=None):
-
     user = authenticate(uidb36=uidb36, token=token, is_active=True)
 
     if request.method == "POST":
@@ -82,7 +81,6 @@ def password_reset_verify(request, uidb36=None, token=None):
         user.set_password(body["password"])
         user.save()
         return JsonResponse({"detail": "Password updated please login"})
-
 
     if request.user.is_authenticated():
         return redirect("/")
@@ -659,7 +657,8 @@ def stripe_webhooks(request):
 
             payment = Payment.objects.filter(charge_id=charge.id, status='Pending').first()
             if payment is None:
-                payment = Payment.objects.create(user=user, amount=amount, date=created, charge_id=charge.id, status='Failed')
+                payment = Payment.objects.create(user=user, amount=amount, date=created, charge_id=charge.id,
+                                                 status='Failed')
             else:
                 payment.status = 'Failed'
             payment.save()
@@ -872,19 +871,13 @@ def product_keySort(product):
 
     cat = product.get_category()
 
-    if cat and not cat.parent:
-        return (cat.order_on_invoice, product.title)
+    if cat:
+        if cat.order_on_invoice > 0:
+            return (cat.order_on_invoice, product.title)
 
-    if cat and cat.parent and cat.parent.category:
-        parent_order = cat.parent.category.order_on_invoice
-        order = cat.order_on_invoice
-        if order == 0:
-            order = DEFAULT_GROUP_KEY
+        if cat.parent and cat.parent.category and cat.parent.category.order_on_invoice > 0:
+            return (cat.parent.category.order_on_invoice, product.title)
 
-        return (
-            float("{}.{}".format(parent_order, order)),
-            product.title
-        )
     # just return a default number for category
     return (DEFAULT_GROUP_KEY, product.title)
 

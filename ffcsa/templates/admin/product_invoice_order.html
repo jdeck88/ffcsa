@@ -19,11 +19,13 @@
 
 {% block content %}
     <div id="content-main">
-        <p>Products with the same "order on invoice" value are sorted alphabetically. The default value if "order on
-            invoice" is unset is 5. The following logic is used to determine the "order on invoice":</p>
+        <p>Products with the same "order on invoice" value are sorted alphabetically. The following logic is used to
+            determine the "order on invoice":</p>
         <ul>
             <li>Product - Order on Invoice field (if set)</li>
-            <li>If category & parent category - "order on invoice" = {PARENT_CAT_ORDER}.{CAT_ORDER}</li>
+            <li>Category (sub) - Order on Invoice field (if set)</li>
+            <li>Category (parent) - Order on Invoice field (if set)</li>
+            <li>Default - 50</li>
         </ul>
         <table>
             <tr>
