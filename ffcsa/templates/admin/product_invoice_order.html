@@ -37,7 +37,7 @@
 
             {% for p in products %}
                 <tr>
-                    <td><a href="{% url 'admin:shop_product_change' p.id %}">{{ p.title }}</a></td>
+                    <td><a href="{% url 'admin:shop_product_change' p.id %}">{{ p.descriptive_title }}</a></td>
                     <td>{{ p.get_category }}</td>
                     <td>{{ p.computed_order_on_invoice }}</td>
                     <td>
