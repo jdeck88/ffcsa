@@ -40,7 +40,7 @@ class Category(Page, RichText):
                                                "products must match all specified filters, otherwise products "
                                                "can match any specified filter."))
     order_on_invoice = models.IntegerField(default=0,
-                                           help_text="Order this category will be printed on invoices. If this is a sub-category, this is the order printed within the parent category. 0 will be printed last. And sub-categories will only be sorted if the parent category has this value set")
+                                           help_text="Order this category will be printed on invoices.")
 
     class Meta:
         verbose_name = _("Product category")
