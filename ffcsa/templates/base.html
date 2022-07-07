@@ -104,6 +104,9 @@
                 right: 1rem;
                 z-index: 9999999;
             }
+            .cart-drawer .v-virtual-scroll__item:last-child > hr {
+                display: none;
+            }
 
         </style>
 
@@ -165,8 +168,8 @@
             <v-virtual-scroll v-if="store.state.is_authenticated" class="mt-2"
                               :items="store.state.cart.items" :item-height="130" style="height: calc(100% - 13em)">
                 <template v-slot:default="{ item }">
-                    <v-row class="mt-1">
-                        <v-col cols="3" class="p-0 pl-3">
+                    <v-row class="mt-1 mb-1">
+                        <v-col cols="3" class="pb-3 pt-3 pl-3">
                             <v-img :src="'/static/media/' + item.image" height="100%"
                                    max-height="100px" max-width="100px" class="mx-auto">
                             </v-img>
@@ -217,22 +220,22 @@
 
             <!-- total and checkout -->
             <section v-if="store.state.is_authenticated"
-                     class="bg-white absolute px-3 pt-4 mt-10 inset-x-0 bottom-0 border border-top">
+                     class="bg-white absolute px-3 pt-3 inset-x-0 bottom-0 border border-top">
                 <div class="flex text-black font-bold">
-                    <p class="mb-2">SUBTOTAL</p>
-                    <p class="mb-2 ml-auto">$((store.state.cart.total_price))</p>
+                    <p class="mb-1">SUBTOTAL</p>
+                    <p class="mb-1 ml-auto">$((store.state.cart.total_price))</p>
                 </div>
 
                 {% if user.is_authenticated %}
                     {% if user.profile.home_delivery %}
                         <div class="flex text-black font-bold">
-                            <p class="mb-2">DELIVERY FEE</p>
-                            <p class="mb-2 ml-auto">$((store.state.cart.delivery_fee))</p>
+                            <p class="mb-1">DELIVERY FEE</p>
+                            <p class="mb-1 ml-auto">$((store.state.cart.delivery_fee))</p>
                         </div>
                     {% endif %}
                     <div class="flex text-black font-bold">
-                        <p>REMAINING BUDGET</p>
-                        <p class="ml-auto">$((store.state.cart.remaining_budget))</p>
+                        <p class="mb-0">REMAINING BUDGET</p>
+                        <p class="ml-auto mb-0">$((store.state.cart.remaining_budget))</p>
                     </div>
                 {% endif %}
 
@@ -242,9 +245,9 @@
                            :disabled="!store.state.cart.items.length">CONTINUE TO CHECKOUT
                     </v-btn>
                 {% elif user_on_order_cycle%}
-                    <p class="text-sm text-center">Your order will be automatically submitted on {% order_period_end %}</p>
+                    <p class="text-sm text-center mb-1 mt-1">Your order will be automatically submitted on {% order_period_end %}</p>
                 {% else %}
-                    <p class="text-sm text-center">Your next order period is from {% order_period_start %} to {% order_period_end %}</p>
+                    <p class="text-sm text-center mb-1 mt-1">Your next order period is from {% order_period_start %} to {% order_period_end %}</p>
                 {% endif %}
             </section>
             <!-- total and checkout -->
@@ -580,7 +583,7 @@
                         store.state.cart.items = items;
                         store.state.cart.total_price = total_price;
                         store.state.cart.delivery_fee = delivery_fee;
-                        store.state.cart.remaining_budget = parseFloat(remaining_budget.toFixed(2));
+                        store.state.cart.remaining_budget = parseFloat(remaining_budget).toFixed(2);
                         store.state.cart.attending_dinner = attending_dinner;
                         store.state.cart.last_updated = last_updated;
                         store.state.cart.loading = false;
