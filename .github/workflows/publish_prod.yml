@@ -29,5 +29,8 @@ jobs:
     - name: Build frontend
       run: npm run prod
 
-    - name: Collect Static
+    - name: Collect static
       run: python manage.py collectstatic --no-input
+
+    - name: Restart server
+      run: sudo supervisorctl restart gunicorn_ffcsa_prod
