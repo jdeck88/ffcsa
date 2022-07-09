@@ -69,6 +69,7 @@ accounts_base.ProfileInline.form = ProfileAdminForm
 
 
 class UserProfileAdmin(accounts_base.UserProfileAdmin):
+    model = get_user_model()
     fieldsets = user_fieldsets
     list_filter = tuple(user_list_filter)
 

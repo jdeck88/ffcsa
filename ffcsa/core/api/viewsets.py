@@ -15,7 +15,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.exceptions import NotFound
-from mezzanine.utils.urls import next_url
+from mezzanine.utils.urls import next_url, unique_slug, slugify
 from mezzanine.utils.email import subject_template
 from signrequest_client.rest import ApiException
 
@@ -116,17 +116,28 @@ class SignupViewSet(viewsets.ViewSet):
         if not user_raw["password"] == user_raw["password2"]:
             raise NotAcceptable("Passwords do not match")
 
+        if User.objects.filter(email=user_raw["email"]).count() > 0:
+            raise NotAcceptable("A user with that email already exists.")
+
         user_data = user_serializer.data
         profile_data = profile_serializer.data
 
-        # add username
-        user_data["username"] = user_data["first_name"] + '_' + user_data["last_name"]
+        # set blank username first
+        user_data["username"] = ''
 
         # remove password2
         del user_data["password2"]
 
         with transaction.atomic():
             user = User.objects.create(**user_data)
+            #hash the password
+            user.set_password(user_data["password"])
+
+            # set username
+            username = user_data["first_name"] + '-' + user_data["last_name"]
+            qs = User.objects.exclude(id=user.id)
+            user.username = unique_slug(qs, "username", slugify(username))
+
             user.profile.__dict__.update(profile_data)
 
             # drop_site = self.cleaned_data['drop_site']
@@ -150,6 +161,7 @@ class SignupViewSet(viewsets.ViewSet):
 
             sendinblue.update_or_add_user(user, sendinblue.NEW_USER_LISTS, sendinblue.NEW_USER_LISTS_TO_REMOVE)
             user.profile.delivery_address = profile_data.get("delivery_address")
+            user.save()
             user.profile.save()
 
             # login user
@@ -174,7 +186,7 @@ class SignupViewSet(viewsets.ViewSet):
 
         c = {
             'user': "{} {}".format(user.first_name, user.last_name),
-            'user_url': request.build_absolute_uri(reverse("admin:auth_user_change", args=(user.id,))),
+            'user_url': request.build_absolute_uri(reverse("admin:ffcsa_core_user_change", args=(user.id,))),
             'drop_site': 'Home Delivery' if user.profile.home_delivery else user.profile.drop_site,
             'phone_number': user.profile.phone_number,
             'phone_number_2': user.profile.phone_number_2,

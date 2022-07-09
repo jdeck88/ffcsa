@@ -33,7 +33,7 @@ def signup(request, template="accounts/account_signup.html",
         c = {
             'user': "{} {}".format(new_user.first_name, new_user.last_name),
             'site_url': request.build_absolute_uri(reverse("home")),
-            'user_url': request.build_absolute_uri(reverse("admin:auth_user_change", args=(new_user.id,)))
+            'user_url': request.build_absolute_uri(reverse("admin:ffcsa_core_user_change", args=(new_user.id,)))
         }
         send_mail_template(
             "New User Account %s" % settings.SITE_TITLE,

@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 ##############################
 # FFCSA-CORE SETTINGS #
 ##############################
+AUTH_USER_MODEL="ffcsa_core.User"
 YEARLY_SUBSCRIBER_MINIMUM = 1032  # $172 / month for 6 months
 DAIRY_CATEGORY = 'dairy'
 FROZEN_PRODUCT_CATEGORIES = ['pasture raised meats']
@@ -509,7 +510,7 @@ ADMIN_MENU_ORDER = (
     (_("Shop"), ("shop.Product", "shop.Order", "shop.ProductOption", "shop.DiscountCode",
                  "shop.Sale")),
     # ("Users", ((_("Invites"), "invites.InvitationCode"), "auth.User", "auth.Group",)),
-    ("Users", (("auth.User", "auth.Group",))),
+    ("Users", (("ffcsa_core.User", "auth.Group",))),
     ("Content", ("pages.Page", "blog.BlogPost",
                  (_("Media Library"), "fb_browse"),)),
     ("Site", ("sites.Site", "redirects.Redirect", "conf.Setting")),

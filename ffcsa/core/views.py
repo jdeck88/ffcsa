@@ -122,7 +122,7 @@ def signup(request, template="accounts/account_signup.html", extra_context=None)
 
         c = {
             'user': "{} {}".format(new_user.first_name, new_user.last_name),
-            'user_url': request.build_absolute_uri(reverse("admin:auth_user_change", args=(new_user.id,))),
+            'user_url': request.build_absolute_uri(reverse("admin:ffcsa_core_user_change", args=(new_user.id,))),
             'drop_site': 'Home Delivery' if new_user.profile.home_delivery else form.cleaned_data.get('drop_site'),
             'phone_number': form.cleaned_data['phone_number'],
             'phone_number_2': form.cleaned_data['phone_number_2'],
@@ -604,7 +604,7 @@ def stripe_webhooks(request):
                     if user.profile.join_dairy_program and not user.profile.can_order_dairy:
                         c = {
                             'user': user,
-                            'user_url': request.build_absolute_uri(reverse("admin:auth_user_change", args=(user.id,))),
+                            'user_url': request.build_absolute_uri(reverse("admin:ffcsa_core_user_change", args=(user.id,))),
                         }
                         send_mail_template(
                             'First Payment Received - Needs Dairy Conversation',

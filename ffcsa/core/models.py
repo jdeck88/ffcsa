@@ -1,9 +1,9 @@
 import datetime
-import json
 
 from django import forms
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser
 from django.core import validators
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
@@ -17,22 +17,28 @@ from mezzanine.utils.models import upload_to
 from ffcsa.shop.fields import MoneyField
 from ffcsa.core.managers import PaymentManager
 
-User = get_user_model()
-
 
 ###################
 #  User
 ###################
 
 
-def patched_str_(self):
-    if self.last_name and self.first_name:
-        return "{}, {}".format(self.last_name, self.first_name)
+class User(AbstractUser):
+    email = models.EmailField(unique=True)
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
-    return self.get_username()
+    class Meta:
+        db_table = 'auth_user'
+
+    def __str__(self):
+        if self.last_name and self.first_name:
+            return "{}, {}".format(self.last_name, self.first_name)
+
+        return self.get_username()
 
 
-User.__str__ = patched_str_
+User = get_user_model()
 
 
 class Address(models.Model):
@@ -68,7 +74,7 @@ class AddressDescriptor(ForwardManyToOneDescriptor):
             # ex address: 2050 Goodpasture Loop, Eugene, OR 97401, USA
             address_bits = value.split(',')
 
-            if len(address_bits) is 4:
+            if len(address_bits) == 4:
                 state_zip_bits = address_bits[2].strip().split(' ')
                 obj = Address(street=address_bits[0].strip(), city=address_bits[1].strip(), state=state_zip_bits[0],
                               zip=state_zip_bits[1], country=address_bits[3].strip())
@@ -111,7 +117,7 @@ PHONE_REGEX = RegexValidator(regex=r'^\+?(1-)?\d{3}-\d{3}-\d{4}$',
 
 
 class Profile(models.Model):
-    user = models.OneToOneField("auth.User")
+    user = models.OneToOneField("ffcsa_core.User")
     monthly_contribution = MoneyField("Monthly Contribution", decimal_places=2)
     phone_number = models.CharField("Contact Number", validators=[
         PHONE_REGEX], max_length=15)
@@ -147,7 +153,7 @@ class Profile(models.Model):
     non_subscribing_member = models.BooleanField(default=False,
                                                  help_text="Non-subscribing members are allowed to make payments to their ffcsa account w/o having a monthly subscription")
     plastic_bags = models.BooleanField(default=False,
-                                          help_text="Please pack small items in bags.")
+                                       help_text="Please pack small items in bags.")
     allow_substitutions = models.BooleanField(default=True,
                                               help_text="I am okay with substitutions when an item I ordered is no longer available. We do our best to pack what you have ordered, however on occasion crops will not be ready to harvest, etc. We can provide a substitution, or we can credit your account.")
     weekly_emails = models.BooleanField(default=True, verbose_name="Receive Weekly Emails",
@@ -224,7 +230,7 @@ class DropSiteInfo(models.Model):
 
 
 class Payment(models.Model):
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    user = models.ForeignKey('ffcsa_core.User', on_delete=models.CASCADE)
     date = models.DateField('Payment Date', default=datetime.date.today)
     amount = models.DecimalField('Amount', max_digits=10, decimal_places=2)
     status = models.CharField(default='Accepted', max_length=50,
