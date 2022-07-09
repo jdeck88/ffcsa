@@ -2,7 +2,7 @@
 
 ### Migration Issues   
 When running migrations, run the migrations for ffcsa_core up to 0055 `python manage.py migrate ffcsa_core 0055`
-The you will need to manually enter the migration as ran into the database for 0056 `insert into django_migrations ('ffcsa_core', '0056_user', now());`
+The you will need to manually enter the migration as ran into the database for 0056 `insert into django_migrations (app, name, applied) values ('ffcsa_core', '0056_user', now());`
 This is b/c we switched user models after already in production
 
 #### Bootup
