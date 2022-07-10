@@ -334,6 +334,7 @@
 
                 homeDelivery: {
                     // error: false,
+                    success: false,
                     errorMessages: []
                 }
 
@@ -351,6 +352,12 @@
                     if (this.user.profile.home_delivery) {
                       if (this.homeDelivery.errorMessages.length > 0) {
                         store.commit('showAlert', {type: 'error', content: 'Can not deliver to provided address'})
+                        return
+                      }
+                      else if (!this.homeDelivery.success) {
+                        const errorMsg = 'Please enter a valid address.';
+                        store.commit('showAlert', {type: 'error', content: errorMsg})
+                        AccountVue.homeDelivery.errorMessages.push(errorMsg)
                         return
                       }
                     } else {
@@ -419,6 +426,8 @@
             const addressInput = document.getElementById('address')
             const autocomplete = new google.maps.places.Autocomplete(addressInput, options)
             autocomplete.addListener('place_changed', function () {
+                AccountVue.homeDelivery.errorMessages = []
+                AccountVue.homeDelivery.success = true;
                 const place = autocomplete.getPlace();
                 if (!place) {
                   AccountVue.homeDelivery.errorMessages.push('Please enter a valid address.')
