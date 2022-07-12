@@ -190,9 +190,8 @@ def create_labels(modeladmin, request, queryset):
             orders = [o for o in queryset]
             orders.sort(key=order_sort)
             for order in orders:
-                if order.shipping_type is 'Home Delivery':
-                    continue
-                sheet.add_label(order)
+                if order.shipping_type != 'Home Delivery':
+                    sheet.add_label(order)
 
             with tempfile.NamedTemporaryFile() as tmp:
                 sheet.save(tmp)
