@@ -55,7 +55,7 @@ class UserViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
     def update(self, request, *args, **kwargs):
         user = get_object_or_404(User, pk=kwargs["pk"])
         profile_data = request.data.pop("profile")
-        delivery_address = profile_data.pop("delivery_address")
+        delivery_address = profile_data.get("delivery_address")
 
         # save user data
         serializer = UserSerializer(user, data=request.data)

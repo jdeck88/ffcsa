@@ -71,7 +71,7 @@ class AddressSerializer(serializers.ModelSerializer):
 
 # Profile Serializer
 class ProfileSerializer(serializers.ModelSerializer):
-    delivery_address = serializers.SerializerMethodField()
+    delivery_address = serializers.CharField(required=False)
     next_payment_date = serializers.SerializerMethodField()
 
     class Meta:
@@ -90,11 +90,11 @@ class ProfileSerializer(serializers.ModelSerializer):
             "google_person_id",
         )
 
-    def get_delivery_address(self, obj):
-        if obj.delivery_address:
-            return str(obj.delivery_address)
-
-        return ""
+    # def get_delivery_address(self, obj):
+    #     if obj.delivery_address:
+    #         return str(obj.delivery_address)
+    #
+    #     return ""
 
     def get_next_payment_date(self, obj):
         next_payment_date = None

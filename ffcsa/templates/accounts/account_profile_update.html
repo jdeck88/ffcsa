@@ -126,7 +126,9 @@
                                                  v-observe-visibility="initAutoCompelete()">
                                                 <v-text-field id="address" label="Address" outlined
                                                               v-model="user.profile.delivery_address"
-                                                              required></v-text-field>
+                                                              :error-messages="homeDelivery.errorMessages"
+                                                              :rules="[store.state.rules.required]"
+                                                              autocomplete="false"></v-text-field>
                                             </div>
                                         {% endif %}
 
@@ -627,6 +629,11 @@
                     }
                 },
 
+                homeDelivery: {
+                    success: false,
+                    errorMessages: []
+                },
+
                 // Payments
                 // oneTimePayment
                 //
@@ -703,6 +710,24 @@
                 async saveUser() {
                     if (!this.$refs.personalForm.validate()) {
                         return
+                    }
+
+                    console.log('delivery_address : ', this.user.profile.delivery_address)
+
+                    // validate address
+                    if (this.user.profile.home_delivery) {
+                      if (this.homeDelivery.errorMessages.length > 0) {
+                        store.commit('showAlert', {type: 'error', content: 'Can not deliver to provided address'})
+                        return
+                      }
+                      else if (!this.homeDelivery.success) {
+                        const errorMsg = 'Please enter a valid address.';
+                        store.commit('showAlert', {type: 'error', content: errorMsg})
+                        AccountVue.homeDelivery.errorMessages.push(errorMsg)
+                        return
+                      }
+                    } else {
+                      this.user.profile.delivery_address = ''
                     }
 
                     try {
@@ -1133,9 +1158,12 @@
             const addressInput = document.getElementById('address')
             const autocomplete = new google.maps.places.Autocomplete(addressInput, options)
             autocomplete.addListener('place_changed', function () {
+                AccountVue.homeDelivery.errorMessages = []
+                AccountVue.homeDelivery.success = true;
                 const place = autocomplete.getPlace();
                 if (!place) {
-                    // return error message
+                    AccountVue.homeDelivery.errorMessages.push('Please enter a valid address.')
+                    return
                 }
 
                 // Set delivery_address value
@@ -1161,13 +1189,15 @@
                                 if (data.is_full) {
                                     success = false
                                     var errMsg = 'Unfortunately, our delivery route is full and we can not offer home delivery to your zip code at this time. Please check again at a later date as members change drop sites from time-to-time. You can also contact us to be notified when a spot opens up!'
-                                    store.commit('showAlert', {type: 'error', content: errMsg})
+                                    AccountVue.homeDelivery.errorMessages.push(errMsg)
+                                }else{
+                                    AccountVue.homeDelivery.errorMessages = []
                                 }
                             })
                             .fail(function () {
                                 success = false
                                 var errMsg = 'An error occurred. Please try again later. Please contact us if this problem persists.'
-                                store.commit('showAlert', {type: 'error', content: errMsg})
+                                AccountVue.homeDelivery.errorMessages.push(errMsg)
                             })
                     }
                 }
@@ -1175,7 +1205,7 @@
                 // we don't deliver to this address
                 if (!success) {
                     var errMsg = 'We do not currently offer delivery service to this address. Please contact us to be notified when our delivery options expand.'
-                    store.commit('showAlert', {type: 'error', content: errMsg})
+                    AccountVue.homeDelivery.errorMessages.push(errMsg)
                 }
             })
         }

@@ -68,8 +68,9 @@ def get_order_period(drop_site=None, zip=None):
 
 
 def get_order_period_for_user(user):
-    zip = user.profile.delivery_address.zip if user.profile.home_delivery else None
-    drop_site = user.profile.drop_site if not user.profile.home_delivery else None
+    profile = user.profile
+    zip = profile.delivery_address.zip if profile.delivery_address and profile.home_delivery else None
+    drop_site = profile.drop_site if not profile.home_delivery else None
     return get_order_period(drop_site, zip)
 
 
