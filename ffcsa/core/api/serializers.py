@@ -71,7 +71,7 @@ class AddressSerializer(serializers.ModelSerializer):
 
 # Profile Serializer
 class ProfileSerializer(serializers.ModelSerializer):
-    delivery_address = serializers.CharField(required=False)
+    delivery_address = serializers.CharField(required=False, allow_blank=True)
     next_payment_date = serializers.SerializerMethodField()
 
     class Meta:
