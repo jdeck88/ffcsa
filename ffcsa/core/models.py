@@ -88,7 +88,7 @@ class AddressDescriptor(ForwardManyToOneDescriptor):
 
 
 class AddressField(models.ForeignKey):
-    description = 'An address'
+    description = 'An address : street, city, state, zip, country'
 
     def __init__(self, *args, **kwargs):
         kwargs['to'] = 'Address'
@@ -165,7 +165,7 @@ class Profile(models.Model):
     home_delivery = models.BooleanField(default=False, verbose_name="Home Delivery",
                                         help_text="Available in Eugene, Corvallis, and Springfield for a $5 fee. This fee is waived for all orders over ${}.".format(
                                             settings.FREE_HOME_DELIVERY_ORDER_AMOUNT))
-    delivery_address = AddressField(null=True, blank=True)
+    delivery_address = AddressField(null=True, blank=True, help_text='Example : 4063 Avalon St, Eugene, OR 97402, USA (street, city, state, zip, country)')
     delivery_notes = models.TextField("Special Delivery Notes", blank=True)
     num_adults = models.IntegerField("How many adults are in your family?", default=0,
                                      validators=[validators.MinValueValidator(1)]
