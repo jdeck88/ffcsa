@@ -508,7 +508,7 @@
         this.loading = true;
         // get products and assign the results
         try {
-
+          if(typeof searchQuery === 'object') searchQuery = this.query;
           const query = encodeURIComponent(searchQuery || this.query);
 
           if (query) this.selectedCategory = '';
