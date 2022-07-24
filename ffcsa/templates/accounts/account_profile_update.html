@@ -861,7 +861,11 @@
                                     amount2: VerifyACH.amount2.value
                                 })
 
-                                store.commit('showAlert', {type: 'error', content: res.data.detail})
+                                {% if settings.GOOGLE_ANALYTICS_ID and not request.user.is_staff %}
+                                    gtag('event', 'new_subscription')
+                                    gtag('event', 'ach_verified')
+                                {% endif %}
+                                store.commit('showAlert', {type: 'success', content: res.data.detail})
                                 setTimeout(() => location.reload(), 20000)
 
                             } catch (error) {
@@ -894,6 +898,10 @@
                                             amount: parseFloat(fd.get('amount')),
                                             paymentType: this.newSubscription.paymentMethod,
                                         });
+
+                                        {% if settings.GOOGLE_ANALYTICS_ID and not request.user.is_staff %}
+                                          gtag('event', 'new_subscription')
+                                        {% endif %}
                                         store.commit('showAlert', {type: 'success', content: res.data.detail})
                                         location.reload()
                                     } catch (error) {
@@ -925,6 +933,9 @@
                                             amount: parseFloat(fd.get('amount')),
                                             paymentType: fd.get('paymentType')
                                         });
+                                        {% if settings.GOOGLE_ANALYTICS_ID and not request.user.is_staff %}
+                                          gtag('event', 'ach_init')
+                                        {% endif %}
                                         store.commit('showAlert', {type: 'success', content: res.data.detail})
                                         location.reload()
                                     } catch (error) {
