@@ -159,8 +159,8 @@ class SignupViewSet(viewsets.ViewSet):
             user.profile.weekly_emails = True
             user.profile.plastic_bags = False
 
-            sendinblue.update_or_add_user(user, sendinblue.NEW_USER_LISTS, sendinblue.NEW_USER_LISTS_TO_REMOVE)
             user.profile.delivery_address = profile_data.get("delivery_address")
+            sendinblue.update_or_add_user(user, sendinblue.NEW_USER_LISTS, sendinblue.NEW_USER_LISTS_TO_REMOVE)
             user.save()
             user.profile.save()
 
