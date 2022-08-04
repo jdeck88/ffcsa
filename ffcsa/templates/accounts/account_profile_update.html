@@ -1146,6 +1146,14 @@
                     this.activeSettings = section || 'personal'
                 }
 
+            {% if settings.GOOGLE_ANALYTICS_ID and not request.user.is_staff %}
+              console.log('user is not staff')
+            {% endif %}
+
+            {% if settings.GOOGLE_ANALYTICS_ID %}
+              gtag('event', 'test_event')
+            {% endif %}
+
             }
         })
     </script>
