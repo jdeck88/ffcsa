@@ -712,8 +712,6 @@
                         return
                     }
 
-                    console.log('delivery_address : ', this.user.profile.delivery_address)
-
                     // validate address
                     if (this.user.profile.home_delivery) {
                       if (this.homeDelivery.errorMessages.length > 0) {
@@ -748,6 +746,7 @@
                         }
                         const res = await axios.put(`/api/users/` + this.user.id + '/', data = dataUpdate);
                         this.user.profile.drop_site = dropSiteDescription
+                        this.homeDelivery.success = false
                         store.commit('showAlert')
 
                         this.personal.loading = false
@@ -1199,6 +1198,7 @@
                             .done(function (data) {
                                 if (data.is_full) {
                                     success = false
+                                    AccountVue.homeDelivery.success = false
                                     var errMsg = 'Unfortunately, our delivery route is full and we can not offer home delivery to your zip code at this time. Please check again at a later date as members change drop sites from time-to-time. You can also contact us to be notified when a spot opens up!'
                                     AccountVue.homeDelivery.errorMessages.push(errMsg)
                                 }else{
@@ -1207,6 +1207,7 @@
                             })
                             .fail(function () {
                                 success = false
+                                AccountVue.homeDelivery.success = false
                                 var errMsg = 'An error occurred. Please try again later. Please contact us if this problem persists.'
                                 AccountVue.homeDelivery.errorMessages.push(errMsg)
                             })

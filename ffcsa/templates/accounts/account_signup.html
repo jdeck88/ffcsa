@@ -456,12 +456,14 @@
                             .done(function (data) {
                                 if (data.is_full) {
                                     success = false
+                                    AccountVue.homeDelivery.success = false
                                     AccountVue.homeDelivery.errorMessages.push('Unfortunately, our delivery route is full and we can not offer home delivery to your zip code at this time. Please check again at a later date as members change drop sites from time-to-time. You can also contact us to be notified when a spot opens up!')
                                 } else {
                                     AccountVue.homeDelivery.errorMessages = []
                                 }
                             })
                             .fail(function () {
+                                AccountVue.homeDelivery.success = false
                                 success = false
                                 AccountVue.homeDelivery.errorMessages.push('An error occurred. Please try again later. Please contact us if this problem persists.')
                             })
