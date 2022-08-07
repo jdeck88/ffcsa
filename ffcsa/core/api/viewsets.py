@@ -234,16 +234,18 @@ class SignupViewSet(viewsets.ViewSet):
         profile = get_object_or_404(Profile, pk=kwargs["pk"])
         join_dairy_program = request.data.get("join_dairy_program")
 
-        profile_raw = ProfileSerializer(profile).data
-        profile_raw['join_dairy_program'] = join_dairy_program
-        # if profile_raw['num_adults'] == 0:
-        #     profile_raw['num_adults'] = 1
+        try:
+            profile_raw = ProfileSerializer(profile).data
+            profile_raw['join_dairy_program'] = join_dairy_program
+            profile_raw['delivery_address'] = ''
 
-        serializer = ProfileSerializer(profile, data=profile_raw)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+            serializer = ProfileSerializer(profile, data=profile_raw)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
 
-        return Response({})
+            return Response({})
+        except Exception as e:
+            raise NotAcceptable(e)
 
 
 class LoginViewSet(viewsets.ViewSet):

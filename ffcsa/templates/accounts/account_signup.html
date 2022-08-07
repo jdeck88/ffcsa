@@ -205,6 +205,8 @@
                                             <v-col cols="12" md=6>
                                                 <v-text-field outlined label="How many adults are in your family? *"
                                                               type="number" v-model="user.profile.num_adults"
+                                                              @input="acceptNumeAdultsGte1"
+                                                              :error-messages="user.profile.errorMessages"
                                                               :rules="[store.state.rules.required]"></v-text-field>
                                             </v-col>
 
@@ -328,7 +330,8 @@
                         drop_site: '',
                         join_dairy_program: false,
                         payment_agreement: false,
-                        pickup_agreement: false
+                        pickup_agreement: false,
+                        errorMessages: []
                     }
                 },
 
@@ -400,6 +403,15 @@
                     // accept only numbers and format them like 999-999-9999
                     const x = this.user.profile.phone_number_2.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
                     this.user.profile.phone_number_2 = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
+                },
+                acceptNumeAdultsGte1(e) {
+                    // accept only numbers >= 1
+                    if (this.user.profile.num_adults <= 0) {
+                        const errorMsg = 'Number of adults on your family should be greater than 1'
+                        AccountVue.user.profile.errorMessages.push(errorMsg)
+                    }else{
+                        AccountVue.user.profile.errorMessages = []
+                    }
                 },
             },
             watch: {},
