@@ -75,7 +75,7 @@ class UserViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Updat
 
         return Response({})
 
-    @detail_route(methods=["post"])
+    @list_route(methods=["post"])
     def change_password(self, request, pk=None):
         serializer = ChangePasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

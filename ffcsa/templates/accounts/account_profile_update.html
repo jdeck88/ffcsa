@@ -225,12 +225,27 @@
                                     <h3 class="text-2xl font-bold opacity-40">Change Password</h3>
 
                                     <form id="password-form" class="my-10">
-                                        <v-text-field label="Current password" outlined name="cpassword" minlength=6
-                                                      required></v-text-field>
-                                        <v-text-field label="New password" outlined name="password" minlength=6
-                                                      required></v-text-field>
-                                        <v-text-field label="Confirm New password" outlined name="password2" minlength=6
-                                                      required></v-text-field>
+                                        <v-text-field label="Current password"
+                                                      outlined
+                                                      type="password"
+                                                      name="cpassword" minlength=6
+                                                      :rules="[store.state.rules.required, store.state.rules.password]"
+                                                      required>
+                                        </v-text-field>
+                                        <v-text-field label="New password"
+                                                      outlined
+                                                      name="password" minlength=6
+                                                      type="password"
+                                                      :rules="[store.state.rules.required, store.state.rules.password]"
+                                                      required>
+                                        </v-text-field>
+                                        <v-text-field label="Confirm New password"
+                                                      outlined
+                                                      type="password"
+                                                      name="password2" minlength=6
+                                                      :rules="[store.state.rules.required, store.state.rules.password]"
+                                                      required>
+                                        </v-text-field>
                                     </form>
 
                                     <!-- save button -->
@@ -1039,7 +1054,7 @@
 
                     try {
                         this.personal.loading = true
-                        const res = await axios.post(`/api/users//change_password/`, formData);
+                        const res = await axios.post(`/api/users/change_password/`, formData);
                         store.commit('showAlert')
                         this.personal.loading = false
                         location.reload()
