@@ -727,14 +727,6 @@
                         return
                     }
 
-                    {% if settings.GOOGLE_ANALYTICS_ID and request.user.is_staff %}
-                        gtag('event', 'test_of_test', {
-                            'event_callback': function() {
-                                console.log('----------- GA event_callback !!')
-                            }
-                        });
-                    {% endif %}
-
                     // validate address
                     if (this.user.profile.home_delivery) {
                       if (this.homeDelivery.errorMessages.length > 0) {
@@ -884,8 +876,14 @@
                                 })
 
                                 {% if settings.GOOGLE_ANALYTICS_ID and not request.user.is_staff %}
-                                    gtag('event', 'new_subscription')
-                                    gtag('event', 'ach_verified')
+                                    gtag('event', 'new_subscription', {
+                                      'event_category' : 'Subscription',
+                                      'event_label' : 'Pay'
+                                    });
+                                    gtag('event', 'ach_verified', {
+                                      'event_category' : 'Subscription',
+                                      'event_label' : 'Pay'
+                                    });
                                 {% endif %}
                                 store.commit('showAlert', {type: 'success', content: res.data.detail})
                                 setTimeout(() => location.reload(), 20000)
@@ -922,7 +920,10 @@
                                         });
 
                                         {% if settings.GOOGLE_ANALYTICS_ID and not request.user.is_staff %}
-                                          gtag('event', 'new_subscription')
+                                            gtag('event', 'new_subscription', {
+                                              'event_category' : 'Subscription',
+                                              'event_label' : 'Pay'
+                                            });
                                         {% endif %}
                                         store.commit('showAlert', {type: 'success', content: res.data.detail})
                                         location.reload()
@@ -956,7 +957,10 @@
                                             paymentType: fd.get('paymentType')
                                         });
                                         {% if settings.GOOGLE_ANALYTICS_ID and not request.user.is_staff %}
-                                          gtag('event', 'ach_init')
+                                            gtag('event', 'ach_init', {
+                                              'event_category' : 'Subscription',
+                                              'event_label' : 'Pay'
+                                            });
                                         {% endif %}
                                         store.commit('showAlert', {type: 'success', content: res.data.detail})
                                         location.reload()

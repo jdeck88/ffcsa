@@ -122,7 +122,7 @@
     {% block extra_head %}{% endblock %}
 </head>
 
-{% if settings.GOOGLE_ANALYTICS_ID %}
+{% if settings.GOOGLE_ANALYTICS_ID and not request.user.is_staff %}
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-96409336-1"></script>
     <script>
