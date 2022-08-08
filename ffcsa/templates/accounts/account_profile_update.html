@@ -729,8 +729,9 @@
 
                     {% if settings.GOOGLE_ANALYTICS_ID and request.user.is_staff %}
                         gtag('event', 'test_of_test', {
-                          'event_category' : 'test_of_test_cat',
-                          'event_label' : 'test_of_test_label'
+                            'event_callback': function() {
+                                console.log('----------- GA event_callback !!')
+                            }
                         });
                     {% endif %}
 
