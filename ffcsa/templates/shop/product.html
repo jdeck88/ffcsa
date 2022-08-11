@@ -39,7 +39,7 @@
 {% block extra_head %}
     {{ block.super }}
     <script>var variations = {{ variations_json|safe }}</script>
-    <script src="{% static "shop/js/product_variations.js" %}"></script>
+{#    <script src="{% static "shop/js/product_variations.js" %}"></script>#}
 {% endblock %}
 
 {% block breadcrumb_menu %}
