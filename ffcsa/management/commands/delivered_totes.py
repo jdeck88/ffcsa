@@ -14,8 +14,8 @@ class Command(BaseCommand):
         today = date.today()
 
         yesterday = today - timedelta(days=1)
-        last_day_of_previous_month = yesterday.replace(day=1) - timedelta(days=1)
-        one_month_ago = today.replace(month=last_day_of_previous_month.month, year=last_day_of_previous_month.year)
+        # last_day_of_previous_month = yesterday.replace(day=1) - timedelta(days=1)
+        one_month_ago = today.replace(month=yesterday.month, year=yesterday.year)
 
         total = 0
         dff_dropsites = [d['name'] for d in settings.DROPSITES if d.get('DFFDelivery', False)]
