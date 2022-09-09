@@ -502,9 +502,6 @@ class PayViewSet(viewsets.ViewSet):
         user = request.user
         amount, stripeToken, paymentType = serializer.data.values()
 
-        if user.profile.join_dairy_program and not user.profile.paid_signup_fee:
-            raise NotAcceptable("You must acknowledge the 1 time Raw Dairy program fee")
-
         try:
             if not user.profile.stripe_customer_id:
                 # Absolutely new user
