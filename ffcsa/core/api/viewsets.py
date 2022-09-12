@@ -237,7 +237,6 @@ class SignupViewSet(viewsets.ViewSet):
         try:
             profile_raw = ProfileSerializer(profile).data
             profile_raw['join_dairy_program'] = join_dairy_program
-            profile_raw['delivery_address'] = ''
 
             serializer = ProfileSerializer(profile, data=profile_raw)
             serializer.is_valid(raise_exception=True)
