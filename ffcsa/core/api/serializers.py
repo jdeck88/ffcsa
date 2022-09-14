@@ -71,7 +71,7 @@ class AddressSerializer(serializers.ModelSerializer):
 
 # Profile Serializer
 class ProfileSerializer(serializers.ModelSerializer):
-    delivery_address = serializers.CharField(required=False, allow_blank=True)
+    delivery_address = serializers.CharField(required=False, allow_null=True, allow_blank=True)
     next_payment_date = serializers.SerializerMethodField()
 
     class Meta:
@@ -112,7 +112,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         old_order_period_start = get_order_period_for_user(instance.user)
         home_delivery_changed = instance.home_delivery != validated_data['home_delivery']
-        dropsite_changed = instance.drop_site != validated_data['drop_site']
+        dropsite_changed = instance.drop_site != validated_data.get('drop_site', '')
         delivery_address_changed = validated_data['home_delivery'] and instance.delivery_address != validated_data.get(
             'delivery_address', None)
 
