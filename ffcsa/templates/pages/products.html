@@ -30,6 +30,70 @@
             align-items: start;
             justify-content: left;
         }
+        #slider {
+            max-width: 600px;
+            text-align: center;
+            margin: 0 auto;
+        }
+        #overflow {
+            width: 100%;
+            overflow: hidden;
+        }
+        #slides .inner {
+            width: 400%;
+        }
+        #slides .inner {
+            -webkit-transform: translateZ(0);
+            -moz-transform: translateZ(0);
+            -o-transform: translateZ(0);
+            -ms-transform: translateZ(0);
+            transform: translateZ(0);
+
+            -webkit-transition: all 800ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
+            -moz-transition: all 800ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
+            -o-transition: all 800ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
+            transition: all 800ms cubic-bezier(0.770, 0.000, 0.175, 1.000);
+
+            -webkit-transition-timing-function: cubic-bezier(0.770, 0.000, 0.175, 1.000);
+            -moz-transition-timing-function: cubic-bezier(0.770, 0.000, 0.175, 1.000);
+            -o-transition-timing-function: cubic-bezier(0.770, 0.000, 0.175, 1.000);
+            -ms-transition-timing-function: cubic-bezier(0.770, 0.000, 0.175, 1.000);
+            transition-timing-function: cubic-bezier(0.770, 0.000, 0.175, 1.000);
+        }
+        #slides article {
+            width: 25%;
+            float: left;
+        }
+        #slide1:checked ~ #slides .inner {
+            margin-left: 0;
+        }
+        #slide2:checked ~ #slides .inner {
+            margin-left: -100%;
+        }
+        #slide3:checked ~ #slides .inner {
+            margin-left: -200%;
+        }
+        #slide4:checked ~ #slides .inner {
+            margin-left: -300%;
+        }
+        input[type="radio"] {
+            display: none;
+        }
+        label {
+            background: #CCC;
+            display: inline-block;
+            cursor: pointer;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+        }
+        #slide1:checked ~ label[for="slide1"],
+        #slide2:checked ~ label[for="slide2"],
+        #slide3:checked ~ label[for="slide3"],
+        #slide4:checked ~ label[for="slide4"] {
+            background: #333;
+        }
+
     </style>
 {% endblock %}
 
@@ -305,7 +369,30 @@
                      <v-row>
                         <!-- Variation image -->
                         <v-col md="4">
-                          <v-img :src="'/static/media/' + currentProduct.variations[0].image.file" height="265"></v-img>
+                            <template v-if="currentProduct.variations.length > 1">
+                              <div id="slider">
+                                  <template v-for="(item, index) in currentProduct.variations" :key="item.id">
+                                      <input checked="" type="radio" :id="`slide${index+1}`" name="slider" selected="false">
+                                  </template>
+                                  <div id="slides">
+                                      <div id="overflow">
+                                          <div class="inner">
+                                              <article v-for="productVariation in currentProduct.variations">
+                                                  <v-img :src="'/static/media/' + productVariation.image.file" height="265"></v-img>
+                                              </article>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <template v-for="(item, index) in currentProduct.variations" :key="item.id">
+                                      <label :for="`slide${index+1}`"></label>
+                                  </template>
+                              </div>
+                          </template>
+
+                          <template v-else>
+                              <v-img :src="'/static/media/' + currentProduct.variations[0].image.file" height="265"></v-img>
+                          </template>
+
                         </v-col>
                         <!-- Variation detail -->
                         <v-col md="8">
