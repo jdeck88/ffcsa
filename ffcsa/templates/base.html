@@ -246,7 +246,7 @@
             <!-- total and checkout -->
             <section v-if="store.state.is_authenticated"
                      class="bg-white absolute px-3 pt-3 inset-x-0 bottom-0 border border-top">
-                <p class="text-sm mb-1 mt-1 text-danger hidden" id="lowRemainingBudget">You are not allowed to order more then your remaining budget !</p>
+                <p class="text-sm mb-1 mt-1 text-danger hidden" id="lowRemainingBudget">You will need to <a href="/accounts/update/?section=payment">add more funds to your account</a> before ordering.</p>
                 <div class="flex text-black font-bold">
                     <p class="mb-1">SUBTOTAL</p>
                     <p class="mb-1 ml-auto">$((store.state.cart.total_price))</p>
