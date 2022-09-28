@@ -246,6 +246,7 @@
             <!-- total and checkout -->
             <section v-if="store.state.is_authenticated"
                      class="bg-white absolute px-3 pt-3 inset-x-0 bottom-0 border border-top">
+                <p class="text-sm mb-1 mt-1 text-danger hidden" id="lowRemainingBudget">You are not allowed to order more then your remaining budget !</p>
                 <div class="flex text-black font-bold">
                     <p class="mb-1">SUBTOTAL</p>
                     <p class="mb-1 ml-auto">$((store.state.cart.total_price))</p>
@@ -267,7 +268,7 @@
                 {% is_order_cycle as user_on_order_cycle %}
                 {% if not user.profile.is_member %}
                     <v-btn large block color="primary" class="font-weight-bold mt-4" href="/cart"
-                           :disabled="!store.state.cart.items.length">CONTINUE TO CHECKOUT
+                           :disabled="!store.state.cart.items.length || store.state.cart.remaining_budget < store.state.cart.total_price">CONTINUE TO CHECKOUT
                     </v-btn>
                 {% elif user_on_order_cycle%}
                     <p class="text-sm text-center mb-1 mt-1">Your order will be automatically submitted on {% order_period_end %}</p>
@@ -606,12 +607,16 @@
                         } = res.data
                         console.log(res.data)
                         store.state.cart.items = items;
-                        store.state.cart.total_price = total_price;
+                        store.state.cart.total_price = parseFloat(total_price);
                         store.state.cart.delivery_fee = delivery_fee;
                         store.state.cart.remaining_budget = parseFloat(remaining_budget).toFixed(2);
                         store.state.cart.attending_dinner = attending_dinner;
                         store.state.cart.last_updated = last_updated;
                         store.state.cart.loading = false;
+
+                        if(store.state.cart.remaining_budget < store.state.cart.total_price) {
+                            document.getElementById("lowRemainingBudget").classList.remove('hidden');
+                        }
 
                         // {% if not user.is_authenticated %}
                             if (items.length > 0) {
@@ -627,16 +632,20 @@
                     }
                 },
                 async addToCart(variation) {
-                    // Add item to session cart
-                    const res = await axios.post(`/api/product_variations/${variation.id}/add_to_cart/`)
+                    if(store.state.cart.remaining_budget > store.state.cart.total_price) {
+                        // Add item to session cart
+                        const res = await axios.post(`/api/product_variations/${variation.id}/add_to_cart/`)
 
-                    ProductsVue.hideProductModal();
-                    this.drawer = !this.drawer;
-                    this.fetchCart();
+                        ProductsVue.hideProductModal();
+                        this.drawer = !this.drawer;
+                        this.fetchCart();
 
-                    // update products if user in products page
-                    if (location.href.includes('/products/')) {
-                        ProductsVue.getProducts()
+                        // update products if user in products page
+                        if (location.href.includes('/products/')) {
+                            ProductsVue.getProducts()
+                        }
+                    }else{
+                        store.commit('showAlert', {type: 'warning', content: 'You are not allowed to order more then your remaining budget !'})
                     }
                 },
                 async removeCartItem(item) {
@@ -662,34 +671,48 @@
 
                 // per item
                 async increaseItemQuantity(item, event) {
-                    // increase CartItem quantity
-                    const controlContainer = event.target.parentElement
-                    // disable buttons
-                    controlContainer.querySelectorAll('button').forEach(btn => btn.disabled = true);
+                    var elmLowRemainingBudget = document.getElementById("lowRemainingBudget");
 
-                    try {
-                        const res = await axios.post(`/api/cart/${item.id}/increase_item/`);
-                        this.fetchCart();
+                    if(store.state.cart.remaining_budget > store.state.cart.total_price) {
+                        // hide msg of low remaining budget
+                        elmLowRemainingBudget.classList.add('hidden');
 
-                        // update products if user in products page
-                        if (location.href.includes('/products/')) {
-                            ProductsVue.getProducts()
+                        // disable buttons
+                        const controlContainer = event.target.parentElement
+                        controlContainer.querySelectorAll('button').forEach(btn => btn.disabled = true);
+
+                        // increase CartItem quantity
+                        try {
+                            const res = await axios.post(`/api/cart/${item.id}/increase_item/`);
+                            this.fetchCart();
+
+                            // update products if user in products page
+                            if (location.href.includes('/products/')) {
+                                ProductsVue.getProducts()
+                            }
+
+                            // enable buttons
+                            controlContainer.querySelectorAll('button').forEach(btn => btn.disabled = false);
+                        } catch (error) {
+                            console.log(error)
+                            // enable buttons
+                            controlContainer.querySelectorAll('button').forEach(btn => btn.disabled = false);
                         }
-
-                        // enable buttons
-                        controlContainer.querySelectorAll('button').forEach(btn => btn.disabled = false);
-                    } catch (error) {
-                        console.log(error)
-                        // enable buttons
-                        controlContainer.querySelectorAll('button').forEach(btn => btn.disabled = false);
+                    } else {
+                        // show msg of low remaining budget
+                        elmLowRemainingBudget.classList.remove('hidden');
                     }
                 },
                 async decreaseItemQuantity(item, event) {
-                    // increase CartItem quantity
-                    const controlContainer = event.target.parentElement
+
+                    // Hide msg of low remaining budget if it's exist
+                    document.getElementById("lowRemainingBudget").classList.add('hidden');
+
                     // disable buttons
+                    const controlContainer = event.target.parentElement
                     controlContainer.querySelectorAll('button').forEach(btn => btn.disabled = true);
 
+                    // decrease CartItem quantity
                     try {
                         const res = await axios.post(`/api/cart/${item.id}/decrease_item/`);
                         this.fetchCart();
