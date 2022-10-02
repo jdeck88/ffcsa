@@ -240,8 +240,16 @@
           {% endif %}
       {% endif %}
 
+      <template v-if="store.state.cart.remaining_budget < 20">
+        <v-container class="py-0">
+          <v-alert class="mb-0" type="warning" dense>
+            Your remaining budget is running low. You can <a href='/accounts/update/?section=payment' class="text-white font-bold" style="text-decoration: underline">add more funds to your account here</a>.
+          </v-alert>
+        </v-container>
+      </template>
 
-        <!-- Products list -->
+
+      <!-- Products list -->
       <section id="productsListSection" class="min-h-screen">
         <div v-if="products.results.length > 0" class="container my-12 mx-auto min-h-screen">
           <v-row>
