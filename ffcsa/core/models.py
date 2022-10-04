@@ -185,7 +185,7 @@ class Profile(models.Model):
     def is_member(self):
         # TODO this is not correct
         # TODO fix this for one-time orders
-        return self.paid_signup_fee
+        return True
 
     @property
     def is_subscribing_member(self):
