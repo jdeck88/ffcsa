@@ -4,6 +4,7 @@ from django.db.models import  Q, query
 from rest_framework import viewsets
 from rest_framework import mixins
 from rest_framework.decorators import detail_route, list_route
+from rest_framework.exceptions import NotAcceptable
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import pagination
@@ -85,14 +86,19 @@ class ProductVariationViewSet(viewsets.ModelViewSet):
         Add product variation to cart
         """
         product_variation = get_object_or_404(ProductVariation, pk=pk)
-        
-        # increase item quantity if item already in cart 
+
+        # check if we get into a state where the cart is over_budget
+        additional_total = product_variation.price()
+        if request.cart.over_budget(additional_total) and additional_total > 0:
+            raise NotAcceptable("Updating your cart put you over budget. Try removing some items first.")
+
+        # increase item quantity if item already in cart
         item = request.cart.items.filter(variation=product_variation).first()
         if item:
             item.update_quantity(item.quantity + 1)
         else:
             request.cart.add_item(product_variation, 1)
-        
+
         recalculate_cart(request)
         return Response({'OK': 'OK'})
 

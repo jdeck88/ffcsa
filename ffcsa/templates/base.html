@@ -639,8 +639,8 @@
                     }
                 },
                 async addToCart(variation) {
-                    if(store.state.cart.remaining_budget > parseFloat(variation.unit_price)) {
-                        // Add item to session cart
+                    try {
+                      // Add item to session cart
                         const res = await axios.post(`/api/product_variations/${variation.id}/add_to_cart/`)
 
                         ProductsVue.hideProductModal();
@@ -651,9 +651,11 @@
                         if (location.href.includes('/products/')) {
                             ProductsVue.getProducts()
                         }
-                    }else{
-                        store.commit('showAlert', {type: 'warning', content: 'You are not allowed to order more then your remaining budget !'})
+
+                    } catch (error) {
+                        store.commit('showAlert', {type: 'warning', content: error.response.data.detail})
                     }
+
                 },
                 async removeCartItem(item) {
                     // remove an item from cart
