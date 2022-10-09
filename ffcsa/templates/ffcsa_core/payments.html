@@ -116,7 +116,7 @@
                 {% for error in subscribe_errors %}
                     <div class="alert alert-danger">{{ error }}</div>
                 {% endfor %}
-                <form action="{% url "payments_verify" %}" method="POST" id="verify-form" class="form-inline">
+                <form method="POST" id="verify-form" class="form-inline">
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-xs-12 col-sm-3">

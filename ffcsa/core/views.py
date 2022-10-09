@@ -133,7 +133,7 @@ def signup(request, template="accounts/account_signup.html", extra_context=None)
             'num_adults': form.cleaned_data['num_adults'],
             'num_children': form.cleaned_data['num_children'],
             'hear_about_us': form.cleaned_data['hear_about_us'],
-            'payments_url': request.build_absolute_uri(reverse("payments")),
+            'payments_url': request.build_absolute_uri("/accounts/update/?section=payment"),
         }
 
         try:
@@ -162,7 +162,7 @@ def signup(request, template="accounts/account_signup.html", extra_context=None)
             addr_bcc=[settings.EMAIL_HOST_USER]
         )
 
-        return HttpResponseRedirect(reverse('payments'))
+        return HttpResponseRedirect("/accounts/update/?section=payment")
 
     context = {"form": form, "title": "Join Now!"}
     context.update(extra_context or {})
@@ -199,7 +199,10 @@ def payments(request, template="ffcsa_core/payments.html", extra_context=None):
                "STRIPE_API_KEY": settings.STRIPE_API_KEY}
     context.update(extra_context)
 
-    return TemplateResponse(request, template, context)
+    # TODO: TO BE REMOVED b/c this is and old code, new code is on profile_update view
+    # return TemplateResponse(request, template, context)
+
+    return HttpResponseRedirect("/accounts/update/?section=payment")
 
 
 @require_POST
@@ -585,8 +588,7 @@ def stripe_webhooks(request):
                     payment = Payment.objects.create(user=user, amount=amount, date=date, charge_id=charge.id,
                                                      status='Pending')
                     payment.save()
-                    payments_url = request.build_absolute_uri(
-                        reverse("payments"))
+                    payments_url = request.build_absolute_uri("/accounts/update/?section=payment")
                     send_pending_payment_email(user, payments_url)
 
             elif not user:
@@ -651,7 +653,7 @@ def stripe_webhooks(request):
                 profile__stripe_customer_id=event.data.object.customer).first()
             charge = event.data.object
             err = charge.failure_message
-            payments_url = request.build_absolute_uri(reverse("payments"))
+            payments_url = request.build_absolute_uri("/accounts/update/?section=payment")
             created = datetime.datetime.fromtimestamp(charge.created).strftime('%Y-%m-%d')
             amount = charge.amount / 100
 
@@ -679,7 +681,7 @@ def stripe_webhooks(request):
             user.profile.save()
             date = datetime.datetime.fromtimestamp(
                 event.data.object.canceled_at).strftime('%d-%m-%Y')
-            payments_url = request.build_absolute_uri(reverse("payments"))
+            payments_url = request.build_absolute_uri("/accounts/update/?section=payment")
             send_subscription_canceled_email(user, date, payments_url)
 
             sendinblue.on_user_cancel_subscription(user)
@@ -944,7 +946,7 @@ def admin_credit_ordered_product(request, template="admin/credit_ordered_product
                         'amount': p.amount,
                         'product_msg': p.notes.split(':')[1],
                         'msg': form.cleaned_data.get('msg', None),
-                        'payments_url': request.build_absolute_uri(reverse("payments"))
+                        'payments_url': request.build_absolute_uri("/accounts/update/?section=payment")
                     }
                 )
 

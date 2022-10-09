@@ -54,7 +54,7 @@
             <p class="alert-info">This is a one time payment that will be credited to your account.</p>
             {% endif %}
 
-            <form v-if="!oneTimePayment.success" action="{% url 'make_payment' %}" method="POST" id="oneTimePayment" class="mt-8">
+            <form v-if="!oneTimePayment.success" method="POST" id="oneTimePayment" class="mt-8">
               <!-- Amount -->
               <v-text-field outlined v-model="oneTimePayment.amount" label="Payment Amount" v-model="oneTimePayment.amount" prefix="$" type="number" min="20" max="999" required></v-text-field>
 
@@ -128,7 +128,7 @@
       <div class="alert-danger mt-3">{{ error }}</div>
     {% endfor %}
 
-    <form action="{% url 'payments_verify' %}" method="POST" id="VerifyACH" class="mt-5">
+    <form method="POST" id="VerifyACH" class="mt-5">
       <p>Deposit Amounts</p>
       <v-row>
         <v-col cols="12" md="6">
@@ -164,7 +164,7 @@
   {% endif %}
 
 
-  <form action="{% url 'payments_subscribe' %}" method="POST" id="newSubscription">
+  <form method="POST" id="newSubscription">
     <!-- Monthly Contribution Amount (minimum $172) >>>>>> payment_amount.html -->
     <div class="mt-2">
       {% if user.profile.monthly_contribution != None %}
@@ -288,7 +288,7 @@
   <!-- update payment method -->
 
   <div class="hidden" id="edit-payment">
-    <form action="{% url 'payments_update' %}" method="POST" id="updatePaymentMethod">
+    <form method="POST" id="updatePaymentMethod">
         <!-- Payment method ACH Bank/CC >>>>>> payment_details.html -->
         <div>
           <h3 class="text-lg mt-4">Payment method</h3>
@@ -352,7 +352,7 @@
     </form>
 
     <div class="hidden" id="edit-payment-amount">
-     <form action="{% url 'payments_update_amount' %}" method="POST" id="updatePaymentAmount">
+     <form method="POST" id="updatePaymentAmount">
 
       <!-- Monthly Contribution Amount (minimum $172) >>>>>> payment_amount.html -->
       <br/>

@@ -44,7 +44,7 @@ def signup(request, template="accounts/account_signup.html",
             fail_silently=True,
         )
 
-        return HttpResponseRedirect(reverse('payments'))
+        return HttpResponseRedirect("/accounts/update/?section=payment")
 
     context = {"form": form, "title": _("Sign up")}
     context.update(extra_context or {})

@@ -339,7 +339,7 @@ class BasePaymentFormSet(forms.BaseModelFormSet):
                         'first_name': d['user'].first_name,
                         'amount': d['amount'],
                         'notes': d['notes'],
-                        'payments_url': self.request.build_absolute_uri(reverse("payments")) if self.request else None
+                        'payments_url': self.request.build_absolute_uri("/accounts/update/?section=payment") if self.request else None
                     }
                 )
 
