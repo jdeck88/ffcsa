@@ -250,7 +250,7 @@
             <!-- total and checkout -->
             <section v-if="store.state.is_authenticated"
                      class="bg-white absolute px-3 pt-3 inset-x-0 bottom-0 border border-top">
-                <p class="text-sm mb-1 mt-1 text-danger hidden" id="lowRemainingBudget">You will need to <a style="text-decoration: underline" href="/accounts/update/?section=payment">add more funds to your account</a> before ordering.</p>
+                <p class="text-sm mb-1 mt-1 text-danger hidden" id="lowRemainingBudget">You will need to <a style="text-decoration: underline" href="{% url "profile_update" %}?section=payment">add more funds to your account</a> before ordering.</p>
                 <div class="flex text-black font-bold">
                     <p class="mb-1">SUBTOTAL</p>
                     <p class="mb-1 ml-auto">$((store.state.cart.total_price))</p>
@@ -580,10 +580,10 @@
                     counter: 0,
 
                     items: [
-                        {title: 'Account settings', href: '/accounts/update/'},
+                        {title: 'Account settings', href: '{% url "profile_update" %}'},
                         {title: 'Email us', href: 'mailto:fullfarmcsa@deckfamilyfarm.com'},
-                        {title: 'My orders', href: '/accounts/update/?section=orders'},
-                        {title: 'Feed a friend', href: '/accounts/update/?section=feed'},
+                        {title: 'My orders', href: '{% url "profile_update" %}?section=orders'},
+                        {title: 'Feed a friend', href: '{% url "profile_update" %}?section=feed'},
                         {title: 'Logout', href: `{% url 'logout' %}?next={{ request.get_full_path }}`},
                     ],
 

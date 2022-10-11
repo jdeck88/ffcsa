@@ -5,6 +5,7 @@ from django.contrib.auth import login as auth_login
 from django.http import Http404, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.urls import reverse
+from django.utils.http import urlencode
 from django.utils.translation import ugettext_lazy as _
 from mezzanine.conf import settings
 from mezzanine.utils.email import send_mail_template
@@ -44,7 +45,8 @@ def signup(request, template="accounts/account_signup.html",
             fail_silently=True,
         )
 
-        return HttpResponseRedirect("/accounts/update/?section=payment")
+        payment_url = '{}?{}'.format(request.build_absolute_uri(reverse("profile_update")), urlencode({'section': 'payment'}))
+        return HttpResponseRedirect(payment_url)
 
     context = {"form": form, "title": _("Sign up")}
     context.update(extra_context or {})

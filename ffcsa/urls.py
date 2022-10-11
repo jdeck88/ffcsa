@@ -54,12 +54,6 @@ urlpatterns += [
     url("^api/", include(router.urls)),
 
     url("^account/orders/$", shop_ciews.order_history, name="shop_order_history"),
-    url("^account/payments/$", ffcsa_core.payments, name="payments"),
-    url("^account/payments/subscribe$", ffcsa_core.payments_subscribe, name="payments_subscribe"),
-    url("^account/payments/verify$", ffcsa_core.verify_ach, name="payments_verify"),
-    url("^account/payments/update$", ffcsa_core.payments_update, name="payments_update"),
-    url("^account/payments/update/amount$", ffcsa_core.payments_update_amount, name="payments_update_amount"),
-    url("^account/payments/new$", ffcsa_core.make_payment, name="make_payment"),
     url("^account/dairy/program/$", ffcsa_core.dairy_program, name="dairy_program"),
 
     url(

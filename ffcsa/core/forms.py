@@ -3,6 +3,7 @@ import datetime
 from django import forms
 from django.core import validators
 from django.db import transaction, connection
+from django.utils.http import urlencode
 from django.urls import reverse
 from mezzanine.accounts import forms as accounts_forms
 from mezzanine.conf import settings
@@ -339,7 +340,7 @@ class BasePaymentFormSet(forms.BaseModelFormSet):
                         'first_name': d['user'].first_name,
                         'amount': d['amount'],
                         'notes': d['notes'],
-                        'payments_url': self.request.build_absolute_uri("/accounts/update/?section=payment") if self.request else None
+                        'payments_url': '{}?{}'.format(self.request.build_absolute_uri(reverse("profile_update")), urlencode({'section': 'payment'})) if self.request else None
                     }
                 )
 

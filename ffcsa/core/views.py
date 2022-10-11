@@ -20,7 +20,7 @@ from django.template.response import HttpResponse, TemplateResponse
 from django.urls import reverse
 from django.utils import formats
 from django.utils.decorators import method_decorator
-from django.utils.http import is_safe_url
+from django.utils.http import is_safe_url, urlencode
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.decorators.http import require_POST
 from django.views import View
@@ -133,7 +133,7 @@ def signup(request, template="accounts/account_signup.html", extra_context=None)
             'num_adults': form.cleaned_data['num_adults'],
             'num_children': form.cleaned_data['num_children'],
             'hear_about_us': form.cleaned_data['hear_about_us'],
-            'payments_url': request.build_absolute_uri("/accounts/update/?section=payment"),
+            'payments_url': '{}?{}'.format(request.build_absolute_uri(reverse("profile_update")), urlencode({'section': 'payment'})),
         }
 
         try:
@@ -162,293 +162,13 @@ def signup(request, template="accounts/account_signup.html", extra_context=None)
             addr_bcc=[settings.EMAIL_HOST_USER]
         )
 
-        return HttpResponseRedirect("/accounts/update/?section=payment")
+        payment_url = '{}?{}'.format(request.build_absolute_uri(reverse("profile_update")),
+                                     urlencode({'section': 'payment'}))
+        return HttpResponseRedirect(payment_url)
 
     context = {"form": form, "title": "Join Now!"}
     context.update(extra_context or {})
     return TemplateResponse(request, template, context)
-
-
-@login_required
-def payments(request, template="ffcsa_core/payments.html", extra_context=None):
-    """
-    Display a list of the currently logged-in user's past orders.
-    """
-
-    extra_context = {} if extra_context is None else extra_context
-
-    next_payment_date = None
-    if request.user.profile.stripe_subscription_id:
-        subscription = stripe.Subscription.retrieve(request.user.profile.stripe_subscription_id)
-        next_payment_date = datetime.date.fromtimestamp(subscription.current_period_end + 1)
-        next_payment_date = formats.date_format(next_payment_date, "D, F d")
-
-    elif settings.DEBUG:
-        next_payment_date = datetime.datetime.today() + datetime.timedelta(days=62)
-        next_payment_date = formats.date_format(next_payment_date, "D, F d")
-
-    all_payments = Payment.objects.filter(user__id=request.user.id)
-    payments = paginate(all_payments.order_by('-date', '-id'),
-                        request.GET.get("page", 1),
-                        settings.SHOP_PER_PAGE_CATEGORY,
-                        settings.MAX_PAGING_LINKS)
-    context = {"payments": payments,
-               "contact_email": settings.DEFAULT_FROM_EMAIL,
-               "next_payment_date": next_payment_date,
-               "subscribe_errors": request.GET.getlist('error'),
-               "STRIPE_API_KEY": settings.STRIPE_API_KEY}
-    context.update(extra_context)
-
-    # TODO: TO BE REMOVED b/c this is and old code, new code is on profile_update view
-    # return TemplateResponse(request, template, context)
-
-    return HttpResponseRedirect("/accounts/update/?section=payment")
-
-
-@require_POST
-@login_required
-def payments_subscribe(request):
-    """
-    Create a new subscription
-    """
-    errors = []
-    amount = Decimal(request.POST.get('amount'))
-    paymentType = request.POST.get('paymentType')
-    stripeToken = request.POST.get('stripeToken')
-
-    user = request.user
-    if user.profile.join_dairy_program and not user.profile.paid_signup_fee and not request.POST.get(
-            'signupAcknowledgement') == 'True':
-        errors.append('You must acknowledge the 1 time Dairy program fee')
-
-    if not stripeToken:
-        errors.append('Invalid Request')
-
-    try:
-        if not errors:
-            resubscribed = False
-
-            if paymentType == 'CC':
-                if not user.profile.stripe_customer_id:
-                    customer = stripe.Customer.create(
-                        email=user.email,
-                        description=user.get_full_name(),
-                        source=stripeToken,
-                    )
-                    user.profile.stripe_customer_id = customer.id
-
-                else:
-                    customer = stripe.Customer.retrieve(user.profile.stripe_customer_id)
-                    customer.source = stripeToken
-                    customer.save()
-
-                    resubscribed = True
-
-                user.profile.payment_method = 'CC'
-                user.profile.monthly_contribution = amount
-                user.profile.save()
-
-                # we can create the subscription right now
-                create_stripe_subscription(user)
-                success(request,
-                        'Your subscription has been created and your first payment is pending. '
-                        'You should see the payment credited to your account within the next few minutes')
-
-            elif paymentType == 'ACH':
-                if not user.profile.stripe_customer_id:
-                    customer = stripe.Customer.create(
-                        email=user.email,
-                        description=user.get_full_name(),
-                        source=stripeToken,
-                    )
-                    user.profile.stripe_customer_id = customer.id
-
-                else:
-                    customer = stripe.Customer.retrieve(
-                        user.profile.stripe_customer_id)
-                    customer.source = stripeToken
-                    customer.save()
-
-                    resubscribed = True
-
-                user.profile.payment_method = 'ACH'
-                user.profile.monthly_contribution = amount
-                user.profile.ach_status = 'VERIFIED' if customer.sources.data[
-                                                            0].status == 'verified' else 'NEW'
-                user.profile.save()
-                success(request,
-                        'Your subscription has been created. You will need to verify your bank account '
-                        'before your first payment is made.')
-
-            else:
-                errors.append('Unknown Payment Type')
-
-            if resubscribed:
-                sendinblue.on_user_resubscribe(user)
-
-    except stripe.error.CardError as e:
-        body = e.json_body
-        err = body.get('error', {})
-        errors.append(err.get('message'))
-
-    url = reverse('payments')
-    isFirst = True
-    for error in errors:
-        if isFirst:
-            url += "?error={}".format(error)
-        else:
-            url += "&error={}".format(error)
-
-    return HttpResponseRedirect(url)
-
-
-@require_POST
-@login_required
-def payments_update(request):
-    """
-    Update a payment source
-    """
-    errors = []
-    paymentType = request.POST.get('paymentType')
-    stripeToken = request.POST.get('stripeToken')
-
-    user = request.user
-    if not user.profile.stripe_customer_id or not user.profile.stripe_subscription_id:
-        errors.append(
-            'Could not find your subscription id to update. Please contact the site administrator.')
-
-    if not stripeToken:
-        errors.append('Invalid Request')
-
-    try:
-        if not errors:
-            if paymentType == 'CC':
-                customer = stripe.Customer.retrieve(
-                    user.profile.stripe_customer_id)
-                customer.source = stripeToken
-                customer.save()
-                # reset this so they don't receive error msg for failed ach verification
-                user.profile.payment_method = 'CC'
-                user.profile.ach_status = None
-                user.profile.save()
-                success(request, 'Your payment method has been updated.')
-            elif paymentType == 'ACH':
-                customer = stripe.Customer.retrieve(
-                    user.profile.stripe_customer_id)
-                customer.source = stripeToken
-                customer.save()
-                user.profile.payment_method = 'ACH'
-                user.profile.ach_status = 'VERIFIED' if customer.sources.data[
-                                                            0].status == 'verified' else 'NEW'
-                user.profile.save()
-                success(request, 'Your payment method has been updated.')
-            else:
-                errors.append('Unknown Payment Type')
-
-    except stripe.error.CardError as e:
-        body = e.json_body
-        err = body.get('error', {})
-        errors.append(err.get('message'))
-
-    url = reverse('payments')
-    isFirst = True
-    for error in errors:
-        if isFirst:
-            url += "?error={}".format(error)
-        else:
-            url += "&error={}".format(error)
-
-    return HttpResponseRedirect(url)
-
-
-@require_POST
-@login_required
-def payments_update_amount(request):
-    """
-    Update subscription amount
-    """
-    errors = []
-    amount = Decimal(request.POST.get('amount'))
-
-    user = request.user
-    if not user.profile.stripe_customer_id or not user.profile.stripe_subscription_id:
-        errors.append(
-            'Could not find your subscription id to update. Please contact the site administrator.')
-
-    if not errors and amount != user.profile.monthly_contribution:
-        user.profile.monthly_contribution = amount
-        update_stripe_subscription(user)
-        user.profile.save()
-        success(request, 'Your monthly contribution has been updated.')
-
-    url = reverse('payments')
-    isFirst = True
-    for error in errors:
-        if isFirst:
-            url += "?error={}".format(error)
-        else:
-            url += "&error={}".format(error)
-
-    return HttpResponseRedirect(url)
-
-
-@require_POST
-@login_required
-def make_payment(request):
-    """
-    Make a 1 time payment
-    """
-    hasError = False
-    amount = Decimal(request.POST.get('amount', 0))
-
-    user = request.user
-    if not user.profile.stripe_customer_id:
-        # create stripe user if not already existing. This should have been created on signup, but we've had an issue in the past where it wasn't for some reason
-        customer = stripe.Customer.create(
-            email=user.email,
-            description=user.get_full_name()
-        )
-        user.profile.stripe_customer_id = customer.id
-        user.profile.save()
-
-    if not request.POST.get('chargeAcknowledgement') == 'True':
-        hasError = True
-        error(request, 'You must acknowledge the charge')
-
-    if not amount:
-        hasError = True
-        error(request, 'Invalid amount provided.')
-
-    if amount < 20:
-        hasError = True
-        error(request, 'Minimum payment amount is $20.')
-
-    try:
-        if not hasError:
-            stripeToken = request.POST.get('stripeToken')
-            card = None
-            if stripeToken:
-                customer = stripe.Customer.retrieve(
-                    user.profile.stripe_customer_id)
-                card = customer.sources.create(source=stripeToken)
-
-            stripe.Charge.create(
-                amount=(amount * 100).quantize(0),  # in cents
-                currency='usd',
-                description=PAYMENT_DESCRIPTION,
-                customer=user.profile.stripe_customer_id,
-                source=card.id if card else None,
-                statement_descriptor=PAYMENT_DESCRIPTION,
-            )
-            success(request, 'Your payment is pending.')
-            # Payment will be created when the charge is successful
-
-    except stripe.error.CardError as e:
-        body = e.json_body
-        err = body.get('error', {})
-        error(request, err.get('message'))
-
-    return HttpResponseRedirect(reverse('payments'))
 
 
 @require_POST
@@ -487,77 +207,6 @@ def donate(request):
 
 
 @require_POST
-@login_required
-def verify_ach(request):
-    """
-    Verify an ACH bank account
-    """
-    errors = []
-    amount1 = request.POST.get('amount1')
-    amount2 = request.POST.get('amount2')
-    user = request.user
-
-    if not amount1 or not amount2:
-        errors.append('both amounts are required')
-
-    if not user.profile.stripe_customer_id:
-        errors.append(
-            'You are missing a customerId. Please contact the site administrator')
-
-    if not errors:
-        customer = stripe.Customer.retrieve(user.profile.stripe_customer_id)
-        bank_account = customer.sources.retrieve(customer.default_source)
-
-        amount1 = amount1.split('.')[-1]
-        amount2 = amount2.split('.')[-1]
-
-        # verify the account
-        try:
-            bank_account.verify(amounts=[amount1, amount2])
-            user.profile.ach_status = 'VERIFIED'
-            user.profile.save()
-
-            # we can create the subscription right now
-            if not user.profile.stripe_subscription_id:
-                create_stripe_subscription(user)
-                if not Payment.objects.filter(user=user).exists():
-                    success(request,
-                            'Your account has been verified and your first payment is processing. '
-                            'When your payment has been received, you will receive an email letting '
-                            'you know when your first ordering and pickup dates are. If you do not '
-                            'see this email in the next 5 - 7 business days, please check your spam')
-                else:
-                    subscription = stripe.Subscription.retrieve(
-                        user.profile.stripe_subscription_id)
-                    next_payment_date = datetime.date.fromtimestamp(
-                        subscription.current_period_end + 1)
-                    next_payment_date = formats.date_format(
-                        next_payment_date, "D, F d")
-                    success(request,
-                            'Congratulations, your account has been verified and your first payment is processing. '
-                            'You will be seeing this amount show up in your member store account in 5 - 7 business '
-                            'days. Your next scheduled payment will be ' + next_payment_date)
-            else:
-                success(request, 'Your account has been verified.')
-        except stripe.error.CardError as e:
-            user.profile.ach_status = 'VERIFYING'
-            user.profile.save()
-            body = e.json_body
-            err = body.get('error', {})
-            error(request, err.get('message'))
-
-    url = reverse('payments')
-    isFirst = True
-    for e in errors:
-        if isFirst:
-            url += "?error={}".format(e)
-        else:
-            url += "&error={}".format(e)
-
-    return HttpResponseRedirect(url)
-
-
-@require_POST
 @csrf_exempt
 def stripe_webhooks(request):
     """
@@ -588,7 +237,7 @@ def stripe_webhooks(request):
                     payment = Payment.objects.create(user=user, amount=amount, date=date, charge_id=charge.id,
                                                      status='Pending')
                     payment.save()
-                    payments_url = request.build_absolute_uri("/accounts/update/?section=payment")
+                    payments_url = '{}?{}'.format(request.build_absolute_uri(reverse("profile_update")), urlencode({'section': 'payment'}))
                     send_pending_payment_email(user, payments_url)
 
             elif not user:
@@ -653,7 +302,7 @@ def stripe_webhooks(request):
                 profile__stripe_customer_id=event.data.object.customer).first()
             charge = event.data.object
             err = charge.failure_message
-            payments_url = request.build_absolute_uri("/accounts/update/?section=payment")
+            payments_url = '{}?{}'.format(request.build_absolute_uri(reverse("profile_update")), urlencode({'section': 'payment'}))
             created = datetime.datetime.fromtimestamp(charge.created).strftime('%Y-%m-%d')
             amount = charge.amount / 100
 
@@ -681,7 +330,7 @@ def stripe_webhooks(request):
             user.profile.save()
             date = datetime.datetime.fromtimestamp(
                 event.data.object.canceled_at).strftime('%d-%m-%Y')
-            payments_url = request.build_absolute_uri("/accounts/update/?section=payment")
+            payments_url = '{}?{}'.format(request.build_absolute_uri(reverse("profile_update")), urlencode({'section': 'payment'}))
             send_subscription_canceled_email(user, date, payments_url)
 
             sendinblue.on_user_cancel_subscription(user)
@@ -946,7 +595,7 @@ def admin_credit_ordered_product(request, template="admin/credit_ordered_product
                         'amount': p.amount,
                         'product_msg': p.notes.split(':')[1],
                         'msg': form.cleaned_data.get('msg', None),
-                        'payments_url': request.build_absolute_uri("/accounts/update/?section=payment")
+                        'payments_url': '{}?{}'.format(request.build_absolute_uri(reverse("profile_update")), urlencode({'section': 'payment'}))
                     }
                 )
 

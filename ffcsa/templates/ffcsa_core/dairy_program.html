@@ -69,7 +69,7 @@
                       });
                   }
 
-                  location.href = "/accounts/update/?section=payment"
+                  location.href = "{% url "profile_update" %}?section=payment"
 
                 } catch (error) {
                   store.commit('showAlert', {type: 'error', content: error.response.data.detail})

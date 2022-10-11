@@ -52,7 +52,7 @@
             <a href="{% url "shop_order_history" %}" class="btn btn-sm btn-block btn-info btn-account">
                 <span class="glyphicon glyphicon-folder-open"></span> {% trans "View Order History" %}</a>
 
-            <a href="{% url "payments" %}" class="btn btn-sm btn-block btn-info btn-account">
+            <a href="{% url "profile_update" %}?section=payment" class="btn btn-sm btn-block btn-info btn-account">
                 <span class="glyphicon glyphicon-folder-open"></span> {% trans "Manage Payments " %}</a>
 
             {% if request.session.remaining_budget > 0 %}
