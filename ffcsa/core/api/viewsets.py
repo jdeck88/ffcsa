@@ -424,19 +424,35 @@ class PayViewSet(viewsets.ViewSet):
         """Make ont time payment using stripe Charge"""
         serializer = OneTimePaymentSerializer(data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
+        profile = request.user.profile
 
         try:
             card = None
             if serializer.data.get("stripeToken", None):
+                # create stripe customer if user is a non-subscribing member and has no stripe_customer_id
+                if profile.non_subscribing_member and not profile.stripe_customer_id:
+                    customer = stripe.Customer.create(
+                        email=request.user.email,
+                        description=request.user.get_full_name()
+                    )
+                    # save stripe_customer_id
+                    profile.stripe_customer_id = customer.id
+
+                    # only accepts CC payments
+                    profile.payment_method = 'CC'
+                    profile.ach_status = None
+
+                    profile.save()
+
                 # create customer card
-                customer = stripe.Customer.retrieve(request.user.profile.stripe_customer_id)
+                customer = stripe.Customer.retrieve(profile.stripe_customer_id)
                 card = customer.sources.create(source=serializer.data.get("stripeToken"))
 
             res = stripe.Charge.create(
                 amount=(int(serializer.data.get("amount") * 100)),  # in cents
                 currency="usd",
                 description=PAYMENT_DESCRIPTION,
-                customer=request.user.profile.stripe_customer_id,
+                customer=profile.stripe_customer_id,
                 source=card.id if card else None,
                 statement_descriptor=PAYMENT_DESCRIPTION,
             )
