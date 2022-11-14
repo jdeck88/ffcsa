@@ -281,7 +281,7 @@ DELIVERY_CSVS = {
             'zipCodes': ['97330', '97331', '97333'],
             'standingDeliveries': [
                 # ['Address', 'Name', 'Phone', 'Email', 'Notes', 'duration', 'tw start', 'tw end', 'Boxes', 'dairy', 'meat', 'flowers', 'notifications']
-                ['3355 SW Hawkeye, Corvallis, OR 97333', 'Corvallis Dropsite', '', '', '', '8', '7:00', '12:00',
+                ['3355 SW Hawkeye, Corvallis, OR 97333', 'Corvallis Dropsite', '', '', '', '8', '3:30', '8:00',
                  '', '', '', '', 'none'],
                 ['1007 SE 3rd St, Corvallis, OR 97333', '1st Alt South', '', '', '', '10', '', '', '', '', '', '',
                  'none'],
