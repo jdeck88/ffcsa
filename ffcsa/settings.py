@@ -236,8 +236,8 @@ ORDER_WINDOWS = [
         'endTime': '23:59',
         'packDay': 5,
         'memberLimit': 220,
-        'dropsites': ['Farm - Friday', 'LCFM', 'Hollywood', 'PSU', 'Corvallis', 'Cully', 'Irvington', 'Woodstock',
-                      'St Johns', 'Zafar'],
+        'dropsites': [],#'Farm - Friday', 'LCFM', 'Hollywood', 'PSU', 'Corvallis', 'Cully', 'Irvington', 'Woodstock',
+                      #'St Johns', 'Zafar'],
         'homeDeliveryZips': ['97330', '97331', '97333']
     },
     {
