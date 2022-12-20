@@ -238,7 +238,7 @@ ORDER_WINDOWS = [
         'memberLimit': 220,
         'dropsites': [],#'Farm - Friday', 'LCFM', 'Hollywood', 'PSU', 'Corvallis', 'Cully', 'Irvington', 'Woodstock',
                       #'St Johns', 'Zafar'],
-        'homeDeliveryZips': ['97330', '97331', '97333']
+        'homeDeliveryZips': [],#'97330', '97331', '97333']
     },
     {
         'startDay': 6,  # 1 is Monday
