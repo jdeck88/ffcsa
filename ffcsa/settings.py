@@ -236,9 +236,9 @@ ORDER_WINDOWS = [
         'endTime': '23:59',
         'packDay': 5,
         'memberLimit': 220,
-        'dropsites': [],#'Farm - Friday', 'LCFM', 'Hollywood', 'PSU', 'Corvallis', 'Cully', 'Irvington', 'Woodstock',
-                      #'St Johns', 'Zafar'],
-        'homeDeliveryZips': [],#'97330', '97331', '97333']
+        'dropsites': ['Farm - Friday', 'LCFM', 'Hollywood', 'PSU', 'Corvallis', 'Cully', 'Irvington', 'Woodstock',
+                      'St Johns', 'Zafar'],
+        'homeDeliveryZips': ['97330', '97331', '97333']
     },
     {
         'startDay': 6,  # 1 is Monday
@@ -247,8 +247,8 @@ ORDER_WINDOWS = [
         'endTime': '23:59',
         'packDay': 2,
         'memberLimit': 220,
-        'dropsites': [],#'Farm - Tuesday', 'W 11th', 'Friendly'],
-        'homeDeliveryZips': [],#'97401', '97402', '97403', '97404', '97405', '97477', '97408', '97448']
+        'dropsites': ['Farm - Tuesday', 'W 11th', 'Friendly'],
+        'homeDeliveryZips': ['97401', '97402', '97403', '97404', '97405', '97477', '97408', '97448']
     }
 ]
 DROP_SITE_ORDER = ['Home Delivery', 'W 11th', 'Friendly', 'Farm - Friday', 'Farm - Tuesday',
