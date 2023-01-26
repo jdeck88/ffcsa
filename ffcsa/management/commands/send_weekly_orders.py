@@ -59,10 +59,13 @@ class Command(BaseCommand):
             for invoice, order in generate_invoices(orders):
                 # points to Items Ordered header
                 # Lets rename to lastname
-                bookmark = list(invoice.pages[0].bookmarks[0])
-                bookmark[1] = order.billing_detail_last_name + " Invoice"
-                invoice.pages[0].bookmarks[0] = tuple(bookmark)
-                invoice_pages.extend(invoice.pages)
+                bookmarks = invoice.pages[0].bookmarks
+                # We used to not have this check and occasionally an index out of range error would occur
+                if bookmarks:
+                    bookmark = list(bookmarks[0])
+                    bookmark[1] = order.billing_detail_last_name + " Invoice"
+                    invoice.pages[0].bookmarks[0] = tuple(bookmark)
+                    invoice_pages.extend(invoice.pages)
 
             # workaround for https://github.com/Kozea/WeasyPrint/issues/990
             # for invoice, order in generate_invoices(orders):

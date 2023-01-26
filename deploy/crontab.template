@@ -24,7 +24,7 @@
 #0 3 * * 1 %(user)s %(manage)s weekly_kpis
 
 # Send outstanding balance email
-# 0 1 9 * * %(user)s %(manage)s outstanding_member_credits
+# 0 1 1 * * %(user)s %(manage)s outstanding_member_credits
 # 0 1 24 * * %(user)s %(manage)s outstanding_member_credits
 # 0 1 1 1 * %(user)s %(manage)s outstanding_member_credits
 
