@@ -681,6 +681,12 @@ CELERY_BEAT_SCHEDULE = {
         # 'schedule': crontab(minute="*", hour="*"),
         'schedule': crontab(),
         # 'args': (*args)
+    },
+    'task-submit-orders': {
+        'task': 'ffcsa.core.tasks.send_weekly_orders',
+        # Monday at 00:01
+        # 'schedule': crontab(minute='1', hour='0', day_of_week='1'),
+        'schedule': crontab(minute='30'),
     }
 }
 
