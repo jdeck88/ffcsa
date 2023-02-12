@@ -5,6 +5,6 @@ default_app_config = "ffcsa.core.apps.CoreConfig"
 
 # This will make sure the app is always imported when
 # Django starts so that shared_task will use this app.
-from ffcsa.celery_tasks import app as celery_app
+from ffcsa.celery import app as celery_app
 
 __all__ = ["celery_app"]

@@ -5,7 +5,7 @@ from celery.signals import task_failure
 from django.core import management
 from django.utils.timezone import utc
 
-from ffcsa.celery_tasks import app
+from ffcsa.celery import app
 from ffcsa.shop.models.Cart import Cart
 
 
@@ -41,6 +41,7 @@ def send_weekly_orders(self):
     """
     # management.call_command("cart")
     # management.call_command("send_weekly_orders", "--send-orders")
+    print("In Send Weekly Orders Task")
     raise Exception("Test exception from failed Celery Task")
 
 

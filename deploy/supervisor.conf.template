@@ -12,3 +12,12 @@ stderr_logfile = /home/%(user)s/logs/%(proj_name)s_supervisor_error
 autorestart=true
 redirect_stderr=false
 environment=LANG="%(locale)s",LC_ALL="%(locale)s",LC_LANG="%(locale)s"
+
+[program:celeryd_%(proj_name)s]
+command=%(venv_path)s/bin/celery --app=%(proj_app)s worker -l info
+stdout_logfile = /home/%(user)s/logs/%(proj_name)s_celeryd.log
+stderr_logfile = /home/%(user)s/logs/%(proj_name)s_celeryd_error.log
+autostart=true
+autorestart=true
+startsecs=10
+stopwaitsecs=600
