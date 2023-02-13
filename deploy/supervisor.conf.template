@@ -14,7 +14,9 @@ redirect_stderr=false
 environment=LANG="%(locale)s",LC_ALL="%(locale)s",LC_LANG="%(locale)s"
 
 [program:celeryd_%(proj_name)s]
-command=%(venv_path)s/bin/celery --app=%(proj_app)s worker -l info
+command=%(venv_path)s/bin/celery --app=%(proj_app)s worker -l info --beat
+directory=%(proj_path)s
+user=%(user)s
 stdout_logfile = /home/%(user)s/logs/%(proj_name)s_celeryd.log
 stderr_logfile = /home/%(user)s/logs/%(proj_name)s_celeryd_error.log
 autostart=true

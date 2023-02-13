@@ -665,8 +665,8 @@ DATABASES = {
 #############
 # Celery application definition
 # http://docs.celeryproject.org/en/v4.0.2/userguide/configuration.html
-CELERY_BROKER_URL = 'redis://redis:6379/0'
-CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+CELERY_BROKER_URL = 'redis://'
+CELERY_RESULT_BACKEND = 'redis://'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
@@ -684,9 +684,9 @@ CELERY_BEAT_SCHEDULE = {
     },
     'task-submit-orders': {
         'task': 'ffcsa.core.tasks.send_weekly_orders',
-        # Monday at 00:01
-        # 'schedule': crontab(minute='1', hour='0', day_of_week='1'),
-        'schedule': crontab(minute='22'),
+        # Monday and Thursday at 00:01
+        # 'schedule': crontab(minute='1', hour='0', day_of_week='1,4'),
+        'schedule': crontab(minute='10', hour='16', day_of_week='0'),
     }
 }
 

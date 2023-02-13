@@ -34,3 +34,6 @@ jobs:
 
     - name: Restart server
       run: sudo supervisorctl restart gunicorn_ffcsa_prod
+
+    - name: Restart celery
+      run: sudo supervisorctl restart celeryd_ffcsa_prod
