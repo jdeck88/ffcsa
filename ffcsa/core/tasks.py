@@ -39,9 +39,8 @@ The contents of the full traceback was:
 def send_weekly_orders(self):
     """
     """
-    # management.call_command("cart")
-    # management.call_command("send_weekly_orders", "--send-orders")
-    management.call_command("send_weekly_orders")
+    management.call_command("cart")
+    management.call_command("send_weekly_orders", "--send-orders")
     return True
 
 

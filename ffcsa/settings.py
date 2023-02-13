@@ -676,17 +676,16 @@ from celery.schedules import crontab
 
 # Other Celery settings
 CELERY_BEAT_SCHEDULE = {
-    'task-anonymous-carts': {
-        'task': 'ffcsa.core.tasks.clean_anonymous_carts',
-        # 'schedule': crontab(minute="*", hour="*"),
-        'schedule': crontab(),
-        # 'args': (*args)
-    },
+#    'task-anonymous-carts': {
+#        'task': 'ffcsa.core.tasks.clean_anonymous_carts',
+#        # 'schedule': crontab(minute="*", hour="*"),
+#        'schedule': crontab(),
+#        # 'args': (*args)
+#    },
     'task-submit-orders': {
         'task': 'ffcsa.core.tasks.send_weekly_orders',
         # Monday and Thursday at 00:01
-        # 'schedule': crontab(minute='1', hour='0', day_of_week='1,4'),
-        'schedule': crontab(minute='10', hour='16', day_of_week='0'),
+        'schedule': crontab(minute='1', hour='0', day_of_week='1,4'),
     }
 }
 
