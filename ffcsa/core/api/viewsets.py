@@ -200,11 +200,11 @@ class SignupViewSet(viewsets.ViewSet):
                                            urlencode({'section': 'payment'})),
         }
 
-        try:
-            signrequest.send_sign_request(user, True)
-        except ApiException as e:
-            # don't prevent the user from signing up. They can re-send the sign request document later
-            logger.error(e)
+        # try:
+        #     signrequest.send_sign_request(user, True)
+        # except ApiException as e:
+        #     # don't prevent the user from signing up. They can re-send the sign request document later
+        #     logger.error(e)
         add_google_contact(user)
 
         subject = "New User Signup"

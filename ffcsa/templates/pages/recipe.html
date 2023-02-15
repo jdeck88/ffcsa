@@ -14,7 +14,8 @@
             {{ page.recipe.content|safe }}
         {% endeditable %}
 
-        {% if can_order and request.user.profile.signed_membership_agreement %}
+{#        {% if can_order and request.user.profile.signed_membership_agreement %}#}
+        {% if can_order %}
             <form method="post" id="add-all-recipe-form" class="add-recipe-form">
                 {% csrf_token %}
                 <div class="form-actions">
@@ -47,9 +48,9 @@
                                     <h6>{{ p.product }}</h6>
                                 </div>
                             </a>
-                            {% if not request.user.profile.signed_membership_agreement %}
-                                <p class="text-base text-center text-red-800">Please sign our member agreement</p>
-                            {% elif not can_order %}
+{#                            {% if not request.user.profile.signed_membership_agreement %}#}
+{#                                <p class="text-base text-center text-red-800">Please sign our member agreement</p>#}
+                            {% if not can_order %}
                                 <p class="text-base text-center text-red-800">Order period has not opened</p>
                             {% elif not p.product.variations.first.has_stock %}
                                 <p class="text-danger text-center">Out of Stock</p>

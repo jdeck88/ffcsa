@@ -148,6 +148,9 @@ class Profile(models.Model):
     payment_agreement = models.BooleanField(
         "I agree to make monthly payments in order to maintain my membership with the FFCSA for 6 months, with a minimium of $172 per month.",
         default=False)
+    product_agreement = models.BooleanField(
+        "I agree to the Full Farm CSA Product Liability agreement. Click <a href='/static/docs/Product Liability Agreement.pdf'>here</a> to read this agreement",
+        default=False)
     signed_membership_agreement = models.BooleanField(default=False,
                                                       help_text="We have a signed Member Liability Document of file.")
     non_subscribing_member = models.BooleanField(default=False,

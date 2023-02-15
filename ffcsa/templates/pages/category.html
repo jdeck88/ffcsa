@@ -70,7 +70,8 @@
                                         <div class="flex-grow mb-6">{{ product.content|truncate:140|striptags}}</div>
                                     </a>
                                     {% with has_stock=product|product_has_stock %}
-                                        {% if not request.user.profile.signed_membership_agreement or not can_order %}
+{#                                        {% if not request.user.profile.signed_membership_agreement or not can_order %}#}
+                                        {% if not can_order %}
                                             {# DO Nothing #}
                                         {% elif not has_stock %}
                                             <p class="text-danger text-center">Out of Stock</p>
@@ -82,11 +83,11 @@
                                     {#                                        {% endif %}#}
                                 </div>
                                 <div>
-                                    {% if not request.user.profile.signed_membership_agreement %}
-                                        <p class="text-base text-center text-red-800">Please sign our member
-                                            agreement</p>
+{#                                    {% if not request.user.profile.signed_membership_agreement %}#}
+{#                                        <p class="text-base text-center text-red-800">Please sign our member#}
+{#                                            agreement</p>#}
                                         {#                                    {% elif product.is_dairy and not request.user.profile.join_dairy_program %}#}
-                                    {% elif not can_order %}
+                                    {% if not can_order %}
                                         <p class="text-base text-center text-red-800">Order period has not opened</p>
                                     {% elif product.is_dairy and not can_order_dairy %}
                                         <p class="text-base text-center text-red-800">Ask us about our Raw Dairy program

@@ -2,8 +2,8 @@
 
 {% if not request.user.is_authenticated %}
     <div class="alert alert-warning non-field-error">FFCSA members please sign in to make your order</div>
-{% elif not request.user.profile.signed_membership_agreement %}
-    {% include 'ffcsa_core/includes/membership_agreement_alert.html' %}
+{#{% elif not request.user.profile.signed_membership_agreement %}#}
+{#    {% include 'ffcsa_core/includes/membership_agreement_alert.html' %}#}
 {% else %}
     <div class="alert alert-info non-field-error mb-2"><b>Current
         Dropsite:</b> {% if request.user.profile.home_delivery %}Home Delivery -
@@ -30,4 +30,4 @@
     {% endif %}
 {% endif %}
 
-{% include 'ffcsa_core/includes/membership_agreement_alert.html' %}
+{#{% include 'ffcsa_core/includes/membership_agreement_alert.html' %}#}

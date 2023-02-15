@@ -193,18 +193,18 @@
               </v-alert>
             </v-container>
           </template>
-      {% elif not user.profile.signed_membership_agreement %}
-          <template>
-              <v-container class="py-0">
-                  <v-alert class="mb-0" type="warning" dense>
-                      You will need to sign our Membership Agreement before you can order. You should
-                      have received an email with this document upon signup.
-                      <v-btn small color="green" dark class="font-weight-bold ml-3" href="{% url "signrequest" %}">
-                          Re-Send
-                      </v-btn>
-                  </v-alert>
-              </v-container>
-          </template>
+{#      {% elif not user.profile.signed_membership_agreement %}#}
+{#          <template>#}
+{#              <v-container class="py-0">#}
+{#                  <v-alert class="mb-0" type="warning" dense>#}
+{#                      You will need to sign our Membership Agreement before you can order. You should#}
+{#                      have received an email with this document upon signup.#}
+{#                      <v-btn small color="green" dark class="font-weight-bold ml-3" href="{% url "signrequest" %}">#}
+{#                          Re-Send#}
+{#                      </v-btn>#}
+{#                  </v-alert>#}
+{#              </v-container>#}
+{#          </template>#}
       {% else %}
           {% if not valid_dropsite %}
               <template>

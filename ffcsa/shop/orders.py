@@ -10,8 +10,8 @@ def user_can_order(user):
     if not user.is_authenticated():
         return False, "You must be authenticated in order to add products to your cart"
 
-    if not user.profile.signed_membership_agreement:
-        return False, "You must sign our membership agreement before you can make an order"
+    # if not user.profile.signed_membership_agreement:
+    #     return False, "You must sign our membership agreement before you can make an order"
 
     if not is_valid_dropsite(user):
         return False, "Your current dropsite is no longer available. " \

@@ -29,6 +29,7 @@ class SignupProfileSerializer(serializers.Serializer):
     delivery_address = serializers.CharField(required=False)
     join_dairy_program = serializers.BooleanField(required=False)
     payment_agreement = serializers.BooleanField()
+    product_agreement = serializers.BooleanField(required=False)
     pickup_agreement = serializers.BooleanField(required=False)  # ? not included in the model
     delivery_notes = serializers.CharField(required=False)
     communication_method = serializers.CharField(required=False)  # ? not included in the model

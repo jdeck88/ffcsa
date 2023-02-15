@@ -123,8 +123,8 @@
 
         {% if not request.user.is_authenticated %}
             <p class="error-msg">Log In to place an order.</p>
-        {% elif not request.user.profile.signed_membership_agreement %}
-            <p class="error-msg">Please sign our membership agreement</p>
+{#        {% elif not request.user.profile.signed_membership_agreement %}#}
+{#            <p class="error-msg">Please sign our membership agreement</p>#}
         {% elif not can_order %}
             <p class="error-msg">Order period has not opened.</p>
         {% else %}
