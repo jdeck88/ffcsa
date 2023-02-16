@@ -214,7 +214,7 @@ class UpdatePaymentMethodSerializer(serializers.Serializer):
 
 
 class UpdatePaymentAmountSerializer(serializers.Serializer):
-    amount = serializers.FloatField(min_value=172)
+    amount = serializers.FloatField(min_value=200)
 
 
 # OneTimePayment Serializer

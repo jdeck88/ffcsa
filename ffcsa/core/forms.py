@@ -126,7 +126,7 @@ class ProfileForm(accounts_forms.ProfileForm):
             self.fields['pickup_agreement'] = forms.BooleanField(
                 label="I agree to bring my own bags and coolers as needed to pick up my product. The containers "
                       "that the product arrives in stay at the dropsite. I intend to maintain my membership with the FFCSA "
-                      "for 6 months, with a minimum payment of $172 per month.")
+                      "for 6 months, with a minimum payment of $200 per month.")
 
             # self.fields[''] = forms.FileField(label="Signed Member Product Liability Agreement",
             # self.fields['invite_code'] = forms.CharField(label="Invite Code (Portland dropsites only)",

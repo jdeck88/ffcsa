@@ -158,22 +158,22 @@
       {% else %}
         <span>If you would like to pay for the year in advance</span>
       {% endif %}
-      <span>, (minimum $172 / month, $2,064 total) send a personal check made out to "Full Farm CSA" by mail to: PO box 565 Junction City, OR 97448</span>
+      <span>, (minimum $200 / month, $2,400 total) send a personal check made out to "Full Farm CSA" by mail to: PO box 565 Junction City, OR 97448</span>
     </p>
     <strong>Otherwise,</strong> please complete the following form to setup your subscription.</p>
   {% endif %}
 
 
   <form method="POST" id="newSubscription">
-    <!-- Monthly Contribution Amount (minimum $172) >>>>>> payment_amount.html -->
+    <!-- Monthly Contribution Amount (minimum $200) >>>>>> payment_amount.html -->
     <div class="mt-2">
       {% if user.profile.monthly_contribution != None %}
-        <v-text-field label="Monthly Contribution Amount (minimum $172)" outlined type="number" name="amount" min="172" value="user.profile.monthly_contribution" required></v-text-field>
+        <v-text-field label="Monthly Contribution Amount (minimum $200)" outlined type="number" name="amount" min="200" value="user.profile.monthly_contribution" required></v-text-field>
       {% else %}
-        <v-text-field label="Monthly Contribution Amount (minimum $172)" outlined type="number" name="amount" min="172" required></v-text-field>
+        <v-text-field label="Monthly Contribution Amount (minimum $200)" outlined type="number" name="amount" min="200" required></v-text-field>
       {% endif %}
 
-      <!-- <small class="italic px-2">minimum $172</small> -->
+      <!-- <small class="italic px-2">minimum $200</small> -->
       <div class="mt-3 mb-4">
         How much should I pay? This amount will be your monthly
         budget for each month throughout the year, which may include either 4 weeks
@@ -354,15 +354,15 @@
     <div class="hidden" id="edit-payment-amount">
      <form method="POST" id="updatePaymentAmount">
 
-      <!-- Monthly Contribution Amount (minimum $172) >>>>>> payment_amount.html -->
+      <!-- Monthly Contribution Amount (minimum $200) >>>>>> payment_amount.html -->
       <br/>
       {% if user.profile.monthly_contribution %}
-        <v-text-field label="Monthly Contribution Amount (minimum $172)" outlined type="number" name="amount" min="172" value="{{ user.profile.monthly_contribution }}" required></v-text-field>
+        <v-text-field label="Monthly Contribution Amount (minimum $200)" outlined type="number" name="amount" min="200" value="{{ user.profile.monthly_contribution }}" required></v-text-field>
       {% else %}
-        <v-text-field label="Monthly Contribution Amount (minimum $172)" outlined type="number" name="amount" min="172" required></v-text-field>
+        <v-text-field label="Monthly Contribution Amount (minimum $200)" outlined type="number" name="amount" min="200" required></v-text-field>
       {% endif %}
 
-      <!-- <small class="italic px-2">minimum $172</small> -->
+      <!-- <small class="italic px-2">minimum $200</small> -->
       <div class="mt-3 mb-4">
         How much should I pay? This amount will be your monthly
         budget for each month throughout the year, which may include either 4 weeks

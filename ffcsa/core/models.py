@@ -146,7 +146,7 @@ class Profile(models.Model):
         help_text="I would like to join the Dairy program. I understand that I will be charged a $50 herd-share fee when making my first payment and will need to talk to the Dairy Manager before gaining access to dairy products. We'll be in touch soon.",
         default=False)
     payment_agreement = models.BooleanField(
-        "I agree to make monthly payments in order to maintain my membership with the FFCSA for 6 months, with a minimium of $172 per month.",
+        "I agree to make monthly payments in order to maintain my membership with the FFCSA for 6 months, with a minimium of $200 per month.",
         default=False)
     product_agreement = models.BooleanField(
         "I agree to the Full Farm CSA Product Liability agreement. Click <a href='/static/docs/Product Liability Agreement.pdf'>here</a> to read this agreement",
