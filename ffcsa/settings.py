@@ -46,7 +46,7 @@ DROP_LOCATION_GROUP_LIMITS = [
     # Portland
     {
         'limit': 170,
-        'locations': ['Hollywood', 'PSU', 'Cully', 'St Johns', 'Zafar', 'Irvington', 'Woodstock']
+        'locations': ['Hollywood', 'PSU', 'Cully', 'St Johns', 'Zafar', 'Irvington', 'Woodstock', 'Sherwood']
     },
     # Corvallis
     {
@@ -192,6 +192,16 @@ DROPSITES = [
        'DFFDelivery': True,
    },
    {
+       'name': 'Sherwood',
+       'memberLimit': 30,
+       'color': 'pink',
+       'description': "Portland - Sherwood - Fat Milo's Family Kitchen (Saturday)",
+       'allowOneTimeOrders': False,
+       'pickupDay': 6,
+       'members_only': True,
+       'DFFDelivery': True,
+   },
+   {
        'name': 'St Johns',
        'memberLimit': 20,
        'color': 'purple',
@@ -236,7 +246,7 @@ ORDER_WINDOWS = [
         'endTime': '23:59',
         'packDay': 5,
         'memberLimit': 220,
-        'dropsites': ['Farm - Friday', 'LCFM', 'Hollywood', 'PSU', 'Corvallis', 'Cully', 'Irvington', 'Woodstock',
+        'dropsites': ['Farm - Friday', 'LCFM', 'Hollywood', 'PSU', 'Corvallis', 'Cully', 'Irvington', 'Woodstock', 'Sherwood',
                       'St Johns', 'Zafar'],
         'homeDeliveryZips': ['97330', '97331', '97333']
     },
@@ -252,7 +262,7 @@ ORDER_WINDOWS = [
     }
 ]
 DROP_SITE_ORDER = ['Home Delivery', 'W 11th', 'Friendly', 'Farm - Friday', 'Farm - Tuesday',
-                   'Woodstock', 'Cully', 'St Johns', 'PSU', 'Hollywood', 'Irvington', 'Woodstock', 'Zafar', 'LCFM',
+                   'Woodstock', 'Cully', 'St Johns', 'PSU', 'Hollywood', 'Irvington', 'Sherwood', 'Zafar', 'LCFM',
                    'Corvallis']
 
 DELIVERY_CSVS = {
@@ -344,6 +354,7 @@ SENDINBLUE_TRANSACTIONAL_TEMPLATES = {
     'Hollywood': 683,
     'Irvington': 692,
     'Woodstock': 689,
+    'Sherwood': 778,
     'PSU': 687,
     'Cully': 691,
     'Home Delivery': 694,
