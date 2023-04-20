@@ -195,7 +195,7 @@ DROPSITES = [
        'name': 'Sherwood',
        'memberLimit': 30,
        'color': 'pink',
-       'description': "Portland - Sherwood - Fat Milo's Family Kitchen (Saturday)",
+       'description': "Portland - Sherwood; Fat Milo's Family Kitchen (Saturday)",
        'allowOneTimeOrders': False,
        'pickupDay': 6,
        'members_only': True,
