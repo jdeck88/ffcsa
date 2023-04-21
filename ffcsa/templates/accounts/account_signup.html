@@ -160,7 +160,7 @@
                                                         outlined
                                                         v-if="!user.profile.home_delivery"
                                                         label="Drop Site Location"
-                                                        :items="store.state.drop_sites"
+                                                        :items="store.state.drop_sites.filter(site => site.private == false)"
                                                         item-text="description"
                                                         item-value="description"
                                                         @input="onChangeDropSite"
