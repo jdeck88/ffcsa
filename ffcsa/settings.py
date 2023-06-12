@@ -54,21 +54,21 @@ DROP_LOCATION_GROUP_LIMITS = [
         'locations': ['97330', '97331', '97333', 'Corvallis'],
     },
     # Eugene - Tue
-    {
-        'limit': 60,
-        'locations': ['W 11th', 'Friendly']
-    },
+    #{
+    #    'limit': 60,
+    #    'locations': ['W 11th', 'Friendly']
+    #},
     # Eugene - Wed
-    {
-        'limit': 100,
+    #{
+    #    'limit': 100,
         # 'locations': ['97402', '97403', '97405', 'W 11th', 'Friendly']
-        'locations': ['97402', '97403', '97405']
-    },
+    #    'locations': ['97402', '97403', '97405']
+    #},
     # Eugene - Thur
-    {
-        'limit': 100,
-        'locations': ['97401', '97404', '97477', '97408', '97448']
-    },
+    #{
+    #    'limit': 100,
+    #    'locations': ['97401', '97404', '97477', '97408', '97448']
+    #},
 ]
 
 HOME_DELIVERY_ZIP_LIMITS = {
@@ -82,12 +82,12 @@ HOME_DELIVERY_DAY = {
     '97330': 6,
     '97331': 6,
     '97333': 6,
-    '97401': 4,
-    '97404': 4,
-    '97408': 4,
-    '97477': 4,
-    '97448': 4,
-    'default': 3
+    #'97401': 4,
+    #'97404': 4,
+    #'97408': 4,
+    #'97477': 4,
+    #'97448': 4,
+    'default': 2
 }
 
 DROPSITES = [
@@ -281,8 +281,8 @@ DROP_SITE_ORDER = ['Home Delivery', 'W 11th', 'Friendly', 'Farm - Friday', 'Farm
 DELIVERY_CSVS = {
     1: [
         {
-            'name': 'Wednesday',
-            'zipCodes': ['97402', '97403', '97405'],
+            'name': 'Tuesday',
+            'zipCodes': ['97402', '97403', '97405','97401', '97404', '97408', '97477', '97448'],
             'standingDeliveries': [
                 # ['1122 W 11th Avenue, Eugene, OR 97402', 'W 11th Dropsite', '', '', '', '15', '4:00', '10:00', '', '',
                 #  '', '', 'none'],
@@ -290,13 +290,13 @@ DELIVERY_CSVS = {
                 #  '', '', 'none']
             ]
         },
-        {
-            'name': 'Thursday',
-            'zipCodes': ['97401', '97404', '97408', '97477', '97448'],
-            'standingDeliveries': [
+        #{
+        #    'name': 'Thursday',
+        #    'zipCodes': [],
+        #    'standingDeliveries': [
                 # ['669 Greenwood St, Junction City, OR 97448', 'Post Office', '', '', '', '4', '', '', '', '', '', '', 'none'],
-            ]
-        }
+        #    ]
+        #}
     ],
     4: [
         {
